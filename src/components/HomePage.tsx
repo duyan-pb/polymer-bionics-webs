@@ -13,11 +13,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <div className="max-w-[1280px] mx-auto">
           <div className="max-w-3xl">
             <h1 className="text-6xl font-bold text-foreground mb-6 tracking-tight leading-tight">
-              Advanced Biomaterials for Medical Innovation
+              Neural Interface Technology & Advanced Biomaterials
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Polymer Bionics develops next-generation bioadhesives, conductive polymers, and medical-grade materials
-              for surgical applications, neural interfaces, and drug delivery systems.
+              Neurox pioneers cutting-edge neural interface systems and biocompatible materials for brain-computer interfaces,
+              neural prosthetics, and advanced diagnostic platforms.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button size="lg" onClick={() => onNavigate('products')} className="text-base tracking-wide">
@@ -38,7 +38,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <Users size={40} className="text-primary mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Our Team</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                World-class scientists and engineers with expertise in polymer chemistry and medical devices.
+                World-class neuroscientists, engineers, and material scientists advancing neural technology.
               </p>
               <Button variant="ghost" className="p-0 h-auto text-accent hover:text-accent/80">
                 Learn more <ArrowRight className="ml-1" size={16} />
@@ -49,7 +49,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <Flask size={40} className="text-primary mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Products</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                High-performance polymers for surgical adhesives, wearable sensors, and implantable devices.
+                High-performance neural electrodes, biocompatible interfaces, and diagnostic sensor arrays.
               </p>
               <Button variant="ghost" className="p-0 h-auto text-accent hover:text-accent/80">
                 Explore catalog <ArrowRight className="ml-1" size={16} />
@@ -60,7 +60,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <Video size={40} className="text-primary mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Case Studies</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                Real-world validation through laboratory testing and clinical collaborations.
+                Real-world validation through preclinical studies and translational research partnerships.
               </p>
               <Button variant="ghost" className="p-0 h-auto text-accent hover:text-accent/80">
                 View studies <ArrowRight className="ml-1" size={16} />
@@ -71,7 +71,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <FileText size={40} className="text-primary mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Technical Data</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                Comprehensive datasheets with mechanical properties, biocompatibility, and regulatory compliance.
+                Comprehensive technical specifications, biocompatibility data, and performance metrics.
               </p>
               <Button variant="ghost" className="p-0 h-auto text-accent hover:text-accent/80">
                 Access library <ArrowRight className="ml-1" size={16} />
@@ -85,13 +85,13 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <div className="max-w-[1280px] mx-auto">
           <h2 className="text-4xl font-bold text-center mb-4">Trusted by Leading Institutions</h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Collaborating with world-renowned research institutions and healthcare providers to advance medical technology.
+            Collaborating with world-renowned neuroscience institutes and medical centers to advance neural technology.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
-            <div className="text-center text-xl font-semibold text-muted-foreground">University of Oxford</div>
-            <div className="text-center text-xl font-semibold text-muted-foreground">NHS Trusts</div>
-            <div className="text-center text-xl font-semibold text-muted-foreground">Materials Lab</div>
-            <div className="text-center text-xl font-semibold text-muted-foreground">Research Partners</div>
+            <div className="text-center text-xl font-semibold text-muted-foreground">Neuroscience Centers</div>
+            <div className="text-center text-xl font-semibold text-muted-foreground">Research Hospitals</div>
+            <div className="text-center text-xl font-semibold text-muted-foreground">University Labs</div>
+            <div className="text-center text-xl font-semibold text-muted-foreground">Clinical Partners</div>
           </div>
         </div>
       </section>

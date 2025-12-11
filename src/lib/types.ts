@@ -2,26 +2,33 @@ export interface TeamMember {
   id: string
   name: string
   title: string
+  role: string
   category: 'founders' | 'management' | 'advisory'
-  image?: string
   shortBio: string
   fullBio: string
-  education: string[]
-  achievements: string[]
-  publications?: string[]
+  image?: string
+  imageUrl?: string
   linkedin?: string
+  linkedIn?: string
   scholar?: string
+  email?: string
+  education?: string[]
+  achievements?: string[]
+  publications?: string[]
 }
 
 export interface Product {
   id: string
   name: string
   tagline: string
-  category: string
-  features: string[]
+  description: string
   technicalDescription: string
+  category: string
+  specifications: string
+  features: string[]
   applications: string[]
-  regulatoryStatus: string
+  regulatoryStatus?: string
+  imageUrl?: string
   datasheetId?: string
   caseStudyId?: string
 }
@@ -30,50 +37,49 @@ export interface Video {
   id: string
   title: string
   description: string
-  thumbnailUrl?: string
+  url: string
   videoUrl: string
-  duration?: string
   category: string
+  thumbnailUrl?: string
+  duration?: string
 }
 
 export interface CaseStudy {
   id: string
   title: string
-  category: string
+  description: string
   problem: string
   solution: string
   results: string
-  quote?: {
-    text: string
-    author: string
-    title: string
-  }
-  images?: string[]
+  quote?: { text: string; author: string }
+  pdfUrl: string
+  category: string
+  publishedDate: string
   datasheetId?: string
 }
 
 export interface Datasheet {
   id: string
   name: string
+  title: string
+  description: string
   category: string
   version: string
   lastUpdated: string
-  description: string
-  technicalSpecs: {
-    label: string
-    value: string
-  }[]
-  pdfUrl?: string
+  pdfUrl: string
+  fileSize?: string
+  technicalSpecs?: Record<string, string>
 }
 
 export interface NewsItem {
   id: string
   title: string
-  date: string
-  category: string
   summary: string
   content: string
+  date: string
+  category: string
   link?: string
+  imageUrl?: string
 }
 
 export interface Publication {
@@ -81,10 +87,12 @@ export interface Publication {
   title: string
   authors: string[]
   journal: string
+  year: number
   date: string
+  type: 'journal' | 'conference' | 'preprint'
   abstract: string
   tags: string[]
   doi?: string
+  url?: string
   pdfUrl?: string
-  type: 'peer-reviewed' | 'conference' | 'white-paper' | 'preprint'
 }

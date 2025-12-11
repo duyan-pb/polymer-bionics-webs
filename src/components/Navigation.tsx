@@ -33,7 +33,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
             onClick={() => handleNavigate('home')}
             className="text-2xl font-bold text-primary hover:text-accent transition-colors"
           >
-            Polymer Bionics
+            Neurox
           </button>
 
           <div className="hidden md:flex items-center gap-1">
