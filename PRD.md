@@ -1,11 +1,11 @@
 # Planning Guide
 
-A professional biotech company website showcasing Neurox's medical innovations, team expertise, and research publications in neural interface technology and biomaterials.
+A professional biotech company website showcasing PolymerBionics' medical innovations, team expertise, and research publications in polymer-based bioelectronics and flexible medical device technology.
 
 **Experience Qualities**:
-1. **Authoritative** - Conveys scientific credibility and medical-grade professionalism through refined typography and structured layouts
-2. **Innovative** - Reflects cutting-edge biotechnology through modern design elements and subtle tech-inspired visual details
-3. **Accessible** - Presents complex scientific information in clear, digestible formats for various audiences from researchers to investors
+1. **Pioneering** - Conveys innovation in flexible bioelectronics and polymer science through dynamic, organic design elements
+2. **Approachable** - Balances scientific credibility with warmth and accessibility through softer color palettes and inviting layouts
+3. **Precise** - Demonstrates technical excellence and medical-grade engineering through clean, well-organized information architecture
 
 **Complexity Level**: Content Showcase (information-focused)
 This is primarily an informational website presenting company details, team members, products, research, and publications without complex interactive features or user-generated content management.
@@ -14,7 +14,7 @@ This is primarily an informational website presenting company details, team memb
 
 ### Hero Section with Company Overview
 - **Functionality**: Displays company tagline, mission statement, and key value propositions
-- **Purpose**: Immediately communicates Neurox's focus and expertise in neural biomaterials
+- **Purpose**: Immediately communicates PolymerBionics' focus and expertise in flexible bioelectronics and polymer-based medical devices
 - **Trigger**: Page load on homepage
 - **Progression**: User sees hero image/graphic → reads headline and tagline → views CTAs to explore sections
 - **Success criteria**: Clear understanding of company mission within 5 seconds
@@ -64,33 +64,33 @@ This is primarily an informational website presenting company details, team memb
 
 ## Design Direction
 
-The design should evoke precision, innovation, and medical professionalism - balancing scientific authority with approachability. Think clean pharmaceutical aesthetics meets modern tech company, with a color palette inspired by neural networks and biotechnology.
+The design should evoke innovation, flexibility, and biocompatibility - reflecting the organic, adaptable nature of polymer materials. Think modern medical device aesthetics meets materials science, with a warm color palette inspired by biological systems and soft tissue engineering.
 
 ## Color Selection
 
-A sophisticated scientific palette with deep blue-purple tones representing neural technology, accented with vibrant cyan for innovation and energy.
+A sophisticated warm palette with coral-orange tones representing organic materials and biocompatibility, balanced with soft neutrals and deep navy for medical authority.
 
-- **Primary Color**: Deep Indigo (oklch(0.35 0.10 270)) - Represents depth of scientific research, neural networks, and medical authority
+- **Primary Color**: Deep Navy (oklch(0.28 0.05 250)) - Represents medical authority, precision engineering, and scientific depth
 - **Secondary Colors**: 
-  - Soft Lavender (oklch(0.94 0.02 280)) - Subtle backgrounds that don't compete with content
-  - Warm Gray (oklch(0.92 0.005 270)) - Muted elements and borders
-- **Accent Color**: Vibrant Cyan (oklch(0.70 0.15 195)) - Calls attention to interactive elements and innovation
+  - Warm Beige (oklch(0.95 0.015 85)) - Soft backgrounds that create warmth and approachability
+  - Light Gray (oklch(0.93 0.005 260)) - Neutral elements and subtle borders
+- **Accent Color**: Vibrant Coral (oklch(0.68 0.18 35)) - Represents organic materials, innovation, and energy - draws attention to key actions
 - **Foreground/Background Pairings**: 
-  - Primary (Deep Indigo oklch(0.35 0.10 270)): White text (oklch(0.99 0 0)) - Ratio 9.2:1 ✓
-  - Accent (Vibrant Cyan oklch(0.70 0.15 195)): White text (oklch(0.99 0 0)) - Ratio 5.1:1 ✓
-  - Background (Off-White oklch(0.99 0 0)): Dark text (oklch(0.25 0.01 270)) - Ratio 13.8:1 ✓
-  - Muted (Soft Lavender oklch(0.94 0.02 280)): Medium text (oklch(0.50 0.05 270)) - Ratio 6.5:1 ✓
+  - Primary (Deep Navy oklch(0.28 0.05 250)): White text (oklch(0.99 0 0)) - Ratio 11.5:1 ✓
+  - Accent (Vibrant Coral oklch(0.68 0.18 35)): White text (oklch(0.99 0 0)) - Ratio 4.9:1 ✓
+  - Background (Off-White oklch(0.99 0 0)): Dark text (oklch(0.22 0.03 250)) - Ratio 15.2:1 ✓
+  - Muted (Warm Beige oklch(0.95 0.015 85)): Medium text (oklch(0.45 0.05 250)) - Ratio 7.8:1 ✓
 
 ## Font Selection
 
-Typography should blend scientific credibility with readability - a classic serif for authority paired with a clean technical sans-serif.
+Typography should blend approachability with technical credibility - an elegant serif for warmth paired with a professional sans-serif for clarity.
 
 - **Typographic Hierarchy**:
-  - H1 (Page Titles): Crimson Pro Bold/48px/tight letter-spacing (-0.02em) - Commanding presence for main headings
-  - H2 (Section Titles): Crimson Pro Semibold/36px/normal letter-spacing - Clear content organization
+  - H1 (Page Titles): Crimson Pro Bold/48px/tight letter-spacing (-0.02em) - Warm, inviting presence for main headings
+  - H2 (Section Titles): Crimson Pro Semibold/36px/normal letter-spacing - Clear content organization with personality
   - H3 (Subsections): Crimson Pro Semibold/24px/normal letter-spacing - Supporting hierarchy
-  - Body Text: IBM Plex Sans Regular/16px/1.6 line-height - Optimal readability for descriptions
-  - Labels/UI: IBM Plex Sans Medium/14px/0.01em letter-spacing - Clean interface elements
+  - Body Text: IBM Plex Sans Regular/16px/1.6 line-height - Clean, technical readability
+  - Labels/UI: IBM Plex Sans Medium/14px/0.01em letter-spacing - Professional interface elements
   - Captions: IBM Plex Sans Regular/14px/1.5 line-height/muted color - Supporting information
 
 ## Animations

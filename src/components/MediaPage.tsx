@@ -177,7 +177,6 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
                         <p className="text-base italic mb-3">"{selectedCaseStudy.quote.text}"</p>
                         <div className="text-sm text-muted-foreground">
                           <p className="font-semibold">{selectedCaseStudy.quote.author}</p>
-                          <p>{selectedCaseStudy.quote.title}</p>
                         </div>
                       </div>
                     </>

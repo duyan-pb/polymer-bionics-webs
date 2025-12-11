@@ -26,9 +26,8 @@ export function NewsPage({ news, publications }: NewsPageProps) {
     : publications.filter(p => p.tags.includes(selectedTag))
 
   const publicationTypeColors: Record<Publication['type'], 'default' | 'secondary' | 'outline'> = {
-    'peer-reviewed': 'default',
+    'journal': 'default',
     'conference': 'secondary',
-    'white-paper': 'outline',
     'preprint': 'outline',
   }
 

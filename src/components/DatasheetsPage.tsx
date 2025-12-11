@@ -177,17 +177,19 @@ export function DatasheetsPage({ datasheets }: DatasheetsPageProps) {
                 <Separator className="my-6" />
 
                 <div className="space-y-6">
-                  <div>
-                    <h4 className="text-lg font-semibold mb-4">Technical Specifications</h4>
-                    <div className="grid grid-cols-1 gap-3">
-                      {selectedDatasheet.technicalSpecs.map((spec, idx) => (
-                        <div key={idx} className="flex border-b pb-3">
-                          <div className="w-1/2 font-medium text-sm">{spec.label}</div>
-                          <div className="w-1/2 text-sm text-muted-foreground">{spec.value}</div>
-                        </div>
-                      ))}
+                  {selectedDatasheet.technicalSpecs && (
+                    <div>
+                      <h4 className="text-lg font-semibold mb-4">Technical Specifications</h4>
+                      <div className="grid grid-cols-1 gap-3">
+                        {Object.entries(selectedDatasheet.technicalSpecs).map(([key, value], idx) => (
+                          <div key={idx} className="flex border-b pb-3">
+                            <div className="w-1/2 font-medium text-sm">{key}</div>
+                            <div className="w-1/2 text-sm text-muted-foreground">{value}</div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="pt-4">
                     <Button className="w-full md:w-auto">

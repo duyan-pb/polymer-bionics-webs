@@ -117,33 +117,39 @@ export function TeamPage({ team }: TeamPageProps) {
 
                   <Separator />
 
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <GraduationCap size={20} className="text-primary" /> Education
-                    </h4>
-                    <ul className="space-y-2">
-                      {selectedMember.education.map((edu, idx) => (
-                        <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
-                          {edu}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {selectedMember.education && selectedMember.education.length > 0 && (
+                    <div>
+                      <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                        <GraduationCap size={20} className="text-primary" /> Education
+                      </h4>
+                      <ul className="space-y-2">
+                        {selectedMember.education.map((edu, idx) => (
+                          <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
+                            {edu}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
-                  <Separator />
+                  {selectedMember.education && selectedMember.education.length > 0 && (
+                    <Separator />
+                  )}
 
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <Trophy size={20} className="text-primary" /> Key Achievements
-                    </h4>
-                    <ul className="space-y-2">
-                      {selectedMember.achievements.map((achievement, idx) => (
-                        <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
-                          {achievement}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {selectedMember.achievements && selectedMember.achievements.length > 0 && (
+                    <div>
+                      <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                        <Trophy size={20} className="text-primary" /> Key Achievements
+                      </h4>
+                      <ul className="space-y-2">
+                        {selectedMember.achievements.map((achievement, idx) => (
+                          <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
+                            {achievement}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                   {selectedMember.publications && selectedMember.publications.length > 0 && (
                     <>
