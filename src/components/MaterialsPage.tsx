@@ -20,9 +20,9 @@ export function MaterialsPage() {
             <h1 className="text-6xl font-bold">Our Materials</h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
-            PolymerBionics develops and manufactures advanced polymer materials specifically engineered for 
-            biomedical applications. Our materials portfolio spans conductive polymers, biocompatible elastomers, 
-            hydrogels, and specialty coatings—all optimized for safety, performance, and manufacturability.
+            Advanced materials for advancements in humankind. Our portfolio of specialized bionic materials 
+            includes flexible conductive polymers, biocompatible gels, and innovative bonding solutions—all 
+            engineered for superior performance in wearable and implantable bioelectronic devices.
           </p>
         </div>
       </section>

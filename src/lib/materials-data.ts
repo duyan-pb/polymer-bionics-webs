@@ -20,294 +20,207 @@ export interface Application {
 
 export const materials: Material[] = [
   {
-    id: 'pedot-pss',
-    name: 'PEDOT:PSS',
-    description: 'Poly(3,4-ethylenedioxythiophene) polystyrene sulfonate - a highly conductive organic polymer for flexible bioelectronics',
+    id: 'biongel',
+    name: 'BionGel',
+    description: 'Soft, conductive gel coating for improving the performance of existing bionic devices',
     properties: [
-      'High electrical conductivity (up to 1000 S/cm)',
-      'Excellent mechanical flexibility',
-      'Biocompatible and tissue-safe',
-      'Solution-processable',
-      'Transparent in thin films'
+      'High electrical conductivity',
+      'Soft, tissue-compliant consistency',
+      'Biocompatible formulation',
+      'Reduces impedance at electrode-tissue interfaces',
+      'Long-lasting performance'
     ],
     keyAdvantages: [
-      'Superior conformability to tissue surfaces',
-      'Low impedance for high-quality signal recording',
-      'Chemical stability in physiological environments',
-      'Scalable manufacturing process'
+      'Significantly improves signal quality for existing devices',
+      'Enhances electrode-tissue coupling',
+      'Reduces irritation and inflammation',
+      'Easy application to existing hardware',
+      'Stable in physiological environments'
     ],
-    technicalDetails: 'Our proprietary PEDOT:PSS formulations are optimized for medical-grade applications with enhanced conductivity and mechanical durability. The material exhibits excellent electrochemical stability and can be patterned at high resolution for complex electrode geometries.',
-    imageClass: 'bg-gradient-to-br from-blue-500/20 to-purple-500/20'
-  },
-  {
-    id: 'hydrogels',
-    name: 'Biocompatible Hydrogels',
-    description: 'Advanced hydrogel matrices designed for soft tissue interfacing and drug delivery applications',
-    properties: [
-      'Tunable mechanical properties (1-100 kPa)',
-      'High water content (70-95%)',
-      'Tissue-mimetic compliance',
-      'Controlled degradation profiles',
-      'Injectable formulations available'
-    ],
-    keyAdvantages: [
-      'Minimizes foreign body response',
-      'Enables sustained drug release',
-      'Matches soft tissue mechanical properties',
-      'Can incorporate bioactive molecules'
-    ],
-    technicalDetails: 'Our hydrogel platform includes both natural and synthetic polymer systems with precisely controlled crosslinking chemistry. Materials can be customized for specific applications with controlled swelling ratios, degradation kinetics, and mechanical properties.',
+    technicalDetails: 'BionGel is formulated to create an optimal electrical interface between rigid electrodes and soft biological tissues. The gel maintains its conductive properties over extended periods while conforming to tissue surfaces, dramatically improving the performance of neural interfaces, cardiac monitors, and other bioelectronic devices.',
     imageClass: 'bg-gradient-to-br from-cyan-500/20 to-teal-500/20'
   },
   {
-    id: 'silicone-elastomers',
-    name: 'Medical-Grade Silicone Elastomers',
-    description: 'Ultra-soft silicone polymers for long-term implantable devices and wearable electronics',
+    id: 'elastibion',
+    name: 'ElastiBion',
+    description: 'Flexible conductive material that can be fabricated into electrodes for both wearable and implantable devices',
     properties: [
-      'Shore hardness: 00-10 to 00-50',
-      'Elongation at break: >400%',
-      'Excellent tear resistance',
-      'Biostable for long-term implantation',
-      'Gas permeable'
-    ],
-    keyAdvantages: [
-      'Exceptional biocompatibility',
-      'Maintains properties over years of implantation',
-      'Resistant to body fluids and enzymes',
-      'Can be molded into complex 3D shapes'
-    ],
-    technicalDetails: 'Our silicone formulations are specifically designed for medical device applications, meeting USP Class VI and ISO 10993 requirements. The materials offer excellent processability while maintaining ultra-soft mechanical properties critical for chronic implants.',
-    imageClass: 'bg-gradient-to-br from-pink-500/20 to-rose-500/20'
-  },
-  {
-    id: 'parylene',
-    name: 'Parylene-C Coatings',
-    description: 'Ultra-thin conformal polymer coatings for device encapsulation and barrier protection',
-    properties: [
-      'Coating thickness: 0.1-50 μm',
-      'Pinhole-free coverage',
-      'Excellent barrier properties',
-      'Optical transparency',
-      'Chemical inertness'
-    ],
-    keyAdvantages: [
-      'Uniform coating on complex geometries',
-      'Superior moisture barrier',
-      'Maintains device miniaturization',
-      'Room temperature deposition process'
-    ],
-    technicalDetails: 'Parylene-C deposition via chemical vapor deposition provides molecular-level conformal coating without heat, UV, or catalysts. The coating process is compatible with temperature-sensitive materials and provides reliable long-term protection in harsh biological environments.',
-    imageClass: 'bg-gradient-to-br from-violet-500/20 to-indigo-500/20'
-  },
-  {
-    id: 'polyimide',
-    name: 'Flexible Polyimide Substrates',
-    description: 'High-performance polymer substrates for flexible circuit boards and neural interfaces',
-    properties: [
-      'High temperature stability (>350°C)',
-      'Low dielectric constant',
-      'Excellent mechanical strength',
-      'Chemical resistance',
-      'Dimensional stability'
-    ],
-    keyAdvantages: [
-      'Enables high-density interconnects',
-      'Compatible with microfabrication processes',
-      'Maintains flexibility at small bend radii',
-      'Long-term reliability in vivo'
-    ],
-    technicalDetails: 'Our polyimide films are precision-engineered for medical device applications with controlled thickness uniformity and surface roughness. The material provides an ideal substrate for flexible electronics while maintaining the mechanical robustness required for surgical handling.',
-    imageClass: 'bg-gradient-to-br from-amber-500/20 to-orange-500/20'
-  },
-  {
-    id: 'liquid-crystal-polymers',
-    name: 'Liquid Crystal Polymers (LCP)',
-    description: 'Ultra-thin, high-performance thermoplastics for hermetic encapsulation of active implants',
-    properties: [
-      'Extremely low moisture absorption',
-      'High barrier to ions and gases',
+      'Excellent electrical conductivity',
+      'High mechanical flexibility and stretchability',
       'Biocompatible and biostable',
-      'Thermal stability',
-      'Low dielectric loss'
+      'Can be patterned at high resolution',
+      'Compatible with microfabrication techniques'
     ],
     keyAdvantages: [
-      'Superior hermetic sealing for electronics',
-      'Enables ultra-miniaturized implants',
-      'Long-term stability in saline environments',
-      'Laser-weldable for secure seals'
+      'Conforms to dynamic tissue surfaces',
+      'Reduces mechanical mismatch with biological tissues',
+      'Enables high-density electrode arrays',
+      'Long-term chronic implantation stability',
+      'Suitable for both wearable and implantable applications'
     ],
-    technicalDetails: 'LCP materials provide the gold standard for hermetic packaging of active implantable medical devices. Our processing techniques enable thin-film LCP structures that maintain barrier properties while allowing device miniaturization critical for minimally invasive procedures.',
-    imageClass: 'bg-gradient-to-br from-emerald-500/20 to-green-500/20'
+    technicalDetails: 'ElastiBion combines the electrical performance of traditional metal electrodes with the mechanical properties of soft elastomers. This unique material can be fabricated into flexible electrode arrays that maintain electrical performance while conforming to curved, moving biological surfaces. The material is optimized for neural recording, cardiac monitoring, and muscle stimulation applications.',
+    imageClass: 'bg-gradient-to-br from-blue-500/20 to-purple-500/20'
+  },
+  {
+    id: 'elastisolder',
+    name: 'ElastiSolder',
+    description: 'Bonding material for creating connections to metallic hardware such as wires and control systems',
+    properties: [
+      'Electrically conductive',
+      'Flexible and strain-tolerant',
+      'Strong adhesion to metals and polymers',
+      'Low-temperature processing',
+      'Reliable electrical connections'
+    ],
+    keyAdvantages: [
+      'Creates robust electrical connections that withstand flexing',
+      'Eliminates failure points common with rigid solder joints',
+      'Compatible with flexible electronics manufacturing',
+      'Maintains conductivity under mechanical stress',
+      'Biocompatible formulation for medical applications'
+    ],
+    technicalDetails: 'ElastiSolder is specifically engineered to solve the challenge of connecting flexible polymer electrodes to rigid metallic hardware such as wires, connectors, and control electronics. Traditional solder creates brittle joints that fail under flexing; ElastiSolder maintains electrical conductivity while accommodating the mechanical strain inherent in flexible bioelectronic devices.',
+    imageClass: 'bg-gradient-to-br from-amber-500/20 to-orange-500/20'
   }
 ]
 
 export const applications: Application[] = [
   {
-    id: 'neural-interfaces',
-    name: 'Neural Interfaces & Brain-Computer Interfaces',
-    description: 'High-density electrode arrays for neural recording and stimulation with minimal tissue damage',
+    id: 'elasticuff',
+    name: 'ElastiCuff',
+    description: 'Flexible cuff electrode for interfacing with peripheral nerves to enable advanced prosthetic control and sensory feedback',
     benefits: [
-      'High-fidelity signal recording from individual neurons',
-      'Chronic stability over months to years',
-      'Reduced inflammatory response compared to rigid electrodes',
-      'Scalable to thousands of channels',
-      'Compatible with advanced signal processing'
+      'Conforms to nerve geometry without constriction',
+      'High-resolution neural signal recording',
+      'Enables bidirectional communication with nerves',
+      'Reduced foreign body response',
+      'Long-term chronic stability',
+      'Suitable for multi-channel neural interfaces'
     ],
     useCases: [
-      'Intracortical brain-computer interfaces',
-      'Peripheral nerve interfaces for prosthetic control',
-      'Spinal cord stimulation for pain management',
-      'Deep brain stimulation for movement disorders',
-      'Electrocorticography (ECoG) arrays'
+      'Prosthetic limb control via peripheral nerve signals',
+      'Sensory feedback restoration for amputees',
+      'Functional electrical stimulation for paralysis',
+      'Vagus nerve stimulation therapy',
+      'Bladder and bowel control applications',
+      'Chronic pain management'
     ],
-    relevantMaterials: ['PEDOT:PSS', 'Flexible Polyimide Substrates', 'Parylene-C Coatings'],
+    relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiSolder'],
     imageClass: 'bg-gradient-to-br from-purple-500/10 to-pink-500/10'
   },
   {
-    id: 'wearable-biosensors',
-    name: 'Wearable Biosensors & Health Monitoring',
-    description: 'Comfortable, skin-conforming sensors for continuous physiological monitoring',
+    id: 'elastarray',
+    name: 'ElastArray',
+    description: 'Flexible electrode array for tissue surface diagnostics and therapies with superior conformability',
     benefits: [
-      'Continuous real-time health data collection',
-      'Minimal user discomfort during long-term wear',
-      'High signal quality with motion artifacts reduction',
-      'Wireless data transmission capabilities',
-      'Integration with digital health platforms'
+      'Conforms to curved and dynamic tissue surfaces',
+      'High-density electrode configurations',
+      'Excellent signal-to-noise ratio',
+      'Minimally invasive application',
+      'Compatible with both recording and stimulation',
+      'Reduced tissue damage and inflammation'
     ],
     useCases: [
-      'Continuous glucose monitoring',
-      'ECG and cardiac arrhythmia detection',
-      'EEG for sleep and seizure monitoring',
-      'Hydration and electrolyte tracking',
-      'Temperature and inflammation monitoring'
+      'Epicardial cardiac mapping and ablation',
+      'Brain surface electrocorticography (ECoG)',
+      'Spinal cord stimulation arrays',
+      'Muscle activity mapping and stimulation',
+      'Nerve repair and regeneration monitoring',
+      'Tissue health diagnostics'
     ],
-    relevantMaterials: ['PEDOT:PSS', 'Medical-Grade Silicone Elastomers', 'Biocompatible Hydrogels'],
+    relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiSolder'],
     imageClass: 'bg-gradient-to-br from-blue-500/10 to-cyan-500/10'
   },
   {
-    id: 'drug-delivery',
-    name: 'Smart Drug Delivery Systems',
-    description: 'Controlled and responsive drug release platforms for targeted therapeutics',
+    id: 'elastiwire',
+    name: 'ElastiWire',
+    description: 'Flexible polymeric wires for reliable electrical connection between bioelectronic devices and external hardware',
     benefits: [
-      'Precise spatial and temporal drug delivery',
-      'Reduced systemic side effects',
-      'Improved patient compliance',
-      'Responsive release based on physiological triggers',
-      'Combination therapy capabilities'
+      'Maintains conductivity under repeated flexing',
+      'Biocompatible for implantable applications',
+      'Resistant to fatigue failure',
+      'Compatible with minimally invasive deployment',
+      'Reduces mechanical stress on tissue interfaces',
+      'Lower impedance than traditional wire leads'
     ],
     useCases: [
-      'Localized chemotherapy delivery',
-      'Insulin delivery systems',
-      'Pain management implants',
-      'Ocular drug delivery',
-      'Wound healing and tissue regeneration'
+      'Neural implant lead wires',
+      'Cardiac pacemaker and defibrillator leads',
+      'Deep brain stimulation connections',
+      'Cochlear implant wiring',
+      'Connections for wearable biosensors',
+      'Linking flexible electrodes to rigid electronics'
     ],
-    relevantMaterials: ['Biocompatible Hydrogels', 'Medical-Grade Silicone Elastomers', 'PEDOT:PSS'],
+    relevantMaterials: ['ElastiBion', 'ElastiSolder'],
     imageClass: 'bg-gradient-to-br from-teal-500/10 to-emerald-500/10'
   },
   {
-    id: 'cardiac-devices',
-    name: 'Cardiac Monitoring & Therapeutic Devices',
-    description: 'Flexible electronics for cardiac diagnostics, mapping, and electrical therapy',
+    id: 'simpleeg',
+    name: 'SimplEEG',
+    description: 'Wearable and reusable sensors for electromyography (EMG) and electroencephalography (EEG) with hospital-grade performance',
     benefits: [
-      'Conformal contact with dynamic cardiac tissue',
-      'High-resolution electrical mapping',
-      'Reduced risk of perforation or tissue damage',
-      'MRI-compatible designs possible',
-      'Chronic stability in hemodynamic environment'
+      'Easy application and removal',
+      'Reusable for cost-effective monitoring',
+      'High signal quality comparable to clinical systems',
+      'Comfortable for extended wear',
+      'Compatible with standard EEG/EMG systems',
+      'Minimal skin preparation required'
     ],
     useCases: [
-      'Epicardial mapping arrays',
-      'Leadless pacemaker technologies',
-      'Cardiac ablation guidance',
-      'Arrhythmia monitoring implants',
-      'Hemodynamic sensors'
+      'Clinical EEG monitoring for epilepsy',
+      'Sleep disorder diagnostics',
+      'Brain-computer interface research',
+      'Muscle rehabilitation monitoring',
+      'Sports performance analysis',
+      'Neurofeedback therapy'
     ],
-    relevantMaterials: ['PEDOT:PSS', 'Parylene-C Coatings', 'Medical-Grade Silicone Elastomers'],
-    imageClass: 'bg-gradient-to-br from-red-500/10 to-rose-500/10'
-  },
-  {
-    id: 'surgical-tools',
-    name: 'Smart Surgical Instruments',
-    description: 'Sensor-integrated surgical tools for enhanced precision and real-time feedback',
-    benefits: [
-      'Real-time tissue characterization',
-      'Force and pressure feedback',
-      'Integration with robotic surgery systems',
-      'Reduced surgical complications',
-      'Enhanced training capabilities'
-    ],
-    useCases: [
-      'Electrosurgical instruments with sensing',
-      'Smart forceps and graspers',
-      'Tissue differentiation tools',
-      'Minimally invasive surgical robots',
-      'Biopsy needles with integrated sensors'
-    ],
-    relevantMaterials: ['PEDOT:PSS', 'Flexible Polyimide Substrates', 'Parylene-C Coatings'],
+    relevantMaterials: ['ElastiBion', 'BionGel'],
     imageClass: 'bg-gradient-to-br from-indigo-500/10 to-violet-500/10'
   },
   {
-    id: 'wound-care',
-    name: 'Advanced Wound Care & Healing',
-    description: 'Smart wound dressings with integrated sensors and therapeutic functions',
+    id: 'babeeg',
+    name: 'BabEEG',
+    description: 'Specialized sensors for continuous monitoring of infant biosignals with gentle, skin-safe design',
     benefits: [
-      'Real-time wound condition monitoring',
-      'Infection detection and prevention',
-      'Accelerated healing through electrical stimulation',
-      'Reduced dressing change frequency',
-      'Improved patient outcomes'
+      'Designed specifically for delicate infant skin',
+      'Continuous monitoring without frequent repositioning',
+      'Minimal disruption to infant comfort and sleep',
+      'High signal quality for accurate diagnostics',
+      'Easy application by clinical staff',
+      'Reduced infection risk compared to traditional electrodes'
     ],
     useCases: [
-      'Chronic wound management',
-      'Diabetic ulcer treatment',
-      'Surgical site monitoring',
-      'Burn treatment and monitoring',
-      'Pressure ulcer prevention'
+      'Neonatal seizure monitoring',
+      'Premature infant brain development tracking',
+      'Sleep apnea detection in infants',
+      'Cardiac monitoring in NICU settings',
+      'Developmental milestone assessment',
+      'Early detection of neurological disorders'
     ],
-    relevantMaterials: ['Biocompatible Hydrogels', 'PEDOT:PSS', 'Medical-Grade Silicone Elastomers'],
+    relevantMaterials: ['ElastiBion', 'BionGel'],
+    imageClass: 'bg-gradient-to-br from-pink-500/10 to-rose-500/10'
+  },
+  {
+    id: 'custom-applications',
+    name: 'Customer-Specific Applications',
+    description: 'Tailored flexible bioelectronic solutions designed in collaboration with medical device partners for unique clinical needs',
+    benefits: [
+      'Customized electrode geometries and configurations',
+      'Application-specific material formulations',
+      'Optimized for manufacturing scalability',
+      'Regulatory guidance and support',
+      'Rapid prototyping and iteration',
+      'Comprehensive technical documentation'
+    ],
+    useCases: [
+      'Novel medical device development',
+      'Custom research instrumentation',
+      'Specialized clinical diagnostic tools',
+      'Next-generation implantable devices',
+      'Advanced wearable health monitors',
+      'Veterinary and animal research applications'
+    ],
+    relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiSolder'],
     imageClass: 'bg-gradient-to-br from-amber-500/10 to-orange-500/10'
-  },
-  {
-    id: 'organ-on-chip',
-    name: 'Organ-on-Chip & In-Vitro Models',
-    description: 'Microfluidic platforms with integrated sensors for advanced drug testing and disease modeling',
-    benefits: [
-      'More physiologically relevant than 2D cultures',
-      'Real-time monitoring of cellular responses',
-      'Reduced animal testing requirements',
-      'High-throughput drug screening',
-      'Patient-specific disease modeling'
-    ],
-    useCases: [
-      'Drug toxicity screening',
-      'Disease mechanism studies',
-      'Personalized medicine development',
-      'Environmental toxin assessment',
-      'Tissue engineering research'
-    ],
-    relevantMaterials: ['PEDOT:PSS', 'Biocompatible Hydrogels', 'Parylene-C Coatings'],
-    imageClass: 'bg-gradient-to-br from-lime-500/10 to-green-500/10'
-  },
-  {
-    id: 'prosthetics',
-    name: 'Advanced Prosthetics & Rehabilitation',
-    description: 'Sensor-embedded prosthetic interfaces for improved control and sensory feedback',
-    benefits: [
-      'Natural movement control through neural signals',
-      'Sensory feedback restoration',
-      'Reduced phantom limb pain',
-      'Improved osseointegration',
-      'Long-term biocompatibility'
-    ],
-    useCases: [
-      'Myoelectric prosthetic limbs',
-      'Neural-controlled prosthetics',
-      'Sensory feedback systems',
-      'Osseointegrated implant interfaces',
-      'Rehabilitation monitoring devices'
-    ],
-    relevantMaterials: ['PEDOT:PSS', 'Medical-Grade Silicone Elastomers', 'Flexible Polyimide Substrates'],
-    imageClass: 'bg-gradient-to-br from-sky-500/10 to-blue-500/10'
   }
 ]
