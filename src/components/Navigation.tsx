@@ -16,6 +16,8 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'team', label: 'Team' },
+    { id: 'materials', label: 'Materials' },
+    { id: 'applications', label: 'Applications' },
     { id: 'products', label: 'Products' },
     { id: 'media', label: 'Videos & Case Studies' },
     { id: 'datasheets', label: 'Datasheets' },

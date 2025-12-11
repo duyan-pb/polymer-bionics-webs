@@ -33,6 +33,20 @@ This is primarily an informational website presenting company details, team memb
 - **Progression**: Browse product cards → click for details → view technical specs and use cases
 - **Success criteria**: Clear product differentiation with visual appeal and technical depth
 
+### Materials Catalog
+- **Functionality**: Comprehensive display of biomaterial offerings with properties, advantages, and technical specifications
+- **Purpose**: Showcases the company's core materials science capabilities and polymer platform
+- **Trigger**: Navigate to Materials section
+- **Progression**: View materials grid → click material card → see detailed properties, advantages, and technical details
+- **Success criteria**: Clear differentiation between material types with accessible technical information
+
+### Applications Gallery
+- **Functionality**: Display of medical applications enabled by PolymerBionics materials with benefits and use cases
+- **Purpose**: Demonstrates real-world clinical applications and market opportunities for the technology
+- **Trigger**: Navigate to Applications section
+- **Progression**: Browse application cards → click for details → view benefits, use cases, and relevant materials
+- **Success criteria**: Clear connection between materials capabilities and clinical applications
+
 ### Media Gallery (Videos & Case Studies)
 - **Functionality**: Embedded videos and downloadable case study documents
 - **Purpose**: Provides in-depth demonstrations and clinical evidence

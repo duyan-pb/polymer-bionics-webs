@@ -3,6 +3,8 @@ import { useKV } from '@github/spark/hooks'
 import { Navigation } from '@/components/Navigation'
 import { HomePage } from '@/components/HomePage'
 import { TeamPage } from '@/components/TeamPage'
+import { MaterialsPage } from '@/components/MaterialsPage'
+import { ApplicationsPage } from '@/components/ApplicationsPage'
 import { ProductsPage } from '@/components/ProductsPage'
 import { MediaPage } from '@/components/MediaPage'
 import { DatasheetsPage } from '@/components/DatasheetsPage'
@@ -25,6 +27,10 @@ function App() {
     switch (currentPage) {
       case 'team':
         return <TeamPage team={team || []} />
+      case 'materials':
+        return <MaterialsPage />
+      case 'applications':
+        return <ApplicationsPage />
       case 'products':
         return <ProductsPage products={products || []} />
       case 'media':
