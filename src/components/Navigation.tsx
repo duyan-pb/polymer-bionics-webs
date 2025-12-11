@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, X } from '@phosphor-icons/react'
+import logoSvg from '@/assets/images/logo.svg'
 
 interface NavigationProps {
   currentPage: string
@@ -31,9 +32,9 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
         <div className="flex items-center justify-between">
           <button
             onClick={() => handleNavigate('home')}
-            className="text-2xl font-bold text-primary hover:text-accent transition-colors"
+            className="flex items-center gap-0 hover:opacity-80 transition-opacity"
           >
-            PolymerBionics
+            <img src={logoSvg} alt="PolymerBionics" className="h-10 text-primary" />
           </button>
 
           <div className="hidden md:flex items-center gap-1">
