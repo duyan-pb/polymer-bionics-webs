@@ -28,7 +28,7 @@
   --primary: oklch(0.45 0.15 260);
   --primary-foreground: oklch(1.00 0 0);
   
-  --secondary: oklch(92.9% 0.013 255.508);
+  --secondary: oklch(0.98 0.002 240);
   --secondary-foreground: oklch(0.35 0.008 240);
   
   --muted: oklch(0.96 0.005 240);
@@ -46,11 +46,11 @@
   
   --radius: 0.5rem;
   
-  --font-sans: "Inter";
+  --font-sans: Inter;
   
-  --font-serif: "Noto Serif";
+  --font-serif: Noto Serif;
   
-  --font-mono: "JetBrains Mono";
+  --font-mono: JetBrains Mono;
   
   --chart-1: oklch(0.45 0.15 260);
   
