@@ -82,30 +82,31 @@ The design should evoke innovation, flexibility, and biocompatibility - reflecti
 
 ## Color Selection
 
-A sophisticated warm palette with coral-orange tones representing organic materials and biocompatibility, balanced with soft neutrals and deep navy for medical authority.
+A sophisticated scientific palette centered on deep purple-blue tones representing precision bioelectronics and medical innovation, balanced with clean neutrals and dark accent elements for technical authority.
 
-- **Primary Color**: Deep Navy (oklch(0.28 0.05 250)) - Represents medical authority, precision engineering, and scientific depth
+- **Primary Color**: Deep Purple-Blue (oklch(0.45 0.15 260)) - Represents bioelectronics innovation, precision engineering, and scientific depth
 - **Secondary Colors**: 
-  - Warm Beige (oklch(0.95 0.015 85)) - Soft backgrounds that create warmth and approachability
-  - Light Gray (oklch(0.93 0.005 260)) - Neutral elements and subtle borders
-- **Accent Color**: Vibrant Coral (oklch(0.68 0.18 35)) - Represents organic materials, innovation, and energy - draws attention to key actions
+  - Light Gray (oklch(0.96 0.005 240)) - Soft backgrounds that create clean, professional layouts
+  - Soft Neutral (oklch(0.93 0.013 255.508)) - Supporting elements and card backgrounds
+- **Accent Color**: Deep Navy (oklch(0.10 0.005 240)) - Represents authority, stability, and technical precision - draws attention to key actions
 - **Foreground/Background Pairings**: 
-  - Primary (Deep Navy oklch(0.28 0.05 250)): White text (oklch(0.99 0 0)) - Ratio 11.5:1 ✓
-  - Accent (Vibrant Coral oklch(0.68 0.18 35)): White text (oklch(0.99 0 0)) - Ratio 4.9:1 ✓
-  - Background (Off-White oklch(0.99 0 0)): Dark text (oklch(0.22 0.03 250)) - Ratio 15.2:1 ✓
-  - Muted (Warm Beige oklch(0.95 0.015 85)): Medium text (oklch(0.45 0.05 250)) - Ratio 7.8:1 ✓
+  - Primary (Deep Purple-Blue oklch(0.45 0.15 260)): White text (oklch(1.00 0 0)) - Ratio 8.2:1 ✓
+  - Accent (Deep Navy oklch(0.10 0.005 240)): White text (oklch(1.00 0 0)) - Ratio 18.5:1 ✓
+  - Background (White oklch(1.00 0 0)): Foreground text (oklch(0.10 0.005 240)) - Ratio 18.5:1 ✓
+  - Muted (Light Gray oklch(0.96 0.005 240)): Medium text (oklch(0.45 0.01 240)) - Ratio 6.8:1 ✓
 
 ## Font Selection
 
 Typography should blend approachability with technical credibility - an elegant serif for warmth paired with a professional sans-serif for clarity.
 
 - **Typographic Hierarchy**:
-  - H1 (Page Titles): Crimson Pro Bold/48px/tight letter-spacing (-0.02em) - Warm, inviting presence for main headings
-  - H2 (Section Titles): Crimson Pro Semibold/36px/normal letter-spacing - Clear content organization with personality
-  - H3 (Subsections): Crimson Pro Semibold/24px/normal letter-spacing - Supporting hierarchy
-  - Body Text: IBM Plex Sans Regular/16px/1.6 line-height - Clean, technical readability
-  - Labels/UI: IBM Plex Sans Medium/14px/0.01em letter-spacing - Professional interface elements
-  - Captions: IBM Plex Sans Regular/14px/1.5 line-height/muted color - Supporting information
+  - H1 (Page Titles): Crimson Pro Bold/48-60px/tight letter-spacing (-0.02em) - Warm, inviting presence for main headings
+  - H2 (Section Titles): Crimson Pro Semibold/36-40px/normal letter-spacing - Clear content organization with personality
+  - H3 (Subsections): Crimson Pro Semibold/20-24px/normal letter-spacing - Supporting hierarchy
+  - Body Text: Inter Regular/16px/1.6 line-height - Clean, technical readability with excellent legibility
+  - Labels/UI: Inter Medium/14px/0.01em letter-spacing - Professional interface elements
+  - Captions: Inter Regular/14px/1.5 line-height/muted color - Supporting information
+  - Code/Technical: JetBrains Mono Regular/14px - For technical specifications and code snippets
 
 ## Animations
 
