@@ -1,0 +1,173 @@
+import { useState } from 'react'
+import { Card } from '@/components/ui/card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
+import { LinkedinLogo, User, GraduationCap, Trophy, BookOpen } from '@phosphor-icons/react'
+import type { TeamMember } from '@/lib/types'
+
+interface TeamPageProps {
+  team: TeamMember[]
+}
+
+export function TeamPage({ team }: TeamPageProps) {
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
+
+  const categorizeTeam = () => {
+    return {
+      founders: team.filter(m => m.category === 'founders'),
+      management: team.filter(m => m.category === 'management'),
+      advisory: team.filter(m => m.category === 'advisory'),
+    }
+  }
+
+  const { founders, management, advisory } = categorizeTeam()
+
+  const TeamGrid = ({ members, title }: { members: TeamMember[], title: string }) => (
+    <div className="mb-16">
+      <h2 className="text-4xl font-bold mb-8 text-primary">{title}</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {members.map((member) => (
+          <Card
+            key={member.id}
+            className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer border-2 hover:border-accent"
+            onClick={() => setSelectedMember(member)}
+          >
+            <div className="aspect-square bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+              {member.image ? (
+                <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+              ) : (
+                <User size={80} className="text-muted-foreground" weight="light" />
+              )}
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
+              <p className="text-sm text-accent font-medium mb-3">{member.title}</p>
+              <p className="text-sm text-muted-foreground line-clamp-3">{member.shortBio}</p>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="min-h-screen bg-background">
+      <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8">
+        <div className="max-w-[1280px] mx-auto">
+          <h1 className="text-6xl font-bold mb-6">Our Team</h1>
+          <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+            Our multidisciplinary team combines world-class expertise in polymer chemistry, biomedical engineering,
+            and clinical medicine to develop innovative biomaterials solutions.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-16 px-8">
+        <div className="max-w-[1280px] mx-auto">
+          {founders.length > 0 && <TeamGrid members={founders} title="Founders" />}
+          {management.length > 0 && <TeamGrid members={management} title="Management Team" />}
+          {advisory.length > 0 && <TeamGrid members={advisory} title="Scientific Advisory Board" />}
+        </div>
+      </section>
+
+      <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
+        <DialogContent className="max-w-3xl max-h-[90vh]">
+          <ScrollArea className="max-h-[80vh] pr-4">
+            {selectedMember && (
+              <>
+                <DialogHeader>
+                  <div className="flex items-start gap-6 mb-6">
+                    <div className="w-32 h-32 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center flex-shrink-0">
+                      {selectedMember.image ? (
+                        <img src={selectedMember.image} alt={selectedMember.name} className="w-full h-full object-cover rounded-lg" />
+                      ) : (
+                        <User size={60} className="text-muted-foreground" weight="light" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <DialogTitle className="text-3xl mb-2">{selectedMember.name}</DialogTitle>
+                      <p className="text-lg text-accent font-medium mb-4">{selectedMember.title}</p>
+                      <div className="flex gap-2">
+                        {selectedMember.linkedin && (
+                          <Button size="sm" variant="outline" asChild>
+                            <a href={selectedMember.linkedin} target="_blank" rel="noopener noreferrer">
+                              <LinkedinLogo className="mr-2" /> LinkedIn
+                            </a>
+                          </Button>
+                        )}
+                        {selectedMember.scholar && (
+                          <Button size="sm" variant="outline" asChild>
+                            <a href={selectedMember.scholar} target="_blank" rel="noopener noreferrer">
+                              <GraduationCap className="mr-2" /> Google Scholar
+                            </a>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </DialogHeader>
+
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-base leading-relaxed">{selectedMember.fullBio}</p>
+                  </div>
+
+                  <Separator />
+
+                  <div>
+                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                      <GraduationCap size={20} className="text-primary" /> Education
+                    </h4>
+                    <ul className="space-y-2">
+                      {selectedMember.education.map((edu, idx) => (
+                        <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
+                          {edu}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <Separator />
+
+                  <div>
+                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                      <Trophy size={20} className="text-primary" /> Key Achievements
+                    </h4>
+                    <ul className="space-y-2">
+                      {selectedMember.achievements.map((achievement, idx) => (
+                        <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
+                          {achievement}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {selectedMember.publications && selectedMember.publications.length > 0 && (
+                    <>
+                      <Separator />
+                      <div>
+                        <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                          <BookOpen size={20} className="text-primary" /> Selected Publications
+                        </h4>
+                        <ul className="space-y-2">
+                          {selectedMember.publications.map((pub, idx) => (
+                            <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
+                              {pub}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
