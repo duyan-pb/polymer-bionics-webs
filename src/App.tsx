@@ -7,6 +7,7 @@ import { ProductsPage } from '@/components/ProductsPage'
 import { MediaPage } from '@/components/MediaPage'
 import { DatasheetsPage } from '@/components/DatasheetsPage'
 import { NewsPage } from '@/components/NewsPage'
+import { ProductsInitializer } from '@/components/ProductsInitializer'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background">
+      <ProductsInitializer />
       <Navigation currentPage={currentPage} onNavigate={setCurrentPage} />
       {renderPage()}
     </div>
