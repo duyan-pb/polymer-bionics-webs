@@ -227,22 +227,6 @@ export function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">Business Hours</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Monday - Friday</span>
-                  <span className="font-medium text-foreground">9:00 AM - 5:00 PM GMT</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Saturday - Sunday</span>
-                  <span className="font-medium text-foreground">Closed</span>
-                </div>
-              </CardContent>
-            </Card>
-
             <Card className="bg-primary/5 border-primary/20">
               <CardContent className="pt-6">
                 <h3 className="font-semibold text-foreground mb-2 text-lg">
