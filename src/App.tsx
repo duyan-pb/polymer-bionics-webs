@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Navigation } from '@/components/Navigation'
+import { Footer } from '@/components/Footer'
 import { HomePage } from '@/components/HomePage'
 import { TeamPage } from '@/components/TeamPage'
 import { MaterialsPage } from '@/components/MaterialsPage'
@@ -45,10 +46,13 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <ProductsInitializer />
       <Navigation currentPage={currentPage} onNavigate={setCurrentPage} />
-      {renderPage()}
+      <div className="flex-1">
+        {renderPage()}
+      </div>
+      <Footer />
     </div>
   )
 }
