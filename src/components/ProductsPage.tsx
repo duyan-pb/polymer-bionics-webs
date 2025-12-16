@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { Download, CheckCircle, TestTube, Package, FileText } from '@phosphor-icons/react'
+import { Download, CheckCircle, TestTube, Package, FileText, Image as ImageIcon } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
 
 interface ProductsPageProps {
@@ -15,6 +15,7 @@ interface ProductsPageProps {
 export function ProductsPage({ products }: ProductsPageProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
   const categories = ['all', ...Array.from(new Set(products.map(p => p.category)))]
 
@@ -56,6 +57,15 @@ export function ProductsPage({ products }: ProductsPageProps) {
                 className="p-6 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer border-2 hover:border-accent"
                 onClick={() => setSelectedProduct(product)}
               >
+                {product.imageUrl && (
+                  <div className="mb-4 rounded-lg overflow-hidden">
+                    <img 
+                      src={product.imageUrl} 
+                      alt={product.name}
+                      className="w-full h-48 object-cover"
+                    />
+                  </div>
+                )}
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h3 className="text-2xl font-semibold mb-2">{product.name}</h3>
@@ -112,6 +122,32 @@ export function ProductsPage({ products }: ProductsPageProps) {
                 </DialogHeader>
 
                 <div className="space-y-6">
+                  {selectedProduct.images && selectedProduct.images.length > 0 && (
+                    <>
+                      <div>
+                        <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                          <ImageIcon size={20} className="text-primary" /> Product Images
+                        </h4>
+                        <div className="grid grid-cols-3 gap-3">
+                          {selectedProduct.images.map((img, idx) => (
+                            <div 
+                              key={idx}
+                              className="cursor-pointer rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-colors"
+                              onClick={() => setSelectedImage(img)}
+                            >
+                              <img 
+                                src={img} 
+                                alt={`${selectedProduct.name} - Image ${idx + 1}`}
+                                className="w-full h-32 object-cover"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <Separator />
+                    </>
+                  )}
+
                   <div>
                     <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
                       <TestTube size={20} className="text-primary" /> Technical Description
@@ -173,6 +209,18 @@ export function ProductsPage({ products }: ProductsPageProps) {
               </>
             )}
           </ScrollArea>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
+        <DialogContent className="max-w-5xl">
+          <div className="flex items-center justify-center">
+            <img 
+              src={selectedImage || ''} 
+              alt="Product detail"
+              className="max-w-full max-h-[80vh] object-contain"
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </div>

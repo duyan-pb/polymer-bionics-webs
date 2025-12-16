@@ -29,6 +29,7 @@ export interface Product {
   applications: string[]
   regulatoryStatus?: string
   imageUrl?: string
+  images?: string[]
   datasheetId?: string
   caseStudyId?: string
 }
