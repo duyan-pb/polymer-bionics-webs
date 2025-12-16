@@ -1,6 +1,18 @@
-<svg width="180" height="40" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 20C8 16.6863 10.6863 14 14 14H20C23.3137 14 26 16.6863 26 20V26C26 29.3137 23.3137 32 20 32H14C10.6863 32 8 29.3137 8 26V20Z" fill="oklch(0.58 0.14 194)" opacity="0.15"/>
-  <path d="M12 8C12 5.23858 14.2386 3 17 3H23C25.7614 3 28 5.23858 28 8V14C28 16.7614 25.7614 19 23 19H17C14.2386 19 12 16.7614 12 14V8Z" fill="oklch(0.58 0.14 194)"/>
-  <circle cx="17" cy="28" r="5" fill="oklch(0.20 0.01 240)"/>
-  <text x="38" y="26" font-family="'Poppins', sans-serif" font-size="20" font-weight="600" fill="oklch(0.20 0.01 240)">PolymerBionics</text>
+<svg width="180" height="60" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="300" cy="950" r="50" fill="#003D6D"/>
+  <circle cx="300" cy="800" r="50" fill="#003D6D"/>
+  <path d="M 300 950 Q 200 800 300 650" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M 300 800 Q 150 700 200 500" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <circle cx="200" cy="500" r="50" fill="#003D6D"/>
+  <path d="M 200 500 Q 300 350 400 200" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <circle cx="400" cy="200" r="50" fill="#003D6D"/>
+  <circle cx="500" cy="200" r="50" fill="#003D6D"/>
+  <path d="M 500 200 Q 600 350 700 500" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <circle cx="700" cy="500" r="50" fill="#003D6D"/>
+  <circle cx="800" cy="500" r="50" fill="#003D6D"/>
+  <path d="M 800 500 Q 850 650 750 800" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M 750 800 Q 650 900 750 950" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <circle cx="750" cy="950" r="50" fill="#003D6D"/>
+  <path d="M 300 650 Q 400 550 500 650" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M 500 650 Q 600 550 700 650" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
 </svg>

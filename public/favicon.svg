@@ -1,6 +1,18 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="6" fill="oklch(0.58 0.14 194)"/>
-  <path d="M8 16C8 13.7909 9.79086 12 12 12H16C18.2091 12 20 13.7909 20 16V20C20 22.2091 18.2091 24 16 24H12C9.79086 24 8 22.2091 8 20V16Z" fill="oklch(1.00 0 0)" opacity="0.2"/>
-  <path d="M11 6C11 4.34315 12.3431 3 14 3H18C19.6569 3 21 4.34315 21 6V10C21 11.6569 19.6569 13 18 13H14C12.3431 13 11 11.6569 11 10V6Z" fill="oklch(1.00 0 0)"/>
-  <circle cx="14" cy="22" r="4" fill="oklch(0.20 0.01 240)"/>
+<svg width="32" height="32" viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="300" cy="950" r="50" fill="#003D6D"/>
+  <circle cx="300" cy="800" r="50" fill="#003D6D"/>
+  <path d="M 300 950 Q 200 800 300 650" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M 300 800 Q 150 700 200 500" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <circle cx="200" cy="500" r="50" fill="#003D6D"/>
+  <path d="M 200 500 Q 300 350 400 200" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <circle cx="400" cy="200" r="50" fill="#003D6D"/>
+  <circle cx="500" cy="200" r="50" fill="#003D6D"/>
+  <path d="M 500 200 Q 600 350 700 500" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <circle cx="700" cy="500" r="50" fill="#003D6D"/>
+  <circle cx="800" cy="500" r="50" fill="#003D6D"/>
+  <path d="M 800 500 Q 850 650 750 800" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M 750 800 Q 650 900 750 950" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <circle cx="750" cy="950" r="50" fill="#003D6D"/>
+  <path d="M 300 650 Q 400 550 500 650" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M 500 650 Q 600 550 700 650" stroke="#003D6D" stroke-width="40" fill="none" stroke-linecap="round"/>
 </svg>

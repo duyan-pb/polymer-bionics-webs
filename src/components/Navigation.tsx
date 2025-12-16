@@ -35,18 +35,26 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
         <div className="flex items-center justify-between">
           <motion.button
             onClick={() => handleNavigate('home')}
-            className="flex items-center gap-0"
-            whileHover={{ scale: 1.05, rotate: 2 }}
-            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-0 group"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <motion.img 
-              src={logoSvg} 
-              alt="PolymerBionics" 
-              className="h-10 text-primary"
-              whileHover={{ rotate: -2 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
-            />
+            <motion.div
+              whileHover={{ 
+                rotate: [0, -3, 3, -3, 0],
+                transition: { 
+                  duration: 0.5,
+                  ease: "easeInOut"
+                }
+              }}
+            >
+              <img 
+                src={logoSvg} 
+                alt="PolymerBionics" 
+                className="h-12 w-auto transition-all duration-300 group-hover:brightness-110"
+              />
+            </motion.div>
           </motion.button>
 
           <div className="hidden md:flex items-center gap-1">
