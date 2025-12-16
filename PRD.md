@@ -82,31 +82,31 @@ The design should evoke innovation, flexibility, and biocompatibility - reflecti
 
 ## Color Selection
 
-A sophisticated scientific palette centered on deep purple-blue tones representing precision bioelectronics and medical innovation, balanced with clean neutrals and dark accent elements for technical authority.
+A fresh, modern scientific palette centered on teal/turquoise tones representing biocompatibility and innovation, inspired by the PolymerBionics brand identity. The color scheme evokes trust, clarity, and medical precision.
 
-- **Primary Color**: Deep Purple-Blue (oklch(0.45 0.15 260)) - Represents bioelectronics innovation, precision engineering, and scientific depth
+- **Primary Color**: Teal/Turquoise (oklch(0.58 0.14 194)) - Represents innovation, biocompatibility, and modern medical technology with a fresh, approachable feel
 - **Secondary Colors**: 
   - Light Gray (oklch(0.96 0.005 240)) - Soft backgrounds that create clean, professional layouts
-  - Soft Neutral (oklch(0.93 0.013 255.508)) - Supporting elements and card backgrounds
-- **Accent Color**: Deep Navy (oklch(0.10 0.005 240)) - Represents authority, stability, and technical precision - draws attention to key actions
+  - Soft Neutral (oklch(0.99 0 0)) - Clean white backgrounds for maximum clarity
+- **Accent Color**: Teal/Turquoise (oklch(0.58 0.14 194)) - Draws attention to key actions and interactive elements
 - **Foreground/Background Pairings**: 
-  - Primary (Deep Purple-Blue oklch(0.45 0.15 260)): White text (oklch(1.00 0 0)) - Ratio 8.2:1 ✓
-  - Accent (Deep Navy oklch(0.10 0.005 240)): White text (oklch(1.00 0 0)) - Ratio 18.5:1 ✓
-  - Background (White oklch(1.00 0 0)): Foreground text (oklch(0.10 0.005 240)) - Ratio 18.5:1 ✓
-  - Muted (Light Gray oklch(0.96 0.005 240)): Medium text (oklch(0.45 0.01 240)) - Ratio 6.8:1 ✓
+  - Primary (Teal oklch(0.58 0.14 194)): White text (oklch(1.00 0 0)) - Ratio 4.8:1 ✓
+  - Accent (Teal oklch(0.58 0.14 194)): White text (oklch(1.00 0 0)) - Ratio 4.8:1 ✓
+  - Background (White oklch(0.99 0 0)): Foreground text (oklch(0.20 0.01 240)) - Ratio 15.2:1 ✓
+  - Muted (Light Gray oklch(0.96 0.005 240)): Medium text (oklch(0.50 0.01 240)) - Ratio 5.8:1 ✓
 
 ## Font Selection
 
-Typography should blend approachability with technical credibility - an elegant serif for warmth paired with a professional sans-serif for clarity.
+Typography uses Poppins throughout for a clean, modern, and highly readable experience that matches the PolymerBionics brand identity. Poppins provides a geometric sans-serif with friendly personality.
 
 - **Typographic Hierarchy**:
-  - H1 (Page Titles): Crimson Pro Bold/48-60px/tight letter-spacing (-0.02em) - Warm, inviting presence for main headings
-  - H2 (Section Titles): Crimson Pro Semibold/36-40px/normal letter-spacing - Clear content organization with personality
-  - H3 (Subsections): Crimson Pro Semibold/20-24px/normal letter-spacing - Supporting hierarchy
-  - Body Text: Inter Regular/16px/1.6 line-height - Clean, technical readability with excellent legibility
-  - Labels/UI: Inter Medium/14px/0.01em letter-spacing - Professional interface elements
-  - Captions: Inter Regular/14px/1.5 line-height/muted color - Supporting information
-  - Code/Technical: JetBrains Mono Regular/14px - For technical specifications and code snippets
+  - H1 (Page Titles): Poppins Bold/48-60px/tight letter-spacing (-0.01em) - Strong, confident presence for main headings
+  - H2 (Section Titles): Poppins Semibold/36-40px/normal letter-spacing - Clear content organization
+  - H3 (Subsections): Poppins Semibold/20-24px/normal letter-spacing - Supporting hierarchy
+  - Body Text: Poppins Regular/16px/1.6 line-height - Clean readability with excellent legibility
+  - Labels/UI: Poppins Medium/14px/0.01em letter-spacing - Professional interface elements
+  - Captions: Poppins Regular/14px/1.5 line-height/muted color - Supporting information
+  - Code/Technical: JetBrains Mono Regular/14px - For technical specifications (if needed)
 
 ## Animations
 
