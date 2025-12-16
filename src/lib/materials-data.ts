@@ -201,24 +201,24 @@ export const applications: Application[] = [
     imageClass: 'bg-gradient-to-br from-pink-500/10 to-rose-500/10'
   },
   {
-    id: 'in-ear-device',
-    name: 'In-Ear Biosignal Monitor',
-    description: 'Advanced in-ear wearable device for continuous biosignal monitoring with superior comfort and signal quality',
+    id: 'inear-eeg',
+    name: 'InEar EEG',
+    description: 'Discreet in-ear EEG sensor for continuous brain activity monitoring with clinical-grade signal quality',
     benefits: [
-      'Discreet and comfortable all-day wear',
-      'High-quality biosignal acquisition from ear canal',
+      'Comfortable all-day wear without visible hardware',
+      'High-quality EEG signal acquisition from ear canal',
       'Minimal interference with daily activities',
-      'Secure fit for continuous monitoring',
-      'Multi-modal sensing capabilities',
-      'Wireless connectivity for real-time data transmission'
+      'Secure fit for continuous monitoring during movement',
+      'Reusable design for long-term studies',
+      'Compatible with wireless data transmission systems'
     ],
     useCases: [
       'Continuous EEG monitoring in ambulatory settings',
-      'Sleep quality assessment and diagnostics',
-      'Cardiac rhythm monitoring via ear canal',
-      'Temperature and activity tracking',
+      'Long-term epilepsy monitoring outside hospital',
+      'Sleep disorder diagnostics and research',
       'Brain-computer interface applications',
-      'Remote patient monitoring programs'
+      'Cognitive performance monitoring',
+      'Remote neurological patient monitoring'
     ],
     relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiWire'],
     imageClass: 'bg-gradient-to-br from-emerald-500/10 to-teal-500/10'

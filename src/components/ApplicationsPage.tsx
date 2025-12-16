@@ -13,7 +13,8 @@ import {
   Heart,
   Brain,
   FirstAidKit,
-  Syringe
+  Syringe,
+  Headphones
 } from '@phosphor-icons/react'
 import { applications, type Application } from '@/lib/materials-data'
 
@@ -25,7 +26,14 @@ const iconMap: Record<string, any> = {
   'surgical-tools': FirstAidKit,
   'wound-care': FirstAidKit,
   'organ-on-chip': Package,
-  'prosthetics': Pulse
+  'prosthetics': Pulse,
+  'elasticuff': Brain,
+  'elastarray': Pulse,
+  'elastiwire': Package,
+  'simpleeg': Brain,
+  'babeeg': Heart,
+  'inear-eeg': Headphones,
+  'custom-applications': Lightbulb
 }
 
 export function ApplicationsPage() {
