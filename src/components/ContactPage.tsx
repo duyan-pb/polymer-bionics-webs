@@ -169,7 +169,7 @@ export function ContactPage() {
                     <EnvelopeSimple size={24} className="text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">Email</h3>
+                    <h3 className="font-semibold text-foreground mb-1">General Enquiries</h3>
                     <a 
                       href="mailto:info@polymerbionics.com" 
                       className="text-muted-foreground hover:text-primary transition-colors"
@@ -181,12 +181,29 @@ export function ContactPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="bg-primary/10 p-3 rounded-lg">
+                    <EnvelopeSimple size={24} className="text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground mb-1">Quote Requests</h3>
+                    <a 
+                      href="mailto:sales@polymerbionics.com" 
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      sales@polymerbionics.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-3 rounded-lg">
                     <MapPin size={24} className="text-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Location</h3>
                     <p className="text-muted-foreground">
-                      Oxford, United Kingdom
+                      Exhibition Rd, South Kensington<br />
+                      London SW7 2AZ<br />
+                      United Kingdom
                     </p>
                   </div>
                 </div>
