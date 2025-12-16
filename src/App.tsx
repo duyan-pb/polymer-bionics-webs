@@ -12,6 +12,7 @@ import { DatasheetsPage } from '@/components/DatasheetsPage'
 import { NewsPage } from '@/components/NewsPage'
 import { ContactPage } from '@/components/ContactPage'
 import { ProductsInitializer } from '@/components/ProductsInitializer'
+import { TeamInitializer } from '@/components/TeamInitializer'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <ProductsInitializer />
+      <TeamInitializer />
       <Navigation currentPage={currentPage} onNavigate={setCurrentPage} />
       <div className="flex-1">
         {renderPage()}
