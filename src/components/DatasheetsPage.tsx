@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -8,7 +8,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Download, MagnifyingGlass, FileText, Calendar } from '@phosphor-icons/react'
-import type { Datasheet } from '@/lib/types'
+import type { Datasheet, Product } from '@/lib/types'
+import { materials, applications } from '@/lib/materials-data'
+import { useKV } from '@github/spark/hooks'
 
 interface DatasheetsPageProps {
   datasheets: Datasheet[]
@@ -18,10 +20,64 @@ export function DatasheetsPage({ datasheets }: DatasheetsPageProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedDatasheet, setSelectedDatasheet] = useState<Datasheet | null>(null)
+  const [products] = useKV<Product[]>('products', [])
 
-  const categories = ['all', ...Array.from(new Set(datasheets.map(d => d.category)))]
+  const generatedDatasheets = useMemo(() => {
+    const sheets: Datasheet[] = []
+    
+    materials.forEach((material) => {
+      sheets.push({
+        id: `datasheet-${material.id}`,
+        name: material.name,
+        title: `${material.name} Technical Datasheet`,
+        description: material.description,
+        category: 'Advanced Materials',
+        version: 'v1.0',
+        lastUpdated: 'January 2025',
+        pdfUrl: '#',
+        technicalSpecs: {
+          'Material Type': 'Flexible Bioelectronic Material',
+          'Primary Function': material.properties[0] || 'N/A',
+          'Biocompatibility': 'ISO 10993 compliant',
+          'Sterilization': 'Compatible with EtO and gamma irradiation',
+          'Key Properties': material.properties.slice(0, 3).join(', '),
+          'Typical Applications': applications
+            .filter(app => app.relevantMaterials.includes(material.name))
+            .map(app => app.name)
+            .join(', ') || 'Various bioelectronic applications',
+        }
+      })
+    })
+    
+    applications.forEach((application) => {
+      sheets.push({
+        id: `datasheet-${application.id}`,
+        name: application.name,
+        title: `${application.name} Product Information`,
+        description: application.description,
+        category: 'Clinical Applications',
+        version: 'v1.0',
+        lastUpdated: 'January 2025',
+        pdfUrl: '#',
+        technicalSpecs: {
+          'Product Type': 'Bioelectronic Device/Application',
+          'Primary Use': application.useCases[0] || 'N/A',
+          'Key Benefits': application.benefits.slice(0, 3).join(', '),
+          'Materials Used': application.relevantMaterials.join(', '),
+          'Target Applications': application.useCases.slice(0, 2).join(', '),
+          'Regulatory Status': 'Development stage - Contact for partnership',
+        }
+      })
+    })
+    
+    return sheets
+  }, [])
 
-  const filteredDatasheets = datasheets.filter(datasheet => {
+  const allDatasheets = [...generatedDatasheets, ...datasheets]
+
+  const categories = ['all', ...Array.from(new Set(allDatasheets.map(d => d.category)))]
+
+  const filteredDatasheets = allDatasheets.filter(datasheet => {
     const matchesSearch = datasheet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          datasheet.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || datasheet.category === selectedCategory
