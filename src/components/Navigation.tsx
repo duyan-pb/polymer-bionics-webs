@@ -22,6 +22,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
     { id: 'media', label: 'Videos & Case Studies' },
     { id: 'datasheets', label: 'Datasheets' },
     { id: 'news', label: 'News & Publications' },
+    { id: 'contact', label: 'Contact' },
   ]
 
   const handleNavigate = (page: string) => {
