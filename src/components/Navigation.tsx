@@ -56,7 +56,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
                 className="h-12 w-auto transition-all duration-300 group-hover:brightness-110"
               />
             </motion.div>
-            <span className="text-xl font-semibold text-foreground tracking-tight">
+            <span className="text-xl text-foreground tracking-tight">
               polymerbionics
             </span>
           </motion.button>
