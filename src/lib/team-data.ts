@@ -41,10 +41,29 @@ export const teamMembers: TeamMember[] = [
     linkedin: 'https://linkedin.com'
   },
   {
+    id: 'olivia-cauvi',
+    name: 'Olivia Cauvi',
+    title: 'Project Manager',
+    role: 'Project Manager',
+    category: 'management',
+    shortBio: '[Short bio placeholder]',
+    fullBio: '[Full bio placeholder]',
+    education: [
+      '[Education placeholder]'
+    ],
+    achievements: [
+      '[Achievement placeholder]'
+    ],
+    publications: [
+      '[Publication placeholder]'
+    ],
+    linkedin: 'https://linkedin.com'
+  },
+  {
     id: 'joe-goding',
     name: 'Dr Joe Goding',
-    title: 'Head of Research & Development',
-    role: 'Head of R&D',
+    title: 'Research Team',
+    role: 'Research Team',
     category: 'management',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
@@ -63,8 +82,8 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'estelle-cuttaz',
     name: 'Dr Estelle Cuttaz',
-    title: 'Senior Scientist - Neural Interfaces',
-    role: 'Senior Scientist',
+    title: 'Research Team',
+    role: 'Research Team',
     category: 'management',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
@@ -81,10 +100,49 @@ export const teamMembers: TeamMember[] = [
     linkedin: 'https://linkedin.com'
   },
   {
+    id: 'robert-toth',
+    name: 'Dr Robert Toth',
+    title: 'Research Team',
+    role: 'Research Team',
+    category: 'management',
+    shortBio: '[Short bio placeholder]',
+    fullBio: '[Full bio placeholder]',
+    education: [
+      '[Education placeholder]'
+    ],
+    achievements: [
+      '[Achievement placeholder]'
+    ],
+    publications: [
+      '[Publication placeholder]'
+    ],
+    scholar: 'https://scholar.google.com',
+    linkedin: 'https://linkedin.com'
+  },
+  {
+    id: 'alexey-nonikov',
+    name: 'Alexey Nonikov',
+    title: 'Research Team',
+    role: 'Research Team',
+    category: 'management',
+    shortBio: '[Short bio placeholder]',
+    fullBio: '[Full bio placeholder]',
+    education: [
+      '[Education placeholder]'
+    ],
+    achievements: [
+      '[Achievement placeholder]'
+    ],
+    publications: [
+      '[Publication placeholder]'
+    ],
+    linkedin: 'https://linkedin.com'
+  },
+  {
     id: 'efe-sen',
     name: 'Efe Sen',
-    title: 'Materials Engineer',
-    role: 'Materials Engineer',
+    title: 'Engineering Team',
+    role: 'Engineering Team',
     category: 'management',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
@@ -102,8 +160,8 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'duy-an-tran',
     name: 'Duy An Tran',
-    title: 'Biomedical Engineer',
-    role: 'Biomedical Engineer',
+    title: 'Engineering Team',
+    role: 'Engineering Team',
     category: 'management',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
@@ -116,26 +174,6 @@ export const teamMembers: TeamMember[] = [
     publications: [
       '[Publication placeholder]'
     ],
-    linkedin: 'https://linkedin.com'
-  },
-  {
-    id: 'alexey-nonikov',
-    name: 'Dr Alexey Nonikov',
-    title: 'Scientific Advisor',
-    role: 'Scientific Advisor',
-    category: 'advisory',
-    shortBio: '[Short bio placeholder]',
-    fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
-    scholar: 'https://scholar.google.com',
     linkedin: 'https://linkedin.com'
   }
 ]
