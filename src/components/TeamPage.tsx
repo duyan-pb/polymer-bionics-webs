@@ -1,25 +1,129 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useKV } from '@github/spark/hooks'
 import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { LinkedinLogo, User, GraduationCap, Trophy, BookOpen } from '@phosphor-icons/react'
+import { LinkedinLogo, User, GraduationCap, Trophy, BookOpen, MagnifyingGlass } from '@phosphor-icons/react'
+import { toast } from 'sonner'
 import type { TeamMember } from '@/lib/types'
 
 interface TeamPageProps {
   team: TeamMember[]
 }
 
-export function TeamPage({ team }: TeamPageProps) {
+export function TeamPage({ team: initialTeam }: TeamPageProps) {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
+  const [isSearching, setIsSearching] = useState(false)
+  const [isOwner, setIsOwner] = useState(false)
+  const [team, setTeam] = useKV<TeamMember[]>('team', initialTeam)
+
+  useEffect(() => {
+    const checkOwner = async () => {
+      try {
+        const user = await window.spark.user()
+        setIsOwner(user?.isOwner || false)
+      } catch (error) {
+        console.error('Error checking user:', error)
+      }
+    }
+    checkOwner()
+  }, [])
+
+  const searchLinkedIn = async () => {
+    if (!team || team.length === 0) return
+    
+    setIsSearching(true)
+    toast.info('Searching LinkedIn for team profiles...')
+    
+    try {
+      const teamMembers = team.map(m => `- ${m.name} (${m.role})`).join('\n')
+      
+      const response = await window.spark.llm(
+        `You are researching real LinkedIn profiles for the team at Polymer Bionics, a UK-based medical device and biomaterials company specializing in flexible bioelectronics.
+
+The team members to research are:
+${teamMembers}
+
+For EACH person, search for their actual LinkedIn profile and professional information. Gather:
+1. Their real current job title at Polymer Bionics or related biomedical roles
+2. Actual education background from their profiles (real degrees and universities)
+3. Real professional achievements, career highlights, and previous positions
+4. Research publications or patents if they're academic researchers
+5. Their actual LinkedIn profile URL (in format: https://linkedin.com/in/username)
+6. Google Scholar profile URL if applicable
+
+IMPORTANT: Research real information. Do not fabricate generic details. If you cannot find specific information for someone, set "found": false.
+
+Return ONLY a valid JSON object with structure:
+{
+  "teamUpdates": [
+    {
+      "name": "Full Name",
+      "found": true,
+      "title": "Actual Current Title",
+      "education": ["Real Degree 1", "Real Degree 2"],
+      "achievements": ["Real achievement 1", "Real achievement 2"],
+      "publications": ["Real publication 1", "Real publication 2"],
+      "linkedin": "https://linkedin.com/in/realprofile",
+      "scholar": "https://scholar.google.com/citations?user=...",
+      "shortBio": "1-2 sentence summary based on real info",
+      "fullBio": "3-4 sentence biography based on real info"
+    }
+  ]
+}`,
+        "gpt-4o",
+        true
+      )
+      
+      const data = JSON.parse(response)
+      
+      if (data.teamUpdates && Array.isArray(data.teamUpdates)) {
+        setTeam((currentTeam) => {
+          if (!currentTeam) return []
+          return currentTeam.map(member => {
+            const update = data.teamUpdates.find((u: any) => {
+              const memberLastName = member.name.toLowerCase().split(' ').pop()
+              const updateName = u.name.toLowerCase()
+              return updateName.includes(memberLastName || '')
+            })
+            
+            if (update && update.found !== false) {
+              return {
+                ...member,
+                title: update.title || member.title,
+                education: update.education && update.education.length > 0 ? update.education : member.education,
+                achievements: update.achievements && update.achievements.length > 0 ? update.achievements : member.achievements,
+                publications: update.publications && update.publications.length > 0 ? update.publications : member.publications,
+                linkedin: update.linkedin || member.linkedin,
+                scholar: update.scholar || member.scholar,
+                shortBio: update.shortBio || member.shortBio,
+                fullBio: update.fullBio || member.fullBio
+              }
+            }
+            
+            return member
+          })
+        })
+        
+        toast.success('Team profiles updated from LinkedIn!')
+      }
+    } catch (error) {
+      console.error('Error updating team from LinkedIn:', error)
+      toast.error('Failed to update team profiles')
+    } finally {
+      setIsSearching(false)
+    }
+  }
 
   const categorizeTeam = () => {
+    const currentTeam = team || []
     return {
-      founders: team.filter(m => m.category === 'founders'),
-      management: team.filter(m => m.category === 'management'),
-      advisory: team.filter(m => m.category === 'advisory'),
+      founders: currentTeam.filter(m => m.category === 'founders'),
+      management: currentTeam.filter(m => m.category === 'management'),
+      advisory: currentTeam.filter(m => m.category === 'advisory'),
     }
   }
 
@@ -57,11 +161,26 @@ export function TeamPage({ team }: TeamPageProps) {
     <div className="min-h-screen bg-background">
       <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8">
         <div className="max-w-[1280px] mx-auto">
-          <h1 className="text-6xl font-bold mb-6">Our Team</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
-            Our multidisciplinary team combines world-class expertise in polymer chemistry, biomedical engineering,
-            and clinical medicine to develop innovative biomaterials solutions.
-          </p>
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <h1 className="text-6xl font-bold mb-6">Our Team</h1>
+              <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+                Our multidisciplinary team combines world-class expertise in polymer chemistry, biomedical engineering,
+                and clinical medicine to develop innovative biomaterials solutions.
+              </p>
+            </div>
+            {isOwner && (
+              <Button 
+                onClick={searchLinkedIn} 
+                disabled={isSearching}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <MagnifyingGlass size={18} />
+                {isSearching ? 'Searching LinkedIn...' : 'Update from LinkedIn'}
+              </Button>
+            )}
+          </div>
         </div>
       </section>
 

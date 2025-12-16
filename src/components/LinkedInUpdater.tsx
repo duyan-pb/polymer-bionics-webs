@@ -1,65 +1,74 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useKV } from '@github/spark/hooks'
 import type { TeamMember } from '@/lib/types'
 
 export function LinkedInUpdater() {
   const [team, setTeam] = useKV<TeamMember[]>('team', [])
-  const [isUpdating, setIsUpdating] = useState(false)
+  const [hasSearched, setHasSearched] = useKV<boolean>('linkedin-search-complete', false)
 
   useEffect(() => {
     const updateTeamFromLinkedIn = async () => {
-      if (isUpdating || !team || team.length === 0) return
-      
-      setIsUpdating(true)
+      if (hasSearched || !team || team.length === 0) return
       
       try {
-        const teamNames = team.map(m => m.name).join(', ')
+        const teamMembers = team.map(m => `- ${m.name} (${m.role})`).join('\n')
         
-        const promptText = `You are helping to update team member profiles for Polymer Bionics, a UK-based medical device company specializing in flexible bioelectronics and conducting polymer materials.
+        const response = await window.spark.llm(
+          `You are researching real LinkedIn profiles for the team at Polymer Bionics, a UK-based medical device and biomaterials company specializing in flexible bioelectronics.
 
-The current team members are: ${teamNames}
+The team members to research are:
+${teamMembers}
 
-Please research and provide updated LinkedIn profile information for each person. For each team member, provide:
-1. Current accurate job title at Polymer Bionics (or their actual current role)
-2. Updated education background (degrees, institutions)
-3. Key professional achievements and career highlights
-4. Research publications or patents (if applicable)
-5. LinkedIn profile URL (if publicly available)
-6. Google Scholar URL (if applicable for research members)
+For EACH person, search for their actual LinkedIn profile and professional information. Gather:
+1. Their real current job title at Polymer Bionics or related biomedical roles
+2. Actual education background from their profiles (real degrees and universities)
+3. Real professional achievements, career highlights, and previous positions
+4. Research publications or patents if they're academic researchers
+5. Their actual LinkedIn profile URL (in format: https://linkedin.com/in/username)
+6. Google Scholar profile URL if applicable
 
-Focus on accuracy and professionalism. If you cannot find specific information, provide reasonable professional descriptions based on their likely role in a biomedical materials company.
+IMPORTANT: Research real information. Do not fabricate generic details. If you cannot find specific information for someone, set "found": false.
 
-Return the result as a valid JSON object with a single property called "teamUpdates" that contains an array of objects. Each object should have:
+Return ONLY a valid JSON object with structure:
 {
-  "name": "exact name from the list",
-  "title": "current job title",
-  "education": ["degree 1", "degree 2"],
-  "achievements": ["achievement 1", "achievement 2"],
-  "publications": ["publication 1", "publication 2"],
-  "linkedin": "linkedin url or empty string",
-  "scholar": "google scholar url or empty string",
-  "shortBio": "brief 1-2 sentence professional summary",
-  "fullBio": "comprehensive 3-4 sentence professional biography"
-}`
-
-        const response = await window.spark.llm(promptText, "gpt-4o", true)
+  "teamUpdates": [
+    {
+      "name": "Full Name",
+      "found": true,
+      "title": "Actual Current Title",
+      "education": ["Real Degree 1", "Real Degree 2"],
+      "achievements": ["Real achievement 1", "Real achievement 2"],
+      "publications": ["Real publication 1", "Real publication 2"],
+      "linkedin": "https://linkedin.com/in/realprofile",
+      "scholar": "https://scholar.google.com/citations?user=...",
+      "shortBio": "1-2 sentence summary based on real info",
+      "fullBio": "3-4 sentence biography based on real info"
+    }
+  ]
+}`,
+          "gpt-4o",
+          true
+        )
+        
         const data = JSON.parse(response)
         
         if (data.teamUpdates && Array.isArray(data.teamUpdates)) {
           setTeam((currentTeam) => {
             if (!currentTeam) return []
             return currentTeam.map(member => {
-              const update = data.teamUpdates.find((u: any) => 
-                u.name.toLowerCase().includes(member.name.toLowerCase().split(' ')[member.name.toLowerCase().split(' ').length - 1])
-              )
+              const update = data.teamUpdates.find((u: any) => {
+                const memberLastName = member.name.toLowerCase().split(' ').pop()
+                const updateName = u.name.toLowerCase()
+                return updateName.includes(memberLastName || '')
+              })
               
-              if (update) {
+              if (update && update.found !== false) {
                 return {
                   ...member,
                   title: update.title || member.title,
-                  education: update.education || member.education,
-                  achievements: update.achievements || member.achievements,
-                  publications: update.publications || member.publications,
+                  education: update.education && update.education.length > 0 ? update.education : member.education,
+                  achievements: update.achievements && update.achievements.length > 0 ? update.achievements : member.achievements,
+                  publications: update.publications && update.publications.length > 0 ? update.publications : member.publications,
                   linkedin: update.linkedin || member.linkedin,
                   scholar: update.scholar || member.scholar,
                   shortBio: update.shortBio || member.shortBio,
@@ -70,16 +79,17 @@ Return the result as a valid JSON object with a single property called "teamUpda
               return member
             })
           })
+          
+          setHasSearched(true)
         }
       } catch (error) {
         console.error('Error updating team from LinkedIn:', error)
-      } finally {
-        setIsUpdating(false)
+        setHasSearched(true)
       }
     }
 
     updateTeamFromLinkedIn()
-  }, [])
+  }, [team, hasSearched, setTeam, setHasSearched])
 
   return null
 }
