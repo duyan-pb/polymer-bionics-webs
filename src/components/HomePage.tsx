@@ -16,7 +16,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               Flexible Bioelectronics & Polymer Medical Devices
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              PolymerBionics develops advanced polymer-based bioelectronics and flexible medical devices for 
+              Polymer Bionics develops advanced polymer-based bioelectronics and flexible medical devices for 
               next-generation healthcare solutions, combining material science innovation with clinical precision.
             </p>
             <div className="flex flex-wrap gap-4">

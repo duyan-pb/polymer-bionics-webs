@@ -51,12 +51,12 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
             >
               <img 
                 src={logoPng} 
-                alt="PolymerBionics" 
+                alt="Polymer Bionics" 
                 className="h-12 w-auto transition-all duration-300 group-hover:brightness-110"
               />
             </motion.div>
             <span className="text-xl font-semibold text-foreground tracking-tight">
-              polymerbionics
+              Polymer Bionics
             </span>
           </motion.button>
 

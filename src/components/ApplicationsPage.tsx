@@ -40,7 +40,7 @@ export function ApplicationsPage() {
             <h1 className="text-6xl font-bold">Applications</h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
-            Applications for healthcare and diagnostics. PolymerBionics materials enable breakthrough medical 
+            Applications for healthcare and diagnostics. Polymer Bionics materials enable breakthrough medical 
             technologies across diverse clinical applications—from peripheral nerve interfaces to continuous 
             infant monitoring, our flexible bioelectronics platform supports innovation that improves patient outcomes.
           </p>

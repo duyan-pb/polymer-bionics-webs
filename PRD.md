@@ -1,6 +1,6 @@
 # Planning Guide
 
-A professional biotech company website showcasing PolymerBionics' medical innovations, team expertise, and research publications in polymer-based bioelectronics and flexible medical device technology.
+A professional biotech company website showcasing Polymer Bionics' medical innovations, team expertise, and research publications in polymer-based bioelectronics and flexible medical device technology.
 
 **Experience Qualities**:
 1. **Pioneering** - Conveys innovation in flexible bioelectronics and polymer science through dynamic, organic design elements
@@ -14,7 +14,7 @@ This is primarily an informational website presenting company details, team memb
 
 ### Hero Section with Company Overview
 - **Functionality**: Displays company tagline, mission statement, and key value propositions
-- **Purpose**: Immediately communicates PolymerBionics' focus and expertise in flexible bioelectronics and polymer-based medical devices
+- **Purpose**: Immediately communicates Polymer Bionics' focus and expertise in flexible bioelectronics and polymer-based medical devices
 - **Trigger**: Page load on homepage
 - **Progression**: User sees hero image/graphic → reads headline and tagline → views CTAs to explore sections
 - **Success criteria**: Clear understanding of company mission within 5 seconds
@@ -82,31 +82,30 @@ The design should evoke innovation, flexibility, and biocompatibility - reflecti
 
 ## Color Selection
 
-A fresh, modern scientific palette centered on teal/turquoise tones representing biocompatibility and innovation, inspired by the PolymerBionics brand identity. The color scheme evokes trust, clarity, and medical precision.
+A fresh, modern scientific palette centered on teal/turquoise tones (#00A9AD) representing biocompatibility and innovation, matching the Polymer Bionics brand identity from polymerbionics.com. The color scheme evokes trust, clarity, and medical precision.
 
-- **Primary Color**: Teal/Turquoise (oklch(0.58 0.14 194)) - Represents innovation, biocompatibility, and modern medical technology with a fresh, approachable feel
+- **Primary Color**: Teal/Turquoise (oklch(0.58 0.14 194) / #00A9AD) - Represents innovation, biocompatibility, and modern medical technology with a fresh, approachable feel
 - **Secondary Colors**: 
-  - Light Gray (oklch(0.96 0.005 240)) - Soft backgrounds that create clean, professional layouts
-  - Soft Neutral (oklch(0.99 0 0)) - Clean white backgrounds for maximum clarity
-- **Accent Color**: Teal/Turquoise (oklch(0.58 0.14 194)) - Draws attention to key actions and interactive elements
+  - Light Gray (oklch(0.95 0.005 240)) - Soft backgrounds that create clean, professional layouts
+  - Clean White (oklch(1.00 0 0)) - Clean white backgrounds for maximum clarity
+- **Accent Color**: Teal/Turquoise (oklch(0.58 0.14 194) / #00A9AD) - Draws attention to key actions and interactive elements
 - **Foreground/Background Pairings**: 
   - Primary (Teal oklch(0.58 0.14 194)): White text (oklch(1.00 0 0)) - Ratio 4.8:1 ✓
   - Accent (Teal oklch(0.58 0.14 194)): White text (oklch(1.00 0 0)) - Ratio 4.8:1 ✓
-  - Background (White oklch(0.99 0 0)): Foreground text (oklch(0.20 0.01 240)) - Ratio 15.2:1 ✓
+  - Background (White oklch(1.00 0 0)): Foreground text (oklch(0.20 0.01 240)) - Ratio 15.2:1 ✓
   - Muted (Light Gray oklch(0.96 0.005 240)): Medium text (oklch(0.50 0.01 240)) - Ratio 5.8:1 ✓
 
 ## Font Selection
 
-Typography uses Poppins throughout for a clean, modern, and highly readable experience that matches the PolymerBionics brand identity. Poppins provides a geometric sans-serif with friendly personality.
+Typography uses Arial/Helvetica throughout for a clean, professional, and highly readable experience that matches the Polymer Bionics brand identity from polymerbionics.com. Arial provides a classic, trusted sans-serif that is universally compatible and conveys medical/scientific authority.
 
 - **Typographic Hierarchy**:
-  - H1 (Page Titles): Poppins Bold/48-60px/tight letter-spacing (-0.01em) - Strong, confident presence for main headings
-  - H2 (Section Titles): Poppins Semibold/36-40px/normal letter-spacing - Clear content organization
-  - H3 (Subsections): Poppins Semibold/20-24px/normal letter-spacing - Supporting hierarchy
-  - Body Text: Poppins Regular/16px/1.6 line-height - Clean readability with excellent legibility
-  - Labels/UI: Poppins Medium/14px/0.01em letter-spacing - Professional interface elements
-  - Captions: Poppins Regular/14px/1.5 line-height/muted color - Supporting information
-  - Code/Technical: JetBrains Mono Regular/14px - For technical specifications (if needed)
+  - H1 (Page Titles): Arial Bold/48-60px/tight letter-spacing (-0.01em) - Strong, confident presence for main headings
+  - H2 (Section Titles): Arial Bold/36-40px/normal letter-spacing - Clear content organization
+  - H3 (Subsections): Arial Bold/20-24px/normal letter-spacing - Supporting hierarchy
+  - Body Text: Arial Regular/16px/1.6 line-height - Clean readability with excellent legibility
+  - Labels/UI: Arial Regular/14px/0.01em letter-spacing - Professional interface elements
+  - Captions: Arial Regular/14px/1.5 line-height/muted color - Supporting information
 
 ## Animations
 
