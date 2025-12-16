@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, X } from '@phosphor-icons/react'
-import logoSvg from '@/assets/images/logo.svg'
+import logoPng from '@/assets/images/unnamed.png'
 
 interface NavigationProps {
   currentPage: string
@@ -50,7 +50,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
               }}
             >
               <img 
-                src={logoSvg} 
+                src={logoPng} 
                 alt="PolymerBionics" 
                 className="h-12 w-auto transition-all duration-300 group-hover:brightness-110"
               />
