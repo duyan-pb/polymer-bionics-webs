@@ -123,11 +123,13 @@ Return ONLY a valid JSON object with structure:
     return {
       founders: currentTeam.filter(m => m.category === 'founders'),
       management: currentTeam.filter(m => m.category === 'management'),
+      research: currentTeam.filter(m => m.category === 'research'),
+      engineering: currentTeam.filter(m => m.category === 'engineering'),
       advisory: currentTeam.filter(m => m.category === 'advisory'),
     }
   }
 
-  const { founders, management, advisory } = categorizeTeam()
+  const { founders, management, research, engineering, advisory } = categorizeTeam()
 
   const TeamGrid = ({ members, title }: { members: TeamMember[], title: string }) => (
     <div className="mb-16">
@@ -188,6 +190,8 @@ Return ONLY a valid JSON object with structure:
         <div className="max-w-[1280px] mx-auto">
           {founders.length > 0 && <TeamGrid members={founders} title="Founders" />}
           {management.length > 0 && <TeamGrid members={management} title="Management Team" />}
+          {research.length > 0 && <TeamGrid members={research} title="Research Team" />}
+          {engineering.length > 0 && <TeamGrid members={engineering} title="Engineering Team" />}
           {advisory.length > 0 && <TeamGrid members={advisory} title="Scientific Advisory Board" />}
         </div>
       </section>

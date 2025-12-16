@@ -62,9 +62,9 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'joe-goding',
     name: 'Dr Joe Goding',
-    title: 'Research Team',
-    role: 'Research Team',
-    category: 'management',
+    title: 'Researcher',
+    role: 'Researcher',
+    category: 'research',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: [
@@ -82,9 +82,9 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'estelle-cuttaz',
     name: 'Dr Estelle Cuttaz',
-    title: 'Research Team',
-    role: 'Research Team',
-    category: 'management',
+    title: 'Researcher',
+    role: 'Researcher',
+    category: 'research',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: [
@@ -102,9 +102,9 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'robert-toth',
     name: 'Dr Robert Toth',
-    title: 'Research Team',
-    role: 'Research Team',
-    category: 'management',
+    title: 'Researcher',
+    role: 'Researcher',
+    category: 'research',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: [
@@ -122,9 +122,9 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'alexey-nonikov',
     name: 'Alexey Nonikov',
-    title: 'Research Team',
-    role: 'Research Team',
-    category: 'management',
+    title: 'Researcher',
+    role: 'Researcher',
+    category: 'research',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: [
@@ -141,9 +141,9 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'efe-sen',
     name: 'Efe Sen',
-    title: 'Engineering Team',
-    role: 'Engineering Team',
-    category: 'management',
+    title: 'Engineer',
+    role: 'Engineer',
+    category: 'engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: [
@@ -160,9 +160,9 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'duy-an-tran',
     name: 'Duy An Tran',
-    title: 'Engineering Team',
-    role: 'Engineering Team',
-    category: 'management',
+    title: 'Engineer',
+    role: 'Engineer',
+    category: 'engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: [

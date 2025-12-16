@@ -3,7 +3,7 @@ export interface TeamMember {
   name: string
   title: string
   role: string
-  category: 'founders' | 'management' | 'advisory'
+  category: 'founders' | 'management' | 'research' | 'engineering' | 'advisory'
   shortBio: string
   fullBio: string
   image?: string
