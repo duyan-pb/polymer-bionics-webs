@@ -8,8 +8,7 @@ export function TeamInitializer() {
   const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
-    const needsUpdate = (team?.length || 0) === 0 || 
-      !team?.some(m => m.education && m.education.length > 0)
+    const needsUpdate = (team?.length || 0) !== teamMembers.length
     
     if (needsUpdate && !isInitialized) {
       setTeam(teamMembers)
