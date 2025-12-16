@@ -21,7 +21,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             </p>
             <div className="flex flex-wrap gap-4">
               <Button size="lg" onClick={() => onNavigate('products')} className="text-base tracking-wide">
-                polymerbionics <ArrowRight className="ml-2" />
+                Products <ArrowRight className="ml-2" />
               </Button>
               <Button size="lg" variant="outline" onClick={() => onNavigate('team')} className="text-base">
                 Meet the Team
