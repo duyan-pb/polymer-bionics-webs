@@ -57,7 +57,7 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
               />
             </motion.div>
             <span className="text-xl font-semibold text-foreground tracking-tight">
-              Polymer Bionics
+              polymerbionics
             </span>
           </motion.button>
 
