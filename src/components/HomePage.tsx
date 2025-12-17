@@ -12,9 +12,9 @@ interface HomePageProps {
 export function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="min-h-screen">
-      <section className="relative bg-gradient-to-br from-accent/10 via-background to-primary/5 py-24 px-8 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-accent/10 via-background to-primary/5 py-32 px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <HeroImage src={BackgroundCover} alt="" opacity={0.15} />
+          <HeroImage src={BackgroundCover} alt="" opacity={0.25} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="max-w-3xl">

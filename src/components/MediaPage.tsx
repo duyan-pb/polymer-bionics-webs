@@ -91,7 +91,7 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
-                        <h3 className="text-2xl font-semibold mb-2">{study.title}</h3>
+                        <h3 className="text-2xl font-normal mb-2">{study.title}</h3>
                         <Badge variant="secondary" className="capitalize">{study.category}</Badge>
                       </div>
                     </div>
