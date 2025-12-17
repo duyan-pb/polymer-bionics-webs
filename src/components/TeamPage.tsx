@@ -241,6 +241,7 @@ Return ONLY a valid JSON object with structure:
                       <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                         {selectedMember.education.map((edu, idx) => (
                           <li key={idx}>{edu}</li>
+                        ))}
                       </ul>
                     </div>
                   )}
