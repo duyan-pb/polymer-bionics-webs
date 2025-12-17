@@ -13,6 +13,7 @@ import { NewsPage } from '@/components/NewsPage'
 import { ContactPage } from '@/components/ContactPage'
 import { ProductsInitializer } from '@/components/ProductsInitializer'
 import { TeamInitializer } from '@/components/TeamInitializer'
+import { FloatingContactButton } from '@/components/FloatingContactButton'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
         {renderPage()}
       </div>
       <Footer />
+      <FloatingContactButton />
     </div>
   )
 }
