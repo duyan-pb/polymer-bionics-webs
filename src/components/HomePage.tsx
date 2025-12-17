@@ -14,7 +14,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
     <div className="min-h-screen">
       <section className="relative bg-gradient-to-br from-accent/10 via-background to-primary/5 py-40 px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <HeroImage src={BackgroundCover} alt="" opacity={0.35} />
+          <HeroImage src={BackgroundCover} alt="" opacity={0.6} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="max-w-3xl">

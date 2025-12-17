@@ -32,7 +32,7 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
           />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
-          <h1 className="text-6xl font-bold mb-6">Videos & Case Studies</h1>
+          <h1 className="text-6xl font-normal mb-4">Videos & Case Studies</h1>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
             Explore our technology demonstrations, laboratory validations, and real-world application case studies
             showcasing the performance of our biomaterials.

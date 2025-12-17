@@ -21,7 +21,7 @@ export function ApplicationsPage() {
     <div className="min-h-screen bg-background">
       <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <HeroImage src={NeuralCells} alt="" opacity={0.2} />
+          <HeroImage src={NeuralCells} alt="" opacity={0.3} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="mb-6">
