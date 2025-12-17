@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label'
 import { EnvelopeSimple, MapPin, Phone, LinkedinLogo } from '@phosphor-icons/react'
 import { toast } from 'sonner'
+import { contactConfig, getEmailUrl } from '@/lib/contact-config'
 
 export function ContactPage() {
   const [formData, setFormData] = useState({
@@ -171,10 +172,14 @@ export function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">General Enquiries</h3>
                     <a 
-                      href="mailto:info@polymerbionics.com" 
-                      className="text-muted-foreground hover:text-primary transition-colors"
+                      href={getEmailUrl('general')}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        window.location.href = getEmailUrl('general')
+                      }}
+                      className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
                     >
-                      info@polymerbionics.com
+                      {contactConfig.email.general}
                     </a>
                   </div>
                 </div>
@@ -186,10 +191,14 @@ export function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Quote Requests</h3>
                     <a 
-                      href="mailto:sales@polymerbionics.com" 
-                      className="text-muted-foreground hover:text-primary transition-colors"
+                      href={getEmailUrl('sales')}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        window.location.href = getEmailUrl('sales')
+                      }}
+                      className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
                     >
-                      sales@polymerbionics.com
+                      {contactConfig.email.sales}
                     </a>
                   </div>
                 </div>
@@ -201,9 +210,9 @@ export function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Location</h3>
                     <p className="text-muted-foreground">
-                      Exhibition Rd, South Kensington<br />
-                      London SW7 2AZ<br />
-                      United Kingdom
+                      {contactConfig.address.street}<br />
+                      {contactConfig.address.city} {contactConfig.address.postcode}<br />
+                      {contactConfig.address.country}
                     </p>
                   </div>
                 </div>
@@ -215,7 +224,7 @@ export function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">LinkedIn</h3>
                     <a 
-                      href="https://www.linkedin.com/company/polymer-bionics" 
+                      href={contactConfig.social.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-primary transition-colors"

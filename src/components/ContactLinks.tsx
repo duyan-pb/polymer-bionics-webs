@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { EnvelopeSimple, WhatsappLogo } from '@phosphor-icons/react'
+import { contactConfig, getWhatsAppUrl, getEmailUrl } from '@/lib/contact-config'
 
 interface ContactLinksProps {
   variant?: 'default' | 'outline' | 'ghost'
@@ -18,10 +19,18 @@ export function ContactLinks({
   showEmail = true,
   emailType = 'general'
 }: ContactLinksProps) {
-  const email = emailType === 'sales' ? 'sales@polymerbionics.com' : 'info@polymerbionics.com'
-  const whatsappNumber = '+447000000000'
-  const whatsappMessage = 'Hello, I would like to enquire about Polymer Bionics products and services.'
-  
+  const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Open WhatsApp in a new window/tab
+    e.preventDefault()
+    window.open(getWhatsAppUrl(), '_blank', 'noopener,noreferrer')
+  }
+
+  const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Trigger the mailto link
+    e.preventDefault()
+    window.location.href = getEmailUrl(emailType)
+  }
+
   return (
     <div className={`flex flex-wrap gap-2 ${className}`}>
       {showWhatsApp && (
@@ -31,7 +40,8 @@ export function ContactLinks({
           asChild
         >
           <a 
-            href={`https://wa.me/${whatsappNumber.replace(/\+/g, '')}?text=${encodeURIComponent(whatsappMessage)}`}
+            href={getWhatsAppUrl()}
+            onClick={handleWhatsAppClick}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -46,7 +56,10 @@ export function ContactLinks({
           size={size}
           asChild
         >
-          <a href={`mailto:${email}`}>
+          <a 
+            href={getEmailUrl(emailType)}
+            onClick={handleEmailClick}
+          >
             <EnvelopeSimple className="mr-2" size={18} />
             {emailType === 'sales' ? 'Email Sales' : 'Email Us'}
           </a>
