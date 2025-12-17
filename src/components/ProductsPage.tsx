@@ -96,15 +96,27 @@ export function ProductsPage({ products }: ProductsPageProps) {
                     </ul>
                   </div>
 
-                  <div className="flex gap-2 pt-2">
-                    <Button variant="outline" size="sm">
-                      View Details
-                    </Button>
-                    {product.datasheetId && (
+                  <div className="space-y-2 pt-2">
+                    <div className="flex gap-2">
+                      {product.datasheetId && (
+                        <Button variant="outline" size="sm" onClick={(e) => e.stopPropagation()}>
+                          <Download className="mr-1" size={16} /> Download Datasheet
+                        </Button>
+                      )}
+                      {product.caseStudyId && (
+                        <Button variant="outline" size="sm" onClick={(e) => e.stopPropagation()}>
+                          View Case Study
+                        </Button>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
                       <Button variant="ghost" size="sm">
-                        <FileText className="mr-1" size={16} /> Datasheet
+                        Enquire
                       </Button>
-                    )}
+                      <Button variant="ghost" size="sm">
+                        Contact
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -130,12 +142,10 @@ export function ProductsPage({ products }: ProductsPageProps) {
             {selectedProduct && (
               <>
                 <DialogHeader>
-                  <div className="flex items-start justify-between mb-6">
-                    <div>
-                      <DialogTitle className="text-3xl mb-2">{selectedProduct.name}</DialogTitle>
-                      <p className="text-lg text-muted-foreground italic">{selectedProduct.tagline}</p>
-                    </div>
-                    <Badge variant="secondary" className="capitalize text-base px-4 py-2">
+                  <DialogTitle className="text-3xl mb-2">{selectedProduct.name}</DialogTitle>
+                  <div className="flex items-center gap-3 mb-4">
+                    <p className="text-lg text-muted-foreground italic">{selectedProduct.tagline}</p>
+                    <Badge variant="secondary" className="capitalize">
                       {selectedProduct.category}
                     </Badge>
                   </div>
@@ -213,18 +223,22 @@ export function ProductsPage({ products }: ProductsPageProps) {
                     <p className="text-sm text-muted-foreground">{selectedProduct.regulatoryStatus}</p>
                   </div>
 
-                  <div className="flex gap-3 pt-4">
-                    <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
-                    {selectedProduct.datasheetId && (
-                      <Button variant="outline">
-                        <Download className="mr-2" /> Download Datasheet
-                      </Button>
-                    )}
-                    {selectedProduct.caseStudyId && (
-                      <Button variant="outline">
-                        View Case Study
-                      </Button>
-                    )}
+                  <div className="space-y-3 pt-4">
+                    <div className="flex gap-3">
+                      {selectedProduct.datasheetId && (
+                        <Button variant="outline">
+                          <Download className="mr-2" /> Download Datasheet
+                        </Button>
+                      )}
+                      {selectedProduct.caseStudyId && (
+                        <Button variant="outline">
+                          View Case Study
+                        </Button>
+                      )}
+                    </div>
+                    <div className="flex gap-3">
+                      <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
+                    </div>
                   </div>
                 </div>
               </>
