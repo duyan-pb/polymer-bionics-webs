@@ -18,7 +18,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="max-w-3xl">
-            <h1 className="text-6xl font-bold text-foreground mb-6 tracking-tight leading-tight">
+            <h1 className="text-6xl text-foreground mb-6 tracking-tight leading-tight">
               Flexible Bioelectronics & Polymer Medical Devices
             </h1>
             <p className="text-xl text-foreground/80 mb-8 leading-relaxed">
@@ -42,66 +42,66 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="p-8 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer bg-card/50 backdrop-blur-sm" onClick={() => onNavigate('team')}>
               <Users size={48} className="text-primary mb-4" weight="duotone" />
-              <h3 className="text-2xl font-bold mb-3">Our Team</h3>
+              <h3 className="text-2xl mb-3">Our Team</h3>
               <p className="text-muted-foreground mb-4 leading-relaxed">
                 Expert polymer scientists, biomedical engineers, and materials researchers advancing flexible bioelectronics.
               </p>
-              <div className="flex items-center text-primary font-medium hover:gap-3 gap-2 transition-all">
+              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
                 Learn more <ArrowRight size={20} />
               </div>
             </Card>
 
             <Card className="p-8 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer bg-card/50 backdrop-blur-sm" onClick={() => onNavigate('materials')}>
               <Atom size={48} className="text-primary mb-4" weight="duotone" />
-              <h3 className="text-2xl font-bold mb-3">Materials</h3>
+              <h3 className="text-2xl mb-3">Materials</h3>
               <p className="text-muted-foreground mb-4 leading-relaxed">
                 Advanced polymers including PEDOT:PSS, hydrogels, silicones, and specialty coatings for biomedical use.
               </p>
-              <div className="flex items-center text-primary font-medium hover:gap-3 gap-2 transition-all">
+              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
                 View materials <ArrowRight size={20} />
               </div>
             </Card>
 
             <Card className="p-8 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer bg-card/50 backdrop-blur-sm" onClick={() => onNavigate('applications')}>
               <Lightbulb size={48} className="text-primary mb-4" weight="duotone" />
-              <h3 className="text-2xl font-bold mb-3">Applications</h3>
+              <h3 className="text-2xl mb-3">Applications</h3>
               <p className="text-muted-foreground mb-4 leading-relaxed">
                 Neural interfaces, wearable sensors, drug delivery, cardiac devices, and advanced surgical tools.
               </p>
-              <div className="flex items-center text-primary font-medium hover:gap-3 gap-2 transition-all">
+              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
                 Explore uses <ArrowRight size={20} />
               </div>
             </Card>
 
             <Card className="p-8 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer bg-card/50 backdrop-blur-sm" onClick={() => onNavigate('products')}>
               <Flask size={48} className="text-primary mb-4" weight="duotone" />
-              <h3 className="text-2xl font-bold mb-3">Products</h3>
+              <h3 className="text-2xl mb-3">Products</h3>
               <p className="text-muted-foreground mb-4 leading-relaxed">
                 Flexible bioelectronic devices, conductive polymer systems, and soft tissue-compatible sensors.
               </p>
-              <div className="flex items-center text-primary font-medium hover:gap-3 gap-2 transition-all">
+              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
                 Explore catalog <ArrowRight size={20} />
               </div>
             </Card>
 
             <Card className="p-8 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer bg-card/50 backdrop-blur-sm" onClick={() => onNavigate('media')}>
               <Video size={48} className="text-primary mb-4" weight="duotone" />
-              <h3 className="text-2xl font-bold mb-3">Case Studies</h3>
+              <h3 className="text-2xl mb-3">Case Studies</h3>
               <p className="text-muted-foreground mb-4 leading-relaxed">
                 Real-world applications in wearable diagnostics, implantable devices, and smart wound healing.
               </p>
-              <div className="flex items-center text-primary font-medium hover:gap-3 gap-2 transition-all">
+              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
                 View studies <ArrowRight size={20} />
               </div>
             </Card>
 
             <Card className="p-8 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer bg-card/50 backdrop-blur-sm" onClick={() => onNavigate('datasheets')}>
               <FileText size={48} className="text-primary mb-4" weight="duotone" />
-              <h3 className="text-2xl font-bold mb-3">Technical Data</h3>
+              <h3 className="text-2xl mb-3">Technical Data</h3>
               <p className="text-muted-foreground mb-4 leading-relaxed">
                 Material properties, biocompatibility testing, mechanical flexibility, and performance specifications.
               </p>
-              <div className="flex items-center text-primary font-medium hover:gap-3 gap-2 transition-all">
+              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
                 Access library <ArrowRight size={20} />
               </div>
             </Card>
@@ -109,24 +109,24 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-20 px-8 bg-secondary/30">
+      <section className="py-4 px-8 bg-secondary/30">
         <div className="max-w-[1280px] mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-4">Trusted by Leading Institutions</h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto text-lg">
+          <h2 className="text-4xl text-center mb-2">Trusted by Leading Institutions</h2>
+          <p className="text-center text-muted-foreground mb-4 max-w-2xl mx-auto text-lg">
             Collaborating with world-class medical centers and research institutions to advance flexible bioelectronics.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 items-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
             <div className="text-center">
-              <div className="text-lg font-semibold text-muted-foreground/60">Medical Centers</div>
+              <div className="text-lg text-muted-foreground/60">Medical Centers</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-semibold text-muted-foreground/60">Research Institutes</div>
+              <div className="text-lg text-muted-foreground/60">Research Institutes</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-semibold text-muted-foreground/60">University Labs</div>
+              <div className="text-lg text-muted-foreground/60">University Labs</div>
             </div>
             <div className="text-center">
-              <div className="text-lg font-semibold text-muted-foreground/60">Clinical Partners</div>
+              <div className="text-lg text-muted-foreground/60">Clinical Partners</div>
             </div>
           </div>
         </div>
