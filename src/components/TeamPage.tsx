@@ -181,8 +181,8 @@ Return ONLY a valid JSON object with structure:
       <section className="py-16 px-8">
         <div className="max-w-[1280px] mx-auto">
           {founders.length > 0 && <TeamGrid members={founders} title="Founders" />}
-          {labManagement.length > 0 && <TeamGrid members={labManagement} title="Laboratory Management Team" />}
-          {management.length > 0 && <TeamGrid members={management} title="Management Team" />}
+          {management.length > 0 && <TeamGrid members={management} title="Project Management Team" />}
+          {labManagement.length > 0 && <TeamGrid members={labManagement} title="Laboratory Management Team" />}      
           {researchEngineering.length > 0 && <TeamGrid members={researchEngineering} title="Research/Engineering Team" />}
           {research.length > 0 && <TeamGrid members={research} title="Research Team" />}
           {engineering.length > 0 && <TeamGrid members={engineering} title="Engineering Team" />}
@@ -241,7 +241,6 @@ Return ONLY a valid JSON object with structure:
                       <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                         {selectedMember.education.map((edu, idx) => (
                           <li key={idx}>{edu}</li>
-                        ))}
                       </ul>
                     </div>
                   )}
