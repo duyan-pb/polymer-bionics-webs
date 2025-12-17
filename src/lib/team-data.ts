@@ -9,6 +9,9 @@ export const teamMembers: TeamMember[] = [
     category: 'founders',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
+    education: ['[Education placeholder]'],
+    achievements: ['[Achievement placeholder]'],
+    publications: ['[Publication placeholder]'],
     scholar: 'https://scholar.google.com',
     linkedin: 'https://linkedin.com'
   },
@@ -20,6 +23,9 @@ export const teamMembers: TeamMember[] = [
     category: 'founders',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
+    education: ['[Education placeholder]'],
+    achievements: ['[Achievement placeholder]'],
+    publications: ['[Publication placeholder]'],
     linkedin: 'https://linkedin.com'
   },
   {
@@ -30,6 +36,9 @@ export const teamMembers: TeamMember[] = [
     category: 'lab-management',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
+    education: ['[Education placeholder]'],
+    achievements: ['[Achievement placeholder]'],
+    publications: ['[Publication placeholder]'],
     linkedin: 'https://linkedin.com'
   },
   {
@@ -40,6 +49,9 @@ export const teamMembers: TeamMember[] = [
     category: 'lab-management',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
+    education: ['[Education placeholder]'],
+    achievements: ['[Achievement placeholder]'],
+    publications: ['[Publication placeholder]'],
     scholar: 'https://scholar.google.com',
     linkedin: 'https://linkedin.com'
   },
@@ -51,6 +63,9 @@ export const teamMembers: TeamMember[] = [
     category: 'lab-management',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
+    education: ['[Education placeholder]'],
+    achievements: ['[Achievement placeholder]'],
+    publications: ['[Publication placeholder]'],
     scholar: 'https://scholar.google.com',
     linkedin: 'https://linkedin.com'
   },
@@ -62,6 +77,9 @@ export const teamMembers: TeamMember[] = [
     category: 'management',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
+    education: ['[Education placeholder]'],
+    achievements: ['[Achievement placeholder]'],
+    publications: ['[Publication placeholder]'],
     linkedin: 'https://linkedin.com'
   },
   {
@@ -72,6 +90,9 @@ export const teamMembers: TeamMember[] = [
     category: 'research-engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
+    education: ['[Education placeholder]'],
+    achievements: ['[Achievement placeholder]'],
+    publications: ['[Publication placeholder]'],
     scholar: 'https://scholar.google.com',
     linkedin: 'https://linkedin.com'
   },
@@ -83,6 +104,9 @@ export const teamMembers: TeamMember[] = [
     category: 'research-engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
+    education: ['[Education placeholder]'],
+    achievements: ['[Achievement placeholder]'],
+    publications: ['[Publication placeholder]'],
     linkedin: 'https://linkedin.com'
   },
   {
@@ -93,6 +117,9 @@ export const teamMembers: TeamMember[] = [
     category: 'research-engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
+    education: ['[Education placeholder]'],
+    achievements: ['[Achievement placeholder]'],
+    publications: ['[Publication placeholder]'],
     linkedin: 'https://linkedin.com'
   }
 ]

@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { LinkedinLogo, User, MagnifyingGlass } from '@phosphor-icons/react'
+import { LinkedinLogo, User, MagnifyingGlass, GraduationCap } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import type { TeamMember } from '@/lib/types'
 
@@ -215,15 +215,58 @@ Return ONLY a valid JSON object with structure:
                             </a>
                           </Button>
                         )}
+                        {selectedMember.scholar && (
+                          <Button size="sm" variant="outline" asChild>
+                            <a href={selectedMember.scholar} target="_blank" rel="noopener noreferrer">
+                              <GraduationCap className="mr-2" /> Google Scholar
+                            </a>
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
                 </DialogHeader>
 
                 <div className="space-y-6">
-                  <div>
-                    <p className="text-base leading-relaxed">{selectedMember.fullBio}</p>
-                  </div>
+                  {selectedMember.shortBio && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Biography</h3>
+                      <p className="text-base leading-relaxed text-muted-foreground">{selectedMember.shortBio}</p>
+                    </div>
+                  )}
+
+                  {selectedMember.education && selectedMember.education.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Education</h3>
+                      <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                        {selectedMember.education.map((edu, idx) => (
+                          <li key={idx}>{edu}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {selectedMember.achievements && selectedMember.achievements.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Achievements</h3>
+                      <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                        {selectedMember.achievements.map((achievement, idx) => (
+                          <li key={idx}>{achievement}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {selectedMember.publications && selectedMember.publications.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Publications</h3>
+                      <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                        {selectedMember.publications.map((pub, idx) => (
+                          <li key={idx}>{pub}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </>
             )}
