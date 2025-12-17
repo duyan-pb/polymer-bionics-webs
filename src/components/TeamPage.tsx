@@ -8,6 +8,7 @@ import { LinkedinLogo, User, MagnifyingGlass, GraduationCap } from '@phosphor-ic
 import { toast } from 'sonner'
 import { HeroImage } from '@/components/HeroImage'
 import ElastomerArray from '@/assets/images/Elastomer_array.png'
+import BackgroundCover from '@/assets/images/Background_Cover.png'
 import type { TeamMember } from '@/lib/types'
 
 interface TeamPageProps {
@@ -153,7 +154,7 @@ Return ONLY a valid JSON object with structure:
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 px-8 overflow-hidden">
         <div className="absolute inset-0">
           <HeroImage src={BackgroundCover} alt="" opacity={0.6} />
         </div>

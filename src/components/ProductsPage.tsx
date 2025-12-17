@@ -28,7 +28,7 @@ export function ProductsPage({ products }: ProductsPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 px-8 overflow-hidden">
         <div className="absolute inset-0">
           <HeroImage src={ElastomerArray} alt="" opacity={0.6} />
         </div>
