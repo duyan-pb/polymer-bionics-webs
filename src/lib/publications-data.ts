@@ -1,4 +1,39 @@
-import type { Publication } from './types'
+import type { Publication, NewsItem } from './types'
+
+export const placeholderNews: NewsItem[] = [
+  {
+    id: 'news-1',
+    title: '[News Title Placeholder]',
+    summary: '[Summary placeholder - Brief description of the news item and its significance.]',
+    content: '[Content placeholder - Full article content would appear here with detailed information about the announcement, partnership, or development.]',
+    date: 'December 2024',
+    category: 'announcement',
+  },
+  {
+    id: 'news-2',
+    title: '[News Title Placeholder]',
+    summary: '[Summary placeholder - Brief description of the news item and its significance.]',
+    content: '[Content placeholder - Full article content would appear here with detailed information about the announcement, partnership, or development.]',
+    date: 'November 2024',
+    category: 'partnership',
+  },
+  {
+    id: 'news-3',
+    title: '[News Title Placeholder]',
+    summary: '[Summary placeholder - Brief description of the news item and its significance.]',
+    content: '[Content placeholder - Full article content would appear here with detailed information about the announcement, partnership, or development.]',
+    date: 'October 2024',
+    category: 'research',
+  },
+  {
+    id: 'news-4',
+    title: '[News Title Placeholder]',
+    summary: '[Summary placeholder - Brief description of the news item and its significance.]',
+    content: '[Content placeholder - Full article content would appear here with detailed information about the announcement, partnership, or development.]',
+    date: 'September 2024',
+    category: 'grant',
+  },
+]
 
 export const placeholderPublications: Publication[] = [
   {

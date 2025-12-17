@@ -14,13 +14,14 @@ import { NewsPage } from '@/components/NewsPage'
 import { ContactPage } from '@/components/ContactPage'
 import { ProductsInitializer } from '@/components/ProductsInitializer'
 import { TeamInitializer } from '@/components/TeamInitializer'
+import { NewsInitializer } from '@/components/NewsInitializer'
 import { FloatingContactButton } from '@/components/FloatingContactButton'
 import { GlobalSearch } from '@/components/GlobalSearch'
 import { BackToTopButton } from '@/components/BackToTopButton'
 import { useTheme } from '@/hooks/use-theme'
 import { PAGE_TRANSITION } from '@/lib/constants'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
-import { placeholderPublications } from '@/lib/publications-data'
+import { placeholderPublications, placeholderNews } from '@/lib/publications-data'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
@@ -32,7 +33,7 @@ function App() {
   const [videos] = useKV<Video[]>('videos', [])
   const [caseStudies] = useKV<CaseStudy[]>('caseStudies', [])
   const [datasheets] = useKV<Datasheet[]>('datasheets', [])
-  const [news] = useKV<NewsItem[]>('news', [])
+  const [news] = useKV<NewsItem[]>('news', placeholderNews)
   const [publications] = useKV<Publication[]>('publications', placeholderPublications)
 
   const handleNavigate = useCallback((page: string) => {
@@ -67,6 +68,7 @@ function App() {
     <div className="min-h-screen bg-background flex flex-col">
       <ProductsInitializer />
       <TeamInitializer />
+      <NewsInitializer />
       <Navigation 
         currentPage={currentPage} 
         onNavigate={handleNavigate} 
