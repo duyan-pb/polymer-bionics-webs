@@ -31,21 +31,21 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
   }
 
   return (
-    <nav className="border-b border-border bg-card sticky top-0 z-50 shadow-sm">
+    <nav className="border-b border-border bg-background/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
       <div className="max-w-[1280px] mx-auto px-8 py-4">
         <div className="flex items-center justify-between">
           <motion.button
             onClick={() => handleNavigate('home')}
             className="flex items-center gap-3 group"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
             <motion.div
               whileHover={{ 
-                rotate: [0, -3, 3, -3, 0],
+                rotate: [0, -2, 2, -2, 0],
                 transition: { 
-                  duration: 0.5,
+                  duration: 0.4,
                   ease: "easeInOut"
                 }
               }}
@@ -53,10 +53,10 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
               <img 
                 src={logoPng} 
                 alt="Polymer Bionics" 
-                className="h-12 w-auto transition-all duration-300 group-hover:brightness-110"
+                className="h-11 w-auto transition-all duration-300 group-hover:brightness-110"
               />
             </motion.div>
-            <span className="text-xl text-foreground tracking-tight">
+            <span className="text-xl font-semibold text-foreground tracking-tight">
               polymerbionics
             </span>
           </motion.button>

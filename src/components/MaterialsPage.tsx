@@ -17,15 +17,15 @@ export function MaterialsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 px-8 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <HeroImage src={CESheet} alt="" opacity={0.6} />
+          <HeroImage src={CESheet} alt="" opacity={0.7} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="mb-6">
-            <h1 className="text-6xl font-normal mb-4">Our Materials</h1>
+            <h1 className="text-6xl font-bold mb-6">Our Materials</h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
             Advanced materials for advancements in humankind. Our portfolio of specialized bionic materials 
             includes flexible conductive polymers, biocompatible gels, and innovative bonding solutions—all 
             engineered for superior performance in wearable and implantable bioelectronic devices.
@@ -33,34 +33,34 @@ export function MaterialsPage() {
         </div>
       </section>
 
-      <section className="py-16 px-8">
+      <section className="py-20 px-8">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {materials.map((material) => (
               <Card
                 key={material.id}
-                className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer border-2 hover:border-accent"
+                className="group overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] cursor-pointer hover:border-primary"
                 onClick={() => setSelectedMaterial(material)}
               >
-                <div className="h-32 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
+                <div className="h-40 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
                   {material.imageUrl ? (
                     <img src={material.imageUrl} alt={material.name} className="w-full h-full object-cover" />
                   ) : (
-                    <div className={`w-full h-full ${material.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}></div>
+                    <div className={`w-full h-full ${material.imageClass || 'bg-gradient-to-br from-primary/20 to-secondary/10'}`}></div>
                   )}
                 </div>
                 
-                <div className="p-6">
-                  <h3 className="text-2xl font-semibold mb-3 group-hover:text-accent transition-colors">
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                     {material.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                  <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
                     {material.description}
                   </p>
                   
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <div>
-                      <h4 className="text-xs font-semibold text-primary uppercase tracking-wide mb-2">
+                      <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
                         Key Properties
                       </h4>
                       <div className="flex flex-wrap gap-2">
@@ -77,7 +77,7 @@ export function MaterialsPage() {
                       </div>
                     </div>
                     
-                    <Button variant="outline" size="sm" className="w-full group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+                    <Button variant="outline" size="sm" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors font-semibold">
                       View Full Details
                     </Button>
                   </div>

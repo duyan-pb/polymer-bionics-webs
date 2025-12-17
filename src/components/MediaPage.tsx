@@ -23,29 +23,29 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 px-8 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
         <div className="absolute inset-0">
           <HeroImage 
             src={BackgroundCover}
             alt="" 
-            opacity={0.2}
+            opacity={0.35}
           />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
-          <h1 className="text-6xl font-normal mb-4">Videos & Case Studies</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+          <h1 className="text-6xl font-bold mb-6">Videos & Case Studies</h1>
+          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
             Explore our technology demonstrations, laboratory validations, and real-world application case studies
             showcasing the performance of our biomaterials.
           </p>
         </div>
       </section>
 
-      <section className="py-16 px-8">
+      <section className="py-20 px-8">
         <div className="max-w-[1280px] mx-auto">
           <Tabs defaultValue="videos" className="w-full">
-            <TabsList className="mb-8">
-              <TabsTrigger value="videos" className="text-base px-6">Videos</TabsTrigger>
-              <TabsTrigger value="case-studies" className="text-base px-6">Case Studies</TabsTrigger>
+            <TabsList className="mb-12">
+              <TabsTrigger value="videos" className="text-base px-8 py-3 font-semibold">Videos</TabsTrigger>
+              <TabsTrigger value="case-studies" className="text-base px-8 py-3 font-semibold">Case Studies</TabsTrigger>
             </TabsList>
 
             <TabsContent value="videos">
@@ -53,10 +53,10 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
                 {videos.map((video) => (
                   <Card
                     key={video.id}
-                    className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer border-2 hover:border-accent"
+                    className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer hover:border-primary"
                     onClick={() => setSelectedVideo(video)}
                   >
-                    <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative">
+                    <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
                       {video.thumbnailUrl ? (
                         <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover" />
                       ) : (
@@ -66,14 +66,14 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
                         <Play size={64} className="text-white" weight="fill" />
                       </div>
                       {video.duration && (
-                        <Badge className="absolute bottom-2 right-2 bg-black/70 text-white">
+                        <Badge className="absolute bottom-3 right-3 bg-black/70 text-white font-semibold">
                           {video.duration}
                         </Badge>
                       )}
                     </div>
                     <div className="p-6">
-                      <Badge variant="outline" className="mb-2 capitalize">{video.category}</Badge>
-                      <h3 className="text-lg font-normal mb-2">{video.title}</h3>
+                      <Badge variant="outline" className="mb-3 capitalize font-semibold">{video.category}</Badge>
+                      <h3 className="text-lg font-bold mb-2">{video.title}</h3>
                       <p className="text-sm text-muted-foreground line-clamp-2">{video.description}</p>
                     </div>
                   </Card>

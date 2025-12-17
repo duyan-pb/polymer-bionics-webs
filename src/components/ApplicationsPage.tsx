@@ -19,15 +19,15 @@ export function ApplicationsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 px-8 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <HeroImage src={NeuralCells} alt="" opacity={0.3} />
+          <HeroImage src={NeuralCells} alt="" opacity={0.5} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="mb-6">
-            <h1 className="text-6xl font-normal mb-4">Applications</h1>
+            <h1 className="text-6xl font-bold mb-6">Applications</h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
             Applications for healthcare and diagnostics. Polymer Bionics materials enable breakthrough medical 
             technologies across diverse clinical applications—from peripheral nerve interfaces to continuous 
             infant monitoring, our flexible bioelectronics platform supports innovation that improves patient outcomes.
@@ -35,50 +35,50 @@ export function ApplicationsPage() {
         </div>
       </section>
 
-      <section className="py-16 px-8">
+      <section className="py-20 px-8">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {applications.map((application) => (
                 <Card
                   key={application.id}
-                  className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer border-2 hover:border-accent"
+                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] cursor-pointer hover:border-primary"
                   onClick={() => setSelectedApplication(application)}
                 >
-                  <div className="h-32 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
+                  <div className="h-40 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
                     {application.imageUrl ? (
                       <img src={application.imageUrl} alt={application.name} className="w-full h-full object-cover" />
                     ) : (
-                      <div className={`w-full h-full ${application.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}></div>
+                      <div className={`w-full h-full ${application.imageClass || 'bg-gradient-to-br from-primary/20 to-secondary/10'}`}></div>
                     )}
                   </div>
                   
-                  <div className="p-6">
-                    <h3 className="text-2xl font-semibold mb-3 group-hover:text-accent transition-colors">
+                  <div className="p-8">
+                    <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                       {application.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                    <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
                       {application.description}
                     </p>
                     
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div>
-                        <h4 className="text-xs font-semibold text-primary uppercase tracking-wide mb-2">
+                        <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
                           Key Benefits
                         </h4>
-                        <ul className="space-y-1">
+                        <ul className="space-y-2">
                           {application.benefits.slice(0, 2).map((benefit, idx) => (
                             <li key={idx} className="text-xs text-muted-foreground flex items-start gap-2">
-                              <CheckCircle size={14} className="text-accent mt-0.5 flex-shrink-0" weight="fill" />
+                              <CheckCircle size={16} className="text-primary mt-0.5 flex-shrink-0" weight="fill" />
                               {benefit}
                             </li>
                           ))}
                         </ul>
                         {application.benefits.length > 2 && (
-                          <p className="text-xs text-accent mt-2">+{application.benefits.length - 2} more benefits</p>
+                          <p className="text-xs text-primary font-semibold mt-3">+{application.benefits.length - 2} more benefits</p>
                         )}
                       </div>
                       
-                      <Button variant="outline" size="sm" className="w-full group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+                      <Button variant="outline" size="sm" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors font-semibold">
                         Explore Application
                       </Button>
                     </div>

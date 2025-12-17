@@ -36,31 +36,31 @@ export function NewsPage({ news, publications }: NewsPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 px-8 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
         <div className="absolute inset-0">
           <HeroImage 
             src={BackgroundCover}
             alt="" 
-            opacity={0.2}
+            opacity={0.35}
           />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
-          <h1 className="text-6xl font-normal mb-6">News & Publications</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+          <h1 className="text-6xl font-bold mb-6">News & Publications</h1>
+          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
             Stay updated on our latest research, partnerships, grant awards, and peer-reviewed publications
             advancing the field of medical biomaterials.
           </p>
         </div>
       </section>
 
-      <section className="py-16 px-8">
+      <section className="py-20 px-8">
         <div className="max-w-[1280px] mx-auto">
           <Tabs defaultValue="news" className="w-full">
-            <TabsList className="mb-8">
-              <TabsTrigger value="news" className="text-base px-6">
+            <TabsList className="mb-12">
+              <TabsTrigger value="news" className="text-base px-8 py-3 font-semibold">
                 <Newspaper className="mr-2" size={18} /> News
               </TabsTrigger>
-              <TabsTrigger value="publications" className="text-base px-6">
+              <TabsTrigger value="publications" className="text-base px-8 py-3 font-semibold">
                 <BookOpen className="mr-2" size={18} /> Publications
               </TabsTrigger>
             </TabsList>
@@ -70,13 +70,13 @@ export function NewsPage({ news, publications }: NewsPageProps) {
                 {news.map((item) => (
                   <Card
                     key={item.id}
-                    className="p-6 hover:shadow-xl transition-all duration-300 cursor-pointer border-l-4 border-l-accent hover:scale-[1.01]"
+                    className="p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer border-l-4 border-l-primary hover:scale-[1.01]"
                     onClick={() => setSelectedNews(item)}
                   >
                     <div className="flex flex-col md:flex-row md:items-start gap-4">
                       <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <Badge variant="secondary" className="capitalize">{item.category}</Badge>
+                        <div className="flex items-center gap-3 mb-3">
+                          <Badge variant="secondary" className="capitalize font-semibold">{item.category}</Badge>
                           <div className="flex items-center text-sm text-muted-foreground">
                             <Calendar size={16} className="mr-1" />
                             {item.date}

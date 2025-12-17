@@ -14,46 +14,51 @@ export function Footer() {
   }
 
   return (
-    <footer className="bg-secondary border-t border-border mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center space-y-4">
+    <footer className="bg-secondary/50 border-t border-border mt-auto">
+      <div className="max-w-[1280px] mx-auto px-8 py-12">
+        <div className="text-center space-y-6">
           <div className="flex flex-wrap justify-center gap-3">
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="outline" size="default" className="font-semibold" asChild>
               <a 
                 href={getWhatsAppUrl()}
                 onClick={handleWhatsAppClick}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <WhatsappLogo className="mr-2" size={16} weight="fill" />
+                <WhatsappLogo className="mr-2" size={18} weight="fill" />
                 WhatsApp
               </a>
             </Button>
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="outline" size="default" className="font-semibold" asChild>
               <a 
                 href={getEmailUrl('general')}
                 onClick={handleEmailClick('general')}
               >
-                <EnvelopeSimple className="mr-2" size={16} />
+                <EnvelopeSimple className="mr-2" size={18} weight="bold" />
                 General Enquiry
               </a>
             </Button>
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="outline" size="default" className="font-semibold" asChild>
               <a 
                 href={getEmailUrl('sales')}
                 onClick={handleEmailClick('sales')}
               >
-                <EnvelopeSimple className="mr-2" size={16} />
+                <EnvelopeSimple className="mr-2" size={18} weight="bold" />
                 Quote Request
               </a>
             </Button>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Copyright © 2021 Polymer Bionics Limited. All rights reserved
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {contactConfig.address.street}, {contactConfig.address.city} {contactConfig.address.postcode}, {contactConfig.address.country}
-          </p>
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">
+              {contactConfig.email.general}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {contactConfig.address.street}, {contactConfig.address.city} {contactConfig.address.postcode}, {contactConfig.address.country}
+            </p>
+            <p className="text-sm text-muted-foreground font-medium">
+              Copyright © 2021 Polymer Bionics Limited. All rights reserved
+            </p>
+          </div>
         </div>
       </div>
     </footer>

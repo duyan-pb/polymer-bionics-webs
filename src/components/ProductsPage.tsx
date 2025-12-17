@@ -28,27 +28,27 @@ export function ProductsPage({ products }: ProductsPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 px-8 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <HeroImage src={ElastomerArray} alt="" opacity={0.6} />
+          <HeroImage src={ElastomerArray} alt="" opacity={0.7} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
-          <h1 className="text-6xl font-normal mb-6">Product Portfolio</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+          <h1 className="text-6xl font-bold mb-6">Product Portfolio</h1>
+          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
             Our proprietary biomaterials platform delivers high-performance solutions for surgical applications,
             wearable medical devices, and advanced drug delivery systems.
           </p>
         </div>
       </section>
 
-      <section className="py-16 px-8">
+      <section className="py-20 px-8">
         <div className="max-w-[1280px] mx-auto">
           <div className="flex flex-wrap gap-2 mb-12">
             {categories.map((cat) => (
               <Badge
                 key={cat}
                 variant={selectedCategory === cat ? 'default' : 'outline'}
-                className="cursor-pointer px-4 py-2 text-sm capitalize"
+                className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
                 onClick={() => setSelectedCategory(cat)}
               >
                 {cat}
@@ -60,24 +60,24 @@ export function ProductsPage({ products }: ProductsPageProps) {
             {filteredProducts.map((product) => (
               <Card
                 key={product.id}
-                className="p-6 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer border-2 hover:border-accent"
+                className="p-8 hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] cursor-pointer hover:border-primary"
                 onClick={() => setSelectedProduct(product)}
               >
                 {product.imageUrl && (
-                  <div className="mb-4 rounded-lg overflow-hidden">
+                  <div className="mb-6 rounded-lg overflow-hidden">
                     <img 
                       src={product.imageUrl} 
                       alt={product.name}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-56 object-cover"
                     />
                   </div>
                 )}
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-2xl font-semibold mb-2">{product.name}</h3>
+                    <h3 className="text-2xl font-bold mb-2">{product.name}</h3>
                     <p className="text-base text-muted-foreground italic">{product.tagline}</p>
                   </div>
-                  <Badge variant="secondary" className="capitalize">{product.category}</Badge>
+                  <Badge variant="secondary" className="capitalize font-semibold">{product.category}</Badge>
                 </div>
 
                 <div className="space-y-4">

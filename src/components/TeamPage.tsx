@@ -125,26 +125,26 @@ Return ONLY a valid JSON object with structure:
   const { founders, labManagement, management, researchEngineering, research, engineering, advisory } = categorizeTeam()
 
   const TeamGrid = ({ members, title }: { members: TeamMember[], title: string }) => (
-    <div className="mb-16">
-      <h2 className="text-4xl font-bold mb-8 text-primary">{title}</h2>
+    <div className="mb-20">
+      <h2 className="text-4xl font-bold mb-10 text-primary">{title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {members.map((member) => (
           <Card
             key={member.id}
-            className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer border-2 hover:border-accent"
+            className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer hover:border-primary"
             onClick={() => setSelectedMember(member)}
           >
-            <div className="aspect-square bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+            <div className="aspect-square bg-gradient-to-br from-primary/10 to-secondary/20 flex items-center justify-center">
               {member.image ? (
                 <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
               ) : (
-                <User size={80} className="text-muted-foreground" weight="light" />
+                <User size={100} className="text-muted-foreground/40" weight="light" />
               )}
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
-              <p className="text-sm text-accent font-medium mb-3">{member.title}</p>
-              <p className="text-sm text-muted-foreground line-clamp-3">{member.shortBio}</p>
+              <h3 className="text-xl font-bold mb-1.5">{member.name}</h3>
+              <p className="text-sm text-primary font-semibold mb-3">{member.title}</p>
+              <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">{member.shortBio}</p>
             </div>
           </Card>
         ))}
@@ -154,15 +154,15 @@ Return ONLY a valid JSON object with structure:
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-20 px-8 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
         <div className="absolute inset-0">
-          <HeroImage src={BackgroundCover} alt="" opacity={0.6} />
+          <HeroImage src={BackgroundCover} alt="" opacity={0.7} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
-          <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between gap-8">
             <div className="flex-1">
-              <h1 className="text-6xl font-normal mb-6">Our Team</h1>
-              <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+              <h1 className="text-6xl font-bold mb-6">Our Team</h1>
+              <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
                 Our multidisciplinary team combines world-class expertise in polymer chemistry, biomedical engineering,
                 and clinical medicine to develop innovative biomaterials solutions.
               </p>
@@ -172,7 +172,7 @@ Return ONLY a valid JSON object with structure:
                 onClick={searchLinkedIn} 
                 disabled={isSearching}
                 variant="outline"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 bg-background/80 backdrop-blur-sm"
               >
                 <MagnifyingGlass size={18} />
                 {isSearching ? 'Searching LinkedIn...' : 'Update from LinkedIn'}
@@ -182,7 +182,7 @@ Return ONLY a valid JSON object with structure:
         </div>
       </section>
 
-      <section className="py-16 px-8">
+      <section className="py-20 px-8">
         <div className="max-w-[1280px] mx-auto">
           {founders.length > 0 && <TeamGrid members={founders} title="Founders" />}
           {management.length > 0 && <TeamGrid members={management} title="Project Management Team" />}
