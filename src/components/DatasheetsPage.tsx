@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -8,22 +8,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Download, MagnifyingGlass, FileText, Calendar } from '@phosphor-icons/react'
-import type { Datasheet, Product } from '@/lib/types'
+import type { Datasheet } from '@/lib/types'
 import { materials, applications } from '@/lib/materials-data'
-import { useKV } from '@github/spark/hooks'
 import { ContactLinks } from '@/components/ContactLinks'
-import { HeroImage } from '@/components/HeroImage'
+import { PageHero } from '@/components/PageHero'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface DatasheetsPageProps {
   datasheets: Datasheet[]
+  onNavigate: (page: string) => void
 }
 
-export function DatasheetsPage({ datasheets }: DatasheetsPageProps) {
+export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedDatasheet, setSelectedDatasheet] = useState<Datasheet | null>(null)
-  const [products] = useKV<Product[]>('products', [])
 
   const generatedDatasheets = useMemo(() => {
     const sheets: Datasheet[] = []
@@ -76,35 +75,50 @@ export function DatasheetsPage({ datasheets }: DatasheetsPageProps) {
     return sheets
   }, [])
 
-  const allDatasheets = [...generatedDatasheets, ...datasheets]
+  const allDatasheets = useMemo(
+    () => [...generatedDatasheets, ...datasheets],
+    [generatedDatasheets, datasheets]
+  )
 
-  const categories = ['all', ...Array.from(new Set(allDatasheets.map(d => d.category)))]
+  const categories = useMemo(
+    () => ['all', ...Array.from(new Set(allDatasheets.map(d => d.category)))],
+    [allDatasheets]
+  )
 
-  const filteredDatasheets = allDatasheets.filter(datasheet => {
-    const matchesSearch = datasheet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         datasheet.description.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === 'all' || datasheet.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+  const filteredDatasheets = useMemo(() => {
+    return allDatasheets.filter(datasheet => {
+      const matchesSearch = datasheet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           datasheet.description.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesCategory = selectedCategory === 'all' || datasheet.category === selectedCategory
+      return matchesSearch && matchesCategory
+    })
+  }, [allDatasheets, searchTerm, selectedCategory])
+
+  const handleCategorySelect = useCallback((cat: string) => {
+    setSelectedCategory(cat)
+  }, [])
+
+  const handleDatasheetSelect = useCallback((datasheet: Datasheet) => {
+    setSelectedDatasheet(datasheet)
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
-        <div className="absolute inset-0">
-          <HeroImage src={BackgroundCover} alt="" opacity={0.7} />
-        </div>
-        <div className="relative max-w-[1280px] mx-auto z-10">
-          <h1 className="text-6xl font-bold mb-6">Technical Datasheets</h1>
-          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
-            Comprehensive technical documentation including mechanical properties, biocompatibility data,
-            and regulatory compliance information for all our biomaterials.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Technical Datasheets"
+        description="Comprehensive technical documentation including mechanical properties, biocompatibility data, and processing guidelines for our advanced biomaterials platform."
+        backgroundImage={BackgroundCover}
+        backgroundOpacity={0.7}
+        breadcrumbs={[
+          { label: 'Home', page: 'home' },
+          { label: 'Datasheets' }
+        ]}
+        onNavigate={onNavigate}
+      />
 
-      <section className="py-20 px-8">
+      <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-[1280px] mx-auto">
-          <div className="flex flex-col md:flex-row gap-4 mb-12">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-4 mb-8 md:mb-12">
             <div className="relative flex-1">
               <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
               <Input
@@ -187,15 +201,15 @@ export function DatasheetsPage({ datasheets }: DatasheetsPageProps) {
             </div>
           )}
 
-          <div className="md:hidden grid grid-cols-1 gap-4">
+          <div className="md:hidden grid grid-cols-1 gap-3">
             {filteredDatasheets.map((datasheet) => (
               <Card
                 key={datasheet.id}
-                className="p-6 hover:shadow-lg transition-all cursor-pointer border-2 hover:border-accent"
+                className="p-4 md:p-6 hover:shadow-lg transition-all cursor-pointer border-2 hover:border-accent"
                 onClick={() => setSelectedDatasheet(datasheet)}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <h3 className="text-lg font-semibold flex-1">{datasheet.name}</h3>
+                <div className="flex items-start justify-between mb-2 md:mb-3">
+                  <h3 className="text-base md:text-lg font-semibold flex-1 pr-2">{datasheet.name}</h3>
                   <Badge variant="secondary">{datasheet.version}</Badge>
                 </div>
                 <div className="flex flex-wrap gap-2 mb-3">

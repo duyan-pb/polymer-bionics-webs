@@ -26,11 +26,11 @@ export function BackToTopButton() {
     <Button
       variant="default"
       size="icon"
-      className="fixed bottom-6 left-6 shadow-lg rounded-full h-12 w-12"
+      className="fixed bottom-4 md:bottom-6 left-4 md:left-6 shadow-lg rounded-full h-10 w-10 md:h-12 md:w-12"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Back to top"
     >
-      <ArrowUp size={22} weight="bold" />
+      <ArrowUp size={20} weight="bold" className="md:w-[22px] md:h-[22px]" />
     </Button>
   )
 }

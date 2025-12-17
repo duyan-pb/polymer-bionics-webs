@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Card } from '@/components/ui/card'
+import { useState, useMemo, useCallback } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -9,52 +8,59 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, Quotes, FileText } from '@phosphor-icons/react'
 import type { Video, CaseStudy } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
-import { HeroImage } from '@/components/HeroImage'
+import { PageHero } from '@/components/PageHero'
+import { ClickableCard } from '@/components/ClickableCard'
+import { Card } from '@/components/ui/card'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface MediaPageProps {
   videos: Video[]
   caseStudies: CaseStudy[]
+  onNavigate: (page: string) => void
 }
 
-export function MediaPage({ videos, caseStudies }: MediaPageProps) {
+export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null)
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudy | null>(null)
 
+  const handleVideoSelect = useCallback((video: Video) => {
+    setSelectedVideo(video)
+  }, [])
+
+  const handleCaseStudySelect = useCallback((study: CaseStudy) => {
+    setSelectedCaseStudy(study)
+  }, [])
+
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
-        <div className="absolute inset-0">
-          <HeroImage 
-            src={BackgroundCover}
-            alt="" 
-            opacity={0.35}
-          />
-        </div>
-        <div className="relative max-w-[1280px] mx-auto z-10">
-          <h1 className="text-6xl font-bold mb-6">Videos & Case Studies</h1>
-          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
-            Explore our technology demonstrations, laboratory validations, and real-world application case studies
-            showcasing the performance of our biomaterials.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Videos & Case Studies"
+        description="Explore our technology demonstrations, laboratory validations, and real-world application case studies showcasing the performance of our biomaterials."
+        backgroundImage={BackgroundCover}
+        backgroundOpacity={0.35}
+        breadcrumbs={[
+          { label: 'Home', page: 'home' },
+          { label: 'Videos & Case Studies' }
+        ]}
+        onNavigate={onNavigate}
+      />
 
-      <section className="py-20 px-8">
+      <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-[1280px] mx-auto">
           <Tabs defaultValue="videos" className="w-full">
-            <TabsList className="mb-12">
-              <TabsTrigger value="videos" className="text-base px-8 py-3 font-semibold">Videos</TabsTrigger>
-              <TabsTrigger value="case-studies" className="text-base px-8 py-3 font-semibold">Case Studies</TabsTrigger>
+            <TabsList className="mb-8 md:mb-12">
+              <TabsTrigger value="videos" className="text-sm md:text-base px-4 md:px-8 py-2 md:py-3 font-semibold">Videos</TabsTrigger>
+              <TabsTrigger value="case-studies" className="text-sm md:text-base px-4 md:px-8 py-2 md:py-3 font-semibold">Case Studies</TabsTrigger>
             </TabsList>
 
             <TabsContent value="videos">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                 {videos.map((video) => (
-                  <Card
+                  <ClickableCard
                     key={video.id}
-                    className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer hover:border-primary"
-                    onClick={() => setSelectedVideo(video)}
+                    className="overflow-hidden"
+                    onClick={() => handleVideoSelect(video)}
+                    ariaLabel={`View video: ${video.title}`}
                   >
                     <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
                       {video.thumbnailUrl ? (
@@ -71,32 +77,33 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
                         </Badge>
                       )}
                     </div>
-                    <div className="p-6">
-                      <Badge variant="outline" className="mb-3 capitalize font-semibold">{video.category}</Badge>
-                      <h3 className="text-lg font-bold mb-2">{video.title}</h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{video.description}</p>
+                    <div className="p-4 md:p-6">
+                      <Badge variant="outline" className="mb-2 md:mb-3 capitalize font-semibold text-xs md:text-sm">{video.category}</Badge>
+                      <h3 className="text-base md:text-lg font-bold mb-1 md:mb-2">{video.title}</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">{video.description}</p>
                     </div>
-                  </Card>
+                  </ClickableCard>
                 ))}
               </div>
             </TabsContent>
 
             <TabsContent value="case-studies">
-              <div className="grid grid-cols-1 gap-8">
+              <div className="grid grid-cols-1 gap-4 md:gap-8">
                 {caseStudies.map((study) => (
-                  <Card
+                  <ClickableCard
                     key={study.id}
-                    className="p-8 hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-accent"
-                    onClick={() => setSelectedCaseStudy(study)}
+                    className="p-5 md:p-8 border-2"
+                    onClick={() => handleCaseStudySelect(study)}
+                    ariaLabel={`View case study: ${study.title}`}
                   >
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-start justify-between mb-3 md:mb-4">
                       <div className="flex-1">
-                        <h3 className="text-2xl font-normal mb-2">{study.title}</h3>
+                        <h3 className="text-xl md:text-2xl font-normal mb-2">{study.title}</h3>
                         <Badge variant="secondary" className="capitalize">{study.category}</Badge>
                       </div>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-6 mt-6">
+                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-6">
                       <div>
                         <h4 className="text-sm font-semibold mb-2 text-primary uppercase tracking-wide">Problem</h4>
                         <p className="text-sm text-muted-foreground line-clamp-3">{study.problem}</p>
@@ -114,7 +121,7 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
                     <Button variant="outline" className="mt-6">
                       Read Full Case Study
                     </Button>
-                  </Card>
+                  </ClickableCard>
                 ))}
               </div>
             </TabsContent>

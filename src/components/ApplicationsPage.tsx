@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Card } from '@/components/ui/card'
+import { useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -9,40 +8,47 @@ import {
   CheckCircle, 
   Package
 } from '@phosphor-icons/react'
-import { applications, type Application } from '@/lib/materials-data'
+import { applications } from '@/lib/materials-data'
+import type { Application } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
-import { HeroImage } from '@/components/HeroImage'
+import { PageHero } from '@/components/PageHero'
+import { ClickableCard } from '@/components/ClickableCard'
 import NeuralCells from '@/assets/images/Neural_Cells.png'
 
-export function ApplicationsPage() {
+interface ApplicationsPageProps {
+  onNavigate: (page: string) => void
+}
+
+export function ApplicationsPage({ onNavigate }: ApplicationsPageProps) {
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
+
+  const handleApplicationSelect = useCallback((application: Application) => {
+    setSelectedApplication(application)
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
-        <div className="absolute inset-0">
-          <HeroImage src={NeuralCells} alt="" opacity={0.5} />
-        </div>
-        <div className="relative max-w-[1280px] mx-auto z-10">
-          <div className="mb-6">
-            <h1 className="text-6xl font-bold mb-6">Applications</h1>
-          </div>
-          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
-            Applications for healthcare and diagnostics. Polymer Bionics materials enable breakthrough medical 
-            technologies across diverse clinical applications—from peripheral nerve interfaces to continuous 
-            infant monitoring, our flexible bioelectronics platform supports innovation that improves patient outcomes.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Applications"
+        description="Applications for healthcare and diagnostics. Polymer Bionics materials enable breakthrough medical technologies across diverse clinical applications—from peripheral nerve interfaces to continuous infant monitoring, our flexible bioelectronics platform supports innovation that improves patient outcomes."
+        backgroundImage={NeuralCells}
+        backgroundOpacity={0.5}
+        breadcrumbs={[
+          { label: 'Home', page: 'home' },
+          { label: 'Applications' }
+        ]}
+        onNavigate={onNavigate}
+      />
 
-      <section className="py-20 px-8">
+      <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-[1280px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             {applications.map((application) => (
-                <Card
+                <ClickableCard
                   key={application.id}
-                  className="group overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] cursor-pointer hover:border-primary"
-                  onClick={() => setSelectedApplication(application)}
+                  className="group overflow-hidden"
+                  onClick={() => handleApplicationSelect(application)}
+                  ariaLabel={`View details for ${application.name}`}
                 >
                   <div className="h-40 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
                     {application.imageUrl ? (
@@ -52,8 +58,8 @@ export function ApplicationsPage() {
                     )}
                   </div>
                   
-                  <div className="p-8">
-                    <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                  <div className="p-5 md:p-8">
+                    <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-3 group-hover:text-primary transition-colors">
                       {application.name}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
@@ -83,7 +89,7 @@ export function ApplicationsPage() {
                       </Button>
                     </div>
                   </div>
-                </Card>
+                </ClickableCard>
             ))}
           </div>
         </div>

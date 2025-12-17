@@ -5,11 +5,24 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { EnvelopeSimple, MapPin, Phone, LinkedinLogo } from '@phosphor-icons/react'
+import { EnvelopeSimple, MapPin, LinkedinLogo } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { contactConfig, getEmailUrl } from '@/lib/contact-config'
+import { PageHero } from '@/components/PageHero'
+import { cn } from '@/lib/utils'
 
-export function ContactPage() {
+interface ContactPageProps {
+  onNavigate: (page: string) => void
+}
+
+interface FormErrors {
+  name?: string
+  email?: string
+  subject?: string
+  message?: string
+}
+
+export function ContactPage({ onNavigate }: ContactPageProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,10 +30,39 @@ export function ContactPage() {
     subject: '',
     message: ''
   })
+  const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {}
+    
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required'
+    }
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address'
+    }
+    if (!formData.subject.trim()) {
+      newErrors.subject = 'Subject is required'
+    }
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required'
+    }
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    
+    if (!validateForm()) {
+      toast.error('Please fix the errors in the form')
+      return
+    }
+    
     setIsSubmitting(true)
     
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -33,40 +75,37 @@ export function ContactPage() {
       subject: '',
       message: ''
     })
+    setErrors({})
     setIsSubmitting(false)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }))
+    // Clear error when user starts typing
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }))
+    }
   }
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
-        <div className="max-w-[1280px] mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h1 className="text-6xl font-bold text-foreground mb-6">
-              Get In Touch
-            </h1>
-            <p className="text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed">
-              Have a question about our advanced polymers or want to discuss a custom application? 
-              We'd love to hear from you.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        title="Get In Touch"
+        description="Have a question about our advanced polymers or want to discuss a custom application? We'd love to hear from you."
+        breadcrumbs={[
+          { label: 'Home', page: 'home' },
+          { label: 'Contact' }
+        ]}
+        onNavigate={onNavigate}
+      />
 
-      <section className="py-20 px-8">
+      <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-[1280px] mx-auto">
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -74,8 +113,8 @@ export function ContactPage() {
             >
               <Card className="h-full shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-3xl">Send us a message</CardTitle>
-                  <CardDescription className="text-base">
+                  <CardTitle className="text-2xl md:text-3xl">Send us a message</CardTitle>
+                  <CardDescription className="text-sm md:text-base">
                     Fill out the form below and we'll respond within 24 hours
                   </CardDescription>
                 </CardHeader>
@@ -90,8 +129,13 @@ export function ContactPage() {
                         onChange={handleChange}
                         required
                         placeholder="John Smith"
-                        className="h-11"
+                        aria-invalid={!!errors.name}
+                        aria-describedby={errors.name ? 'name-error' : undefined}
+                        className={cn("h-11", errors.name && "border-destructive")}
                       />
+                      {errors.name && (
+                        <p id="name-error" className="text-sm text-destructive">{errors.name}</p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -104,8 +148,13 @@ export function ContactPage() {
                         onChange={handleChange}
                         required
                         placeholder="john@example.com"
-                        className="h-11"
+                        aria-invalid={!!errors.email}
+                        aria-describedby={errors.email ? 'email-error' : undefined}
+                        className={cn("h-11", errors.email && "border-destructive")}
                       />
+                      {errors.email && (
+                        <p id="email-error" className="text-sm text-destructive">{errors.email}</p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -129,8 +178,13 @@ export function ContactPage() {
                         onChange={handleChange}
                         required
                         placeholder="What can we help you with?"
-                        className="h-11"
+                        aria-invalid={!!errors.subject}
+                        aria-describedby={errors.subject ? 'subject-error' : undefined}
+                        className={cn("h-11", errors.subject && "border-destructive")}
                       />
+                      {errors.subject && (
+                        <p id="subject-error" className="text-sm text-destructive">{errors.subject}</p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -143,8 +197,13 @@ export function ContactPage() {
                         required
                         placeholder="Tell us more about your inquiry..."
                         rows={6}
-                        className="resize-none"
+                        aria-invalid={!!errors.message}
+                        aria-describedby={errors.message ? 'message-error' : undefined}
+                        className={cn("resize-none", errors.message && "border-destructive")}
                       />
+                      {errors.message && (
+                        <p id="message-error" className="text-sm text-destructive">{errors.message}</p>
+                      )}
                     </div>
 
                     <Button 
@@ -168,8 +227,8 @@ export function ContactPage() {
             >
               <Card className="shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-3xl">Contact Information</CardTitle>
-                  <CardDescription className="text-base">
+                  <CardTitle className="text-2xl md:text-3xl">Contact Information</CardTitle>
+                  <CardDescription className="text-sm md:text-base">
                     Reach out to us through any of these channels
                   </CardDescription>
                 </CardHeader>
@@ -184,7 +243,7 @@ export function ContactPage() {
                         href={getEmailUrl('general')}
                         onClick={(e) => {
                           e.preventDefault()
-                          window.location.href = getEmailUrl('general')
+                          window.open(getEmailUrl('general'), '_blank', 'noopener,noreferrer')
                         }}
                         className="text-muted-foreground hover:text-primary transition-colors cursor-pointer font-medium"
                       >
@@ -203,7 +262,7 @@ export function ContactPage() {
                         href={getEmailUrl('sales')}
                         onClick={(e) => {
                           e.preventDefault()
-                          window.location.href = getEmailUrl('sales')
+                          window.open(getEmailUrl('sales'), '_blank', 'noopener,noreferrer')
                         }}
                         className="text-muted-foreground hover:text-primary transition-colors cursor-pointer font-medium"
                       >

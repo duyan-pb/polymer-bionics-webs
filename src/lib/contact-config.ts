@@ -36,14 +36,15 @@ export const contactConfig = {
 }
 
 /**
- * Generates a WhatsApp chat URL
+ * Copies WhatsApp number to clipboard and returns success status
  */
-export function getWhatsAppUrl(customMessage?: string): string {
-  const { number, defaultMessage } = contactConfig.whatsapp
-  const message = customMessage || defaultMessage
-  // Remove the + sign and any spaces for the wa.me URL
-  const cleanNumber = number.replace(/[\s+\-()]/g, '')
-  return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`
+export async function copyWhatsAppNumber(): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(contactConfig.whatsapp.number)
+    return true
+  } catch {
+    return false
+  }
 }
 
 /**

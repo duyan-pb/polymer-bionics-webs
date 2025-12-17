@@ -1,19 +1,29 @@
 import { useState } from 'react'
-import { EnvelopeSimple, WhatsappLogo, X, ChatCircleDots, MapPin } from '@phosphor-icons/react'
+import { EnvelopeSimple, WhatsappLogo, X, ChatCircleDots, MapPin, Copy } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
-import { contactConfig, getWhatsAppUrl, getEmailUrl } from '@/lib/contact-config'
+import { toast } from 'sonner'
+import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
 
 export function FloatingContactButton() {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleEmailClick = (type: 'general' | 'sales') => {
-    window.location.href = getEmailUrl(type)
+    window.open(getEmailUrl(type), '_blank', 'noopener,noreferrer')
     setIsOpen(false)
   }
 
-  const handleWhatsAppClick = () => {
-    window.open(getWhatsAppUrl(), '_blank', 'noopener,noreferrer')
+  const handleWhatsAppClick = async () => {
+    const success = await copyWhatsAppNumber()
+    if (success) {
+      toast.success('WhatsApp number copied!', {
+        description: `${contactConfig.whatsapp.number} - Open WhatsApp and start a chat`,
+      })
+    } else {
+      toast.error('Could not copy number', {
+        description: `WhatsApp: ${contactConfig.whatsapp.number}`,
+      })
+    }
     setIsOpen(false)
   }
 
@@ -25,7 +35,7 @@ export function FloatingContactButton() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-4 md:bottom-6 right-4 md:right-6 z-50 flex flex-col items-end gap-2 md:gap-3">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -33,9 +43,9 @@ export function FloatingContactButton() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.8 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col gap-2 bg-card border border-border rounded-lg shadow-lg p-3 min-w-[240px]"
+            className="flex flex-col gap-2 bg-card border border-border rounded-lg shadow-lg p-2 md:p-3 min-w-[200px] md:min-w-[240px]"
           >
-            <div className="text-sm font-semibold text-foreground mb-1 px-2">
+            <div className="text-xs md:text-sm font-semibold text-foreground mb-1 px-2">
               Contact Us
             </div>
             
@@ -69,10 +79,11 @@ export function FloatingContactButton() {
               onClick={handleWhatsAppClick}
             >
               <WhatsappLogo className="flex-shrink-0" />
-              <div className="flex flex-col items-start text-left">
+              <div className="flex flex-col items-start text-left flex-1">
                 <span className="text-sm font-medium">WhatsApp</span>
-                <span className="text-xs text-muted-foreground">Chat with us</span>
+                <span className="text-xs text-muted-foreground">{contactConfig.whatsapp.number}</span>
               </div>
+              <Copy className="flex-shrink-0 text-muted-foreground" size={14} />
             </Button>
 
             <Button

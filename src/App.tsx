@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useKV } from '@github/spark/hooks'
 import { Navigation } from '@/components/Navigation'
@@ -17,18 +17,15 @@ import { TeamInitializer } from '@/components/TeamInitializer'
 import { FloatingContactButton } from '@/components/FloatingContactButton'
 import { GlobalSearch } from '@/components/GlobalSearch'
 import { BackToTopButton } from '@/components/BackToTopButton'
+import { useTheme } from '@/hooks/use-theme'
+import { PAGE_TRANSITION } from '@/lib/constants'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
 import { placeholderPublications } from '@/lib/publications-data'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window === 'undefined') return false
-    const stored = localStorage.getItem('pb-theme')
-    if (stored) return stored === 'dark'
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-  })
+  const { isDark, toggleTheme } = useTheme()
   
   const [team] = useKV<TeamMember[]>('team', [])
   const [products] = useKV<Product[]>('products', [])
@@ -37,11 +34,6 @@ function App() {
   const [datasheets] = useKV<Datasheet[]>('datasheets', [])
   const [news] = useKV<NewsItem[]>('news', [])
   const [publications] = useKV<Publication[]>('publications', placeholderPublications)
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDark)
-    localStorage.setItem('pb-theme', isDark ? 'dark' : 'light')
-  }, [isDark])
 
   const handleNavigate = useCallback((page: string) => {
     setCurrentPage(page)
@@ -75,15 +67,21 @@ function App() {
     <div className="min-h-screen bg-background flex flex-col">
       <ProductsInitializer />
       <TeamInitializer />
-      <Navigation currentPage={currentPage} onNavigate={handleNavigate} onOpenSearch={() => setIsSearchOpen(true)} isDark={isDark} onToggleTheme={() => setIsDark((prev) => !prev)} />
+      <Navigation 
+        currentPage={currentPage} 
+        onNavigate={handleNavigate} 
+        onOpenSearch={() => setIsSearchOpen(true)} 
+        isDark={isDark} 
+        onToggleTheme={toggleTheme} 
+      />
       <div className="flex-1">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentPage}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
+            initial={PAGE_TRANSITION.initial}
+            animate={PAGE_TRANSITION.animate}
+            exit={PAGE_TRANSITION.exit}
+            transition={PAGE_TRANSITION.transition}
           >
             {renderPage()}
           </motion.div>

@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
-import { EnvelopeSimple, WhatsappLogo } from '@phosphor-icons/react'
-import { contactConfig, getWhatsAppUrl, getEmailUrl } from '@/lib/contact-config'
+import { EnvelopeSimple, WhatsappLogo, Copy } from '@phosphor-icons/react'
+import { toast } from 'sonner'
+import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
 
 interface ContactLinksProps {
   variant?: 'default' | 'outline' | 'ghost'
@@ -19,16 +20,23 @@ export function ContactLinks({
   showEmail = true,
   emailType = 'general'
 }: ContactLinksProps) {
-  const handleWhatsAppClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Open WhatsApp in a new window/tab
-    e.preventDefault()
-    window.open(getWhatsAppUrl(), '_blank', 'noopener,noreferrer')
+  const handleWhatsAppClick = async () => {
+    const success = await copyWhatsAppNumber()
+    if (success) {
+      toast.success('WhatsApp number copied!', {
+        description: `${contactConfig.whatsapp.number} - Open WhatsApp and start a chat`,
+      })
+    } else {
+      toast.error('Could not copy number', {
+        description: `WhatsApp: ${contactConfig.whatsapp.number}`,
+      })
+    }
   }
 
   const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     // Trigger the mailto link
     e.preventDefault()
-    window.location.href = getEmailUrl(emailType)
+    window.open(getEmailUrl(emailType), '_blank', 'noopener,noreferrer')
   }
 
   return (
@@ -37,17 +45,11 @@ export function ContactLinks({
         <Button 
           variant={variant} 
           size={size}
-          asChild
+          onClick={handleWhatsAppClick}
         >
-          <a 
-            href={getWhatsAppUrl()}
-            onClick={handleWhatsAppClick}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <WhatsappLogo className="mr-2" size={18} weight="fill" />
-            WhatsApp Enquiry
-          </a>
+          <WhatsappLogo className="mr-2" size={18} weight="fill" />
+          WhatsApp
+          <Copy className="ml-2" size={14} />
         </Button>
       )}
       {showEmail && (

@@ -1,15 +1,17 @@
+import type { TEAM_CATEGORIES } from './constants'
+
+export type TeamCategory = keyof typeof TEAM_CATEGORIES
+
 export interface TeamMember {
   id: string
   name: string
   title: string
   role: string
-  category: 'founders' | 'management' | 'lab-management' | 'research' | 'engineering' | 'research-engineering' | 'advisory'
+  category: TeamCategory
   shortBio: string
   fullBio: string
-  image?: string
   imageUrl?: string
   linkedin?: string
-  linkedIn?: string
   scholar?: string
   email?: string
   education?: string[]
@@ -38,7 +40,6 @@ export interface Video {
   id: string
   title: string
   description: string
-  url: string
   videoUrl: string
   category: string
   thumbnailUrl?: string
@@ -96,4 +97,26 @@ export interface Publication {
   doi?: string
   url?: string
   pdfUrl?: string
+}
+
+export interface Material {
+  id: string
+  name: string
+  description: string
+  properties: string[]
+  keyAdvantages: string[]
+  technicalDetails: string
+  imageClass?: string
+  imageUrl?: string
+}
+
+export interface Application {
+  id: string
+  name: string
+  description: string
+  benefits: string[]
+  useCases: string[]
+  relevantMaterials: string[]
+  imageClass?: string
+  imageUrl?: string
 }

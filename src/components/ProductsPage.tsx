@@ -1,83 +1,138 @@
-import { useState } from 'react'
-import { Card } from '@/components/ui/card'
+import { useState, useMemo, useCallback } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Download, CheckCircle, TestTube, Package, FileText, Image as ImageIcon } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
-import { HeroImage } from '@/components/HeroImage'
+import { PageHero } from '@/components/PageHero'
+import { ClickableCard } from '@/components/ClickableCard'
+import { Card } from '@/components/ui/card'
 import ElastomerArray from '@/assets/images/Elastomer_array.png'
 
 interface ProductsPageProps {
   products: Product[]
+  onNavigate: (page: string) => void
 }
 
-export function ProductsPage({ products }: ProductsPageProps) {
+export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
 
-  const categories = ['all', ...Array.from(new Set(products.map(p => p.category)))]
+  const isLoading = !products || products.length === 0
 
-  const filteredProducts = selectedCategory === 'all'
-    ? products
-    : products.filter(p => p.category === selectedCategory)
+  const categories = useMemo(
+    () => ['all', ...Array.from(new Set(products.map(p => p.category)))],
+    [products]
+  )
+
+  const filteredProducts = useMemo(
+    () => selectedCategory === 'all'
+      ? products
+      : products.filter(p => p.category === selectedCategory),
+    [products, selectedCategory]
+  )
+
+  const handleCategorySelect = useCallback((cat: string) => {
+    setSelectedCategory(cat)
+  }, [])
+
+  const handleProductSelect = useCallback((product: Product) => {
+    setSelectedProduct(product)
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
-        <div className="absolute inset-0">
-          <HeroImage src={ElastomerArray} alt="" opacity={0.7} />
-        </div>
-        <div className="relative max-w-[1280px] mx-auto z-10">
-          <h1 className="text-6xl font-bold mb-6">Product Portfolio</h1>
-          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
-            Our proprietary biomaterials platform delivers high-performance solutions for surgical applications,
-            wearable medical devices, and advanced drug delivery systems.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Product Portfolio"
+        description="Our proprietary biomaterials platform delivers high-performance solutions for surgical applications, wearable medical devices, and advanced drug delivery systems."
+        backgroundImage={ElastomerArray}
+        backgroundOpacity={0.7}
+        breadcrumbs={[
+          { label: 'Home', page: 'home' },
+          { label: 'Products' }
+        ]}
+        onNavigate={onNavigate}
+      />
 
-      <section className="py-20 px-8">
+      <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-[1280px] mx-auto">
-          <div className="flex flex-wrap gap-2 mb-12">
+          <div className="flex flex-wrap gap-2 mb-8 md:mb-12">
             {categories.map((cat) => (
               <Badge
                 key={cat}
                 variant={selectedCategory === cat ? 'default' : 'outline'}
                 className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => handleCategorySelect(cat)}
               >
                 {cat}
               </Badge>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {isLoading ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {Array.from({ length: 4 }).map((_, idx) => (
+                <Card key={idx} className="p-8">
+                  <Skeleton className="h-56 w-full mb-6 rounded-lg" />
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex-1">
+                      <Skeleton className="h-7 w-2/3 mb-2" />
+                      <Skeleton className="h-5 w-1/2" />
+                    </div>
+                    <Skeleton className="h-6 w-20" />
+                  </div>
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-4/5" />
+                    <Skeleton className="h-4 w-3/4" />
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="text-center py-20">
+              <Package size={64} className="mx-auto text-muted-foreground/40 mb-4" weight="duotone" />
+              <h3 className="text-xl font-semibold mb-2">No products found</h3>
+              <p className="text-muted-foreground mb-4">
+                {selectedCategory === 'all' 
+                  ? 'Products are loading...' 
+                  : `No products in the "${selectedCategory}" category`}
+              </p>
+              {selectedCategory !== 'all' && (
+                <Button variant="outline" onClick={() => handleCategorySelect('all')}>
+                  View all products
+                </Button>
+              )}
+            </div>
+          ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
             {filteredProducts.map((product) => (
-              <Card
+              <ClickableCard
                 key={product.id}
-                className="p-8 hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] cursor-pointer hover:border-primary"
-                onClick={() => setSelectedProduct(product)}
+                className="p-5 md:p-8"
+                onClick={() => handleProductSelect(product)}
+                ariaLabel={`View details for ${product.name}`}
               >
                 {product.imageUrl && (
-                  <div className="mb-6 rounded-lg overflow-hidden">
+                  <div className="mb-4 md:mb-6 rounded-lg overflow-hidden">
                     <img 
                       src={product.imageUrl} 
                       alt={product.name}
-                      className="w-full h-56 object-cover"
+                      className="w-full h-40 md:h-56 object-cover"
                     />
                   </div>
                 )}
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 md:mb-4 gap-2">
                   <div>
-                    <h3 className="text-2xl font-bold mb-2">{product.name}</h3>
-                    <p className="text-base text-muted-foreground italic">{product.tagline}</p>
+                    <h3 className="text-xl md:text-2xl font-bold mb-1 md:mb-2">{product.name}</h3>
+                    <p className="text-sm md:text-base text-muted-foreground italic">{product.tagline}</p>
                   </div>
-                  <Badge variant="secondary" className="capitalize font-semibold">{product.category}</Badge>
+                  <Badge variant="secondary" className="capitalize font-semibold self-start">{product.category}</Badge>
                 </div>
 
                 <div className="space-y-4">
@@ -94,19 +149,19 @@ export function ProductsPage({ products }: ProductsPageProps) {
                   </div>
 
                   <div className="space-y-2 pt-2">
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {product.datasheetId && (
-                        <Button variant="outline" size="sm" onClick={(e) => e.stopPropagation()}>
-                          <Download className="mr-1" size={16} /> Download Datasheet
+                        <Button variant="outline" size="sm" className="text-xs md:text-sm" onClick={(e) => e.stopPropagation()}>
+                          <Download className="mr-1" size={16} /> Datasheet
                         </Button>
                       )}
                       {product.caseStudyId && (
-                        <Button variant="outline" size="sm" onClick={(e) => e.stopPropagation()}>
-                          View Case Study
+                        <Button variant="outline" size="sm" className="text-xs md:text-sm" onClick={(e) => e.stopPropagation()}>
+                          Case Study
                         </Button>
                       )}
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                       <Button variant="ghost" size="sm">
                         Enquire
                       </Button>
@@ -116,9 +171,10 @@ export function ProductsPage({ products }: ProductsPageProps) {
                     </div>
                   </div>
                 </div>
-              </Card>
+              </ClickableCard>
             ))}
           </div>
+          )}
         </div>
       </section>
 

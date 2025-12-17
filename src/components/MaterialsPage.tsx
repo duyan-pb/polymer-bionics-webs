@@ -1,17 +1,16 @@
-import { useState } from 'react'
-import { Card } from '@/components/ui/card'
+import { useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { CheckCircle } from '@phosphor-icons/react'
-import { materials, type Material } from '@/lib/materials-data'
+import { materials } from '@/lib/materials-data'
+import type { Material } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
-import { HeroImage } from '@/components/HeroImage'
+import { PageHero } from '@/components/PageHero'
+import { ClickableCard } from '@/components/ClickableCard'
 import CESheet from '@/assets/images/CE_sheet.png'
-import { Breadcrumbs } from '@/components/Breadcrumbs'
-
 
 interface MaterialsPageProps {
   onNavigate: (page: string) => void
@@ -19,43 +18,34 @@ interface MaterialsPageProps {
 
 export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
-  const [comparison, setComparison] = useState<Material[]>([])
 
-  const toggleCompare = (material: Material) => {
-    setComparison((prev) => {
-      const exists = prev.find((m) => m.id === material.id)
-      if (exists) return prev.filter((m) => m.id !== material.id)
-      if (prev.length >= 3) return prev
-      return [...prev, material]
-    })
-  }
+  const handleMaterialSelect = useCallback((material: Material) => {
+    setSelectedMaterial(material)
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
-        <div className="absolute inset-0">
-          <HeroImage src={CESheet} alt="" opacity={0.7} />
-        </div>
-        <div className="relative max-w-[1280px] mx-auto z-10">
-          <div className="mb-6">
-            <h1 className="text-6xl font-bold mb-6">Our Materials</h1>
-          </div>
-          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
-            Advanced materials for advancements in humankind. Our portfolio of specialized bionic materials 
-            includes flexible conductive polymers, biocompatible gels, and innovative bonding solutions—all 
-            engineered for superior performance in wearable and implantable bioelectronic devices.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="Our Materials"
+        description="Advanced materials for advancements in humankind. Our portfolio of specialized bionic materials includes flexible conductive polymers, biocompatible gels, and innovative bonding solutions—all engineered for superior performance in wearable and implantable bioelectronic devices."
+        backgroundImage={CESheet}
+        backgroundOpacity={0.7}
+        breadcrumbs={[
+          { label: 'Home', page: 'home' },
+          { label: 'Materials' }
+        ]}
+        onNavigate={onNavigate}
+      />
 
-      <section className="py-20 px-8">
+      <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-[1280px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
             {materials.map((material) => (
-              <Card
+              <ClickableCard
                 key={material.id}
-                className="group overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-[1.01] cursor-pointer hover:border-primary"
-                onClick={() => setSelectedMaterial(material)}
+                className="group overflow-hidden"
+                onClick={() => handleMaterialSelect(material)}
+                ariaLabel={`View details for ${material.name}`}
               >
                 <div className="h-40 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
                   {material.imageUrl ? (
@@ -65,8 +55,8 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
                   )}
                 </div>
                 
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                <div className="p-5 md:p-8">
+                  <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-3 group-hover:text-primary transition-colors">
                     {material.name}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
@@ -97,7 +87,7 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
                     </Button>
                   </div>
                 </div>
-              </Card>
+              </ClickableCard>
             ))}
           </div>
         </div>

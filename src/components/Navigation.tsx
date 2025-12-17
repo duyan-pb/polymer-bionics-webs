@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, MagnifyingGlass, MoonStars, SunDim } from '@phosphor-icons/react'
+import { NAV_ITEMS } from '@/lib/constants'
 import logoPng from '@/assets/images/unnamed.png'
 
 interface NavigationProps {
@@ -16,18 +17,6 @@ interface NavigationProps {
 export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onToggleTheme }: NavigationProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'team', label: 'Team' },
-    { id: 'materials', label: 'Materials' },
-    { id: 'products', label: 'Products' },
-    { id: 'applications', label: 'Applications' },
-    { id: 'media', label: 'Videos & Case Studies' },
-    { id: 'datasheets', label: 'Datasheets' },
-    { id: 'news', label: 'News & Publications' },
-    { id: 'contact', label: 'Contact' },
-  ]
-
   const handleNavigate = (page: string) => {
     onNavigate(page)
     setMobileOpen(false)
@@ -35,7 +24,7 @@ export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onTo
 
   return (
     <nav className="border-b border-border bg-background/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-      <div className="max-w-[1280px] mx-auto px-8 py-4">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <motion.button
             onClick={() => handleNavigate('home')}
@@ -65,7 +54,7 @@ export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onTo
           </motion.button>
 
           <div className="hidden md:flex items-center gap-0">
-            {navItems.slice(1).map((item) => (
+            {NAV_ITEMS.slice(1).map((item) => (
               <Button
                 key={item.id}
                 variant={currentPage === item.id ? 'default' : 'ghost'}
@@ -97,7 +86,7 @@ export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onTo
                 <Button variant="secondary" onClick={onOpenSearch} className="justify-start" aria-label="Open search">
                   Quick Search (⌘K)
                 </Button>
-                {navItems.map((item) => (
+                {NAV_ITEMS.map((item) => (
                   <Button
                     key={item.id}
                     variant={currentPage === item.id ? 'default' : 'ghost'}

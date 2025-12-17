@@ -1,24 +1,4 @@
-export interface Material {
-  id: string
-  name: string
-  description: string
-  properties: string[]
-  keyAdvantages: string[]
-  technicalDetails: string
-  imageClass?: string
-  imageUrl?: string
-}
-
-export interface Application {
-  id: string
-  name: string
-  description: string
-  benefits: string[]
-  useCases: string[]
-  relevantMaterials: string[]
-  imageClass?: string
-  imageUrl?: string
-}
+import type { Material, Application } from './types'
 
 export const materials: Material[] = [
   {

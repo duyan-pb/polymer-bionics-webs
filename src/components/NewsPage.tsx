@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Card } from '@/components/ui/card'
+import { useState, useMemo, useCallback } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -9,24 +8,45 @@ import { Separator } from '@/components/ui/separator'
 import { Calendar, Newspaper, BookOpen, ArrowSquareOut, Download } from '@phosphor-icons/react'
 import type { NewsItem, Publication } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
-import { HeroImage } from '@/components/HeroImage'
+import { PageHero } from '@/components/PageHero'
+import { ClickableCard } from '@/components/ClickableCard'
+import { Card } from '@/components/ui/card'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface NewsPageProps {
   news: NewsItem[]
   publications: Publication[]
+  onNavigate: (page: string) => void
 }
 
-export function NewsPage({ news, publications }: NewsPageProps) {
+export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null)
   const [selectedPublication, setSelectedPublication] = useState<Publication | null>(null)
   const [selectedTag, setSelectedTag] = useState<string>('all')
 
-  const allTags = ['all', ...Array.from(new Set(publications.flatMap(p => p.tags)))]
+  const allTags = useMemo(
+    () => ['all', ...Array.from(new Set(publications.flatMap(p => p.tags)))],
+    [publications]
+  )
 
-  const filteredPublications = selectedTag === 'all'
-    ? publications
-    : publications.filter(p => p.tags.includes(selectedTag))
+  const filteredPublications = useMemo(
+    () => selectedTag === 'all'
+      ? publications
+      : publications.filter(p => p.tags.includes(selectedTag)),
+    [publications, selectedTag]
+  )
+
+  const handleTagSelect = useCallback((tag: string) => {
+    setSelectedTag(tag)
+  }, [])
+
+  const handleNewsSelect = useCallback((item: NewsItem) => {
+    setSelectedNews(item)
+  }, [])
+
+  const handlePublicationSelect = useCallback((pub: Publication) => {
+    setSelectedPublication(pub)
+  }, [])
 
   const publicationTypeColors: Record<Publication['type'], 'default' | 'secondary' | 'outline'> = {
     'journal': 'default',
@@ -36,42 +56,38 @@ export function NewsPage({ news, publications }: NewsPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-28 px-8 overflow-hidden">
-        <div className="absolute inset-0">
-          <HeroImage 
-            src={BackgroundCover}
-            alt="" 
-            opacity={0.35}
-          />
-        </div>
-        <div className="relative max-w-[1280px] mx-auto z-10">
-          <h1 className="text-6xl font-bold mb-6">News & Publications</h1>
-          <p className="text-xl text-foreground/80 max-w-3xl leading-relaxed">
-            Stay updated on our latest research, partnerships, grant awards, and peer-reviewed publications
-            advancing the field of medical biomaterials.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        title="News & Publications"
+        description="Stay updated on our latest research, partnerships, grant awards, and peer-reviewed publications advancing the field of medical biomaterials."
+        backgroundImage={BackgroundCover}
+        backgroundOpacity={0.35}
+        breadcrumbs={[
+          { label: 'Home', page: 'home' },
+          { label: 'News & Publications' }
+        ]}
+        onNavigate={onNavigate}
+      />
 
-      <section className="py-20 px-8">
+      <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-[1280px] mx-auto">
           <Tabs defaultValue="news" className="w-full">
-            <TabsList className="mb-12">
-              <TabsTrigger value="news" className="text-base px-8 py-3 font-semibold">
-                <Newspaper className="mr-2" size={18} /> News
+            <TabsList className="mb-8 md:mb-12">
+              <TabsTrigger value="news" className="text-sm md:text-base px-4 md:px-8 py-2 md:py-3 font-semibold">
+                <Newspaper className="mr-1 md:mr-2" size={18} /> News
               </TabsTrigger>
-              <TabsTrigger value="publications" className="text-base px-8 py-3 font-semibold">
-                <BookOpen className="mr-2" size={18} /> Publications
+              <TabsTrigger value="publications" className="text-sm md:text-base px-4 md:px-8 py-2 md:py-3 font-semibold">
+                <BookOpen className="mr-1 md:mr-2" size={18} /> Publications
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="news">
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
                 {news.map((item) => (
-                  <Card
+                  <ClickableCard
                     key={item.id}
-                    className="p-8 hover:shadow-2xl transition-all duration-300 cursor-pointer border-l-4 border-l-primary hover:scale-[1.01]"
-                    onClick={() => setSelectedNews(item)}
+                    className="p-5 md:p-8 border-l-4 border-l-primary"
+                    onClick={() => handleNewsSelect(item)}
+                    ariaLabel={`Read news: ${item.title}`}
                   >
                     <div className="flex flex-col md:flex-row md:items-start gap-4">
                       <div className="flex-1">
@@ -89,7 +105,7 @@ export function NewsPage({ news, publications }: NewsPageProps) {
                         Read More
                       </Button>
                     </div>
-                  </Card>
+                  </ClickableCard>
                 ))}
               </div>
             </TabsContent>
@@ -101,19 +117,20 @@ export function NewsPage({ news, publications }: NewsPageProps) {
                     key={tag}
                     variant={selectedTag === tag ? 'default' : 'outline'}
                     className="cursor-pointer px-4 py-2 text-sm capitalize"
-                    onClick={() => setSelectedTag(tag)}
+                    onClick={() => handleTagSelect(tag)}
                   >
                     {tag}
                   </Badge>
                 ))}
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
                 {filteredPublications.map((pub) => (
-                  <Card
+                  <ClickableCard
                     key={pub.id}
-                    className="p-6 hover:shadow-xl transition-all duration-300 cursor-pointer border-l-4 border-l-primary hover:scale-[1.01]"
-                    onClick={() => setSelectedPublication(pub)}
+                    className="p-4 md:p-6 border-l-4 border-l-primary"
+                    onClick={() => handlePublicationSelect(pub)}
+                    ariaLabel={`View publication: ${pub.title}`}
                   >
                     <div className="flex flex-col gap-3">
                       <div className="flex items-start justify-between gap-4">
@@ -157,7 +174,7 @@ export function NewsPage({ news, publications }: NewsPageProps) {
                         )}
                       </div>
                     </div>
-                  </Card>
+                  </ClickableCard>
                 ))}
               </div>
             </TabsContent>

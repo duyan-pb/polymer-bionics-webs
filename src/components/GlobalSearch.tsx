@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { MagnifyingGlass, Users, Package, FileText, Newspaper, ArrowRight } from '@phosphor-icons/react'
+import { NAV_ITEMS } from '@/lib/constants'
 import type { TeamMember, Product, Datasheet, NewsItem } from '@/lib/types'
 
 interface GlobalSearchProps {
@@ -36,17 +37,7 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Navigate">
-          {[
-            { id: 'home', label: 'Home' },
-            { id: 'products', label: 'Products' },
-            { id: 'materials', label: 'Materials' },
-            { id: 'applications', label: 'Applications' },
-            { id: 'media', label: 'Videos & Case Studies' },
-            { id: 'datasheets', label: 'Datasheets' },
-            { id: 'news', label: 'News & Publications' },
-            { id: 'team', label: 'Team' },
-            { id: 'contact', label: 'Contact' }
-          ].map((item) => (
+          {NAV_ITEMS.map((item) => (
             <CommandItem key={item.id} value={item.label} onSelect={() => handleSelect(item.id)}>
               <ArrowRight className="mr-2" size={16} weight="bold" />
               {item.label}
