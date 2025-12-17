@@ -15,7 +15,8 @@ export function useTheme() {
   })
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDark)
+    // Use data-appearance attribute for Tailwind dark mode selector
+    document.documentElement.setAttribute('data-appearance', isDark ? 'dark' : 'light')
     localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light')
   }, [isDark])
 
