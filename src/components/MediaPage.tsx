@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, Quotes, FileText } from '@phosphor-icons/react'
 import type { Video, CaseStudy } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
+import heroImg from '@/assets/images/PXL_20251216_120112987.jpg'
 
 interface MediaPageProps {
   videos: Video[]
@@ -21,8 +22,11 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8">
-        <div className="max-w-[1280px] mx-auto">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <img src={heroImg} alt="" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative max-w-[1280px] mx-auto z-10">
           <h1 className="text-6xl font-bold mb-6">Videos & Case Studies</h1>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
             Explore our technology demonstrations, laboratory validations, and real-world application case studies

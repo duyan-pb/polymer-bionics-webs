@@ -9,13 +9,18 @@ import { CheckCircle } from '@phosphor-icons/react'
 import { materials, type Material } from '@/lib/materials-data'
 import { ContactLinks } from '@/components/ContactLinks'
 
+import heroImg from '@/assets/images/PXL_20251216_115937300.jpg'
+
 export function MaterialsPage() {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8">
-        <div className="max-w-[1280px] mx-auto">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <img src={heroImg} alt="" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="mb-6">
             <h1 className="text-6xl font-normal mb-4">Our Materials</h1>
           </div>
@@ -36,8 +41,12 @@ export function MaterialsPage() {
                 className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer border-2 hover:border-accent"
                 onClick={() => setSelectedMaterial(material)}
               >
-                <div className={`h-32 ${material.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'} 
-                  transition-all duration-300 group-hover:scale-105`}>
+                <div className="h-32 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
+                  {material.imageUrl ? (
+                    <img src={material.imageUrl} alt={material.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className={`w-full h-full ${material.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}></div>
+                  )}
                 </div>
                 
                 <div className="p-6">
@@ -95,7 +104,12 @@ export function MaterialsPage() {
             {selectedMaterial && (
               <>
                 <DialogHeader>
-                  <div className={`h-40 -mx-6 -mt-6 mb-6 ${selectedMaterial.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}>
+                  <div className="h-40 -mx-6 -mt-6 mb-6 overflow-hidden bg-muted">
+                    {selectedMaterial.imageUrl ? (
+                      <img src={selectedMaterial.imageUrl} alt={selectedMaterial.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className={`w-full h-full ${selectedMaterial.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}></div>
+                    )}
                   </div>
                   <DialogTitle className="text-3xl mb-2">{selectedMaterial.name}</DialogTitle>
                   <p className="text-base text-muted-foreground">{selectedMaterial.description}</p>

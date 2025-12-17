@@ -12,6 +12,7 @@ import type { Datasheet, Product } from '@/lib/types'
 import { materials, applications } from '@/lib/materials-data'
 import { useKV } from '@github/spark/hooks'
 import { ContactLinks } from '@/components/ContactLinks'
+import heroImg from '@/assets/images/PXL_20251216_120056575.jpg'
 
 interface DatasheetsPageProps {
   datasheets: Datasheet[]
@@ -87,8 +88,11 @@ export function DatasheetsPage({ datasheets }: DatasheetsPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8">
-        <div className="max-w-[1280px] mx-auto">
+      <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <img src={heroImg} alt="" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative max-w-[1280px] mx-auto z-10">
           <h1 className="text-6xl font-normal mb-6">Technical Datasheets</h1>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
             Comprehensive technical documentation including mechanical properties, biocompatibility data,

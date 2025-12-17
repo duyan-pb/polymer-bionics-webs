@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
 import { ContactLinks } from '@/components/ContactLinks'
+import heroImg from '@/assets/images/PXL_20251216_115958662.jpg'
 
 interface HomePageProps {
   onNavigate: (page: string) => void
@@ -10,8 +11,11 @@ interface HomePageProps {
 export function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="min-h-screen">
-      <section className="relative bg-gradient-to-br from-accent/10 via-background to-primary/5 py-24 px-8">
-        <div className="max-w-[1280px] mx-auto">
+      <section className="relative bg-gradient-to-br from-accent/10 via-background to-primary/5 py-24 px-8 overflow-hidden">
+        <div className="absolute inset-0 opacity-15">
+          <img src={heroImg} alt="" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="max-w-3xl">
             <h1 className="text-6xl font-normal text-foreground mb-6 tracking-tight leading-tight">
               Flexible Bioelectronics & Polymer Medical Devices
