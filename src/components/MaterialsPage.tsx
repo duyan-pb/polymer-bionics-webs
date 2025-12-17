@@ -91,16 +91,7 @@ export function MaterialsPage() {
         </div>
       </section>
 
-      <section className="py-16 px-8 bg-muted/30">
-        <div className="max-w-[1280px] mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">Custom Material Development</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Need a material tailored to your specific application? Our materials science team can develop 
-            custom polymer formulations optimized for your unique requirements.
-          </p>
-          <ContactLinks emailType="sales" />
-        </div>
-      </section>
+
 
       <Dialog open={!!selectedMaterial} onOpenChange={() => setSelectedMaterial(null)}>
         <DialogContent className="max-w-4xl max-h-[90vh]">

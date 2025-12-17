@@ -92,16 +92,7 @@ export function ApplicationsPage() {
         </div>
       </section>
 
-      <section className="py-16 px-8 bg-muted/30">
-        <div className="max-w-[1280px] mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">Partner With Us</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            We collaborate with medical device companies, research institutions, and healthcare providers to bring 
-            innovative bioelectronic solutions from concept to clinical reality.
-          </p>
-          <ContactLinks emailType="sales" />
-        </div>
-      </section>
+
 
       <Dialog open={!!selectedApplication} onOpenChange={() => setSelectedApplication(null)}>
         <DialogContent className="max-w-4xl max-h-[90vh]">

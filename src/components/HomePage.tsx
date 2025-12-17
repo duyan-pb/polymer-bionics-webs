@@ -118,20 +118,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
             Collaborating with world-class medical centers and research institutions to advance flexible bioelectronics.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60 mb-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
             <div className="text-center text-xl font-semibold text-muted-foreground">Medical Centers</div>
             <div className="text-center text-xl font-semibold text-muted-foreground">Research Institutes</div>
             <div className="text-center text-xl font-semibold text-muted-foreground">University Labs</div>
             <div className="text-center text-xl font-semibold text-muted-foreground">Clinical Partners</div>
-          </div>
-          <div className="text-center">
-            <h3 className="text-2xl font-bold mb-4">Get in Touch</h3>
-            <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-              Interested in partnering with us or learning more about our solutions?
-            </p>
-            <div className="flex justify-center">
-              <ContactLinks emailType="general" />
-            </div>
           </div>
         </div>
       </section>
