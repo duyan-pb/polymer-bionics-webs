@@ -37,7 +37,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
-      <section className="py-16 px-8 bg-background">
+      <section className="py-4 px-8 bg-background">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-0 cursor-pointer" onClick={() => onNavigate('team')}>
