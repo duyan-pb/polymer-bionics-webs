@@ -20,17 +20,6 @@ export interface Application {
   imageUrl?: string
 }
 
-import biongel1 from '@/assets/images/PXL_20251216_115711682.PORTRAIT.jpg'
-import biongel2 from '@/assets/images/PXL_20251216_115728419.PORTRAIT.ORIGINAL.jpg'
-import biongel3 from '@/assets/images/PXL_20251216_115737523.PORTRAIT.jpg'
-import app1 from '@/assets/images/PXL_20251216_115759988.jpg'
-import app2 from '@/assets/images/PXL_20251216_115810661.jpg'
-import app3 from '@/assets/images/PXL_20251216_115825489.jpg'
-import app4 from '@/assets/images/PXL_20251216_115836016.jpg'
-import app5 from '@/assets/images/PXL_20251216_115843208.jpg'
-import app6 from '@/assets/images/PXL_20251216_115854143.jpg'
-import app7 from '@/assets/images/PXL_20251216_115905670.jpg'
-
 export const materials: Material[] = [
   {
     id: 'biongel',
@@ -47,7 +36,7 @@ export const materials: Material[] = [
       'Advantage placeholder'
     ],
     technicalDetails: 'Technical details placeholder',
-    imageUrl: biongel1
+    imageClass: 'bg-gradient-to-br from-primary/20 to-accent/10'
   },
   {
     id: 'elastibion',
@@ -64,7 +53,7 @@ export const materials: Material[] = [
       'Advantage placeholder'
     ],
     technicalDetails: 'Technical details placeholder',
-    imageUrl: biongel2
+    imageClass: 'bg-gradient-to-br from-accent/20 to-primary/10'
   },
   {
     id: 'elastisolder',
@@ -81,7 +70,7 @@ export const materials: Material[] = [
       'Advantage placeholder'
     ],
     technicalDetails: 'Technical details placeholder',
-    imageUrl: biongel3
+    imageClass: 'bg-gradient-to-br from-primary/10 to-accent/20'
   }
 ]
 
@@ -101,7 +90,7 @@ export const applications: Application[] = [
       'Use case placeholder'
     ],
     relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiSolder'],
-    imageUrl: app1
+    imageClass: 'bg-gradient-to-br from-primary/20 to-accent/10'
   },
   {
     id: 'elastarray',
@@ -118,7 +107,7 @@ export const applications: Application[] = [
       'Use case placeholder'
     ],
     relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiSolder'],
-    imageUrl: app2
+    imageClass: 'bg-gradient-to-br from-accent/20 to-primary/10'
   },
   {
     id: 'elastiwire',
@@ -135,7 +124,7 @@ export const applications: Application[] = [
       'Use case placeholder'
     ],
     relevantMaterials: ['ElastiBion', 'ElastiSolder'],
-    imageUrl: app3
+    imageClass: 'bg-gradient-to-br from-primary/10 to-accent/20'
   },
   {
     id: 'simpleeg',
@@ -152,7 +141,7 @@ export const applications: Application[] = [
       'Use case placeholder'
     ],
     relevantMaterials: ['ElastiBion', 'BionGel'],
-    imageUrl: app4
+    imageClass: 'bg-gradient-to-br from-accent/10 to-primary/20'
   },
   {
     id: 'babeeg',
@@ -169,7 +158,7 @@ export const applications: Application[] = [
       'Use case placeholder'
     ],
     relevantMaterials: ['ElastiBion', 'BionGel'],
-    imageUrl: app5
+    imageClass: 'bg-gradient-to-br from-primary/15 to-accent/15'
   },
   {
     id: 'inear-eeg',
@@ -186,7 +175,7 @@ export const applications: Application[] = [
       'Use case placeholder'
     ],
     relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiWire'],
-    imageUrl: app6
+    imageClass: 'bg-gradient-to-br from-accent/15 to-primary/15'
   },
   {
     id: 'custom-applications',
@@ -203,6 +192,6 @@ export const applications: Application[] = [
       'Use case placeholder'
     ],
     relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiSolder'],
-    imageUrl: app7
+    imageClass: 'bg-gradient-to-br from-primary/20 to-accent/20'
   }
 ]
