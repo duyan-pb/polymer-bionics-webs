@@ -12,7 +12,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <section className="relative bg-gradient-to-br from-accent/10 via-background to-primary/5 py-24 px-8">
         <div className="max-w-[1280px] mx-auto">
           <div className="max-w-3xl">
-            <h1 className="text-6xl font-bold text-foreground mb-6 tracking-tight leading-tight">
+            <h1 className="text-6xl font-normal text-foreground mb-6 tracking-tight leading-tight">
               Flexible Bioelectronics & Polymer Medical Devices
             </h1>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">

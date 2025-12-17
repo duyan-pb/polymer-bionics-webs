@@ -88,7 +88,7 @@ export function DatasheetsPage({ datasheets }: DatasheetsPageProps) {
     <div className="min-h-screen bg-background">
       <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8">
         <div className="max-w-[1280px] mx-auto">
-          <h1 className="text-6xl font-bold mb-6">Technical Datasheets</h1>
+          <h1 className="text-6xl font-normal mb-6">Technical Datasheets</h1>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
             Comprehensive technical documentation including mechanical properties, biocompatibility data,
             and regulatory compliance information for all our biomaterials.

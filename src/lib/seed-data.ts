@@ -63,7 +63,7 @@ export async function generateBiomaterialsProducts(): Promise<Product[]> {
       caseStudyId: index % 3 === 0 ? `case-study-${application.id}` : undefined
     }
     
-    if (application.id === 'in-ear-device') {
+    if (application.id === 'inear-eeg') {
       product.images = inEarDeviceImages
       product.imageUrl = pxl1
     }

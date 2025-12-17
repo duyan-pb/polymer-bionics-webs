@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { Atom, CheckCircle, Flask } from '@phosphor-icons/react'
 import { materials, type Material } from '@/lib/materials-data'
+import { ContactLinks } from '@/components/ContactLinks'
 
 export function MaterialsPage() {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
@@ -17,7 +18,7 @@ export function MaterialsPage() {
         <div className="max-w-[1280px] mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <Atom size={48} className="text-accent" weight="duotone" />
-            <h1 className="text-6xl font-bold">Our Materials</h1>
+            <h1 className="text-6xl font-normal">Our Materials</h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
             Advanced materials for advancements in humankind. Our portfolio of specialized bionic materials 
@@ -86,9 +87,7 @@ export function MaterialsPage() {
             Need a material tailored to your specific application? Our materials science team can develop 
             custom polymer formulations optimized for your unique requirements.
           </p>
-          <Button size="lg" className="text-base">
-            Discuss Your Project
-          </Button>
+          <ContactLinks emailType="sales" />
         </div>
       </section>
 
@@ -147,12 +146,7 @@ export function MaterialsPage() {
                   </div>
 
                   <div className="flex gap-3 pt-4">
-                    <Button>
-                      Request Technical Datasheet
-                    </Button>
-                    <Button variant="outline">
-                      Contact Materials Team
-                    </Button>
+                    <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
                   </div>
                 </div>
               </>

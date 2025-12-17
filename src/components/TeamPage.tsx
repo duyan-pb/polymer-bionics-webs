@@ -2,11 +2,9 @@ import { useState, useEffect } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import { LinkedinLogo, User, GraduationCap, Trophy, BookOpen, MagnifyingGlass } from '@phosphor-icons/react'
+import { LinkedinLogo, User, MagnifyingGlass } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import type { TeamMember } from '@/lib/types'
 
@@ -49,11 +47,9 @@ ${teamMembers}
 
 For EACH person, search for their actual LinkedIn profile and professional information. Gather:
 1. Their real current job title at Polymer Bionics or related biomedical roles
-2. Actual education background from their profiles (real degrees and universities)
-3. Real professional achievements, career highlights, and previous positions
-4. Research publications or patents if they're academic researchers
-5. Their actual LinkedIn profile URL (in format: https://linkedin.com/in/username)
-6. Google Scholar profile URL if applicable
+2. Their actual LinkedIn profile URL (in format: https://linkedin.com/in/username)
+3. A brief 2-3 sentence biography based on their real professional background
+4. Google Scholar profile URL if they have one and are researchers
 
 IMPORTANT: Research real information. Do not fabricate generic details. If you cannot find specific information for someone, set "found": false.
 
@@ -64,13 +60,10 @@ Return ONLY a valid JSON object with structure:
       "name": "Full Name",
       "found": true,
       "title": "Actual Current Title",
-      "education": ["Real Degree 1", "Real Degree 2"],
-      "achievements": ["Real achievement 1", "Real achievement 2"],
-      "publications": ["Real publication 1", "Real publication 2"],
       "linkedin": "https://linkedin.com/in/realprofile",
       "scholar": "https://scholar.google.com/citations?user=...",
       "shortBio": "1-2 sentence summary based on real info",
-      "fullBio": "3-4 sentence biography based on real info"
+      "fullBio": "2-3 sentence biography based on real info"
     }
   ]
 }`,
@@ -94,9 +87,6 @@ Return ONLY a valid JSON object with structure:
               return {
                 ...member,
                 title: update.title || member.title,
-                education: update.education && update.education.length > 0 ? update.education : member.education,
-                achievements: update.achievements && update.achievements.length > 0 ? update.achievements : member.achievements,
-                publications: update.publications && update.publications.length > 0 ? update.publications : member.publications,
                 linkedin: update.linkedin || member.linkedin,
                 scholar: update.scholar || member.scholar,
                 shortBio: update.shortBio || member.shortBio,
@@ -165,7 +155,7 @@ Return ONLY a valid JSON object with structure:
         <div className="max-w-[1280px] mx-auto">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h1 className="text-6xl font-bold mb-6">Our Team</h1>
+              <h1 className="text-6xl font-normal mb-6">Our Team</h1>
               <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
                 Our multidisciplinary team combines world-class expertise in polymer chemistry, biomedical engineering,
                 and clinical medicine to develop innovative biomaterials solutions.
@@ -221,13 +211,6 @@ Return ONLY a valid JSON object with structure:
                             </a>
                           </Button>
                         )}
-                        {selectedMember.scholar && (
-                          <Button size="sm" variant="outline" asChild>
-                            <a href={selectedMember.scholar} target="_blank" rel="noopener noreferrer">
-                              <GraduationCap className="mr-2" /> Google Scholar
-                            </a>
-                          </Button>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -237,60 +220,6 @@ Return ONLY a valid JSON object with structure:
                   <div>
                     <p className="text-base leading-relaxed">{selectedMember.fullBio}</p>
                   </div>
-
-                  <Separator />
-
-                  {selectedMember.education && selectedMember.education.length > 0 && (
-                    <div>
-                      <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                        <GraduationCap size={20} className="text-primary" /> Education
-                      </h4>
-                      <ul className="space-y-2">
-                        {selectedMember.education.map((edu, idx) => (
-                          <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
-                            {edu}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {selectedMember.education && selectedMember.education.length > 0 && (
-                    <Separator />
-                  )}
-
-                  {selectedMember.achievements && selectedMember.achievements.length > 0 && (
-                    <div>
-                      <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                        <Trophy size={20} className="text-primary" /> Key Achievements
-                      </h4>
-                      <ul className="space-y-2">
-                        {selectedMember.achievements.map((achievement, idx) => (
-                          <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
-                            {achievement}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {selectedMember.publications && selectedMember.publications.length > 0 && (
-                    <>
-                      <Separator />
-                      <div>
-                        <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                          <BookOpen size={20} className="text-primary" /> Selected Publications
-                        </h4>
-                        <ul className="space-y-2">
-                          {selectedMember.publications.map((pub, idx) => (
-                            <li key={idx} className="text-sm text-muted-foreground pl-6 relative before:absolute before:left-0 before:top-2 before:w-2 before:h-2 before:bg-accent before:rounded-full">
-                              {pub}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </>
-                  )}
                 </div>
               </>
             )}

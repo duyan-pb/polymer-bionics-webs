@@ -17,6 +17,7 @@ import {
   Headphones
 } from '@phosphor-icons/react'
 import { applications, type Application } from '@/lib/materials-data'
+import { ContactLinks } from '@/components/ContactLinks'
 
 const iconMap: Record<string, any> = {
   'neural-interfaces': Brain,
@@ -45,7 +46,7 @@ export function ApplicationsPage() {
         <div className="max-w-[1280px] mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <Lightbulb size={48} className="text-accent" weight="duotone" />
-            <h1 className="text-6xl font-bold">Applications</h1>
+            <h1 className="text-6xl font-normal">Applications</h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
             Applications for healthcare and diagnostics. Polymer Bionics materials enable breakthrough medical 
@@ -117,9 +118,7 @@ export function ApplicationsPage() {
             We collaborate with medical device companies, research institutions, and healthcare providers to bring 
             innovative bioelectronic solutions from concept to clinical reality.
           </p>
-          <Button size="lg" className="text-base">
-            Start a Collaboration
-          </Button>
+          <ContactLinks emailType="sales" />
         </div>
       </section>
 
@@ -185,12 +184,7 @@ export function ApplicationsPage() {
                   </div>
 
                   <div className="flex gap-3 pt-4">
-                    <Button>
-                      Request Application Note
-                    </Button>
-                    <Button variant="outline">
-                      Speak with Expert
-                    </Button>
+                    <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
                   </div>
                 </div>
               </>

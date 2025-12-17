@@ -27,7 +27,7 @@ export function ProductsPage({ products }: ProductsPageProps) {
     <div className="min-h-screen bg-background">
       <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8">
         <div className="max-w-[1280px] mx-auto">
-          <h1 className="text-6xl font-bold mb-6">Product Portfolio</h1>
+          <h1 className="text-6xl font-normal mb-6">Product Portfolio</h1>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
             Our proprietary biomaterials platform delivers high-performance solutions for surgical applications,
             wearable medical devices, and advanced drug delivery systems.

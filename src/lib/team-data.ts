@@ -9,15 +9,6 @@ export const teamMembers: TeamMember[] = [
     category: 'founders',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
     scholar: 'https://scholar.google.com',
     linkedin: 'https://linkedin.com'
   },
@@ -29,15 +20,37 @@ export const teamMembers: TeamMember[] = [
     category: 'founders',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
+    linkedin: 'https://linkedin.com'
+  },
+  {
+    id: 'alexey-nonikov',
+    name: 'Alexey Nonikov',
+    title: 'Laboratory Manager',
+    role: 'Laboratory Manager',
+    category: 'management',
+    shortBio: '[Short bio placeholder]',
+    fullBio: '[Full bio placeholder]',
+    linkedin: 'https://linkedin.com'
+  },
+  {
+    id: 'estelle-cuttaz',
+    name: 'Dr Estelle Cuttaz',
+    title: 'Research Manager',
+    role: 'Research Manager',
+    category: 'management',
+    shortBio: '[Short bio placeholder]',
+    fullBio: '[Full bio placeholder]',
+    scholar: 'https://scholar.google.com',
+    linkedin: 'https://linkedin.com'
+  },
+  {
+    id: 'efe-sen',
+    name: 'Efe Sen',
+    title: 'Engineering Manager',
+    role: 'Engineering Manager',
+    category: 'management',
+    shortBio: '[Short bio placeholder]',
+    fullBio: '[Full bio placeholder]',
     linkedin: 'https://linkedin.com'
   },
   {
@@ -48,15 +61,6 @@ export const teamMembers: TeamMember[] = [
     category: 'management',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
     linkedin: 'https://linkedin.com'
   },
   {
@@ -67,35 +71,6 @@ export const teamMembers: TeamMember[] = [
     category: 'research',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
-    scholar: 'https://scholar.google.com',
-    linkedin: 'https://linkedin.com'
-  },
-  {
-    id: 'estelle-cuttaz',
-    name: 'Dr Estelle Cuttaz',
-    title: 'Researcher',
-    role: 'Researcher',
-    category: 'research',
-    shortBio: '[Short bio placeholder]',
-    fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
     scholar: 'https://scholar.google.com',
     linkedin: 'https://linkedin.com'
   },
@@ -107,54 +82,7 @@ export const teamMembers: TeamMember[] = [
     category: 'research',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
     scholar: 'https://scholar.google.com',
-    linkedin: 'https://linkedin.com'
-  },
-  {
-    id: 'alexey-nonikov',
-    name: 'Alexey Nonikov',
-    title: 'Researcher',
-    role: 'Researcher',
-    category: 'research',
-    shortBio: '[Short bio placeholder]',
-    fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
-    linkedin: 'https://linkedin.com'
-  },
-  {
-    id: 'efe-sen',
-    name: 'Efe Sen',
-    title: 'Engineer',
-    role: 'Engineer',
-    category: 'engineering',
-    shortBio: '[Short bio placeholder]',
-    fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
     linkedin: 'https://linkedin.com'
   },
   {
@@ -165,15 +93,6 @@ export const teamMembers: TeamMember[] = [
     category: 'engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
-    education: [
-      '[Education placeholder]'
-    ],
-    achievements: [
-      '[Achievement placeholder]'
-    ],
-    publications: [
-      '[Publication placeholder]'
-    ],
     linkedin: 'https://linkedin.com'
   }
 ]
