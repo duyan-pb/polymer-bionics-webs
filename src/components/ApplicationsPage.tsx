@@ -11,6 +11,7 @@ import {
 } from '@phosphor-icons/react'
 import { applications, type Application } from '@/lib/materials-data'
 import { ContactLinks } from '@/components/ContactLinks'
+import NeuralCells from '@/assets/images/Neural_Cells.png'
 
 export function ApplicationsPage() {
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
@@ -20,10 +21,9 @@ export function ApplicationsPage() {
       <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <img 
-            src="https://www.polymerbionics.com/uploads/1/2/5/6/125699641/published/img-9766.jpg" 
+            src={NeuralCells} 
             alt="" 
             className="w-full h-full object-cover"
-            crossOrigin="anonymous"
           />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">

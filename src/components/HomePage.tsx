@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
 import { ContactLinks } from '@/components/ContactLinks'
+import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface HomePageProps {
   onNavigate: (page: string) => void
@@ -13,10 +14,9 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <section className="relative bg-gradient-to-br from-accent/10 via-background to-primary/5 py-24 px-8 overflow-hidden">
         <div className="absolute inset-0 opacity-15">
           <img 
-            src="https://www.polymerbionics.com/uploads/1/2/5/6/125699641/published/dsc-9453_3.jpg" 
+            src={BackgroundCover} 
             alt="" 
-            className="w-full h-full object-cover" 
-            crossOrigin="anonymous"
+            className="w-full h-full object-cover"
           />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
