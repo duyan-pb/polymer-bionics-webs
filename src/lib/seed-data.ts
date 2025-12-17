@@ -4,15 +4,14 @@ import { materials, applications } from './materials-data'
 import pxl1 from '@/assets/images/PXL_20251216_115711682.PORTRAIT.jpg'
 import pxl2 from '@/assets/images/PXL_20251216_115728419.PORTRAIT.ORIGINAL.jpg'
 import pxl5 from '@/assets/images/PXL_20251216_115810661.jpg'
-import pxl7 from '@/assets/images/PXL_20251216_115836016.jpg'
 import pxl9 from '@/assets/images/PXL_20251216_115854143.jpg'
+import pxl10 from '@/assets/images/PXL_20251216_115905670.jpg'
 import pxl11 from '@/assets/images/PXL_20251216_115937300.jpg'
 import pxl13 from '@/assets/images/PXL_20251216_115958662.jpg'
 import pxl15 from '@/assets/images/PXL_20251216_120056575.jpg'
-import pxl17 from '@/assets/images/PXL_20251216_120112987.jpg'
 
 const inEarDeviceImages = [
-  pxl1, pxl2, pxl5, pxl7, pxl9, pxl11, pxl13, pxl15, pxl17
+  pxl1, pxl2, pxl5, pxl9, pxl10, pxl11, pxl13, pxl15
 ]
 
 export async function generateBiomaterialsProducts(): Promise<Product[]> {
