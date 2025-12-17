@@ -112,14 +112,16 @@ Return ONLY a valid JSON object with structure:
     const currentTeam = team || []
     return {
       founders: currentTeam.filter(m => m.category === 'founders'),
+      labManagement: currentTeam.filter(m => m.category === 'lab-management'),
       management: currentTeam.filter(m => m.category === 'management'),
+      researchEngineering: currentTeam.filter(m => m.category === 'research-engineering'),
       research: currentTeam.filter(m => m.category === 'research'),
       engineering: currentTeam.filter(m => m.category === 'engineering'),
       advisory: currentTeam.filter(m => m.category === 'advisory'),
     }
   }
 
-  const { founders, management, research, engineering, advisory } = categorizeTeam()
+  const { founders, labManagement, management, researchEngineering, research, engineering, advisory } = categorizeTeam()
 
   const TeamGrid = ({ members, title }: { members: TeamMember[], title: string }) => (
     <div className="mb-16">
@@ -179,7 +181,9 @@ Return ONLY a valid JSON object with structure:
       <section className="py-16 px-8">
         <div className="max-w-[1280px] mx-auto">
           {founders.length > 0 && <TeamGrid members={founders} title="Founders" />}
+          {labManagement.length > 0 && <TeamGrid members={labManagement} title="Laboratory Management Team" />}
           {management.length > 0 && <TeamGrid members={management} title="Management Team" />}
+          {researchEngineering.length > 0 && <TeamGrid members={researchEngineering} title="Research/Engineering Team" />}
           {research.length > 0 && <TeamGrid members={research} title="Research Team" />}
           {engineering.length > 0 && <TeamGrid members={engineering} title="Engineering Team" />}
           {advisory.length > 0 && <TeamGrid members={advisory} title="Scientific Advisory Board" />}
