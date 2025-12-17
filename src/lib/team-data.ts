@@ -3,7 +3,7 @@ import type { TeamMember } from './types'
 export const teamMembers: TeamMember[] = [
   {
     id: 'rylie-green',
-    name: 'Dr Rylie Green',
+    name: 'Prof Rylie Green',
     title: 'Co-Founder & Chief Scientific Officer',
     role: 'Co-Founder & CSO',
     category: 'founders',
@@ -31,7 +31,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'alexey-nonikov',
     name: 'Alexey Nonikov',
-    title: 'Material Engineer',
+    title: 'Design Engineer',
     role: 'Laboratory Management Team',
     category: 'lab-management',
     shortBio: '[Short bio placeholder]',
@@ -44,7 +44,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'estelle-cuttaz',
     name: 'Dr Estelle Cuttaz',
-    title: 'Material Engineer',
+    title: 'Design Engineer',
     role: 'Laboratory Management Team',
     category: 'lab-management',
     shortBio: '[Short bio placeholder]',
@@ -85,7 +85,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'robert-toth',
     name: 'Dr Robert Toth',
-    title: 'Electrical Engineer',
+    title: 'Senior Electrical Engineer',
     role: 'Research/Engineering Team',
     category: 'research-engineering',
     shortBio: '[Short bio placeholder]',
@@ -99,7 +99,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'efe-sen',
     name: 'Efe Sen',
-    title: 'Material Engineer',
+    title: 'Research Engineer',
     role: 'Research/Engineering Team',
     category: 'research-engineering',
     shortBio: '[Short bio placeholder]',
