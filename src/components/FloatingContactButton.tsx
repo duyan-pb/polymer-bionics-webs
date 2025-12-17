@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { EnvelopeSimple, WhatsappLogo, X, ChatCircleDots } from '@phosphor-icons/react'
+import { EnvelopeSimple, WhatsappLogo, X, ChatCircleDots, MapPin } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -14,6 +14,11 @@ export function FloatingContactButton() {
 
   const handleWhatsAppClick = () => {
     window.open('https://wa.me/', '_blank')
+    setIsOpen(false)
+  }
+
+  const handleLocationClick = () => {
+    window.open('https://www.google.com/maps/search/?api=1&query=Exhibition+Rd,+South+Kensington,+London+SW7+2AZ,+United+Kingdom', '_blank')
     setIsOpen(false)
   }
 
@@ -65,6 +70,18 @@ export function FloatingContactButton() {
               <div className="flex flex-col items-start text-left">
                 <span className="text-sm font-medium">WhatsApp</span>
                 <span className="text-xs text-muted-foreground">Chat with us</span>
+              </div>
+            </Button>
+
+            <Button
+              variant="ghost"
+              className="w-full justify-start gap-3 h-auto py-3"
+              onClick={handleLocationClick}
+            >
+              <MapPin className="flex-shrink-0" />
+              <div className="flex flex-col items-start text-left">
+                <span className="text-sm font-medium">Visit Us</span>
+                <span className="text-xs text-muted-foreground">South Kensington, London</span>
               </div>
             </Button>
           </motion.div>
