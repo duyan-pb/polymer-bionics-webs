@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, Quotes, FileText } from '@phosphor-icons/react'
 import type { Video, CaseStudy } from '@/lib/types'
+import { ContactLinks } from '@/components/ContactLinks'
 
 interface MediaPageProps {
   videos: Video[]
@@ -183,10 +184,16 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
                   )}
 
                   {selectedCaseStudy.datasheetId && (
-                    <div className="pt-4">
+                    <div className="pt-4 flex gap-3">
                       <Button>
                         <FileText className="mr-2" /> View Related Datasheet
                       </Button>
+                      <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
+                    </div>
+                  )}
+                  {!selectedCaseStudy.datasheetId && (
+                    <div className="pt-4">
+                      <ContactLinks emailType="sales" variant="default" showWhatsApp={true} showEmail={true} />
                     </div>
                   )}
                 </div>

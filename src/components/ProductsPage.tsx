@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Download, CheckCircle, TestTube, Package, FileText, Image as ImageIcon } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
+import { ContactLinks } from '@/components/ContactLinks'
 
 interface ProductsPageProps {
   products: Product[]
@@ -104,6 +105,17 @@ export function ProductsPage({ products }: ProductsPageProps) {
         </div>
       </section>
 
+      <section className="py-16 px-8 bg-muted/30">
+        <div className="max-w-[1280px] mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-4">Request a Quote</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
+            Interested in our products? Contact our sales team for pricing, technical specifications, 
+            or custom formulation requests.
+          </p>
+          <ContactLinks emailType="sales" />
+        </div>
+      </section>
+
       <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
         <DialogContent className="max-w-4xl max-h-[90vh]">
           <ScrollArea className="max-h-[80vh] pr-4">
@@ -194,8 +206,9 @@ export function ProductsPage({ products }: ProductsPageProps) {
                   </div>
 
                   <div className="flex gap-3 pt-4">
+                    <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
                     {selectedProduct.datasheetId && (
-                      <Button>
+                      <Button variant="outline">
                         <Download className="mr-2" /> Download Datasheet
                       </Button>
                     )}

@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
-import { Atom, CheckCircle, Flask } from '@phosphor-icons/react'
+import { CheckCircle } from '@phosphor-icons/react'
 import { materials, type Material } from '@/lib/materials-data'
 import { ContactLinks } from '@/components/ContactLinks'
 
@@ -16,9 +16,8 @@ export function MaterialsPage() {
     <div className="min-h-screen bg-background">
       <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8">
         <div className="max-w-[1280px] mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <Atom size={48} className="text-accent" weight="duotone" />
-            <h1 className="text-6xl font-normal">Our Materials</h1>
+          <div className="mb-6">
+            <h1 className="text-6xl font-normal mb-4">Our Materials</h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
             Advanced materials for advancements in humankind. Our portfolio of specialized bionic materials 
@@ -38,8 +37,7 @@ export function MaterialsPage() {
                 onClick={() => setSelectedMaterial(material)}
               >
                 <div className={`h-32 ${material.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'} 
-                  flex items-center justify-center transition-all duration-300 group-hover:scale-105`}>
-                  <Flask size={56} className="text-primary/40" weight="duotone" />
+                  transition-all duration-300 group-hover:scale-105`}>
                 </div>
                 
                 <div className="p-6">
@@ -97,9 +95,7 @@ export function MaterialsPage() {
             {selectedMaterial && (
               <>
                 <DialogHeader>
-                  <div className={`h-40 -mx-6 -mt-6 mb-6 ${selectedMaterial.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'} 
-                    flex items-center justify-center`}>
-                    <Flask size={80} className="text-primary/40" weight="duotone" />
+                  <div className={`h-40 -mx-6 -mt-6 mb-6 ${selectedMaterial.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}>
                   </div>
                   <DialogTitle className="text-3xl mb-2">{selectedMaterial.name}</DialogTitle>
                   <p className="text-base text-muted-foreground">{selectedMaterial.description}</p>
@@ -107,8 +103,8 @@ export function MaterialsPage() {
 
                 <div className="space-y-6 mt-6">
                   <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <CheckCircle size={20} className="text-primary" /> Material Properties
+                    <h4 className="text-lg font-semibold mb-3">
+                      Material Properties
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {selectedMaterial.properties.map((prop, idx) => (
@@ -123,8 +119,8 @@ export function MaterialsPage() {
                   <Separator />
 
                   <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <Atom size={20} className="text-primary" /> Key Advantages
+                    <h4 className="text-lg font-semibold mb-3">
+                      Key Advantages
                     </h4>
                     <div className="space-y-2">
                       {selectedMaterial.keyAdvantages.map((advantage, idx) => (

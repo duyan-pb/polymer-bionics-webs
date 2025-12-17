@@ -11,6 +11,7 @@ import { Download, MagnifyingGlass, FileText, Calendar } from '@phosphor-icons/r
 import type { Datasheet, Product } from '@/lib/types'
 import { materials, applications } from '@/lib/materials-data'
 import { useKV } from '@github/spark/hooks'
+import { ContactLinks } from '@/components/ContactLinks'
 
 interface DatasheetsPageProps {
   datasheets: Datasheet[]
@@ -247,10 +248,11 @@ export function DatasheetsPage({ datasheets }: DatasheetsPageProps) {
                     </div>
                   )}
 
-                  <div className="pt-4">
-                    <Button className="w-full md:w-auto">
+                  <div className="pt-4 flex gap-3">
+                    <Button>
                       <Download className="mr-2" /> Download Complete Datasheet (PDF)
                     </Button>
+                    <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
                   </div>
                 </div>
               </>

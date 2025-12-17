@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Calendar, Newspaper, BookOpen, ArrowSquareOut, Download } from '@phosphor-icons/react'
 import type { NewsItem, Publication } from '@/lib/types'
+import { ContactLinks } from '@/components/ContactLinks'
 
 interface NewsPageProps {
   news: NewsItem[]
@@ -175,15 +176,16 @@ export function NewsPage({ news, publications }: NewsPageProps) {
 
                 <div className="space-y-4">
                   <p className="text-base leading-relaxed whitespace-pre-line">{selectedNews.content}</p>
-                  {selectedNews.link && (
-                    <div className="pt-4">
+                  <div className="pt-4 flex gap-3">
+                    {selectedNews.link && (
                       <Button asChild>
                         <a href={selectedNews.link} target="_blank" rel="noopener noreferrer">
                           <ArrowSquareOut className="mr-2" /> Read Full Article
                         </a>
                       </Button>
-                    </div>
-                  )}
+                    )}
+                    <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
+                  </div>
                 </div>
               </>
             )}
@@ -230,7 +232,7 @@ export function NewsPage({ news, publications }: NewsPageProps) {
                     </div>
                   </div>
 
-                  <div className="flex gap-3 pt-4">
+                  <div className="flex gap-3 pt-4 flex-wrap">
                     {selectedPublication.doi && (
                       <Button asChild>
                         <a href={selectedPublication.doi} target="_blank" rel="noopener noreferrer">
@@ -243,6 +245,7 @@ export function NewsPage({ news, publications }: NewsPageProps) {
                         <Download className="mr-2" /> Download PDF
                       </Button>
                     )}
+                    <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
                   </div>
                 </div>
               </>

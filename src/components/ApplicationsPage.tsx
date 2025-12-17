@@ -6,36 +6,11 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { 
-  Pulse, 
   CheckCircle, 
-  Lightbulb, 
-  Package,
-  Heart,
-  Brain,
-  FirstAidKit,
-  Syringe,
-  Headphones
+  Package
 } from '@phosphor-icons/react'
 import { applications, type Application } from '@/lib/materials-data'
 import { ContactLinks } from '@/components/ContactLinks'
-
-const iconMap: Record<string, any> = {
-  'neural-interfaces': Brain,
-  'wearable-biosensors': Pulse,
-  'drug-delivery': Syringe,
-  'cardiac-devices': Heart,
-  'surgical-tools': FirstAidKit,
-  'wound-care': FirstAidKit,
-  'organ-on-chip': Package,
-  'prosthetics': Pulse,
-  'elasticuff': Brain,
-  'elastarray': Pulse,
-  'elastiwire': Package,
-  'simpleeg': Brain,
-  'babeeg': Heart,
-  'inear-eeg': Headphones,
-  'custom-applications': Lightbulb
-}
 
 export function ApplicationsPage() {
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
@@ -44,9 +19,8 @@ export function ApplicationsPage() {
     <div className="min-h-screen bg-background">
       <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8">
         <div className="max-w-[1280px] mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <Lightbulb size={48} className="text-accent" weight="duotone" />
-            <h1 className="text-6xl font-normal">Applications</h1>
+          <div className="mb-6">
+            <h1 className="text-6xl font-normal mb-4">Applications</h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
             Applications for healthcare and diagnostics. Polymer Bionics materials enable breakthrough medical 
@@ -59,18 +33,14 @@ export function ApplicationsPage() {
       <section className="py-16 px-8">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {applications.map((application) => {
-              const Icon = iconMap[application.id] || Pulse
-              
-              return (
+            {applications.map((application) => (
                 <Card
                   key={application.id}
                   className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-[1.01] cursor-pointer border-2 hover:border-accent"
                   onClick={() => setSelectedApplication(application)}
                 >
                   <div className={`h-32 ${application.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'} 
-                    flex items-center justify-center transition-all duration-300 group-hover:scale-105`}>
-                    <Icon size={56} className="text-primary/40" weight="duotone" />
+                    transition-all duration-300 group-hover:scale-105`}>
                   </div>
                   
                   <div className="p-6">
@@ -105,8 +75,7 @@ export function ApplicationsPage() {
                     </div>
                   </div>
                 </Card>
-              )
-            })}
+            ))}
           </div>
         </div>
       </section>
@@ -128,12 +97,7 @@ export function ApplicationsPage() {
             {selectedApplication && (
               <>
                 <DialogHeader>
-                  <div className={`h-40 -mx-6 -mt-6 mb-6 ${selectedApplication.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'} 
-                    flex items-center justify-center`}>
-                    {(() => {
-                      const Icon = iconMap[selectedApplication.id] || Pulse
-                      return <Icon size={80} className="text-primary/40" weight="duotone" />
-                    })()}
+                  <div className={`h-40 -mx-6 -mt-6 mb-6 ${selectedApplication.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}>
                   </div>
                   <DialogTitle className="text-3xl mb-2">{selectedApplication.name}</DialogTitle>
                   <p className="text-base text-muted-foreground">{selectedApplication.description}</p>
@@ -141,8 +105,8 @@ export function ApplicationsPage() {
 
                 <div className="space-y-6 mt-6">
                   <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <CheckCircle size={20} className="text-primary" /> Key Benefits
+                    <h4 className="text-lg font-semibold mb-3">
+                      Key Benefits
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {selectedApplication.benefits.map((benefit, idx) => (
@@ -157,8 +121,8 @@ export function ApplicationsPage() {
                   <Separator />
 
                   <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <Package size={20} className="text-primary" /> Clinical Use Cases
+                    <h4 className="text-lg font-semibold mb-3">
+                      Clinical Use Cases
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {selectedApplication.useCases.map((useCase, idx) => (
