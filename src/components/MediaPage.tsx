@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, Quotes, FileText } from '@phosphor-icons/react'
 import type { Video, CaseStudy } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
+import { HeroImage } from '@/components/HeroImage'
+import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface MediaPageProps {
   videos: Video[]
@@ -22,12 +24,11 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
   return (
     <div className="min-h-screen bg-background">
       <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <img 
-            src="https://www.polymerbionics.com/uploads/1/2/5/6/125699641/published/dsc-9469.jpg" 
+        <div className="absolute inset-0">
+          <HeroImage 
+            src={BackgroundCover}
             alt="" 
-            className="w-full h-full object-cover"
-            crossOrigin="anonymous"
+            opacity={0.2}
           />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">

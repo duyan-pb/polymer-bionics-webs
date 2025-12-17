@@ -11,6 +11,7 @@ import {
 } from '@phosphor-icons/react'
 import { applications, type Application } from '@/lib/materials-data'
 import { ContactLinks } from '@/components/ContactLinks'
+import { HeroImage } from '@/components/HeroImage'
 import NeuralCells from '@/assets/images/Neural_Cells.png'
 
 export function ApplicationsPage() {
@@ -19,12 +20,8 @@ export function ApplicationsPage() {
   return (
     <div className="min-h-screen bg-background">
       <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <img 
-            src={NeuralCells} 
-            alt="" 
-            className="w-full h-full object-cover"
-          />
+        <div className="absolute inset-0">
+          <HeroImage src={NeuralCells} alt="" opacity={0.2} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="mb-6">

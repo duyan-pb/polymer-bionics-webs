@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { CheckCircle } from '@phosphor-icons/react'
 import { materials, type Material } from '@/lib/materials-data'
 import { ContactLinks } from '@/components/ContactLinks'
+import { HeroImage } from '@/components/HeroImage'
 import CESheet from '@/assets/images/CE_sheet.png'
 
 
@@ -17,12 +18,8 @@ export function MaterialsPage() {
   return (
     <div className="min-h-screen bg-background">
       <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <img 
-            src={CESheet} 
-            alt="" 
-            className="w-full h-full object-cover"
-          />
+        <div className="absolute inset-0">
+          <HeroImage src={CESheet} alt="" opacity={0.2} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="mb-6">

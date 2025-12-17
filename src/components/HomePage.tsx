@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
 import { ContactLinks } from '@/components/ContactLinks'
+import { HeroImage } from '@/components/HeroImage'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface HomePageProps {
@@ -12,12 +13,8 @@ export function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="min-h-screen">
       <section className="relative bg-gradient-to-br from-accent/10 via-background to-primary/5 py-24 px-8 overflow-hidden">
-        <div className="absolute inset-0 opacity-15">
-          <img 
-            src={BackgroundCover} 
-            alt="" 
-            className="w-full h-full object-cover"
-          />
+        <div className="absolute inset-0">
+          <HeroImage src={BackgroundCover} alt="" opacity={0.15} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="max-w-3xl">
