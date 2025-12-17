@@ -2,15 +2,18 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { List, X } from '@phosphor-icons/react'
+import { List, X, MagnifyingGlass, MoonStars, SunDim } from '@phosphor-icons/react'
 import logoPng from '@/assets/images/unnamed.png'
 
 interface NavigationProps {
   currentPage: string
   onNavigate: (page: string) => void
+  onOpenSearch: () => void
+  isDark: boolean
+  onToggleTheme: () => void
 }
 
-export function Navigation({ currentPage, onNavigate }: NavigationProps) {
+export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onToggleTheme }: NavigationProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const navItems = [
@@ -67,11 +70,23 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
                 key={item.id}
                 variant={currentPage === item.id ? 'default' : 'ghost'}
                 onClick={() => handleNavigate(item.id)}
-                className="text-sm font-medium tracking-wide"
+                className="text-sm font-medium tracking-wide relative"
               >
                 {item.label}
+                {currentPage === item.id && (
+                  <span className="absolute inset-x-3 -bottom-1 h-0.5 rounded-full bg-primary" />
+                )}
               </Button>
             ))}
+            <Button variant="ghost" size="icon" onClick={onOpenSearch} className="ml-2" aria-label="Open search">
+              <MagnifyingGlass size={20} weight="bold" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={onToggleTheme} aria-label="Toggle theme">
+              {isDark ? <MoonStars size={20} weight="duotone" /> : <SunDim size={20} weight="duotone" />}
+            </Button>
+            <Button onClick={() => handleNavigate('contact')} className="ml-2" size="sm">
+              Contact
+            </Button>
           </div>
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -82,6 +97,9 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px]">
               <div className="flex flex-col gap-2 mt-8">
+                <Button variant="secondary" onClick={onOpenSearch} className="justify-start" aria-label="Open search">
+                  Quick Search (⌘K)
+                </Button>
                 {navItems.map((item) => (
                   <Button
                     key={item.id}
@@ -92,6 +110,14 @@ export function Navigation({ currentPage, onNavigate }: NavigationProps) {
                     {item.label}
                   </Button>
                 ))}
+                <div className="flex gap-2 mt-2">
+                  <Button variant="outline" className="flex-1" onClick={() => handleNavigate('contact')}>
+                    Contact
+                  </Button>
+                  <Button variant="outline" size="icon" onClick={onToggleTheme} aria-label="Toggle theme">
+                    {isDark ? '☾' : '☀'}
+                  </Button>
+                </div>
               </div>
             </SheetContent>
           </Sheet>

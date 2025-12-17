@@ -4,22 +4,26 @@ import { Card } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Skeleton } from '@/components/ui/skeleton'
 import { LinkedinLogo, User, MagnifyingGlass, GraduationCap } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { HeroImage } from '@/components/HeroImage'
 import ElastomerArray from '@/assets/images/Elastomer_array.png'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 import type { TeamMember } from '@/lib/types'
 
 interface TeamPageProps {
   team: TeamMember[]
+  onNavigate: (page: string) => void
 }
 
-export function TeamPage({ team: initialTeam }: TeamPageProps) {
+export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
   const [isSearching, setIsSearching] = useState(false)
   const [isOwner, setIsOwner] = useState(false)
   const [team, setTeam] = useKV<TeamMember[]>('team', initialTeam)
+  const isLoading = !team || team.length === 0
 
   useEffect(() => {
     const checkOwner = async () => {
@@ -159,6 +163,7 @@ Return ONLY a valid JSON object with structure:
           <HeroImage src={BackgroundCover} alt="" opacity={0.7} />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
+          <Breadcrumbs trail={[{ label: 'Home', page: 'home' }, { label: 'Team' }]} onNavigate={onNavigate} />
           <div className="flex items-start justify-between gap-8">
             <div className="flex-1">
               <h1 className="text-6xl font-bold mb-6">Our Team</h1>
@@ -184,6 +189,23 @@ Return ONLY a valid JSON object with structure:
 
       <section className="py-20 px-8">
         <div className="max-w-[1280px] mx-auto">
+          {isLoading && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+              {Array.from({ length: 6 }).map((_, idx) => (
+                <Card key={idx} className="p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <Skeleton className="h-16 w-16 rounded-full" />
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-4 w-32" />
+                      <Skeleton className="h-3 w-24" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-3 w-full" />
+                  <Skeleton className="h-3 w-5/6" />
+                </Card>
+              ))}
+            </div>
+          )}
           {founders.length > 0 && <TeamGrid members={founders} title="Founders" />}
           {management.length > 0 && <TeamGrid members={management} title="Project Management Team" />}
           {labManagement.length > 0 && <TeamGrid members={labManagement} title="Laboratory Management Team" />}      

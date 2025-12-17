@@ -10,10 +10,25 @@ import { materials, type Material } from '@/lib/materials-data'
 import { ContactLinks } from '@/components/ContactLinks'
 import { HeroImage } from '@/components/HeroImage'
 import CESheet from '@/assets/images/CE_sheet.png'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
 
 
-export function MaterialsPage() {
+interface MaterialsPageProps {
+  onNavigate: (page: string) => void
+}
+
+export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
+  const [comparison, setComparison] = useState<Material[]>([])
+
+  const toggleCompare = (material: Material) => {
+    setComparison((prev) => {
+      const exists = prev.find((m) => m.id === material.id)
+      if (exists) return prev.filter((m) => m.id !== material.id)
+      if (prev.length >= 3) return prev
+      return [...prev, material]
+    })
+  }
 
   return (
     <div className="min-h-screen bg-background">
