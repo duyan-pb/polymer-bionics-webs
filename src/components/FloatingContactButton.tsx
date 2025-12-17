@@ -2,23 +2,25 @@ import { useState } from 'react'
 import { EnvelopeSimple, WhatsappLogo, X, ChatCircleDots, MapPin } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
+import { contactConfig, getWhatsAppUrl, getEmailUrl } from '@/lib/contact-config'
 
 export function FloatingContactButton() {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleEmailClick = (type: 'general' | 'sales') => {
-    const email = type === 'general' ? 'info@polymerbionics.com' : 'sales@polymerbionics.com'
-    window.location.href = `mailto:${email}`
+    window.location.href = getEmailUrl(type)
     setIsOpen(false)
   }
 
   const handleWhatsAppClick = () => {
-    window.open('https://wa.me/', '_blank')
+    window.open(getWhatsAppUrl(), '_blank', 'noopener,noreferrer')
     setIsOpen(false)
   }
 
   const handleLocationClick = () => {
-    window.open('https://www.google.com/maps/search/?api=1&query=Exhibition+Rd,+South+Kensington,+London+SW7+2AZ,+United+Kingdom', '_blank')
+    const { street, city, postcode, country } = contactConfig.address
+    const query = encodeURIComponent(`${street}, ${city} ${postcode}, ${country}`)
+    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank')
     setIsOpen(false)
   }
 
@@ -45,7 +47,7 @@ export function FloatingContactButton() {
               <EnvelopeSimple className="flex-shrink-0" />
               <div className="flex flex-col items-start text-left">
                 <span className="text-sm font-medium">General Enquiry</span>
-                <span className="text-xs text-muted-foreground">info@polymerbionics.com</span>
+                <span className="text-xs text-muted-foreground">{contactConfig.email.general}</span>
               </div>
             </Button>
 
@@ -57,7 +59,7 @@ export function FloatingContactButton() {
               <EnvelopeSimple className="flex-shrink-0" />
               <div className="flex flex-col items-start text-left">
                 <span className="text-sm font-medium">Quote Request</span>
-                <span className="text-xs text-muted-foreground">sales@polymerbionics.com</span>
+                <span className="text-xs text-muted-foreground">{contactConfig.email.sales}</span>
               </div>
             </Button>
 
@@ -81,7 +83,7 @@ export function FloatingContactButton() {
               <MapPin className="flex-shrink-0" />
               <div className="flex flex-col items-start text-left">
                 <span className="text-sm font-medium">Visit Us</span>
-                <span className="text-xs text-muted-foreground">South Kensington, London</span>
+                <span className="text-xs text-muted-foreground">{contactConfig.address.city}</span>
               </div>
             </Button>
           </motion.div>

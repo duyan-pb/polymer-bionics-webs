@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb, ShieldCheck, Heartbeat, Sparkle } from '@phosphor-icons/react'
+import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb, Sparkle } from '@phosphor-icons/react'
 import { HeroImage } from '@/components/HeroImage'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { motion } from 'framer-motion'
@@ -20,9 +20,6 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-primary bg-primary/10 px-3 py-2 rounded-full mb-4">
-                <Sparkle size={16} weight="fill" /> Polymer bioelectronics, reimagined
-              </p>
               <h1 className="text-6xl text-foreground mb-6 tracking-tight leading-tight">
                 Flexible Bioelectronics & Polymer Medical Devices
               </h1>
@@ -124,61 +121,27 @@ export function HomePage({ onNavigate }: HomePageProps) {
             Collaborating with world-class medical centers and research institutions to advance flexible bioelectronics.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
-            {["NHS Innovation", "Oxford Biodesign", "Imperial MedTech", "Cambridge Bioengineering"].map((name) => (
-              <Card key={name} className="p-6 text-center border-dashed border-primary/30 hover:border-primary transition-colors">
+            {["Partner Placeholder", "Partner Placeholder", "Partner Placeholder", "Partner Placeholder"].map((name, index) => (
+              <Card key={index} className="p-6 text-center border-dashed border-primary/30 hover:border-primary transition-colors">
                 <div className="text-lg font-semibold text-foreground">{name}</div>
                 <p className="text-sm text-muted-foreground">Partner</p>
               </Card>
             ))}
           </div>
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="p-6 flex items-center gap-4 bg-card/70 backdrop-blur">
-              <ShieldCheck size={36} className="text-primary" weight="duotone" />
-              <div>
-                <p className="text-sm text-muted-foreground">Clinical-grade quality</p>
-                <p className="text-xl font-bold">ISO 13485 pathways</p>
-              </div>
-            </Card>
-            <Card className="p-6 flex items-center gap-4 bg-card/70 backdrop-blur">
-              <Heartbeat size={36} className="text-primary" weight="duotone" />
-              <div>
-                <p className="text-sm text-muted-foreground">Proven performance</p>
-                <p className="text-xl font-bold">50+ clinical deployments</p>
-              </div>
-            </Card>
-            <Card className="p-6 flex items-center gap-4 bg-card/70 backdrop-blur">
-              <Sparkle size={36} className="text-primary" weight="duotone" />
-              <div>
-                <p className="text-sm text-muted-foreground">Innovation velocity</p>
-                <p className="text-xl font-bold">20+ patents filed</p>
-              </div>
-            </Card>
-          </div>
         </div>
       </section>
 
       <section className="py-16 px-8 bg-background">
-        <div className="max-w-[1280px] mx-auto grid md:grid-cols-2 gap-10 items-center">
-          <div>
+        <div className="max-w-[1280px] mx-auto max-w-2xl">
+          <div className="text-center">
             <h2 className="text-4xl mb-4">Stay ahead with Polymer Bionics</h2>
             <p className="text-lg text-muted-foreground mb-6">Join our newsletter for the latest breakthroughs, case studies, and clinical data drops.</p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Input placeholder="Email address" className="h-12 text-base" />
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Input placeholder="Email address" className="h-12 text-base max-w-sm" />
               <Button className="h-12 px-6">Subscribe</Button>
             </div>
             <p className="text-sm text-muted-foreground mt-2">We send 1-2 updates per month. No spam.</p>
           </div>
-          <Card className="p-6 bg-card/70 backdrop-blur shadow-lg">
-            <div className="flex items-center gap-3 mb-4">
-              <Sparkle className="text-primary" size={28} weight="duotone" />
-              <div>
-                <p className="text-sm text-muted-foreground">Featured download</p>
-                <p className="text-xl font-semibold">Biocompatibility Playbook</p>
-              </div>
-            </div>
-            <p className="text-muted-foreground mb-4">A concise guide to material selection, bonding strategies, and regulatory readiness for flexible implants.</p>
-            <Button variant="outline" className="w-full">Get the PDF</Button>
-          </Card>
         </div>
       </section>
     </div>

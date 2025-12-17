@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { List, X, MagnifyingGlass, MoonStars, SunDim } from '@phosphor-icons/react'
+import { List, MagnifyingGlass, MoonStars, SunDim } from '@phosphor-icons/react'
 import logoPng from '@/assets/images/unnamed.png'
 
 interface NavigationProps {
@@ -64,7 +64,7 @@ export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onTo
             </span>
           </motion.button>
 
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-0">
             {navItems.slice(1).map((item) => (
               <Button
                 key={item.id}
@@ -82,10 +82,7 @@ export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onTo
               <MagnifyingGlass size={20} weight="bold" />
             </Button>
             <Button variant="ghost" size="icon" onClick={onToggleTheme} aria-label="Toggle theme">
-              {isDark ? <MoonStars size={20} weight="duotone" /> : <SunDim size={20} weight="duotone" />}
-            </Button>
-            <Button onClick={() => handleNavigate('contact')} className="ml-2" size="sm">
-              Contact
+              {isDark ? <SunDim size={20} weight="duotone" /> : <MoonStars size={20} weight="duotone" />}
             </Button>
           </div>
 
@@ -110,14 +107,9 @@ export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onTo
                     {item.label}
                   </Button>
                 ))}
-                <div className="flex gap-2 mt-2">
-                  <Button variant="outline" className="flex-1" onClick={() => handleNavigate('contact')}>
-                    Contact
-                  </Button>
-                  <Button variant="outline" size="icon" onClick={onToggleTheme} aria-label="Toggle theme">
-                    {isDark ? '☾' : '☀'}
-                  </Button>
-                </div>
+                <Button variant="outline" size="icon" onClick={onToggleTheme} className="mt-2" aria-label="Toggle theme">
+                  {isDark ? <SunDim size={20} weight="duotone" /> : <MoonStars size={20} weight="duotone" />}
+                </Button>
               </div>
             </SheetContent>
           </Sheet>
