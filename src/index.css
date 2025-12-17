@@ -2,9 +2,23 @@
 @import "tw-animate-css";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Improve text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
   * {
     @apply border-border;
     font-weight: normal !important;
+  }
+  
+  /* Reduce paint on off-screen content */
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
   }
   
   body {
@@ -18,6 +32,18 @@
   
   code, pre, kbd, samp {
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+  
+  /* Optimize images by default */
+  img {
+    content-visibility: auto;
+  }
+  
+  /* GPU acceleration for animated elements */
+  .animate-pulse,
+  [data-state="open"],
+  [data-state="closed"] {
+    will-change: opacity, transform;
   }
 }
 

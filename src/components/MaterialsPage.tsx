@@ -49,7 +49,7 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
               >
                 <div className="h-40 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
                   {material.imageUrl ? (
-                    <img src={material.imageUrl} alt={material.name} className="w-full h-full object-cover" />
+                    <img src={material.imageUrl} alt={material.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                   ) : (
                     <div className={`w-full h-full ${material.imageClass || 'bg-gradient-to-br from-primary/20 to-secondary/10'}`}></div>
                   )}
@@ -103,7 +103,7 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
                 <DialogHeader>
                   <div className="h-40 -mx-6 -mt-6 mb-6 overflow-hidden bg-muted">
                     {selectedMaterial.imageUrl ? (
-                      <img src={selectedMaterial.imageUrl} alt={selectedMaterial.name} className="w-full h-full object-cover" />
+                      <img src={selectedMaterial.imageUrl} alt={selectedMaterial.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     ) : (
                       <div className={`w-full h-full ${selectedMaterial.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}></div>
                     )}

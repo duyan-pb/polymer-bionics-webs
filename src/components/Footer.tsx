@@ -1,10 +1,11 @@
+import { memo, useCallback } from 'react'
 import { EnvelopeSimple, WhatsappLogo, Copy } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
 
-export function Footer() {
-  const handleWhatsAppClick = async () => {
+export const Footer = memo(function Footer() {
+  const handleWhatsAppClick = useCallback(async () => {
     const success = await copyWhatsAppNumber()
     if (success) {
       toast.success('WhatsApp number copied!', {
@@ -15,7 +16,7 @@ export function Footer() {
         description: `WhatsApp: ${contactConfig.whatsapp.number}`,
       })
     }
-  }
+  }, [])
 
   const handleEmailClick = (type: 'general' | 'sales') => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
@@ -66,4 +67,4 @@ export function Footer() {
       </div>
     </footer>
   )
-}
+})

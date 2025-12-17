@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, memo, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
@@ -14,13 +14,13 @@ interface NavigationProps {
   onToggleTheme: () => void
 }
 
-export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onToggleTheme }: NavigationProps) {
+export const Navigation = memo(function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onToggleTheme }: NavigationProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const handleNavigate = (page: string) => {
+  const handleNavigate = useCallback((page: string) => {
     onNavigate(page)
     setMobileOpen(false)
-  }
+  }, [onNavigate])
 
   return (
     <nav className="border-b border-border bg-background/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
@@ -106,4 +106,4 @@ export function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onTo
       </div>
     </nav>
   )
-}
+})

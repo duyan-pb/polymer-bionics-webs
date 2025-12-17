@@ -52,7 +52,7 @@ export function ApplicationsPage({ onNavigate }: ApplicationsPageProps) {
                 >
                   <div className="h-40 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
                     {application.imageUrl ? (
-                      <img src={application.imageUrl} alt={application.name} className="w-full h-full object-cover" />
+                      <img src={application.imageUrl} alt={application.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     ) : (
                       <div className={`w-full h-full ${application.imageClass || 'bg-gradient-to-br from-primary/20 to-secondary/10'}`}></div>
                     )}
@@ -105,7 +105,7 @@ export function ApplicationsPage({ onNavigate }: ApplicationsPageProps) {
                 <DialogHeader>
                   <div className="h-40 -mx-6 -mt-6 mb-6 overflow-hidden bg-muted">
                     {selectedApplication.imageUrl ? (
-                      <img src={selectedApplication.imageUrl} alt={selectedApplication.name} className="w-full h-full object-cover" />
+                      <img src={selectedApplication.imageUrl} alt={selectedApplication.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     ) : (
                       <div className={`w-full h-full ${selectedApplication.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}></div>
                     )}

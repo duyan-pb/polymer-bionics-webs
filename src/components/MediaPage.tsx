@@ -64,7 +64,7 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
                   >
                     <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
                       {video.thumbnailUrl ? (
-                        <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover" />
+                        <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                       ) : (
                         <Play size={64} className="text-primary/60" weight="fill" />
                       )}

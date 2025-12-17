@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -7,9 +7,16 @@ interface HeroImageProps {
   alt?: string
   opacity?: number
   className?: string
+  priority?: boolean
 }
 
-export function HeroImage({ src, alt = '', opacity = 0.15, className = '' }: HeroImageProps) {
+export const HeroImage = memo(function HeroImage({ 
+  src, 
+  alt = '', 
+  opacity = 0.15, 
+  className = '',
+  priority = false 
+}: HeroImageProps) {
   const [isLoaded, setIsLoaded] = useState(false)
 
   return (
@@ -24,16 +31,18 @@ export function HeroImage({ src, alt = '', opacity = 0.15, className = '' }: Her
         ease: [0.25, 0.1, 0.25, 1]
       }}
       className={cn('absolute inset-0 w-full h-full', className)}
+      style={{ willChange: 'opacity, transform' }}
     >
       <img 
         src={src} 
         alt={alt}
         className="w-full h-full object-cover"
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
+        fetchPriority={priority ? "high" : "auto"}
         aria-hidden={!alt}
         onLoad={() => setIsLoaded(true)}
       />
     </motion.div>
   )
-}
+})
