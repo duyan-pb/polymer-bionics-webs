@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
 import { ContactLinks } from '@/components/ContactLinks'
-import heroImg from '@/assets/images/PXL_20251216_115958662.jpg'
 
 interface HomePageProps {
   onNavigate: (page: string) => void
@@ -13,7 +12,12 @@ export function HomePage({ onNavigate }: HomePageProps) {
     <div className="min-h-screen">
       <section className="relative bg-gradient-to-br from-accent/10 via-background to-primary/5 py-24 px-8 overflow-hidden">
         <div className="absolute inset-0 opacity-15">
-          <img src={heroImg} alt="" className="w-full h-full object-cover" />
+          <img 
+            src="https://www.polymerbionics.com/uploads/1/2/5/6/125699641/published/dsc-9453_3.jpg" 
+            alt="" 
+            className="w-full h-full object-cover" 
+            crossOrigin="anonymous"
+          />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="max-w-3xl">

@@ -9,7 +9,6 @@ import { CheckCircle } from '@phosphor-icons/react'
 import { materials, type Material } from '@/lib/materials-data'
 import { ContactLinks } from '@/components/ContactLinks'
 
-import heroImg from '@/assets/images/PXL_20251216_115937300.jpg'
 
 export function MaterialsPage() {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
@@ -18,7 +17,12 @@ export function MaterialsPage() {
     <div className="min-h-screen bg-background">
       <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <img src={heroImg} alt="" className="w-full h-full object-cover" />
+          <img 
+            src="https://www.polymerbionics.com/uploads/1/2/5/6/125699641/published/dsc-9447_1.jpg" 
+            alt="" 
+            className="w-full h-full object-cover"
+            crossOrigin="anonymous"
+          />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <div className="mb-6">

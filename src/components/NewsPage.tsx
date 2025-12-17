@@ -9,7 +9,6 @@ import { Separator } from '@/components/ui/separator'
 import { Calendar, Newspaper, BookOpen, ArrowSquareOut, Download } from '@phosphor-icons/react'
 import type { NewsItem, Publication } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
-import heroImg from '@/assets/images/PXL_20251216_120119941.jpg'
 
 interface NewsPageProps {
   news: NewsItem[]
@@ -37,7 +36,12 @@ export function NewsPage({ news, publications }: NewsPageProps) {
     <div className="min-h-screen bg-background">
       <section className="relative bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16 px-8 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <img src={heroImg} alt="" className="w-full h-full object-cover" />
+          <img 
+            src="https://www.polymerbionics.com/uploads/1/2/5/6/125699641/published/dsc-9477.jpg" 
+            alt="" 
+            className="w-full h-full object-cover"
+            crossOrigin="anonymous"
+          />
         </div>
         <div className="relative max-w-[1280px] mx-auto z-10">
           <h1 className="text-6xl font-normal mb-6">News & Publications</h1>
