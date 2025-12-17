@@ -73,7 +73,7 @@ export function MediaPage({ videos, caseStudies }: MediaPageProps) {
                     </div>
                     <div className="p-6">
                       <Badge variant="outline" className="mb-2 capitalize">{video.category}</Badge>
-                      <h3 className="text-lg font-semibold mb-2">{video.title}</h3>
+                      <h3 className="text-lg font-normal mb-2">{video.title}</h3>
                       <p className="text-sm text-muted-foreground line-clamp-2">{video.description}</p>
                     </div>
                   </Card>
