@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useKV } from '@github/spark/hooks'
 import { Navigation } from '@/components/Navigation'
@@ -18,12 +18,15 @@ import { FloatingContactButton } from '@/components/FloatingContactButton'
 import { GlobalSearch } from '@/components/GlobalSearch'
 import { BackToTopButton } from '@/components/BackToTopButton'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
+import { placeholderPublications } from '@/lib/publications-data'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isDark, setIsDark] = useState(() => {
     if (typeof window === 'undefined') return false
+    const stored = localStorage.getItem('pb-theme')
+    if (stored) return stored === 'dark'
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   })
   
@@ -33,24 +36,17 @@ function App() {
   const [caseStudies] = useKV<CaseStudy[]>('caseStudies', [])
   const [datasheets] = useKV<Datasheet[]>('datasheets', [])
   const [news] = useKV<NewsItem[]>('news', [])
-  const [publications] = useKV<Publication[]>('publications', [])
+  const [publications] = useKV<Publication[]>('publications', placeholderPublications)
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark)
     localStorage.setItem('pb-theme', isDark ? 'dark' : 'light')
   }, [isDark])
 
-  useEffect(() => {
-    const stored = localStorage.getItem('pb-theme')
-    if (stored) {
-      setIsDark(stored === 'dark')
-    }
-  }, [])
-
-  const handleNavigate = (page: string) => {
+  const handleNavigate = useCallback((page: string) => {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  }, [])
 
   const renderPage = () => {
     switch (currentPage) {
