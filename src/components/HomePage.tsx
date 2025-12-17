@@ -40,7 +40,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <section className="py-16 px-8 bg-background">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-2 cursor-pointer" onClick={() => onNavigate('team')}>
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-0 cursor-pointer" onClick={() => onNavigate('team')}>
               <Users size={40} className="text-accent mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Our Team</h3>
               <p className="text-muted-foreground text-sm mb-4">
@@ -51,7 +51,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               </Button>
             </Card>
 
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-2 cursor-pointer" onClick={() => onNavigate('materials')}>
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-0 cursor-pointer" onClick={() => onNavigate('materials')}>
               <Atom size={40} className="text-accent mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Materials</h3>
               <p className="text-muted-foreground text-sm mb-4">
@@ -62,7 +62,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               </Button>
             </Card>
 
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-2 cursor-pointer" onClick={() => onNavigate('applications')}>
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-0 cursor-pointer" onClick={() => onNavigate('applications')}>
               <Lightbulb size={40} className="text-accent mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Applications</h3>
               <p className="text-muted-foreground text-sm mb-4">
@@ -73,7 +73,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               </Button>
             </Card>
 
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-2 cursor-pointer" onClick={() => onNavigate('products')}>
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-0 cursor-pointer" onClick={() => onNavigate('products')}>
               <Flask size={40} className="text-accent mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Products</h3>
               <p className="text-muted-foreground text-sm mb-4">
@@ -84,7 +84,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               </Button>
             </Card>
 
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-2 cursor-pointer" onClick={() => onNavigate('media')}>
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-0 cursor-pointer" onClick={() => onNavigate('media')}>
               <Video size={40} className="text-accent mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Case Studies</h3>
               <p className="text-muted-foreground text-sm mb-4">
@@ -95,7 +95,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               </Button>
             </Card>
 
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-2 cursor-pointer" onClick={() => onNavigate('datasheets')}>
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-0 cursor-pointer" onClick={() => onNavigate('datasheets')}>
               <FileText size={40} className="text-accent mb-4" weight="duotone" />
               <h3 className="text-xl font-semibold mb-2">Technical Data</h3>
               <p className="text-muted-foreground text-sm mb-4">
