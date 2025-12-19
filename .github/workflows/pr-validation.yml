@@ -1,0 +1,61 @@
+# Pull Request validation workflow
+# Runs on all pull requests to main branch
+
+name: PR Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+# Cancel in-progress runs for the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  validate:
+    name: Lint, Type Check & Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Type check
+        run: npx tsc --noEmit
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
+
+      - name: Report build size
+        run: |
+          echo "## 📦 Build Size Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          find dist -type f \( -name "*.js" -o -name "*.css" \) -exec ls -lh {} \; | awk '{print "| " $NF " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          total_size=$(du -sh dist | cut -f1)
+          echo "**Total dist size:** $total_size" >> $GITHUB_STEP_SUMMARY
