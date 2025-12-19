@@ -10,7 +10,26 @@
     ],
     "module": "ESNext",
     "skipLibCheck": true,
+    
+    /* Strict Type-Checking */
+    "strict": true,
     "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    
+    /* Additional Checks */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "exactOptionalPropertyTypes": false,
+    
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -18,16 +37,22 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    
     /* Linting */
-    "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    /* Path Aliases */
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    },
+    }
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "src/components/ui"
   ]
 }

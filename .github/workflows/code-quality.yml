@@ -1,0 +1,145 @@
+# Code Quality Gate Workflow
+# Comprehensive quality checks for type safety, complexity, and maintainability
+
+name: Code Quality
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Type Safety Checks
+      - name: TypeScript Type Check
+        id: typecheck
+        run: |
+          echo "## Type Safety" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if npm run typecheck 2>&1 | tee typecheck.log; then
+            echo "TypeScript: PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "TypeScript: FAILED" >> $GITHUB_STEP_SUMMARY
+            cat typecheck.log >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      - name: Type Coverage Check
+        id: type-coverage
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Type Coverage" >> $GITHUB_STEP_SUMMARY
+          npx type-coverage --detail --at-least 85 2>&1 | tee coverage.log || true
+          coverage=$(grep -oP '\d+\.\d+%' coverage.log | head -1 || echo "N/A")
+          echo "Coverage: $coverage" >> $GITHUB_STEP_SUMMARY
+          # Enforce minimum 85% type coverage
+          npx type-coverage --at-least 85
+
+      # Code Quality Checks
+      - name: ESLint Check
+        id: lint
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Code Quality" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if npm run lint 2>&1 | tee lint.log; then
+            echo "ESLint: PASSED (0 warnings)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ESLint: FAILED" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      # Dead Code Detection
+      - name: Knip - Unused Code Detection
+        id: knip
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Dead Code Detection (Knip)" >> $GITHUB_STEP_SUMMARY
+          if npm run knip 2>&1 | tee knip.log; then
+            echo "Knip: PASSED (no unused exports/dependencies)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Knip: Issues found" >> $GITHUB_STEP_SUMMARY
+            cat knip.log >> $GITHUB_STEP_SUMMARY
+            # Warning only, don't fail
+          fi
+        continue-on-error: true
+
+      # Dependency Security
+      - name: Security Audit
+        id: audit
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Dependency Security" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if npm audit --audit-level=high 2>&1 | tee audit.log; then
+            echo "Security Audit: PASSED (no high/critical vulnerabilities)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "Security Audit: FAILED" >> $GITHUB_STEP_SUMMARY
+            cat audit.log >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+      # Build Check
+      - name: Production Build
+        id: build
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Build" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          npm run build
+          echo "Build: PASSED" >> $GITHUB_STEP_SUMMARY
+
+      - name: Report Build Size
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Build Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          find dist -type f \( -name "*.js" -o -name "*.css" \) -exec ls -lh {} \; | awk '{print "| " $NF " | " $5 " |"}' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          total_size=$(du -sh dist | cut -f1)
+          echo "**Total:** $total_size" >> $GITHUB_STEP_SUMMARY
+
+      # Summary
+      - name: Quality Summary
+        if: always()
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "## Quality Thresholds" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Threshold | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Type Coverage | >= 85% | ${{ steps.type-coverage.outcome == 'success' && 'PASS' || 'FAIL' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ESLint Warnings | 0 | ${{ steps.lint.outcome == 'success' && 'PASS' || 'FAIL' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| High/Critical Vulns | 0 | ${{ steps.audit.outcome == 'success' && 'PASS' || 'FAIL' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | Success | ${{ steps.build.outcome == 'success' && 'PASS' || 'FAIL' }} |" >> $GITHUB_STEP_SUMMARY

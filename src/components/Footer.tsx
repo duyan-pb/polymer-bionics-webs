@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
 
-export const Footer = memo(function Footer() {
+export const Footer = memo(() => {
   const handleWhatsAppClick = useCallback(async () => {
     const success = await copyWhatsAppNumber()
     if (success) {

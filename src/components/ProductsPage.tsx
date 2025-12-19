@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Download, CheckCircle, TestTube, Package, FileText, Image as ImageIcon } from '@phosphor-icons/react'
+import { Download, CheckCircle, TestTube, Package, Image as ImageIcon } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'

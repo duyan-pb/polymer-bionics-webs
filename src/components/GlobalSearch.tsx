@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
-import { MagnifyingGlass, Users, Package, FileText, Newspaper, ArrowRight } from '@phosphor-icons/react'
+import { Users, Package, FileText, Newspaper, ArrowRight } from '@phosphor-icons/react'
 import { NAV_ITEMS } from '@/lib/constants'
 import type { TeamMember, Product, Datasheet, NewsItem } from '@/lib/types'
 

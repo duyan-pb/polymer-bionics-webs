@@ -78,7 +78,7 @@ function App() {
     })()
     
     // HomePage is eagerly loaded, others are lazy
-    if (currentPage === 'home') return pageContent
+    if (currentPage === 'home') {return pageContent}
     return <Suspense fallback={<PageLoader />}>{pageContent}</Suspense>
   }
 

@@ -8,9 +8,9 @@ const THEME_KEY = 'pb-theme'
  */
 export function useTheme() {
   const [isDark, setIsDark] = useState(() => {
-    if (typeof window === 'undefined') return false
+    if (typeof window === 'undefined') {return false}
     const stored = localStorage.getItem(THEME_KEY)
-    if (stored) return stored === 'dark'
+    if (stored) {return stored === 'dark'}
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   })
 

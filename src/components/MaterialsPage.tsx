@@ -71,7 +71,7 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
                       <div className="flex flex-wrap gap-2">
                         {material.properties.slice(0, 3).map((prop, idx) => (
                           <Badge key={idx} variant="secondary" className="text-xs">
-                            {prop.length > 30 ? prop.substring(0, 30) + '...' : prop}
+                            {prop.length > 30 ? `${prop.substring(0, 30)  }...` : prop}
                           </Badge>
                         ))}
                         {material.properties.length > 3 && (

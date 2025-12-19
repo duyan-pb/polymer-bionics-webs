@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -93,14 +93,6 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
       return matchesSearch && matchesCategory
     })
   }, [allDatasheets, searchTerm, selectedCategory])
-
-  const handleCategorySelect = useCallback((cat: string) => {
-    setSelectedCategory(cat)
-  }, [])
-
-  const handleDatasheetSelect = useCallback((datasheet: Datasheet) => {
-    setSelectedDatasheet(datasheet)
-  }, [])
 
   return (
     <div className="min-h-screen bg-background">

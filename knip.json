@@ -1,0 +1,43 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["src/main.tsx"],
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignore": [
+    "src/components/ui/**",
+    "src/vite-end.d.ts",
+    "src/types/**",
+    "packages/**"
+  ],
+  "ignoreDependencies": [
+    "@github/spark",
+    "@tailwindcss/postcss",
+    "@tailwindcss/container-queries",
+    "tw-animate-css",
+    "@radix-ui/*",
+    "@heroicons/react",
+    "@hookform/resolvers",
+    "lucide-react",
+    "react-day-picker",
+    "react-hook-form",
+    "react-resizable-panels",
+    "input-otp",
+    "cmdk",
+    "embla-carousel-react",
+    "vaul",
+    "next-themes"
+  ],
+  "ignoreBinaries": ["fuser"],
+  "ignoreExportsUsedInFile": true,
+  "ignoreWorkspaces": ["packages/*"],
+  "rules": {
+    "files": "warn",
+    "dependencies": "warn",
+    "devDependencies": "warn",
+    "unlisted": "warn",
+    "binaries": "warn",
+    "unresolved": "error",
+    "exports": "warn",
+    "types": "warn",
+    "duplicates": "error"
+  }
+}

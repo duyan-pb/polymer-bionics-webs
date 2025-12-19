@@ -110,7 +110,7 @@ export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
           )}
           {categoryOrder.map(category => {
             const members = teamByCategory[category]
-            if (!members || members.length === 0) return null
+            if (!members || members.length === 0) {return null}
             return (
               <TeamGrid 
                 key={category} 

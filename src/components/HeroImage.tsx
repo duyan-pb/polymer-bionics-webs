@@ -10,13 +10,13 @@ interface HeroImageProps {
   priority?: boolean
 }
 
-export const HeroImage = memo(function HeroImage({ 
+export const HeroImage = memo(({ 
   src, 
   alt = '', 
   opacity = 0.15, 
   className = '',
   priority = false 
-}: HeroImageProps) {
+}: HeroImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   return (

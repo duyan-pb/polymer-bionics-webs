@@ -5,8 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { 
-  CheckCircle, 
-  Package
+  CheckCircle 
 } from '@phosphor-icons/react'
 import { applications } from '@/lib/materials-data'
 import type { Application } from '@/lib/types'

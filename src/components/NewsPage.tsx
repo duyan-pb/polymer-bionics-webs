@@ -10,7 +10,6 @@ import type { NewsItem, Publication } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
-import { Card } from '@/components/ui/card'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface NewsPageProps {
