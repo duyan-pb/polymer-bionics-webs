@@ -17,7 +17,7 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'team', label: 'Team', description: 'Meet our team' },
   { id: 'materials', label: 'Materials', description: 'Our advanced materials' },
   { id: 'products', label: 'Products', description: 'Product portfolio' },
-  { id: 'applications', label: 'Applications', description: 'Application areas' },
+  // { id: 'applications', label: 'Applications', description: 'Application areas' },
   { id: 'media', label: 'Videos & Case Studies', description: 'Media and case studies' },
   { id: 'datasheets', label: 'Datasheets', description: 'Technical datasheets' },
   { id: 'news', label: 'News & Publications', description: 'Latest news and publications' },
