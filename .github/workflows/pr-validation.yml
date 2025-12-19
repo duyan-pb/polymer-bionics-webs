@@ -51,7 +51,7 @@ jobs:
 
       - name: Report build size
         run: |
-          echo "## 📦 Build Size Report" >> $GITHUB_STEP_SUMMARY
+          echo "## Build Size Report" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
           echo "|------|------|" >> $GITHUB_STEP_SUMMARY

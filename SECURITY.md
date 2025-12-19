@@ -1,31 +1,76 @@
-Thanks for helping make GitHub safe for everyone.
+# Security Policy
 
-# Security
+## Supported Versions
 
-GitHub takes the security of our software products and services seriously, including all of the open source code repositories managed through our GitHub organizations, such as [GitHub](https://github.com/GitHub).
+| Version | Supported |
+| ------- | --------- |
+| Latest  | Yes       |
 
-Even though [open source repositories are outside of the scope of our bug bounty program](https://bounty.github.com/index.html#scope) and therefore not eligible for bounty rewards, we will ensure that your finding gets passed along to the appropriate maintainers for remediation. 
+## Reporting a Vulnerability
 
-## Reporting Security Issues
+We take the security of Polymer Bionics Website seriously. If you believe you have found a security vulnerability, please report it to us as described below.
 
-If you believe you have found a security vulnerability in any GitHub-owned repository, please report it to us through coordinated disclosure.
+### How to Report
 
-**Please do not report security vulnerabilities through public GitHub issues, discussions, or pull requests.**
+**Please do not report security vulnerabilities through public GitHub issues.**
 
-Instead, please send an email to opensource-security[@]github.com.
+Instead, please report them via one of these methods:
 
-Please include as much of the information listed below as you can to help us better understand and resolve the issue:
+1. **GitHub Security Advisories**: Use the [Security tab](https://github.com/duyan-pb/polymer-bionics-webs/security/advisories) to privately report a vulnerability.
 
-  * The type of issue (e.g., buffer overflow, SQL injection, or cross-site scripting)
-  * Full paths of source file(s) related to the manifestation of the issue
-  * The location of the affected source code (tag/branch/commit or direct URL)
-  * Any special configuration required to reproduce the issue
-  * Step-by-step instructions to reproduce the issue
-  * Proof-of-concept or exploit code (if possible)
-  * Impact of the issue, including how an attacker might exploit the issue
+2. **Email**: Send details to the repository maintainer.
 
-This information will help us triage your report more quickly.
+### What to Include
 
-## Policy
+Please include as much of the following information as possible:
 
-See [GitHub's Safe Harbor Policy](https://docs.github.com/en/site-policy/security-policies/github-bug-bounty-program-legal-safe-harbor#1-safe-harbor-terms)
+- Type of issue (e.g., XSS, CSRF, injection, etc.)
+- Full paths of source file(s) related to the issue
+- Location of the affected source code (branch/commit or direct URL)
+- Step-by-step instructions to reproduce the issue
+- Proof-of-concept or exploit code (if possible)
+- Impact of the issue
+
+### Response Timeline
+
+- **Initial Response**: Within 48 hours
+- **Status Update**: Within 7 days
+- **Resolution**: Dependent on complexity
+
+### What to Expect
+
+1. We will acknowledge receipt of your report
+2. We will investigate and validate the issue
+3. We will work on a fix and coordinate disclosure
+4. We will credit you (if desired) when the fix is released
+
+## Security Measures
+
+This project implements the following security measures:
+
+### Automated Security Scanning
+
+- **Dependabot**: Automated dependency updates for security patches
+- **Dependency Review**: Blocks PRs with high-severity vulnerabilities
+- **CodeQL Analysis**: Static code analysis for security vulnerabilities
+
+### Best Practices
+
+- All dependencies are regularly updated
+- No secrets are stored in the repository
+- Azure deployment uses OIDC authentication (no stored credentials)
+- Content Security Policy headers are configured
+
+## Security-Related Configuration
+
+### Azure Deployment
+
+The application is deployed to Azure Web App using OpenID Connect (OIDC) federation, which means:
+
+- No long-lived credentials are stored in GitHub Secrets
+- Authentication tokens are short-lived and scoped
+- All deployments are traceable to specific commits
+
+## Thank You
+
+We appreciate your help in keeping Polymer Bionics Website and its users safe!

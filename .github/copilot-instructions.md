@@ -107,3 +107,30 @@ src/
 - Don't use Card with onClick directly - use ClickableCard for accessibility
 - Don't forget useMemo for filtered/computed data
 - Don't create inline onClick handlers - use useCallback for stable references
+
+## CI/CD & Deployment
+
+### GitHub Actions Workflows
+- **main_polymerbionics-webapp.yml** - Build and deploy to Azure on push to `main`
+- **pr-validation.yml** - Lint, type check, and build verification on PRs
+- **dependency-review.yml** - Security scanning for dependencies on PRs
+
+### Build Environment Variables
+These are injected during CI builds and accessible via `import.meta.env`:
+- `VITE_BUILD_TIME` - Commit timestamp
+- `VITE_BUILD_SHA` - Git commit SHA
+- `VITE_BUILD_REF` - Branch name
+
+### Azure Deployment
+- App deploys to Azure Web App: `polymerbionics-webapp.azurewebsites.net`
+- Uses OIDC authentication (no secrets stored)
+- `web.config` is auto-generated for SPA routing
+- Health check runs after deployment
+
+## Testing Locally
+```bash
+npm run dev      # Start dev server at localhost:5000
+npm run build    # Production build
+npm run preview  # Preview production build
+npm run lint     # Run ESLint
+```

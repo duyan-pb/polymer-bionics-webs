@@ -110,8 +110,8 @@ jobs:
           sleep 30
           response=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net)
           if [ "$response" -eq 200 ]; then
-            echo "✅ Health check passed! Site is live at https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
+            echo "Health check passed! Site is live at https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
           else
-            echo "⚠️ Health check returned status code: $response"
+            echo "WARNING: Health check returned status code: $response"
             exit 1
           fi

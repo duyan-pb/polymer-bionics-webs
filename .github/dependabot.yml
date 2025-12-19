@@ -1,11 +1,62 @@
 version: 2
 updates:
+  # NPM dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Ho_Chi_Minh"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "duyan-pb"
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      radix:
+        patterns:
+          - "@radix-ui/*"
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
 
-  - package-ecosystem: "devcontainers"
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+    reviewers:
+      - "duyan-pb"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci(deps)"
+
+  # Dev containers
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    reviewers:
+      - "duyan-pb"
+    labels:
+      - "dependencies"
+      - "devcontainer"
+    commit-message:
+      prefix: "chore(deps)"

@@ -1,0 +1,17 @@
+# CODEOWNERS - Defines who reviews pull requests
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+*                       @duyan-pb
+
+# GitHub Actions and CI/CD
+.github/                @duyan-pb
+
+# Frontend components
+src/components/         @duyan-pb
+
+# Configuration files
+*.json                  @duyan-pb
+*.ts                    @duyan-pb
+vite.config.ts          @duyan-pb
+tailwind.config.js      @duyan-pb
