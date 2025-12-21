@@ -1,4 +1,4 @@
-import { useState, useCallback, lazy, Suspense, memo } from 'react'
+import { useState, useCallback, useEffect, lazy, Suspense, memo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useKV } from '@github/spark/hooks'
 import { Navigation } from '@/components/Navigation'
@@ -53,6 +53,35 @@ function App() {
   const handleNavigate = useCallback((page: string) => {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
+  useEffect(() => {
+    const preload = () => {
+      import('@/components/ProductsPage')
+      import('@/components/MediaPage')
+      import('@/components/DatasheetsPage')
+      import('@/components/ContactPage')
+      import('@/components/TeamPage')
+    }
+
+    const idleCallback = (window as any).requestIdleCallback as ((cb: () => void) => number) | undefined
+    let timeoutId: number | undefined
+    let idleId: number | undefined
+
+    if (idleCallback) {
+      idleId = idleCallback(preload)
+    } else {
+      timeoutId = window.setTimeout(preload, 500)
+    }
+
+    return () => {
+      if (idleId && (window as any).cancelIdleCallback) {
+        ;(window as any).cancelIdleCallback(idleId)
+      }
+      if (timeoutId) {
+        window.clearTimeout(timeoutId)
+      }
+    }
   }, [])
 
   const renderPage = () => {

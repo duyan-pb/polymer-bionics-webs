@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useKV } from '@github/spark/hooks'
-import { placeholderDatasheets } from '@/lib/media-data'
 import type { Datasheet } from '@/lib/types'
 
 export function DatasheetsInitializer() {
@@ -12,7 +11,8 @@ export function DatasheetsInitializer() {
 
     const needsDatasheets = (datasheets?.length || 0) === 0
     if (needsDatasheets) {
-      setDatasheets(placeholderDatasheets)
+      // No datasheets available yet; seed empty array so UI can show "coming soon"
+      setDatasheets([])
       setIsInitialized(true)
     }
   }, [datasheets, isInitialized, setDatasheets])

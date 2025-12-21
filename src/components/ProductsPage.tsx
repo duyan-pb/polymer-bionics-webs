@@ -142,6 +142,8 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
                       src={product.imageUrl} 
                       alt={product.name}
                       className="w-full h-40 md:h-56 object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                 )}
@@ -241,6 +243,8 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
                                 src={img} 
                                 alt={`${selectedProduct.name} - Image ${idx + 1}`}
                                 className="w-full h-32 object-cover"
+                                loading="lazy"
+                                decoding="async"
                               />
                             </div>
                           ))}
@@ -326,6 +330,8 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
               src={selectedImage || ''} 
               alt="Product detail"
               className="max-w-full max-h-[80vh] object-contain"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </DialogContent>

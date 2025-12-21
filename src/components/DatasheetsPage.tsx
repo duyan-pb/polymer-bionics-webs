@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import type { MouseEvent } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -10,7 +10,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Download, MagnifyingGlass, FileText, Calendar } from '@phosphor-icons/react'
 import type { Datasheet } from '@/lib/types'
-import { materials, applications } from '@/lib/materials-data'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
@@ -22,78 +21,33 @@ interface DatasheetsPageProps {
 
 export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedDatasheet, setSelectedDatasheet] = useState<Datasheet | null>(null)
 
-  const generatedDatasheets = useMemo(() => {
-    const sheets: Datasheet[] = []
-    
-    materials.forEach((material) => {
-      sheets.push({
-        id: `datasheet-${material.id}`,
-        name: material.name,
-        title: `${material.name} Technical Datasheet`,
-        description: material.description,
-        category: 'Advanced Materials',
-        version: 'v1.0',
-        lastUpdated: 'January 2025',
-        pdfUrl: `https://example.com/datasheets/${material.id}.pdf`,
-        technicalSpecs: {
-          'Material Type': 'Flexible Bioelectronic Material',
-          'Primary Function': material.properties[0] || 'N/A',
-          'Biocompatibility': 'ISO 10993 compliant',
-          'Sterilization': 'Compatible with EtO and gamma irradiation',
-          'Key Properties': material.properties.slice(0, 3).join(', '),
-          'Typical Applications': applications
-            .filter(app => app.relevantMaterials.includes(material.name))
-            .map(app => app.name)
-            .join(', ') || 'Various bioelectronic applications',
-        }
-      })
-    })
-    
-    applications.forEach((application) => {
-      sheets.push({
-        id: `datasheet-${application.id}`,
-        name: application.name,
-        title: `${application.name} Product Information`,
-        description: application.description,
-        category: 'Clinical Applications',
-        version: 'v1.0',
-        lastUpdated: 'January 2025',
-        pdfUrl: `https://example.com/datasheets/${application.id}.pdf`,
-        technicalSpecs: {
-          'Product Type': 'Bioelectronic Device/Application',
-          'Primary Use': application.useCases[0] || 'N/A',
-          'Key Benefits': application.benefits.slice(0, 3).join(', '),
-          'Materials Used': application.relevantMaterials.join(', '),
-          'Target Applications': application.useCases.slice(0, 2).join(', '),
-          'Regulatory Status': 'Development stage - Contact for partnership',
-        }
-      })
-    })
-    
-    return sheets
-  }, [])
-
-  const allDatasheets = useMemo(
-    () => [...generatedDatasheets, ...datasheets],
-    [generatedDatasheets, datasheets]
-  )
+  useEffect(() => {
+    const handle = window.setTimeout(() => {
+      setDebouncedSearch(searchTerm.trim().toLowerCase())
+    }, 200)
+    return () => window.clearTimeout(handle)
+  }, [searchTerm])
 
   const categories = useMemo(
-    () => ['all', ...Array.from(new Set(allDatasheets.map(d => d.category)))],
-    [allDatasheets]
+    () => ['all', ...Array.from(new Set(datasheets.map(d => d.category)))],
+    [datasheets]
   )
 
   const filteredDatasheets = useMemo(() => {
-    return allDatasheets.filter(datasheet => {
-      const matchesSearch = datasheet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           datasheet.description.toLowerCase().includes(searchTerm.toLowerCase())
+    return datasheets.filter(datasheet => {
+      const matchesSearch = debouncedSearch.length === 0 ||
+        datasheet.name.toLowerCase().includes(debouncedSearch) ||
+        datasheet.description.toLowerCase().includes(debouncedSearch)
       const matchesCategory = selectedCategory === 'all' || datasheet.category === selectedCategory
       return matchesSearch && matchesCategory
     })
-  }, [allDatasheets, searchTerm, selectedCategory])
+  }, [datasheets, debouncedSearch, selectedCategory])
+
+  const hasDatasheets = filteredDatasheets.length > 0
 
   const handleDownload = useCallback((e: MouseEvent, url?: string) => {
     e.stopPropagation()
@@ -141,16 +95,19 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
             </div>
           </div>
 
-          {filteredDatasheets.length === 0 ? (
-            <Card className="p-16 text-center">
-              <FileText size={80} className="text-muted-foreground/40 mx-auto mb-6" weight="light" />
-              <h3 className="text-2xl font-bold mb-3">No datasheets found</h3>
-              <p className="text-muted-foreground mb-6">
-                Try adjusting your search or filter criteria
+          {!hasDatasheets ? (
+            <Card className="p-16 text-center space-y-3">
+              <FileText size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
+              <h3 className="text-2xl font-bold">Datasheets coming soon</h3>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                We are finalizing technical datasheets for our products. Check back soon or contact us and we will notify you when they are available.
               </p>
-              <Button variant="outline" onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }} size="lg">
-                Clear Filters
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+                <Button variant="outline" onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}>
+                  Clear Filters
+                </Button>
+                <ContactLinks emailType="sales" variant="default" showWhatsApp={true} showEmail={true} />
+              </div>
             </Card>
           ) : (
             <div className="hidden md:block border rounded-lg overflow-hidden shadow-sm">
@@ -185,6 +142,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
                         <Button
                           size="sm"
                           variant="ghost"
+                          disabled={!datasheet.pdfUrl}
                           onClick={(e) => handleDownload(e, datasheet.pdfUrl)}
                         >
                           <Download size={16} className="mr-2" /> Download
@@ -215,7 +173,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
                   <Calendar size={16} className="mr-1" />
                   Updated: {datasheet.lastUpdated}
                 </div>
-                <Button size="sm" onClick={(e) => handleDownload(e, datasheet.pdfUrl)}>
+                <Button size="sm" disabled={!datasheet.pdfUrl} onClick={(e) => handleDownload(e, datasheet.pdfUrl)}>
                   <Download size={16} className="mr-2" /> Download PDF
                 </Button>
               </Card>
@@ -264,7 +222,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
                   )}
 
                   <div className="pt-4 flex gap-3">
-                    <Button onClick={(e) => handleDownload(e, selectedDatasheet.pdfUrl)}>
+                    <Button disabled={!selectedDatasheet.pdfUrl} onClick={(e) => handleDownload(e, selectedDatasheet.pdfUrl)}>
                       <Download className="mr-2" /> Download Complete Datasheet (PDF)
                     </Button>
                     <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
