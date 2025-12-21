@@ -87,7 +87,9 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
 
   const fuseResults = useMemo(() => {
     const trimmed = searchQuery.trim()
-    if (!trimmed) return []
+    if (!trimmed) {
+      return []
+    }
     return fuse.search(trimmed).slice(0, 12).map(result => result.item)
   }, [fuse, searchQuery])
 

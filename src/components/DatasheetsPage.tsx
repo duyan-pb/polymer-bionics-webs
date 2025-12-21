@@ -1,5 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from 'react'
-import type { MouseEvent } from 'react'
+import { useState, useMemo, useCallback, useEffect, type MouseEvent } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -51,7 +50,9 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
 
   const handleDownload = useCallback((e: MouseEvent, url?: string) => {
     e.stopPropagation()
-    if (!url) return
+    if (!url) {
+      return
+    }
     window.open(url, '_blank', 'noopener')
   }, [])
 

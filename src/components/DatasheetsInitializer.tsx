@@ -7,7 +7,9 @@ export function DatasheetsInitializer() {
   const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
-    if (isInitialized) return
+    if (isInitialized) {
+      return
+    }
 
     const needsDatasheets = (datasheets?.length || 0) === 0
     if (needsDatasheets) {

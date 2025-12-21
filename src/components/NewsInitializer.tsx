@@ -13,7 +13,9 @@ export function NewsInitializer() {
   const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
-    if (isInitialized) return
+    if (isInitialized) {
+      return
+    }
 
     const needsNews = (news?.length || 0) === 0
     const needsPublications = (publications?.length || 0) === 0

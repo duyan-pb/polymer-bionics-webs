@@ -1,5 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
-import type { MouseEvent } from 'react'
+import { useState, useMemo, useCallback, type MouseEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -48,13 +47,17 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
 
   const navigateToDatasheet = useCallback((e: MouseEvent, datasheetId?: string) => {
     e.stopPropagation()
-    if (!datasheetId) return
+    if (!datasheetId) {
+      return
+    }
     onNavigate('datasheets')
   }, [onNavigate])
 
   const navigateToCaseStudy = useCallback((e: MouseEvent, caseStudyId?: string) => {
     e.stopPropagation()
-    if (!caseStudyId) return
+    if (!caseStudyId) {
+      return
+    }
     onNavigate('media')
   }, [onNavigate])
 

@@ -64,19 +64,21 @@ function App() {
       import('@/components/TeamPage')
     }
 
-    const idleCallback = (window as any).requestIdleCallback as ((cb: () => void) => number) | undefined
+    type IdleCallback = (cb: IdleRequestCallback) => number
+    type IdleCancelCallback = (id: number) => void
+    const win = window as Window & { requestIdleCallback?: IdleCallback; cancelIdleCallback?: IdleCancelCallback }
     let timeoutId: number | undefined
     let idleId: number | undefined
 
-    if (idleCallback) {
-      idleId = idleCallback(preload)
+    if (win.requestIdleCallback) {
+      idleId = win.requestIdleCallback(preload)
     } else {
       timeoutId = window.setTimeout(preload, 500)
     }
 
     return () => {
-      if (idleId && (window as any).cancelIdleCallback) {
-        ;(window as any).cancelIdleCallback(idleId)
+      if (idleId && win.cancelIdleCallback) {
+        win.cancelIdleCallback(idleId)
       }
       if (timeoutId) {
         window.clearTimeout(timeoutId)

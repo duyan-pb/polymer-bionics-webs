@@ -9,7 +9,9 @@ export function MediaInitializer() {
   const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
-    if (isInitialized) return
+    if (isInitialized) {
+      return
+    }
 
     const needsVideos = (videos?.length || 0) === 0
     const needsCaseStudies = (caseStudies?.length || 0) === 0
