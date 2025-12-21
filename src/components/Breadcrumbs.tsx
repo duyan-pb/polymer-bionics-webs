@@ -17,7 +17,7 @@ export function Breadcrumbs({ trail, onNavigate }: BreadcrumbsProps) {
         {trail.map((item, idx) => (
           <BreadcrumbItemUI key={item.label}>
             {item.page ? (
-              <BreadcrumbLink onClick={() => onNavigate(item.page!)} className="cursor-pointer text-primary hover:underline">
+              <BreadcrumbLink onClick={() => onNavigate(item.page ?? '')} className="cursor-pointer text-primary hover:underline">
                 {item.label}
               </BreadcrumbLink>
             ) : (

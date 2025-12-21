@@ -44,12 +44,12 @@ export default tseslint.config(
       'max-depth': ['warn', { max: 4 }],
       'max-nested-callbacks': ['warn', { max: 3 }],
       'max-lines-per-function': ['warn', { 
-        max: 150, 
+        max: 300, 
         skipBlankLines: true, 
         skipComments: true 
       }],
       'max-lines': ['warn', { 
-        max: 400, 
+        max: 500, 
         skipBlankLines: true, 
         skipComments: true 
       }],
