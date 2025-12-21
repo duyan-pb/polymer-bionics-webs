@@ -25,17 +25,19 @@ jobs:
       contents: read #This is required for actions/checkout
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: npm install and build
+      - name: npm install, lint, typecheck, and build
         run: |
           npm ci
+          npm run lint
+          npm run typecheck
           npm run build
         env:
           VITE_BUILD_TIME: ${{ github.event.head_commit.timestamp }}
