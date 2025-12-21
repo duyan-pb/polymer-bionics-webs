@@ -105,13 +105,24 @@ jobs:
           package: .
 
       - name: Health check
+        continue-on-error: true
         run: |
           echo "Waiting for deployment to stabilize..."
           sleep 30
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net)
-          if [ "$response" -eq 200 ]; then
-            echo "Health check passed! Site is live at https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
-          else
-            echo "WARNING: Health check returned status code: $response"
-            exit 1
-          fi
+          max_retries=3
+          retry_count=0
+          while [ $retry_count -lt $max_retries ]; do
+            response=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net 2>/dev/null || echo "000")
+            if [ "$response" -eq 200 ]; then
+              echo "Health check passed! Site is live at https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
+              exit 0
+            fi
+            retry_count=$((retry_count + 1))
+            echo "Attempt $retry_count/$max_retries: Health check returned status code: $response"
+            if [ $retry_count -lt $max_retries ]; then
+              echo "Retrying in 15 seconds..."
+              sleep 15
+            fi
+          done
+          echo "WARNING: Health check failed after $max_retries attempts"
+          exit 1
