@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from 'react'
+import type { MouseEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -44,6 +45,23 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
   const handleProductSelect = useCallback((product: Product) => {
     setSelectedProduct(product)
   }, [])
+
+  const navigateToDatasheet = useCallback((e: MouseEvent, datasheetId?: string) => {
+    e.stopPropagation()
+    if (!datasheetId) return
+    onNavigate('datasheets')
+  }, [onNavigate])
+
+  const navigateToCaseStudy = useCallback((e: MouseEvent, caseStudyId?: string) => {
+    e.stopPropagation()
+    if (!caseStudyId) return
+    onNavigate('media')
+  }, [onNavigate])
+
+  const navigateToContact = useCallback((e: MouseEvent) => {
+    e.stopPropagation()
+    onNavigate('contact')
+  }, [onNavigate])
 
   return (
     <div className="min-h-screen bg-background">
@@ -151,21 +169,31 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
                   <div className="space-y-2 pt-2">
                     <div className="flex flex-wrap gap-2">
                       {product.datasheetId && (
-                        <Button variant="outline" size="sm" className="text-xs md:text-sm" onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-xs md:text-sm"
+                          onClick={(e) => navigateToDatasheet(e, product.datasheetId)}
+                        >
                           <Download className="mr-1" size={16} /> Datasheet
                         </Button>
                       )}
                       {product.caseStudyId && (
-                        <Button variant="outline" size="sm" className="text-xs md:text-sm" onClick={(e) => e.stopPropagation()}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-xs md:text-sm"
+                          onClick={(e) => navigateToCaseStudy(e, product.caseStudyId)}
+                        >
                           Case Study
                         </Button>
                       )}
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" onClick={navigateToContact}>
                         Enquire
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" onClick={navigateToContact}>
                         Contact
                       </Button>
                     </div>
@@ -270,12 +298,12 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
                   <div className="space-y-3 pt-4">
                     <div className="flex gap-3">
                       {selectedProduct.datasheetId && (
-                        <Button variant="outline">
-                          <Download className="mr-2" /> Download Datasheet
+                        <Button variant="outline" onClick={(e) => navigateToDatasheet(e, selectedProduct.datasheetId)}>
+                          <Download className="mr-2" /> View Datasheet
                         </Button>
                       )}
                       {selectedProduct.caseStudyId && (
-                        <Button variant="outline">
+                        <Button variant="outline" onClick={(e) => navigateToCaseStudy(e, selectedProduct.caseStudyId)}>
                           View Case Study
                         </Button>
                       )}

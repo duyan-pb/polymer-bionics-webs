@@ -7,6 +7,8 @@ import { HomePage } from '@/components/HomePage'
 import { ProductsInitializer } from '@/components/ProductsInitializer'
 import { TeamInitializer } from '@/components/TeamInitializer'
 import { NewsInitializer } from '@/components/NewsInitializer'
+import { MediaInitializer } from '@/components/MediaInitializer'
+import { DatasheetsInitializer } from '@/components/DatasheetsInitializer'
 import { FloatingContactButton } from '@/components/FloatingContactButton'
 import { BackToTopButton } from '@/components/BackToTopButton'
 import { useTheme } from '@/hooks/use-theme'
@@ -87,6 +89,8 @@ function App() {
       <ProductsInitializer />
       <TeamInitializer />
       <NewsInitializer />
+      <MediaInitializer />
+      <DatasheetsInitializer />
       <Navigation 
         currentPage={currentPage} 
         onNavigate={handleNavigate} 

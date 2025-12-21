@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
+import type { MouseEvent } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -36,7 +37,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
         category: 'Advanced Materials',
         version: 'v1.0',
         lastUpdated: 'January 2025',
-        pdfUrl: '#',
+        pdfUrl: `https://example.com/datasheets/${material.id}.pdf`,
         technicalSpecs: {
           'Material Type': 'Flexible Bioelectronic Material',
           'Primary Function': material.properties[0] || 'N/A',
@@ -60,7 +61,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
         category: 'Clinical Applications',
         version: 'v1.0',
         lastUpdated: 'January 2025',
-        pdfUrl: '#',
+        pdfUrl: `https://example.com/datasheets/${application.id}.pdf`,
         technicalSpecs: {
           'Product Type': 'Bioelectronic Device/Application',
           'Primary Use': application.useCases[0] || 'N/A',
@@ -93,6 +94,12 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
       return matchesSearch && matchesCategory
     })
   }, [allDatasheets, searchTerm, selectedCategory])
+
+  const handleDownload = useCallback((e: MouseEvent, url?: string) => {
+    e.stopPropagation()
+    if (!url) return
+    window.open(url, '_blank', 'noopener')
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
@@ -178,10 +185,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setSelectedDatasheet(datasheet)
-                          }}
+                          onClick={(e) => handleDownload(e, datasheet.pdfUrl)}
                         >
                           <Download size={16} className="mr-2" /> Download
                         </Button>
@@ -211,7 +215,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
                   <Calendar size={16} className="mr-1" />
                   Updated: {datasheet.lastUpdated}
                 </div>
-                <Button size="sm" onClick={(e) => { e.stopPropagation(); }}>
+                <Button size="sm" onClick={(e) => handleDownload(e, datasheet.pdfUrl)}>
                   <Download size={16} className="mr-2" /> Download PDF
                 </Button>
               </Card>
@@ -260,7 +264,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
                   )}
 
                   <div className="pt-4 flex gap-3">
-                    <Button>
+                    <Button onClick={(e) => handleDownload(e, selectedDatasheet.pdfUrl)}>
                       <Download className="mr-2" /> Download Complete Datasheet (PDF)
                     </Button>
                     <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
