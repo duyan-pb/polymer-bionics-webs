@@ -322,3 +322,5 @@ export function ContactPage({ onNavigate }: ContactPageProps) {
     </div>
   )
 }
+
+export default ContactPage

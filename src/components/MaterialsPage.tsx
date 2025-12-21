@@ -164,3 +164,5 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
     </div>
   )
 }
+
+export default MaterialsPage

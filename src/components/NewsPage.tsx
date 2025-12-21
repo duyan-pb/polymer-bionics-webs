@@ -281,3 +281,5 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
     </div>
   )
 }
+
+export default NewsPage

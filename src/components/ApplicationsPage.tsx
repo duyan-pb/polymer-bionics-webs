@@ -169,3 +169,5 @@ export function ApplicationsPage({ onNavigate }: ApplicationsPageProps) {
     </div>
   )
 }
+
+export default ApplicationsPage

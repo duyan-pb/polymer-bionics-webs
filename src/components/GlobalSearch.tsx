@@ -84,3 +84,5 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
     </CommandDialog>
   )
 }
+
+export default GlobalSearch

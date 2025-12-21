@@ -274,3 +274,5 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
     </div>
   )
 }
+
+export default DatasheetsPage

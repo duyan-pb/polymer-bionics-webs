@@ -208,3 +208,5 @@ export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
     </div>
   )
 }
+
+export default TeamPage

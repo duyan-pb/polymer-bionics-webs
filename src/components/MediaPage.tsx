@@ -220,3 +220,5 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
     </div>
   )
 }
+
+export default MediaPage
