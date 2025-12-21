@@ -52,8 +52,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
                 Flexible Bioelectronics & Polymer Medical Devices
               </h1>
               <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 mb-8 md:mb-10 leading-relaxed max-w-2xl">
-                Polymer Bionics develops advanced polymer-based bioelectronics and flexible medical devices for 
-                next-generation healthcare solutions, combining material science innovation with clinical precision.
+                Polymer Bionics develops advanced flexible polymer-based bioelectronics and medical devices for next-generation healthcare solutions, combining material science innovation with clinical precision.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Button size="lg" onClick={() => onNavigate('products')} className="text-base font-semibold tracking-wide shadow-lg w-full sm:w-auto h-12 px-8">
