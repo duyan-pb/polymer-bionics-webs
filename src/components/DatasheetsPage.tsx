@@ -25,10 +25,10 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
   const [selectedDatasheet, setSelectedDatasheet] = useState<Datasheet | null>(null)
 
   useEffect(() => {
-    const handle = window.setTimeout(() => {
+    const debounceTimeoutId = window.setTimeout(() => {
       setDebouncedSearch(searchTerm.trim().toLowerCase())
     }, 200)
-    return () => window.clearTimeout(handle)
+    return () => window.clearTimeout(debounceTimeoutId)
   }, [searchTerm])
 
   const categories = useMemo(

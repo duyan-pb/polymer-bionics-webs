@@ -19,14 +19,14 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
-    const listener = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
         onOpenChange(!open)
       }
     }
-    window.addEventListener('keydown', listener)
-    return () => window.removeEventListener('keydown', listener)
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [open, onOpenChange])
 
   type SearchType = 'nav' | 'product' | 'team' | 'datasheet' | 'news'
