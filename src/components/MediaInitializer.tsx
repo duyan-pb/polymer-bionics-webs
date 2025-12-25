@@ -26,7 +26,7 @@ export function MediaInitializer() {
     if (needsVideos || needsCaseStudies) {
       setIsInitialized(true)
     }
-  }, [caseStudies, isInitialized, setCaseStudies, setVideos, videos])
+  }, [videos, caseStudies, isInitialized, setVideos, setCaseStudies])
 
   return null
 }

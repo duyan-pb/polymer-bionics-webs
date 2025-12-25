@@ -1,20 +1,13 @@
-import { useEffect, useState } from 'react'
-import { useKV } from '@github/spark/hooks'
+import { KVInitializer } from '@/components/KVInitializer'
 import { teamMembers } from '@/lib/team-data'
 import type { TeamMember } from '@/lib/types'
 
 export function TeamInitializer() {
-  const [team, setTeam] = useKV<TeamMember[]>('team', [])
-  const [isInitialized, setIsInitialized] = useState(false)
-
-  useEffect(() => {
-    const needsUpdate = (team?.length || 0) !== teamMembers.length
-    
-    if (needsUpdate && !isInitialized) {
-      setTeam(teamMembers)
-      setIsInitialized(true)
-    }
-  }, [team, isInitialized, setTeam])
-
-  return null
+  return (
+    <KVInitializer<TeamMember[]>
+      kvKey="team"
+      initialData={teamMembers}
+      shouldInitialize={(data) => (data?.length || 0) !== teamMembers.length}
+    />
+  )
 }
