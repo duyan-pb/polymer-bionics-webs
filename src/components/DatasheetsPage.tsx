@@ -4,13 +4,14 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Download, MagnifyingGlass, FileText, Calendar } from '@phosphor-icons/react'
 import type { Datasheet } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
+import { DetailDialog } from '@/components/DetailDialog'
+import { FilterBadges } from '@/components/FilterBadges'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface DatasheetsPageProps {
@@ -83,16 +84,12 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
               />
             </div>
             <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <Badge
-                  key={cat}
-                  variant={selectedCategory === cat ? 'default' : 'outline'}
-                  className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
-                  onClick={() => setSelectedCategory(cat)}
-                >
-                  {cat}
-                </Badge>
-              ))}
+              <FilterBadges
+                items={categories}
+                selectedItem={selectedCategory}
+                onSelect={setSelectedCategory}
+                className="flex flex-wrap gap-2"
+              />
             </div>
           </div>
 
@@ -183,57 +180,53 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
         </div>
       </section>
 
-      <Dialog open={!!selectedDatasheet} onOpenChange={() => setSelectedDatasheet(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh]">
-          <ScrollArea className="max-h-[80vh] pr-4">
-            {selectedDatasheet && (
-              <>
-                <DialogHeader>
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <DialogTitle className="text-3xl mb-2">{selectedDatasheet.name}</DialogTitle>
-                      <p className="text-muted-foreground">{selectedDatasheet.description}</p>
-                    </div>
-                    <div className="flex flex-col gap-2 items-end">
-                      <Badge variant="secondary" className="text-base px-4 py-2">{selectedDatasheet.version}</Badge>
-                      <Badge variant="outline" className="capitalize">{selectedDatasheet.category}</Badge>
-                    </div>
-                  </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Calendar size={16} className="mr-2" />
-                    Last updated: {selectedDatasheet.lastUpdated}
-                  </div>
-                </DialogHeader>
+      <DetailDialog open={!!selectedDatasheet} onOpenChange={() => setSelectedDatasheet(null)}>
+        {selectedDatasheet && (
+          <>
+            <DialogHeader>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <DialogTitle className="text-3xl mb-2">{selectedDatasheet.name}</DialogTitle>
+                  <p className="text-muted-foreground">{selectedDatasheet.description}</p>
+                </div>
+                <div className="flex flex-col gap-2 items-end">
+                  <Badge variant="secondary" className="text-base px-4 py-2">{selectedDatasheet.version}</Badge>
+                  <Badge variant="outline" className="capitalize">{selectedDatasheet.category}</Badge>
+                </div>
+              </div>
+              <div className="flex items-center text-sm text-muted-foreground">
+                <Calendar size={16} className="mr-2" />
+                Last updated: {selectedDatasheet.lastUpdated}
+              </div>
+            </DialogHeader>
 
-                <Separator className="my-6" />
+            <Separator className="my-6" />
 
-                <div className="space-y-6">
-                  {selectedDatasheet.technicalSpecs && (
-                    <div>
-                      <h4 className="text-lg font-semibold mb-4">Technical Specifications</h4>
-                      <div className="grid grid-cols-1 gap-3">
-                        {Object.entries(selectedDatasheet.technicalSpecs).map(([key, value], idx) => (
-                          <div key={idx} className="flex border-b pb-3">
-                            <div className="w-1/2 font-medium text-sm">{key}</div>
-                            <div className="w-1/2 text-sm text-muted-foreground">{value}</div>
-                          </div>
-                        ))}
+            <div className="space-y-6">
+              {selectedDatasheet.technicalSpecs && (
+                <div>
+                  <h4 className="text-lg font-semibold mb-4">Technical Specifications</h4>
+                  <div className="grid grid-cols-1 gap-3">
+                    {Object.entries(selectedDatasheet.technicalSpecs).map(([key, value], idx) => (
+                      <div key={idx} className="flex border-b pb-3">
+                        <div className="w-1/2 font-medium text-sm">{key}</div>
+                        <div className="w-1/2 text-sm text-muted-foreground">{value}</div>
                       </div>
-                    </div>
-                  )}
-
-                  <div className="pt-4 flex gap-3">
-                    <Button disabled={!selectedDatasheet.pdfUrl} onClick={(e) => handleDownload(e, selectedDatasheet.pdfUrl)}>
-                      <Download className="mr-2" /> Download Complete Datasheet (PDF)
-                    </Button>
-                    <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
+                    ))}
                   </div>
                 </div>
-              </>
-            )}
-          </ScrollArea>
-        </DialogContent>
-      </Dialog>
+              )}
+
+              <div className="pt-4 flex gap-3">
+                <Button disabled={!selectedDatasheet.pdfUrl} onClick={(e) => handleDownload(e, selectedDatasheet.pdfUrl)}>
+                  <Download className="mr-2" /> Download Complete Datasheet (PDF)
+                </Button>
+                <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
+              </div>
+            </div>
+          </>
+        )}
+      </DetailDialog>
     </div>
   )
 }

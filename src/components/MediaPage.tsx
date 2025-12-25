@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, Quotes, FileText } from '@phosphor-icons/react'
@@ -10,6 +9,8 @@ import type { Video, CaseStudy } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
+import { DetailDialog } from '@/components/DetailDialog'
+import { ImageWithFallback } from '@/components/ImageWithFallback'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface MediaPageProps {
@@ -62,11 +63,11 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
                     ariaLabel={`View video: ${video.title}`}
                   >
                     <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
-                      {video.thumbnailUrl ? (
-                        <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                      ) : (
-                        <Play size={64} className="text-primary/60" weight="fill" />
-                      )}
+                      <ImageWithFallback
+                        src={video.thumbnailUrl}
+                        alt={video.title}
+                        fallback={<Play size={64} className="text-primary/60" weight="fill" />}
+                      />
                       <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                         <Play size={64} className="text-white" weight="fill" />
                       </div>
@@ -153,70 +154,66 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={!!selectedCaseStudy} onOpenChange={() => setSelectedCaseStudy(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh]">
-          <ScrollArea className="max-h-[80vh] pr-4">
-            {selectedCaseStudy && (
-              <>
-                <DialogHeader>
-                  <DialogTitle className="text-3xl mb-2">{selectedCaseStudy.title}</DialogTitle>
-                  <Badge variant="secondary" className="w-fit capitalize text-base px-4 py-2">
-                    {selectedCaseStudy.category}
-                  </Badge>
-                </DialogHeader>
+      <DetailDialog open={!!selectedCaseStudy} onOpenChange={() => setSelectedCaseStudy(null)}>
+        {selectedCaseStudy && (
+          <>
+            <DialogHeader>
+              <DialogTitle className="text-3xl mb-2">{selectedCaseStudy.title}</DialogTitle>
+              <Badge variant="secondary" className="w-fit capitalize text-base px-4 py-2">
+                {selectedCaseStudy.category}
+              </Badge>
+            </DialogHeader>
 
-                <div className="space-y-6 mt-6">
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">The Problem</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedCaseStudy.problem}</p>
-                  </div>
+            <div className="space-y-6 mt-6">
+              <div>
+                <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">The Problem</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">{selectedCaseStudy.problem}</p>
+              </div>
 
+              <Separator />
+
+              <div>
+                <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">Our Solution</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">{selectedCaseStudy.solution}</p>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">Demonstrated Results</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">{selectedCaseStudy.results}</p>
+              </div>
+
+              {selectedCaseStudy.quote && (
+                <>
                   <Separator />
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">Our Solution</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedCaseStudy.solution}</p>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">Demonstrated Results</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedCaseStudy.results}</p>
-                  </div>
-
-                  {selectedCaseStudy.quote && (
-                    <>
-                      <Separator />
-                      <div className="bg-muted/50 p-6 rounded-lg border-l-4 border-accent">
-                        <Quotes size={32} className="text-accent mb-3" weight="fill" />
-                        <p className="text-base italic mb-3">"{selectedCaseStudy.quote.text}"</p>
-                        <div className="text-sm text-muted-foreground">
-                          <p className="font-semibold">{selectedCaseStudy.quote.author}</p>
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  {selectedCaseStudy.datasheetId && (
-                    <div className="pt-4 flex gap-3">
-                      <Button>
-                        <FileText className="mr-2" /> View Related Datasheet
-                      </Button>
-                      <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
+                  <div className="bg-muted/50 p-6 rounded-lg border-l-4 border-accent">
+                    <Quotes size={32} className="text-accent mb-3" weight="fill" />
+                    <p className="text-base italic mb-3">"{selectedCaseStudy.quote.text}"</p>
+                    <div className="text-sm text-muted-foreground">
+                      <p className="font-semibold">{selectedCaseStudy.quote.author}</p>
                     </div>
-                  )}
-                  {!selectedCaseStudy.datasheetId && (
-                    <div className="pt-4">
-                      <ContactLinks emailType="sales" variant="default" showWhatsApp={true} showEmail={true} />
-                    </div>
-                  )}
+                  </div>
+                </>
+              )}
+
+              {selectedCaseStudy.datasheetId && (
+                <div className="pt-4 flex gap-3">
+                  <Button>
+                    <FileText className="mr-2" /> View Related Datasheet
+                  </Button>
+                  <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
                 </div>
-              </>
-            )}
-          </ScrollArea>
-        </DialogContent>
-      </Dialog>
+              )}
+              {!selectedCaseStudy.datasheetId && (
+                <div className="pt-4">
+                  <ContactLinks emailType="sales" variant="default" showWhatsApp={true} showEmail={true} />
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </DetailDialog>
     </div>
   )
 }

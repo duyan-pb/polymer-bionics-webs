@@ -2,14 +2,15 @@ import { useState, useMemo, useCallback } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { Calendar, Newspaper, BookOpen, ArrowSquareOut, Download } from '@phosphor-icons/react'
 import type { NewsItem, Publication } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
+import { DetailDialog } from '@/components/DetailDialog'
+import { FilterBadges } from '@/components/FilterBadges'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 interface NewsPageProps {
@@ -110,18 +111,12 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
             </TabsContent>
 
             <TabsContent value="publications">
-              <div className="flex flex-wrap gap-2 mb-8">
-                {allTags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant={selectedTag === tag ? 'default' : 'outline'}
-                    className="cursor-pointer px-4 py-2 text-sm capitalize"
-                    onClick={() => handleTagSelect(tag)}
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
+              <FilterBadges
+                items={allTags}
+                selectedItem={selectedTag}
+                onSelect={handleTagSelect}
+                className="flex flex-wrap gap-2 mb-8"
+              />
 
               <div className="space-y-4 md:space-y-6">
                 {filteredPublications.map((pub) => (
@@ -181,103 +176,95 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
         </div>
       </section>
 
-      <Dialog open={!!selectedNews} onOpenChange={() => setSelectedNews(null)}>
-        <DialogContent className="max-w-3xl max-h-[90vh]">
-          <ScrollArea className="max-h-[80vh] pr-4">
-            {selectedNews && (
-              <>
-                <DialogHeader>
-                  <div className="flex items-center gap-3 mb-4">
-                    <Badge variant="secondary" className="capitalize text-base px-4 py-2">
-                      {selectedNews.category}
-                    </Badge>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Calendar size={16} className="mr-1" />
-                      {selectedNews.date}
-                    </div>
-                  </div>
-                  <DialogTitle className="text-3xl mb-4">{selectedNews.title}</DialogTitle>
-                </DialogHeader>
-
-                <div className="space-y-4">
-                  <p className="text-base leading-relaxed whitespace-pre-line">{selectedNews.content}</p>
-                  <div className="pt-4 flex gap-3">
-                    {selectedNews.link && (
-                      <Button asChild>
-                        <a href={selectedNews.link} target="_blank" rel="noopener noreferrer">
-                          <ArrowSquareOut className="mr-2" /> Read Full Article
-                        </a>
-                      </Button>
-                    )}
-                    <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
-                  </div>
+      <DetailDialog open={!!selectedNews} onOpenChange={() => setSelectedNews(null)} maxWidth="3xl">
+        {selectedNews && (
+          <>
+            <DialogHeader>
+              <div className="flex items-center gap-3 mb-4">
+                <Badge variant="secondary" className="capitalize text-base px-4 py-2">
+                  {selectedNews.category}
+                </Badge>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Calendar size={16} className="mr-1" />
+                  {selectedNews.date}
                 </div>
-              </>
-            )}
-          </ScrollArea>
-        </DialogContent>
-      </Dialog>
+              </div>
+              <DialogTitle className="text-3xl mb-4">{selectedNews.title}</DialogTitle>
+            </DialogHeader>
 
-      <Dialog open={!!selectedPublication} onOpenChange={() => setSelectedPublication(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh]">
-          <ScrollArea className="max-h-[80vh] pr-4">
-            {selectedPublication && (
-              <>
-                <DialogHeader>
-                  <div className="flex flex-wrap items-center gap-2 mb-4">
-                    <Badge variant={publicationTypeColors[selectedPublication.type]} className="capitalize text-base px-4 py-2">
-                      {selectedPublication.type.replace('-', ' ')}
-                    </Badge>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Calendar size={16} className="mr-1" />
-                      {selectedPublication.date}
-                    </div>
-                  </div>
-                  <DialogTitle className="text-3xl mb-2">{selectedPublication.title}</DialogTitle>
-                  <p className="text-base text-muted-foreground">{selectedPublication.authors.join(', ')}</p>
-                  <p className="text-base text-accent font-medium italic">{selectedPublication.journal}</p>
-                </DialogHeader>
+            <div className="space-y-4">
+              <p className="text-base leading-relaxed whitespace-pre-line">{selectedNews.content}</p>
+              <div className="pt-4 flex gap-3">
+                {selectedNews.link && (
+                  <Button asChild>
+                    <a href={selectedNews.link} target="_blank" rel="noopener noreferrer">
+                      <ArrowSquareOut className="mr-2" /> Read Full Article
+                    </a>
+                  </Button>
+                )}
+                <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
+              </div>
+            </div>
+          </>
+        )}
+      </DetailDialog>
 
-                <Separator className="my-6" />
-
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3">Abstract</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedPublication.abstract}</p>
-                  </div>
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3">Tags</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedPublication.tags.map((tag) => (
-                        <Badge key={tag} variant="outline">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3 pt-4 flex-wrap">
-                    {selectedPublication.doi && (
-                      <Button asChild>
-                        <a href={selectedPublication.doi} target="_blank" rel="noopener noreferrer">
-                          <ArrowSquareOut className="mr-2" /> View on Publisher Site
-                        </a>
-                      </Button>
-                    )}
-                    {selectedPublication.pdfUrl && (
-                      <Button variant="outline">
-                        <Download className="mr-2" /> Download PDF
-                      </Button>
-                    )}
-                    <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
-                  </div>
+      <DetailDialog open={!!selectedPublication} onOpenChange={() => setSelectedPublication(null)}>
+        {selectedPublication && (
+          <>
+            <DialogHeader>
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                <Badge variant={publicationTypeColors[selectedPublication.type]} className="capitalize text-base px-4 py-2">
+                  {selectedPublication.type.replace('-', ' ')}
+                </Badge>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Calendar size={16} className="mr-1" />
+                  {selectedPublication.date}
                 </div>
-              </>
-            )}
-          </ScrollArea>
-        </DialogContent>
-      </Dialog>
+              </div>
+              <DialogTitle className="text-3xl mb-2">{selectedPublication.title}</DialogTitle>
+              <p className="text-base text-muted-foreground">{selectedPublication.authors.join(', ')}</p>
+              <p className="text-base text-accent font-medium italic">{selectedPublication.journal}</p>
+            </DialogHeader>
+
+            <Separator className="my-6" />
+
+            <div className="space-y-6">
+              <div>
+                <h4 className="text-lg font-semibold mb-3">Abstract</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">{selectedPublication.abstract}</p>
+              </div>
+
+              <div>
+                <h4 className="text-lg font-semibold mb-3">Tags</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedPublication.tags.map((tag) => (
+                    <Badge key={tag} variant="outline">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 flex-wrap">
+                {selectedPublication.doi && (
+                  <Button asChild>
+                    <a href={selectedPublication.doi} target="_blank" rel="noopener noreferrer">
+                      <ArrowSquareOut className="mr-2" /> View on Publisher Site
+                    </a>
+                  </Button>
+                )}
+                {selectedPublication.pdfUrl && (
+                  <Button variant="outline">
+                    <Download className="mr-2" /> Download PDF
+                  </Button>
+                )}
+                <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
+              </div>
+            </div>
+          </>
+        )}
+      </DetailDialog>
     </div>
   )
 }

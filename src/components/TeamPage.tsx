@@ -1,13 +1,14 @@
 import { useState, useMemo, useCallback } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Card } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LinkedinLogo, User, GraduationCap } from '@phosphor-icons/react'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
+import { DetailDialog } from '@/components/DetailDialog'
+import { ImageWithFallback } from '@/components/ImageWithFallback'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { TEAM_CATEGORIES, type TeamCategory } from '@/lib/constants'
 import type { TeamMember } from '@/lib/types'
@@ -52,17 +53,11 @@ export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
             ariaLabel={`View profile of ${member.name}`}
           >
             <div className="aspect-square bg-gradient-to-br from-primary/10 to-secondary/20 flex items-center justify-center">
-              {member.imageUrl ? (
-                <img 
-                  src={member.imageUrl} 
-                  alt={member.name} 
-                  className="w-full h-full object-cover" 
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <User size={100} className="text-muted-foreground/40" weight="light" />
-              )}
+              <ImageWithFallback
+                src={member.imageUrl}
+                alt={member.name}
+                fallback={<User size={100} className="text-muted-foreground/40" weight="light" />}
+              />
             </div>
             <div className="p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-bold mb-1.5">{member.name}</h3>
@@ -122,89 +117,86 @@ export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
         </div>
       </section>
 
-      <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
-        <DialogContent className="max-w-3xl max-h-[90vh]">
-          <ScrollArea className="max-h-[80vh] pr-4">
-            {selectedMember && (
-              <>
-                <DialogHeader>
-                  <div className="flex items-start gap-6 mb-6">
-                    <div className="w-32 h-32 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center flex-shrink-0">
-                      {selectedMember.imageUrl ? (
-                        <img src={selectedMember.imageUrl} alt={selectedMember.name} className="w-full h-full object-cover rounded-lg" loading="lazy" decoding="async" />
-                      ) : (
-                        <User size={60} className="text-muted-foreground" weight="light" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <DialogTitle className="text-3xl mb-2">{selectedMember.name}</DialogTitle>
-                      <p className="text-lg text-accent font-medium mb-4">{selectedMember.title}</p>
-                      <div className="flex gap-2">
-                        {selectedMember.linkedin && (
-                          <Button size="sm" variant="outline" asChild>
-                            <a href={selectedMember.linkedin} target="_blank" rel="noopener noreferrer">
-                              <LinkedinLogo className="mr-2" /> LinkedIn
-                            </a>
-                          </Button>
-                        )}
-                        {selectedMember.scholar && (
-                          <Button size="sm" variant="outline" asChild>
-                            <a href={selectedMember.scholar} target="_blank" rel="noopener noreferrer">
-                              <GraduationCap className="mr-2" /> Google Scholar
-                            </a>
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </DialogHeader>
-
-                <div className="space-y-6">
-                  {selectedMember.shortBio && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Biography</h3>
-                      <p className="text-base leading-relaxed text-muted-foreground">{selectedMember.shortBio}</p>
-                    </div>
-                  )}
-
-                  {selectedMember.education && selectedMember.education.length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Education</h3>
-                      <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                        {selectedMember.education.map((edu, idx) => (
-                          <li key={idx}>{edu}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {selectedMember.achievements && selectedMember.achievements.length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Achievements</h3>
-                      <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                        {selectedMember.achievements.map((achievement, idx) => (
-                          <li key={idx}>{achievement}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {selectedMember.publications && selectedMember.publications.length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Publications</h3>
-                      <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                        {selectedMember.publications.map((pub, idx) => (
-                          <li key={idx}>{pub}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+      <DetailDialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)} maxWidth="3xl">
+        {selectedMember && (
+          <>
+            <DialogHeader>
+              <div className="flex items-start gap-6 mb-6">
+                <div className="w-32 h-32 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  <ImageWithFallback
+                    src={selectedMember.imageUrl}
+                    alt={selectedMember.name}
+                    imageClassName="w-full h-full object-cover rounded-lg"
+                    fallback={<User size={60} className="text-muted-foreground" weight="light" />}
+                  />
                 </div>
-              </>
-            )}
-          </ScrollArea>
-        </DialogContent>
-      </Dialog>
+                <div className="flex-1">
+                  <DialogTitle className="text-3xl mb-2">{selectedMember.name}</DialogTitle>
+                  <p className="text-lg text-accent font-medium mb-4">{selectedMember.title}</p>
+                  <div className="flex gap-2">
+                    {selectedMember.linkedin && (
+                      <Button size="sm" variant="outline" asChild>
+                        <a href={selectedMember.linkedin} target="_blank" rel="noopener noreferrer">
+                          <LinkedinLogo className="mr-2" /> LinkedIn
+                        </a>
+                      </Button>
+                    )}
+                    {selectedMember.scholar && (
+                      <Button size="sm" variant="outline" asChild>
+                        <a href={selectedMember.scholar} target="_blank" rel="noopener noreferrer">
+                          <GraduationCap className="mr-2" /> Google Scholar
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </DialogHeader>
+
+            <div className="space-y-6">
+              {selectedMember.shortBio && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Biography</h3>
+                  <p className="text-base leading-relaxed text-muted-foreground">{selectedMember.shortBio}</p>
+                </div>
+              )}
+
+              {selectedMember.education && selectedMember.education.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Education</h3>
+                  <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                    {selectedMember.education.map((edu, idx) => (
+                      <li key={idx}>{edu}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {selectedMember.achievements && selectedMember.achievements.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Achievements</h3>
+                  <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                    {selectedMember.achievements.map((achievement, idx) => (
+                      <li key={idx}>{achievement}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {selectedMember.publications && selectedMember.publications.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Publications</h3>
+                  <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                    {selectedMember.publications.map((pub, idx) => (
+                      <li key={idx}>{pub}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </DetailDialog>
     </div>
   )
 }

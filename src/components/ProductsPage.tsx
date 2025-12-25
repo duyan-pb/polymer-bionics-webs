@@ -2,7 +2,6 @@ import { useState, useMemo, useCallback, type MouseEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Download, CheckCircle, TestTube, Package, Image as ImageIcon } from '@phosphor-icons/react'
@@ -11,6 +10,9 @@ import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import { Card } from '@/components/ui/card'
+import { DetailDialog } from '@/components/DetailDialog'
+import { FilterBadges } from '@/components/FilterBadges'
+import { ImageWithFallback } from '@/components/ImageWithFallback'
 import ElastomerArray from '@/assets/images/Elastomer_array.png'
 
 interface ProductsPageProps {
@@ -82,18 +84,12 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
 
       <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-[1280px] mx-auto">
-          <div className="flex flex-wrap gap-2 mb-8 md:mb-12">
-            {categories.map((cat) => (
-              <Badge
-                key={cat}
-                variant={selectedCategory === cat ? 'default' : 'outline'}
-                className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
-                onClick={() => handleCategorySelect(cat)}
-              >
-                {cat}
-              </Badge>
-            ))}
-          </div>
+          <FilterBadges
+            items={categories}
+            selectedItem={selectedCategory}
+            onSelect={handleCategorySelect}
+            className="flex flex-wrap gap-2 mb-8 md:mb-12"
+          />
 
           {isLoading ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -141,12 +137,10 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
               >
                 {product.imageUrl && (
                   <div className="mb-4 md:mb-6 rounded-lg overflow-hidden">
-                    <img 
-                      src={product.imageUrl} 
+                    <ImageWithFallback
+                      src={product.imageUrl}
                       alt={product.name}
-                      className="w-full h-40 md:h-56 object-cover"
-                      loading="lazy"
-                      decoding="async"
+                      imageClassName="w-full h-40 md:h-56 object-cover"
                     />
                   </div>
                 )}
@@ -213,128 +207,120 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
 
 
 
-      <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh]">
-          <ScrollArea className="max-h-[80vh] pr-4">
-            {selectedProduct && (
-              <>
-                <DialogHeader>
-                  <DialogTitle className="text-3xl mb-2">{selectedProduct.name}</DialogTitle>
-                  <div className="flex items-center gap-3 mb-4">
-                    <p className="text-lg text-muted-foreground italic">{selectedProduct.tagline}</p>
-                    <Badge variant="secondary" className="capitalize">
-                      {selectedProduct.category}
-                    </Badge>
-                  </div>
-                </DialogHeader>
+      <DetailDialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
+        {selectedProduct && (
+          <>
+            <DialogHeader>
+              <DialogTitle className="text-3xl mb-2">{selectedProduct.name}</DialogTitle>
+              <div className="flex items-center gap-3 mb-4">
+                <p className="text-lg text-muted-foreground italic">{selectedProduct.tagline}</p>
+                <Badge variant="secondary" className="capitalize">
+                  {selectedProduct.category}
+                </Badge>
+              </div>
+            </DialogHeader>
 
-                <div className="space-y-6">
-                  {selectedProduct.images && selectedProduct.images.length > 0 && (
-                    <>
-                      <div>
-                        <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                          <ImageIcon size={20} className="text-primary" /> Product Images
-                        </h4>
-                        <div className="grid grid-cols-3 gap-3">
-                          {selectedProduct.images.map((img, idx) => (
-                            <div 
-                              key={idx}
-                              className="cursor-pointer rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-colors"
-                              onClick={() => setSelectedImage(img)}
-                            >
-                              <img 
-                                src={img} 
-                                alt={`${selectedProduct.name} - Image ${idx + 1}`}
-                                className="w-full h-32 object-cover"
-                                loading="lazy"
-                                decoding="async"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <Separator />
-                    </>
-                  )}
-
+            <div className="space-y-6">
+              {selectedProduct.images && selectedProduct.images.length > 0 && (
+                <>
                   <div>
                     <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <TestTube size={20} className="text-primary" /> Technical Description
+                      <ImageIcon size={20} className="text-primary" /> Product Images
                     </h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {selectedProduct.technicalDescription}
-                    </p>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <CheckCircle size={20} className="text-primary" /> Key Features & Benefits
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {selectedProduct.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-start gap-2">
-                          <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
-                          <span className="text-sm text-muted-foreground">{feature}</span>
+                    <div className="grid grid-cols-3 gap-3">
+                      {selectedProduct.images.map((img, idx) => (
+                        <div 
+                          key={idx}
+                          className="cursor-pointer rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-colors"
+                          onClick={() => setSelectedImage(img)}
+                        >
+                          <ImageWithFallback
+                            src={img}
+                            alt={`${selectedProduct.name} - Image ${idx + 1}`}
+                            imageClassName="w-full h-32 object-cover"
+                          />
                         </div>
                       ))}
                     </div>
                   </div>
-
                   <Separator />
+                </>
+              )}
 
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <Package size={20} className="text-primary" /> Intended Applications
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProduct.applications.map((app, idx) => (
-                        <Badge key={idx} variant="outline">{app}</Badge>
-                      ))}
+              <div>
+                <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <TestTube size={20} className="text-primary" /> Technical Description
+                </h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {selectedProduct.technicalDescription}
+                </p>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <CheckCircle size={20} className="text-primary" /> Key Features & Benefits
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {selectedProduct.features.map((feature, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
+                      <span className="text-sm text-muted-foreground">{feature}</span>
                     </div>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3">Regulatory & Safety Status</h4>
-                    <p className="text-sm text-muted-foreground">{selectedProduct.regulatoryStatus}</p>
-                  </div>
-
-                  <div className="space-y-3 pt-4">
-                    <div className="flex gap-3">
-                      {selectedProduct.datasheetId && (
-                        <Button variant="outline" onClick={(e) => navigateToDatasheet(e, selectedProduct.datasheetId)}>
-                          <Download className="mr-2" /> View Datasheet
-                        </Button>
-                      )}
-                      {selectedProduct.caseStudyId && (
-                        <Button variant="outline" onClick={(e) => navigateToCaseStudy(e, selectedProduct.caseStudyId)}>
-                          View Case Study
-                        </Button>
-                      )}
-                    </div>
-                    <div className="flex gap-3">
-                      <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              </>
-            )}
-          </ScrollArea>
-        </DialogContent>
-      </Dialog>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <Package size={20} className="text-primary" /> Intended Applications
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProduct.applications.map((app, idx) => (
+                    <Badge key={idx} variant="outline">{app}</Badge>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h4 className="text-lg font-semibold mb-3">Regulatory & Safety Status</h4>
+                <p className="text-sm text-muted-foreground">{selectedProduct.regulatoryStatus}</p>
+              </div>
+
+              <div className="space-y-3 pt-4">
+                <div className="flex gap-3">
+                  {selectedProduct.datasheetId && (
+                    <Button variant="outline" onClick={(e) => navigateToDatasheet(e, selectedProduct.datasheetId)}>
+                      <Download className="mr-2" /> View Datasheet
+                    </Button>
+                  )}
+                  {selectedProduct.caseStudyId && (
+                    <Button variant="outline" onClick={(e) => navigateToCaseStudy(e, selectedProduct.caseStudyId)}>
+                      View Case Study
+                    </Button>
+                  )}
+                </div>
+                <div className="flex gap-3">
+                  <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </DetailDialog>
 
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
         <DialogContent className="max-w-5xl">
           <div className="flex items-center justify-center">
-            <img 
-              src={selectedImage || ''} 
+            <ImageWithFallback
+              src={selectedImage || ''}
               alt="Product detail"
-              className="max-w-full max-h-[80vh] object-contain"
-              loading="lazy"
-              decoding="async"
+              imageClassName="max-w-full max-h-[80vh] object-contain"
             />
           </div>
         </DialogContent>
