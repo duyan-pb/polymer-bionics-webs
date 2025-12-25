@@ -17,7 +17,9 @@ export function DatasheetsInitializer() {
       setDatasheets([])
       setIsInitialized(true)
     }
-  }, [datasheets, isInitialized, setDatasheets])
+    // Only run when datasheets length changes or on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [datasheets?.length])
 
   return null
 }

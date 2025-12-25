@@ -9,23 +9,22 @@ export function ProductsInitializer() {
   const [isGenerating, setIsGenerating] = useState(false)
 
   useEffect(() => {
-    const initProducts = async () => {
-      if ((products?.length || 0) === 0 && !isInitialized && !isGenerating) {
-        setIsGenerating(true)
-        try {
-          const generatedProducts = await generateBiomaterialsProducts()
-          setProducts(generatedProducts)
-          setIsInitialized(true)
-        } catch (error) {
-          console.error('Failed to generate products:', error)
-        } finally {
-          setIsGenerating(false)
-        }
+    if ((products?.length || 0) === 0 && !isInitialized && !isGenerating) {
+      setIsGenerating(true)
+      try {
+        // generateBiomaterialsProducts is now synchronous for better performance
+        const generatedProducts = generateBiomaterialsProducts()
+        setProducts(generatedProducts)
+        setIsInitialized(true)
+      } catch (error) {
+        console.error('Failed to generate products:', error)
+      } finally {
+        setIsGenerating(false)
       }
     }
-
-    initProducts()
-  }, [products?.length, isInitialized, isGenerating, setProducts])
+    // Only run when products length changes or on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products?.length])
 
   return null
 }

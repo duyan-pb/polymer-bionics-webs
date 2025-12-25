@@ -14,6 +14,9 @@ interface HomePageProps {
   onNavigate: (page: string) => void
 }
 
+// Move partner placeholders outside component to avoid recreation
+const PARTNER_PLACEHOLDERS = ['Partner Placeholder', 'Partner Placeholder', 'Partner Placeholder', 'Partner Placeholder']
+
 export const HomePage = memo(({ onNavigate }: HomePageProps) => {
   const [email, setEmail] = useState('')
   const [isSubscribing, setIsSubscribing] = useState(false)
@@ -170,7 +173,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
             Collaborating with world-class medical centers and research institutions to advance flexible bioelectronics.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 items-center">
-            {["Partner Placeholder", "Partner Placeholder", "Partner Placeholder", "Partner Placeholder"].map((name, index) => (
+            {PARTNER_PLACEHOLDERS.map((name, index) => (
               <Card key={index} className="p-4 md:p-6 text-center border-dashed border-primary/30 hover:border-primary transition-colors">
                 <div className="text-sm md:text-lg font-semibold text-foreground">{name}</div>
                 <p className="text-xs md:text-sm text-muted-foreground">Partner</p>

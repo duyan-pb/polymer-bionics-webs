@@ -14,7 +14,11 @@ const inEarDeviceImages = [
   pxl1, pxl2, pxl5, pxl9, pxl10, pxl11, pxl13, pxl15
 ]
 
-export async function generateBiomaterialsProducts(): Promise<Product[]> {
+/**
+ * Generate product data from materials and applications.
+ * This function is synchronous and fast, returning products immediately.
+ */
+export function generateBiomaterialsProducts(): Product[] {
   const products: Product[] = []
   
   materials.forEach((material, index) => {

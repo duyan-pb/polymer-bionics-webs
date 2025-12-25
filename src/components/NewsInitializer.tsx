@@ -30,7 +30,9 @@ export function NewsInitializer() {
     if (needsNews || needsPublications) {
       setIsInitialized(true)
     }
-  }, [isInitialized, news, publications, setNews, setPublications])
+    // Only run when news or publications length changes or on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [news?.length, publications?.length])
 
   return null
 }

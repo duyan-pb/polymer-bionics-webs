@@ -14,7 +14,9 @@ export function TeamInitializer() {
       setTeam(teamMembers)
       setIsInitialized(true)
     }
-  }, [team, isInitialized, setTeam])
+    // Only run when team length changes or on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [team?.length])
 
   return null
 }

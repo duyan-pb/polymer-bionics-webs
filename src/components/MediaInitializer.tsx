@@ -26,7 +26,9 @@ export function MediaInitializer() {
     if (needsVideos || needsCaseStudies) {
       setIsInitialized(true)
     }
-  }, [caseStudies, isInitialized, setCaseStudies, setVideos, videos])
+    // Only run when videos or caseStudies length changes or on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videos?.length, caseStudies?.length])
 
   return null
 }
