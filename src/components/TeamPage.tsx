@@ -93,8 +93,8 @@ export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
         <div className="max-w-[1280px] mx-auto">
           {isLoading && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-              {Array.from({ length: 6 }).map((_, idx) => (
-                <Card key={idx} className="p-6">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <Card key={index} className="p-6">
                   <div className="flex items-center gap-4 mb-4">
                     <Skeleton className="h-16 w-16 rounded-full" />
                     <div className="flex-1 space-y-2">

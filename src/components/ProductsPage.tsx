@@ -97,8 +97,8 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
 
           {isLoading ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {Array.from({ length: 4 }).map((_, idx) => (
-                <Card key={idx} className="p-8">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <Card key={index} className="p-8">
                   <Skeleton className="h-56 w-full mb-6 rounded-lg" />
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
