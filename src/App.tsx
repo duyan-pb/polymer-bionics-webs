@@ -66,22 +66,22 @@ function App() {
 
     type IdleCallback = (cb: IdleRequestCallback) => number
     type IdleCancelCallback = (id: number) => void
-    const win = window as Window & { requestIdleCallback?: IdleCallback; cancelIdleCallback?: IdleCancelCallback }
-    let timeoutId: number | undefined
-    let idleId: number | undefined
+    const windowWithIdleCallback = window as Window & { requestIdleCallback?: IdleCallback; cancelIdleCallback?: IdleCancelCallback }
+    let preloadTimeoutId: number | undefined
+    let preloadIdleId: number | undefined
 
-    if (win.requestIdleCallback) {
-      idleId = win.requestIdleCallback(preload)
+    if (windowWithIdleCallback.requestIdleCallback) {
+      preloadIdleId = windowWithIdleCallback.requestIdleCallback(preload)
     } else {
-      timeoutId = window.setTimeout(preload, 500)
+      preloadTimeoutId = window.setTimeout(preload, 500)
     }
 
     return () => {
-      if (idleId && win.cancelIdleCallback) {
-        win.cancelIdleCallback(idleId)
+      if (preloadIdleId && windowWithIdleCallback.cancelIdleCallback) {
+        windowWithIdleCallback.cancelIdleCallback(preloadIdleId)
       }
-      if (timeoutId) {
-        window.clearTimeout(timeoutId)
+      if (preloadTimeoutId) {
+        window.clearTimeout(preloadTimeoutId)
       }
     }
   }, [])

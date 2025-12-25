@@ -32,7 +32,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
   }, [searchTerm])
 
   const categories = useMemo(
-    () => ['all', ...Array.from(new Set(datasheets.map(d => d.category)))],
+    () => ['all', ...Array.from(new Set(datasheets.map(datasheet => datasheet.category)))],
     [datasheets]
   )
 
@@ -83,14 +83,14 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
               />
             </div>
             <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
+              {categories.map((category) => (
                 <Badge
-                  key={cat}
-                  variant={selectedCategory === cat ? 'default' : 'outline'}
+                  key={category}
+                  variant={selectedCategory === category ? 'default' : 'outline'}
                   className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => setSelectedCategory(category)}
                 >
-                  {cat}
+                  {category}
                 </Badge>
               ))}
             </div>
@@ -212,8 +212,8 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
                     <div>
                       <h4 className="text-lg font-semibold mb-4">Technical Specifications</h4>
                       <div className="grid grid-cols-1 gap-3">
-                        {Object.entries(selectedDatasheet.technicalSpecs).map(([key, value], idx) => (
-                          <div key={idx} className="flex border-b pb-3">
+                        {Object.entries(selectedDatasheet.technicalSpecs).map(([key, value], index) => (
+                          <div key={index} className="flex border-b pb-3">
                             <div className="w-1/2 font-medium text-sm">{key}</div>
                             <div className="w-1/2 text-sm text-muted-foreground">{value}</div>
                           </div>

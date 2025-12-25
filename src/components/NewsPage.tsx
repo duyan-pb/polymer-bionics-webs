@@ -24,14 +24,14 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
   const [selectedTag, setSelectedTag] = useState<string>('all')
 
   const allTags = useMemo(
-    () => ['all', ...Array.from(new Set(publications.flatMap(p => p.tags)))],
+    () => ['all', ...Array.from(new Set(publications.flatMap(publication => publication.tags)))],
     [publications]
   )
 
   const filteredPublications = useMemo(
     () => selectedTag === 'all'
       ? publications
-      : publications.filter(p => p.tags.includes(selectedTag)),
+      : publications.filter(publication => publication.tags.includes(selectedTag)),
     [publications, selectedTag]
   )
 
@@ -39,12 +39,12 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
     setSelectedTag(tag)
   }, [])
 
-  const handleNewsSelect = useCallback((item: NewsItem) => {
-    setSelectedNews(item)
+  const handleNewsSelect = useCallback((newsItem: NewsItem) => {
+    setSelectedNews(newsItem)
   }, [])
 
-  const handlePublicationSelect = useCallback((pub: Publication) => {
-    setSelectedPublication(pub)
+  const handlePublicationSelect = useCallback((publication: Publication) => {
+    setSelectedPublication(publication)
   }, [])
 
   const publicationTypeColors: Record<Publication['type'], 'default' | 'secondary' | 'outline'> = {
@@ -81,24 +81,24 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
 
             <TabsContent value="news">
               <div className="space-y-4 md:space-y-6">
-                {news.map((item) => (
+                {news.map((newsItem) => (
                   <ClickableCard
-                    key={item.id}
+                    key={newsItem.id}
                     className="p-5 md:p-8 border-l-4 border-l-primary"
-                    onClick={() => handleNewsSelect(item)}
-                    ariaLabel={`Read news: ${item.title}`}
+                    onClick={() => handleNewsSelect(newsItem)}
+                    ariaLabel={`Read news: ${newsItem.title}`}
                   >
                     <div className="flex flex-col md:flex-row md:items-start gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-3">
-                          <Badge variant="secondary" className="capitalize font-semibold">{item.category}</Badge>
+                          <Badge variant="secondary" className="capitalize font-semibold">{newsItem.category}</Badge>
                           <div className="flex items-center text-sm text-muted-foreground">
                             <Calendar size={16} className="mr-1" />
-                            {item.date}
+                            {newsItem.date}
                           </div>
                         </div>
-                        <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground">{item.summary}</p>
+                        <h3 className="text-xl font-semibold mb-2">{newsItem.title}</h3>
+                        <p className="text-sm text-muted-foreground">{newsItem.summary}</p>
                       </div>
                       <Button variant="outline" size="sm" className="md:mt-8">
                         Read More
@@ -124,49 +124,49 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
               </div>
 
               <div className="space-y-4 md:space-y-6">
-                {filteredPublications.map((pub) => (
+                {filteredPublications.map((publication) => (
                   <ClickableCard
-                    key={pub.id}
+                    key={publication.id}
                     className="p-4 md:p-6 border-l-4 border-l-primary"
-                    onClick={() => handlePublicationSelect(pub)}
-                    ariaLabel={`View publication: ${pub.title}`}
+                    onClick={() => handlePublicationSelect(publication)}
+                    ariaLabel={`View publication: ${publication.title}`}
                   >
                     <div className="flex flex-col gap-3">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex flex-wrap items-center gap-2 mb-2">
-                            <Badge variant={publicationTypeColors[pub.type]} className="capitalize">
-                              {pub.type.replace('-', ' ')}
+                            <Badge variant={publicationTypeColors[publication.type]} className="capitalize">
+                              {publication.type.replace('-', ' ')}
                             </Badge>
                             <div className="flex items-center text-sm text-muted-foreground">
                               <Calendar size={16} className="mr-1" />
-                              {pub.date}
+                              {publication.date}
                             </div>
                           </div>
-                          <h3 className="text-xl font-semibold mb-2">{pub.title}</h3>
+                          <h3 className="text-xl font-semibold mb-2">{publication.title}</h3>
                           <p className="text-sm text-muted-foreground mb-2">
-                            {pub.authors.join(', ')}
+                            {publication.authors.join(', ')}
                           </p>
-                          <p className="text-sm text-accent font-medium italic">{pub.journal}</p>
+                          <p className="text-sm text-accent font-medium italic">{publication.journal}</p>
                         </div>
                       </div>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{pub.abstract}</p>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{publication.abstract}</p>
                       <div className="flex flex-wrap gap-2">
-                        {pub.tags.map((tag) => (
+                        {publication.tags.map((tag) => (
                           <Badge key={tag} variant="outline" className="text-xs">
                             {tag}
                           </Badge>
                         ))}
                       </div>
                       <div className="flex gap-2 pt-2">
-                        {pub.doi && (
+                        {publication.doi && (
                           <Button variant="outline" size="sm" asChild>
-                            <a href={pub.doi} target="_blank" rel="noopener noreferrer">
+                            <a href={publication.doi} target="_blank" rel="noopener noreferrer">
                               <ArrowSquareOut className="mr-1" size={16} /> View DOI
                             </a>
                           </Button>
                         )}
-                        {pub.pdfUrl && (
+                        {publication.pdfUrl && (
                           <Button variant="ghost" size="sm">
                             <Download className="mr-1" size={16} /> Download PDF
                           </Button>

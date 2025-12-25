@@ -170,9 +170,9 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
             Collaborating with world-class medical centers and research institutions to advance flexible bioelectronics.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 items-center">
-            {["Partner Placeholder", "Partner Placeholder", "Partner Placeholder", "Partner Placeholder"].map((name, index) => (
+            {["Partner Placeholder", "Partner Placeholder", "Partner Placeholder", "Partner Placeholder"].map((partnerName, index) => (
               <Card key={index} className="p-4 md:p-6 text-center border-dashed border-primary/30 hover:border-primary transition-colors">
-                <div className="text-sm md:text-lg font-semibold text-foreground">{name}</div>
+                <div className="text-sm md:text-lg font-semibold text-foreground">{partnerName}</div>
                 <p className="text-xs md:text-sm text-muted-foreground">Partner</p>
               </Card>
             ))}

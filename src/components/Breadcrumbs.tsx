@@ -14,7 +14,7 @@ export function Breadcrumbs({ trail, onNavigate }: BreadcrumbsProps) {
   return (
     <Breadcrumb className="mb-6">
       <BreadcrumbList>
-        {trail.map((item, idx) => (
+        {trail.map((item, index) => (
           <BreadcrumbItemUI key={item.label}>
             {item.page ? (
               <BreadcrumbLink onClick={() => onNavigate(item.page ?? '')} className="cursor-pointer text-primary hover:underline">
@@ -23,7 +23,7 @@ export function Breadcrumbs({ trail, onNavigate }: BreadcrumbsProps) {
             ) : (
               <span className="text-muted-foreground">{item.label}</span>
             )}
-            {idx < trail.length - 1 && <BreadcrumbSeparator />}
+            {index < trail.length - 1 && <BreadcrumbSeparator />}
           </BreadcrumbItemUI>
         ))}
       </BreadcrumbList>

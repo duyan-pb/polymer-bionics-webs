@@ -26,19 +26,19 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
   const isLoading = !products || products.length === 0
 
   const categories = useMemo(
-    () => ['all', ...Array.from(new Set(products.map(p => p.category)))],
+    () => ['all', ...Array.from(new Set(products.map(product => product.category)))],
     [products]
   )
 
   const filteredProducts = useMemo(
     () => selectedCategory === 'all'
       ? products
-      : products.filter(p => p.category === selectedCategory),
+      : products.filter(product => product.category === selectedCategory),
     [products, selectedCategory]
   )
 
-  const handleCategorySelect = useCallback((cat: string) => {
-    setSelectedCategory(cat)
+  const handleCategorySelect = useCallback((category: string) => {
+    setSelectedCategory(category)
   }, [])
 
   const handleProductSelect = useCallback((product: Product) => {
@@ -83,14 +83,14 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
       <section className="py-12 md:py-20 px-4 md:px-8">
         <div className="max-w-[1280px] mx-auto">
           <div className="flex flex-wrap gap-2 mb-8 md:mb-12">
-            {categories.map((cat) => (
+            {categories.map((category) => (
               <Badge
-                key={cat}
-                variant={selectedCategory === cat ? 'default' : 'outline'}
+                key={category}
+                variant={selectedCategory === category ? 'default' : 'outline'}
                 className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
-                onClick={() => handleCategorySelect(cat)}
+                onClick={() => handleCategorySelect(category)}
               >
-                {cat}
+                {category}
               </Badge>
             ))}
           </div>

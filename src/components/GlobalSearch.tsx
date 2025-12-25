@@ -40,34 +40,34 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
       type: 'nav' as SearchType,
     }))
 
-    const productItems = (products || []).map((p) => ({
-      id: `product-${p.id}`,
-      label: p.name,
-      subtitle: p.category,
+    const productItems = (products || []).map((product) => ({
+      id: `product-${product.id}`,
+      label: product.name,
+      subtitle: product.category,
       page: 'products',
       type: 'product' as SearchType,
     }))
 
-    const teamItems = (team || []).map((m) => ({
-      id: `team-${m.id}`,
-      label: m.name,
-      subtitle: m.role,
+    const teamItems = (team || []).map((member) => ({
+      id: `team-${member.id}`,
+      label: member.name,
+      subtitle: member.role,
       page: 'team',
       type: 'team' as SearchType,
     }))
 
-    const datasheetItems = (datasheets || []).map((d) => ({
-      id: `datasheet-${d.id}`,
-      label: d.title,
-      subtitle: d.category,
+    const datasheetItems = (datasheets || []).map((datasheet) => ({
+      id: `datasheet-${datasheet.id}`,
+      label: datasheet.title,
+      subtitle: datasheet.category,
       page: 'datasheets',
       type: 'datasheet' as SearchType,
     }))
 
-    const newsItems = (news || []).map((n) => ({
-      id: `news-${n.id}`,
-      label: n.title,
-      subtitle: n.category,
+    const newsItems = (news || []).map((newsItem) => ({
+      id: `news-${newsItem.id}`,
+      label: newsItem.title,
+      subtitle: newsItem.category,
       page: 'news',
       type: 'news' as SearchType,
     }))
@@ -155,37 +155,37 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
             </CommandGroup>
 
             <CommandGroup heading="Products">
-              {(products || []).slice(0, 8).map((p) => (
-                <CommandItem key={p.id} value={p.name} onSelect={() => handleSelect('products')}>
+              {(products || []).slice(0, 8).map((product) => (
+                <CommandItem key={product.id} value={product.name} onSelect={() => handleSelect('products')}>
                   <Package className="mr-2" size={16} weight="duotone" />
-                  {p.name} – {p.category}
+                  {product.name} – {product.category}
                 </CommandItem>
               ))}
             </CommandGroup>
 
             <CommandGroup heading="Team">
-              {(team || []).slice(0, 8).map((m) => (
-                <CommandItem key={m.id} value={m.name} onSelect={() => handleSelect('team')}>
+              {(team || []).slice(0, 8).map((member) => (
+                <CommandItem key={member.id} value={member.name} onSelect={() => handleSelect('team')}>
                   <Users className="mr-2" size={16} weight="duotone" />
-                  {m.name} – {m.role}
+                  {member.name} – {member.role}
                 </CommandItem>
               ))}
             </CommandGroup>
 
             <CommandGroup heading="Datasheets">
-              {(datasheets || []).slice(0, 8).map((d) => (
-                <CommandItem key={d.id} value={d.title} onSelect={() => handleSelect('datasheets')}>
+              {(datasheets || []).slice(0, 8).map((datasheet) => (
+                <CommandItem key={datasheet.id} value={datasheet.title} onSelect={() => handleSelect('datasheets')}>
                   <FileText className="mr-2" size={16} weight="duotone" />
-                  {d.title}
+                  {datasheet.title}
                 </CommandItem>
               ))}
             </CommandGroup>
 
             <CommandGroup heading="News & Publications">
-              {(news || []).slice(0, 8).map((n) => (
-                <CommandItem key={n.id} value={n.title} onSelect={() => handleSelect('news')}>
+              {(news || []).slice(0, 8).map((newsItem) => (
+                <CommandItem key={newsItem.id} value={newsItem.title} onSelect={() => handleSelect('news')}>
                   <Newspaper className="mr-2" size={16} weight="duotone" />
-                  {n.title}
+                  {newsItem.title}
                 </CommandItem>
               ))}
             </CommandGroup>
