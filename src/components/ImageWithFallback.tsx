@@ -19,6 +19,20 @@ export function ImageWithFallback({
     return null
   }
 
+  // If we have a source and no wrapper class, render image directly
+  if (src && !className) {
+    return (
+      <img 
+        src={src} 
+        alt={alt} 
+        className={imageClassName}
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
+
+  // Otherwise use wrapper div for fallback or when className is provided
   return (
     <div className={className}>
       {src ? (
