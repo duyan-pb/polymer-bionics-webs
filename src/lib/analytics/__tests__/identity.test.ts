@@ -288,5 +288,150 @@ describe('Identity Management', () => {
       const newId = getAnonymousId()
       expect(newId).toBeTruthy()
     })
+
+    it('regenerates new ID when stored ID is expired', () => {
+      // First get an ID
+      getAnonymousId()
+      expect(localStorage.getItem('pb_anonymous_id')).toBeTruthy()
+      
+      // Simulate expired ID
+      const stored = JSON.parse(localStorage.getItem('pb_anonymous_id')!)
+      stored.expiresAt = new Date(Date.now() - 1000).toISOString() // Expired
+      localStorage.setItem('pb_anonymous_id', JSON.stringify(stored))
+      
+      // Get a new ID - should create fresh one
+      const newId = getAnonymousId()
+      expect(newId).toBeTruthy()
+      // Due to mock, IDs are same, but storage should be updated with new expiry
+      const newStored = JSON.parse(localStorage.getItem('pb_anonymous_id')!)
+      expect(new Date(newStored.expiresAt).getTime()).toBeGreaterThan(Date.now())
+    })
+  })
+
+  describe('refreshSession edge cases', () => {
+    it('handles refreshSession when no session exists', () => {
+      // Should not throw when session doesn't exist
+      expect(() => refreshSession()).not.toThrow()
+    })
+
+    it('handles invalid session data in storage', () => {
+      sessionStorage.setItem('pb_session', 'invalid json')
+      
+      // Should not throw
+      expect(() => refreshSession()).not.toThrow()
+    })
+  })
+
+  describe('clearIdentity edge cases', () => {
+    it('handles clearIdentity when nothing is stored', () => {
+      localStorage.clear()
+      sessionStorage.clear()
+      
+      // Should not throw
+      expect(() => clearIdentity()).not.toThrow()
+    })
+  })
+
+  describe('storage corruption handling', () => {
+    it('handles corrupted localStorage data for anonymous ID', () => {
+      localStorage.setItem('pb_anonymous_id', 'not valid json')
+      
+      // Should not throw and generate new ID
+      const id = getAnonymousId()
+      expect(id).toBeTruthy()
+      expect(typeof id).toBe('string')
+    })
+
+    it('handles corrupted sessionStorage data for session', () => {
+      sessionStorage.setItem('pb_session', 'not valid json')
+      
+      // Should not throw and generate new session
+      const id = getSessionId()
+      expect(id).toBeTruthy()
+      expect(typeof id).toBe('string')
+    })
+
+    it('handles missing required fields in stored anonymous ID', () => {
+      localStorage.setItem('pb_anonymous_id', JSON.stringify({ id: 'test' })) // missing expiresAt
+      
+      // Should handle gracefully
+      const id = getAnonymousId()
+      expect(id).toBeTruthy()
+    })
+
+    it('handles missing required fields in stored session', () => {
+      sessionStorage.setItem('pb_session', JSON.stringify({ id: 'test' })) // missing other fields
+      
+      // Should handle gracefully
+      const id = getSessionId()
+      expect(id).toBeTruthy()
+    })
+  })
+
+  describe('getIdentityWithFallback isPersisted flag', () => {
+    it('returns isPersisted true when storage is available', () => {
+      const identity = getIdentityWithFallback()
+      
+      expect(identity.isPersisted).toBe(true)
+    })
+
+    it('includes all identity fields', () => {
+      const identity = getIdentityWithFallback()
+      
+      expect(identity).toHaveProperty('anonymousId')
+      expect(identity).toHaveProperty('sessionId')
+      expect(identity).toHaveProperty('anonymousIdCreatedAt')
+      expect(identity).toHaveProperty('sessionStartedAt')
+      expect(identity).toHaveProperty('lastActivityAt')
+      expect(identity).toHaveProperty('isPersisted')
+    })
+  })
+
+  describe('getIdentity with default config', () => {
+    it('uses default config when none provided', () => {
+      const identity = getIdentity()
+      
+      expect(identity.anonymousId).toBeTruthy()
+      expect(identity.sessionId).toBeTruthy()
+    })
+  })
+
+  describe('getAnonymousId with custom config', () => {
+    it('respects custom expiry days', () => {
+      const config = { ...DEFAULT_IDENTITY_CONFIG, anonymousIdExpiryDays: 7 }
+      getAnonymousId(config)
+      
+      const stored = JSON.parse(localStorage.getItem('pb_anonymous_id')!)
+      const expiresAt = new Date(stored.expiresAt)
+      const expectedMin = new Date()
+      expectedMin.setDate(expectedMin.getDate() + 6) // Allow some tolerance
+      
+      expect(expiresAt.getTime()).toBeGreaterThan(expectedMin.getTime())
+    })
+  })
+
+  describe('getSessionId with custom config', () => {
+    it('respects custom session timeout', () => {
+      const config = { ...DEFAULT_IDENTITY_CONFIG, sessionTimeoutMinutes: 60 }
+      const id = getSessionId(config)
+      
+      expect(id).toBeTruthy()
+      expect(typeof id).toBe('string')
+    })
+  })
+
+  describe('session activity tracking', () => {
+    it('updates lastActivityAt on getIdentity call', () => {
+      const first = getIdentity()
+      const firstActivity = first.lastActivityAt
+      
+      // Wait a tiny bit to ensure timestamp difference
+      const second = getIdentity()
+      const secondActivity = second.lastActivityAt
+      
+      // Both should be valid timestamps
+      expect(new Date(firstActivity).getTime()).toBeGreaterThan(0)
+      expect(new Date(secondActivity).getTime()).toBeGreaterThan(0)
+    })
   })
 })

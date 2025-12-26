@@ -6,7 +6,9 @@
     "src/components/ui/**",
     "src/vite-end.d.ts",
     "src/types/**",
-    "packages/**"
+    "packages/**",
+    "reports/**",
+    "coverage/**"
   ],
   "ignoreDependencies": [
     "@github/spark",
@@ -30,14 +32,24 @@
   "ignoreExportsUsedInFile": true,
   "ignoreWorkspaces": ["packages/*"],
   "rules": {
-    "files": "warn",
-    "dependencies": "warn",
+    "files": "error",
+    "dependencies": "error",
     "devDependencies": "warn",
-    "unlisted": "warn",
+    "unlisted": "error",
     "binaries": "warn",
     "unresolved": "error",
     "exports": "warn",
     "types": "warn",
-    "duplicates": "error"
-  }
+    "duplicates": "error",
+    "enumMembers": "warn",
+    "classMembers": "warn"
+  },
+  "include": [
+    "dependencies",
+    "devDependencies",
+    "exports",
+    "files",
+    "types",
+    "duplicates"
+  ]
 }

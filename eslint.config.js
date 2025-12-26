@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', 'packages/**', '*.config.*', 'src/components/ui/**', 'src/types/**'] },
+  { ignores: ['dist', 'node_modules', 'packages/**', '*.config.*', 'src/components/ui/**', 'src/types/**', 'reports/**', 'coverage/**'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -24,7 +24,9 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       
-      // TypeScript strict rules (type safety)
+      // ==========================================================
+      // TYPE SAFETY (target: 0 any, ≥95% type coverage)
+      // ==========================================================
       '@typescript-eslint/no-unused-vars': ['error', { 
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
@@ -39,23 +41,36 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
       
-      // Complexity rules (maintainability)
-      'complexity': ['warn', { max: 18 }],
-      'max-depth': ['warn', { max: 4 }],
+      // ==========================================================
+      // COMPLEXITY (cognitive < 15-20, cyclomatic < 10-18)
+      // ==========================================================
+      // Cyclomatic complexity: flag > 10 (warn), > 18 (error)
+      'complexity': ['error', { max: 18 }],
+      // Max nesting depth: 4 levels
+      'max-depth': ['error', { max: 4 }],
+      // Max nested callbacks: 3 levels (reduces cognitive load)
       'max-nested-callbacks': ['warn', { max: 3 }],
+      // Max function length: 150 lines (300 is too permissive)
       'max-lines-per-function': ['warn', { 
-        max: 300, 
+        max: 150, 
         skipBlankLines: true, 
-        skipComments: true 
+        skipComments: true,
+        IIFEs: true,
       }],
+      // Max file length: 400 lines
       'max-lines': ['warn', { 
-        max: 500, 
+        max: 400, 
         skipBlankLines: true, 
         skipComments: true 
       }],
-      'max-params': ['warn', { max: 5 }],
+      // Max function parameters: 4 (prefer object params for more)
+      'max-params': ['warn', { max: 4 }],
+      // Max statements per function
+      'max-statements': ['warn', { max: 25 }],
       
-      // Code quality rules
+      // ==========================================================
+      // MAINTAINABILITY (reduce duplication, improve readability)
+      // ==========================================================
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'error',
       'no-var': 'error',
@@ -68,10 +83,30 @@ export default tseslint.config(
       'prefer-arrow-callback': 'warn',
       'prefer-template': 'warn',
       'object-shorthand': 'warn',
+      // Prevent magic numbers
+      'no-magic-numbers': ['warn', { 
+        ignore: [-1, 0, 1, 2, 100, 1000],
+        ignoreArrayIndexes: true,
+        ignoreDefaultValues: true,
+      }],
       
-      // React best practices
+      // ==========================================================
+      // REACT BEST PRACTICES
+      // ==========================================================
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+    },
+  },
+  // Relaxed rules for test files
+  {
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', '**/test/**', '**/__tests__/**'],
+    rules: {
+      'max-lines-per-function': 'off',
+      'max-lines': 'off',
+      'max-statements': 'off',
+      'max-nested-callbacks': ['warn', { max: 5 }],
+      'no-magic-numbers': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
 )

@@ -12,10 +12,14 @@ import {
   CTAClickEventSchema,
   FormSubmitEventSchema,
   SearchEventSchema,
+  VideoPlayEventSchema,
+  DownloadEventSchema,
+  LeadSubmittedEventSchema,
   validateEvent,
   validateSpecificEvent,
   validateAndWrap,
   hasRequiredProperties,
+  getRequiredProperties,
   EVENT_REGISTRY,
 } from '../schemas'
 
@@ -511,6 +515,341 @@ describe('Schema Validation', () => {
       expect(EVENT_REGISTRY).toHaveProperty('file_downloaded')
       expect(EVENT_REGISTRY).toHaveProperty('search_performed')
       expect(EVENT_REGISTRY).toHaveProperty('lead_submitted')
+    })
+  })
+
+  describe('validateSpecificEvent edge cases', () => {
+    it('returns error for unknown event type', () => {
+      const event = {
+        type: 'track' as const,
+        event_name: 'unknown_event',
+        properties: createStandardProps(),
+      }
+      // Force cast to bypass TypeScript type checking
+      const result = validateSpecificEvent('unknown_event' as keyof typeof EVENT_REGISTRY, event)
+      
+      expect(result.valid).toBe(false)
+      expect(result.errors).toContain('Unknown event type: unknown_event')
+    })
+  })
+
+  describe('VideoPlayEventSchema', () => {
+    it('validates video play event', () => {
+      const event = {
+        type: 'track' as const,
+        event_name: 'video_played',
+        properties: {
+          ...createStandardProps(),
+          video_id: 'video-123',
+          video_title: 'Product Demo',
+        },
+      }
+      const result = VideoPlayEventSchema.safeParse(event)
+      
+      expect(result.success).toBe(true)
+    })
+
+    it('allows optional video_duration and video_position', () => {
+      const event = {
+        type: 'track' as const,
+        event_name: 'video_played',
+        properties: {
+          ...createStandardProps(),
+          video_id: 'video-123',
+          video_title: 'Product Demo',
+          video_duration: 120,
+          video_position: 30,
+        },
+      }
+      const result = VideoPlayEventSchema.safeParse(event)
+      
+      expect(result.success).toBe(true)
+    })
+
+    it('requires video_id', () => {
+      const event = {
+        type: 'track' as const,
+        event_name: 'video_played',
+        properties: {
+          ...createStandardProps(),
+          video_title: 'Product Demo',
+        },
+      }
+      const result = VideoPlayEventSchema.safeParse(event)
+      
+      expect(result.success).toBe(false)
+    })
+  })
+
+  describe('DownloadEventSchema', () => {
+    it('validates download event', () => {
+      const event = {
+        type: 'track' as const,
+        event_name: 'file_downloaded',
+        properties: {
+          ...createStandardProps(),
+          file_id: 'file-123',
+          file_name: 'datasheet.pdf',
+          file_type: 'pdf',
+        },
+      }
+      const result = DownloadEventSchema.safeParse(event)
+      
+      expect(result.success).toBe(true)
+    })
+
+    it('allows optional file_category', () => {
+      const event = {
+        type: 'track' as const,
+        event_name: 'file_downloaded',
+        properties: {
+          ...createStandardProps(),
+          file_id: 'file-123',
+          file_name: 'datasheet.pdf',
+          file_type: 'pdf',
+          file_category: 'datasheets',
+        },
+      }
+      const result = DownloadEventSchema.safeParse(event)
+      
+      expect(result.success).toBe(true)
+    })
+
+    it('requires file_type', () => {
+      const event = {
+        type: 'track' as const,
+        event_name: 'file_downloaded',
+        properties: {
+          ...createStandardProps(),
+          file_id: 'file-123',
+          file_name: 'datasheet.pdf',
+        },
+      }
+      const result = DownloadEventSchema.safeParse(event)
+      
+      expect(result.success).toBe(false)
+    })
+  })
+
+  describe('LeadSubmittedEventSchema', () => {
+    it('validates lead submitted event', () => {
+      const event = {
+        type: 'conversion' as const,
+        event_name: 'lead_submitted',
+        event_id: '12345678-1234-4234-8234-123456789012',
+        properties: {
+          ...createStandardProps(),
+          conversion_type: 'lead',
+          lead_type: 'contact' as const,
+        },
+      }
+      const result = LeadSubmittedEventSchema.safeParse(event)
+      
+      expect(result.success).toBe(true)
+    })
+
+    it('validates lead_type enum', () => {
+      const validTypes = ['contact', 'inquiry', 'demo_request', 'partnership']
+      
+      for (const leadType of validTypes) {
+        const event = {
+          type: 'conversion' as const,
+          event_name: 'lead_submitted',
+          event_id: '12345678-1234-4234-8234-123456789012',
+          properties: {
+            ...createStandardProps(),
+            conversion_type: 'lead',
+            lead_type: leadType as 'contact' | 'inquiry' | 'demo_request' | 'partnership',
+          },
+        }
+        const result = LeadSubmittedEventSchema.safeParse(event)
+        expect(result.success).toBe(true)
+      }
+    })
+
+    it('rejects invalid lead_type', () => {
+      const event = {
+        type: 'conversion' as const,
+        event_name: 'lead_submitted',
+        event_id: '12345678-1234-4234-8234-123456789012',
+        properties: {
+          ...createStandardProps(),
+          conversion_type: 'lead',
+          lead_type: 'invalid',
+        },
+      }
+      const result = LeadSubmittedEventSchema.safeParse(event)
+      
+      expect(result.success).toBe(false)
+    })
+
+    it('allows optional lead_source', () => {
+      const event = {
+        type: 'conversion' as const,
+        event_name: 'lead_submitted',
+        event_id: '12345678-1234-4234-8234-123456789012',
+        properties: {
+          ...createStandardProps(),
+          conversion_type: 'lead',
+          lead_type: 'contact' as const,
+          lead_source: 'google',
+        },
+      }
+      const result = LeadSubmittedEventSchema.safeParse(event)
+      
+      expect(result.success).toBe(true)
+    })
+  })
+
+  describe('getRequiredProperties', () => {
+    it('returns base required properties for any event', () => {
+      const required = getRequiredProperties('page_view')
+      
+      expect(required).toContain('anonymous_id')
+      expect(required).toContain('session_id')
+      expect(required).toContain('page_url')
+      expect(required).toContain('page_path')
+      expect(required).toContain('device_class')
+      expect(required).toContain('locale')
+      expect(required).toContain('timezone')
+      expect(required).toContain('env')
+      expect(required).toContain('app_version')
+      expect(required).toContain('consent_state_version')
+      expect(required).toContain('timestamp')
+      expect(required).toContain('client_timestamp')
+    })
+
+    it('returns page_view specific properties', () => {
+      const required = getRequiredProperties('page_view')
+      expect(required).toContain('page_name')
+    })
+
+    it('returns cta_clicked specific properties', () => {
+      const required = getRequiredProperties('cta_clicked')
+      expect(required).toContain('button_id')
+      expect(required).toContain('button_text')
+    })
+
+    it('returns form_submitted specific properties', () => {
+      const required = getRequiredProperties('form_submitted')
+      expect(required).toContain('form_id')
+      expect(required).toContain('form_name')
+      expect(required).toContain('form_type')
+    })
+
+    it('returns video_played specific properties', () => {
+      const required = getRequiredProperties('video_played')
+      expect(required).toContain('video_id')
+      expect(required).toContain('video_title')
+    })
+
+    it('returns file_downloaded specific properties', () => {
+      const required = getRequiredProperties('file_downloaded')
+      expect(required).toContain('file_id')
+      expect(required).toContain('file_name')
+      expect(required).toContain('file_type')
+    })
+
+    it('returns search_performed specific properties', () => {
+      const required = getRequiredProperties('search_performed')
+      expect(required).toContain('search_query')
+      expect(required).toContain('results_count')
+    })
+
+    it('returns lead_submitted specific properties', () => {
+      const required = getRequiredProperties('lead_submitted')
+      expect(required).toContain('conversion_type')
+      expect(required).toContain('lead_type')
+    })
+  })
+
+  describe('StandardEventPropertiesSchema edge cases', () => {
+    it('accepts all valid device_class values', () => {
+      const validClasses = ['mobile', 'tablet', 'desktop']
+      
+      for (const deviceClass of validClasses) {
+        const props = createStandardProps({ device_class: deviceClass })
+        const result = StandardEventPropertiesSchema.safeParse(props)
+        expect(result.success).toBe(true)
+      }
+    })
+
+    it('accepts all valid env values', () => {
+      const validEnvs = ['development', 'staging', 'production']
+      
+      for (const env of validEnvs) {
+        const props = createStandardProps({ env })
+        const result = StandardEventPropertiesSchema.safeParse(props)
+        expect(result.success).toBe(true)
+      }
+    })
+
+    it('allows all UTM parameters to be set', () => {
+      const props = createStandardProps({
+        utm_source: 'google',
+        utm_medium: 'cpc',
+        utm_campaign: 'spring_sale',
+        utm_term: 'polymer',
+        utm_content: 'banner',
+      })
+      const result = StandardEventPropertiesSchema.safeParse(props)
+      
+      expect(result.success).toBe(true)
+    })
+
+    it('rejects empty session_id', () => {
+      const props = createStandardProps({ session_id: '' })
+      const result = StandardEventPropertiesSchema.safeParse(props)
+      
+      expect(result.success).toBe(false)
+    })
+
+    it('rejects empty page_path', () => {
+      const props = createStandardProps({ page_path: '' })
+      const result = StandardEventPropertiesSchema.safeParse(props)
+      
+      expect(result.success).toBe(false)
+    })
+
+    it('rejects zero viewport dimensions', () => {
+      const props = createStandardProps({ viewport_width: 0 })
+      const result = StandardEventPropertiesSchema.safeParse(props)
+      
+      expect(result.success).toBe(false)
+    })
+
+    it('rejects invalid timestamp format', () => {
+      const props = createStandardProps({ timestamp: 'not-a-date' })
+      const result = StandardEventPropertiesSchema.safeParse(props)
+      
+      expect(result.success).toBe(false)
+    })
+
+    it('rejects non-integer client_timestamp', () => {
+      const props = createStandardProps({ client_timestamp: 1234.56 })
+      const result = StandardEventPropertiesSchema.safeParse(props)
+      
+      expect(result.success).toBe(false)
+    })
+  })
+
+  describe('hasRequiredProperties edge cases', () => {
+    it('handles properties object with all required fields', () => {
+      const props = {
+        ...createStandardProps(),
+        page_name: 'home',
+      }
+      const result = hasRequiredProperties('page_view', props)
+      
+      expect(result.valid).toBe(true)
+      expect(result.missing).toHaveLength(0)
+    })
+
+    it('returns all missing base properties for empty object', () => {
+      const result = hasRequiredProperties('page_view', {})
+      
+      expect(result.valid).toBe(false)
+      expect(result.missing.length).toBeGreaterThan(10)
     })
   })
 })

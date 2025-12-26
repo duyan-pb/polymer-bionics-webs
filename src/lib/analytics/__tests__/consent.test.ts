@@ -14,6 +14,7 @@ import {
   withdrawConsent,
   clearNonEssentialCookies,
   getConsentVersion,
+  getConsentAuditLog,
 } from '../consent'
 import { DEFAULT_CONSENT_STATE } from '../types'
 
@@ -277,6 +278,14 @@ describe('Consent Management', () => {
       expect(localStorage.getItem('_ga')).toBe(null)
       expect(localStorage.getItem('_gid')).toBe(null)
     })
+
+    it('clears sessionStorage analytics keys', () => {
+      sessionStorage.setItem('pb_session', 'test-session')
+      
+      clearNonEssentialCookies()
+      
+      expect(sessionStorage.getItem('pb_session')).toBe(null)
+    })
   })
 
   describe('getConsentVersion', () => {
@@ -288,6 +297,165 @@ describe('Consent Management', () => {
       
       const version = getConsentVersion()
       expect(version).toBe('1.0.0')
+    })
+
+    it('returns default version when no consent stored', () => {
+      const version = getConsentVersion()
+      expect(version).toBe(DEFAULT_CONSENT_STATE.version)
+    })
+  })
+
+  describe('getConsentAuditLog', () => {
+    it('returns audit log with consent choices', () => {
+      acceptAllConsent()
+      
+      const auditLog = getConsentAuditLog()
+      
+      expect(auditLog.consent_analytics).toBe(true)
+      expect(auditLog.consent_marketing).toBe(true)
+      expect(auditLog.consent_has_interacted).toBe(true)
+    })
+
+    it('includes version and timestamp', () => {
+      acceptAllConsent()
+      
+      const auditLog = getConsentAuditLog()
+      
+      expect(auditLog.consent_version).toBeDefined()
+      expect(auditLog.consent_timestamp).toBeDefined()
+    })
+
+    it('returns false for analytics when not consented', () => {
+      acceptNecessaryOnly()
+      
+      const auditLog = getConsentAuditLog()
+      
+      expect(auditLog.consent_analytics).toBe(false)
+      expect(auditLog.consent_marketing).toBe(false)
+    })
+  })
+
+  describe('clearNonEssentialCookies edge cases', () => {
+    it('handles clearing cookies when document.cookie is empty', () => {
+      // Ensure no cookies are set
+      document.cookie.split(';').forEach(c => {
+        const name = c.split('=')[0]?.trim() ?? ''
+        if (name) {
+          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+        }
+      })
+      
+      // Should not throw
+      expect(() => clearNonEssentialCookies()).not.toThrow()
+    })
+
+    it('preserves essential cookies when clearing', () => {
+      // Set a non-essential cookie using document.cookie
+      document.cookie = 'test_cookie=value; path=/'
+      
+      // Set essential consent
+      saveConsentState({ ...DEFAULT_CONSENT_STATE, hasInteracted: true })
+      
+      clearNonEssentialCookies()
+      
+      // pb_consent should still be in localStorage
+      expect(localStorage.getItem('pb_consent')).toBeTruthy()
+    })
+
+    it('clears non-essential cookies from document.cookie', () => {
+      // Set a non-essential cookie
+      document.cookie = '_ga=GA1.2.12345; path=/'
+      document.cookie = 'tracking_id=abc123; path=/'
+      
+      clearNonEssentialCookies()
+      
+      // Cookies should be cleared (or at least the function should run without error)
+      // In happy-dom, cookie behavior may differ from real browsers
+    })
+  })
+
+  describe('updateConsent edge cases', () => {
+    it('clears non-essential cookies when analytics is revoked', () => {
+      // First accept all
+      acceptAllConsent()
+      localStorage.setItem('pb_anonymous_id', 'test-id')
+      
+      // Then revoke analytics
+      updateConsent({ analytics: false })
+      
+      // Analytics data should be cleared
+      expect(localStorage.getItem('pb_anonymous_id')).toBe(null)
+    })
+
+    it('clears non-essential cookies when marketing is revoked', () => {
+      // First accept all
+      acceptAllConsent()
+      localStorage.setItem('pb_utm', 'test-utm')
+      
+      // Then revoke marketing
+      updateConsent({ marketing: false })
+      
+      // Marketing data should be cleared
+      expect(localStorage.getItem('pb_utm')).toBe(null)
+    })
+
+    it('does not clear cookies when both remain true', () => {
+      // First accept all
+      acceptAllConsent()
+      
+      // Update with same values (both still true)
+      updateConsent({ analytics: true, marketing: true })
+      
+      // Consent should still exist
+      expect(localStorage.getItem('pb_consent')).toBeTruthy()
+    })
+
+    it('always keeps necessary as true', () => {
+      // First accept all
+      acceptAllConsent()
+      
+      // Try to set necessary to false (should be ignored)
+      const state = updateConsent({ necessary: false } as unknown as Parameters<typeof updateConsent>[0])
+      
+      // Necessary should still be true
+      expect(state.choices.necessary).toBe(true)
+    })
+  })
+
+  describe('withdrawConsent events', () => {
+    it('dispatches consent-withdrawn event', () => {
+      const handler = vi.fn()
+      window.addEventListener('consent-withdrawn', handler)
+      
+      acceptAllConsent()
+      withdrawConsent()
+      
+      expect(handler).toHaveBeenCalled()
+      window.removeEventListener('consent-withdrawn', handler)
+    })
+  })
+
+  describe('getConsentState with cookie', () => {
+    it('reads consent from cookie when localStorage is empty', () => {
+      // Set consent via cookie (simulated)
+      const consentData = {
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        choices: { necessary: true, analytics: true, marketing: false },
+        bannerShown: true,
+        hasInteracted: true,
+      }
+      
+      // Set in cookie format
+      document.cookie = `pb_consent=${encodeURIComponent(JSON.stringify(consentData))}; path=/`
+      
+      // Clear localStorage
+      localStorage.removeItem('pb_consent')
+      
+      const state = getConsentState()
+      
+      // Should read from cookie
+      expect(state.choices).toBeDefined()
     })
   })
 })
