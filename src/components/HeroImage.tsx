@@ -1,16 +1,51 @@
+/**
+ * Hero Image Component
+ * 
+ * Animated background image for hero sections.
+ * Features fade-in animation and optimized loading.
+ * 
+ * @module components/HeroImage
+ */
+
 import { useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
+/**
+ * Props for the HeroImage component.
+ */
 interface HeroImageProps {
+  /** Image source URL */
   src: string
+  /** Alt text for accessibility */
   alt?: string
+  /** Image opacity (0-1, default: 0.15) */
   opacity?: number
+  /** Additional CSS classes */
   className?: string
+  /** Whether to load eagerly (for above-the-fold images) */
   priority?: boolean
 }
 
-export const HeroImage = memo(({ 
+/**
+ * Animated hero background image.
+ * 
+ * Features:
+ * - Fade-in animation on load
+ * - Scale animation for visual interest
+ * - Lazy loading by default
+ * - Configurable opacity overlay
+ * 
+ * @example
+ * ```tsx
+ * <HeroImage 
+ *   src={backgroundImage} 
+ *   alt="Hero background" 
+ *   opacity={0.3} 
+ * />
+ * ```
+ */
+export const HeroImage = memo(({
   src, 
   alt = '', 
   opacity = 0.15, 

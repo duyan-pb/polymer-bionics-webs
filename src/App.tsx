@@ -1,3 +1,16 @@
+/**
+ * Main Application Component
+ * 
+ * Root component that handles:
+ * - Page routing and navigation
+ * - KV store data subscriptions
+ * - Theme management
+ * - Analytics and consent integration
+ * - Data initializers for KV store
+ * 
+ * @module App
+ */
+
 import { useState, useCallback, useEffect, lazy, Suspense, memo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useKV } from '@github/spark/hooks'
@@ -19,7 +32,14 @@ import { PAGE_TRANSITION } from '@/lib/constants'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
 import { placeholderPublications, placeholderNews } from '@/lib/publications-data'
 
-// Lazy load non-critical page components for better initial load performance
+// =============================================================================
+// LAZY LOADED PAGES
+// =============================================================================
+
+/**
+ * Lazy load non-critical page components for better initial load performance.
+ * Only HomePage is loaded eagerly since it's the landing page.
+ */
 const TeamPage = lazy(() => import('@/components/TeamPage').then(m => ({ default: m.TeamPage })))
 const MaterialsPage = lazy(() => import('@/components/MaterialsPage').then(m => ({ default: m.MaterialsPage })))
 const ApplicationsPage = lazy(() => import('@/components/ApplicationsPage').then(m => ({ default: m.ApplicationsPage })))
@@ -30,7 +50,13 @@ const NewsPage = lazy(() => import('@/components/NewsPage').then(m => ({ default
 const ContactPage = lazy(() => import('@/components/ContactPage').then(m => ({ default: m.ContactPage })))
 const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })))
 
-// Loading fallback component
+// =============================================================================
+// COMPONENTS
+// =============================================================================
+
+/**
+ * Loading fallback component displayed while lazy-loaded pages are fetched.
+ */
 const PageLoader = memo(() => (
   <div className="min-h-[50vh] flex items-center justify-center">
     <div className="animate-pulse flex flex-col items-center gap-4">
@@ -40,6 +66,16 @@ const PageLoader = memo(() => (
   </div>
 ))
 
+/**
+ * Main application component.
+ * 
+ * Handles:
+ * - State-based routing between pages
+ * - KV store subscriptions for all data entities
+ * - Page transition animations
+ * - Global search integration
+ * - Analytics and consent initialization
+ */
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const [isSearchOpen, setIsSearchOpen] = useState(false)

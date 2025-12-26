@@ -1,3 +1,12 @@
+/**
+ * Global Search Component
+ * 
+ * Command palette for quick navigation and content search.
+ * Activated via Cmd+K (Mac) or Ctrl+K (Windows/Linux).
+ * 
+ * @module components/GlobalSearch
+ */
+
 import { useEffect, useMemo, useState } from 'react'
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Users, Package, FileText, Newspaper, ArrowRight } from '@phosphor-icons/react'
@@ -5,16 +14,48 @@ import Fuse from 'fuse.js'
 import { NAV_ITEMS } from '@/lib/constants'
 import type { TeamMember, Product, Datasheet, NewsItem } from '@/lib/types'
 
+/**
+ * Props for the GlobalSearch component.
+ */
 interface GlobalSearchProps {
+  /** Whether the search dialog is open */
   open: boolean
+  /** Handler for open state changes */
   onOpenChange: (open: boolean) => void
+  /** Navigation handler for selected items */
   onNavigate: (page: string) => void
+  /** Products to include in search */
   products: Product[]
+  /** Team members to include in search */
   team: TeamMember[]
+  /** Datasheets to include in search */
   datasheets: Datasheet[]
+  /** News items to include in search */
   news: NewsItem[]
 }
 
+/**
+ * Global search command palette.
+ * 
+ * Features:
+ * - Keyboard shortcut activation (Cmd/Ctrl+K)
+ * - Fuzzy search across all content types
+ * - Grouped results by type (navigation, products, team, etc.)
+ * - Keyboard navigation with arrow keys
+ * 
+ * @example
+ * ```tsx
+ * <GlobalSearch
+ *   open={searchOpen}
+ *   onOpenChange={setSearchOpen}
+ *   onNavigate={handleNavigate}
+ *   products={products}
+ *   team={team}
+ *   datasheets={datasheets}
+ *   news={news}
+ * />
+ * ```
+ */
 export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, datasheets, news }: GlobalSearchProps) {
   const [searchQuery, setSearchQuery] = useState('')
 

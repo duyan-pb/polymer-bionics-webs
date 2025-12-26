@@ -1,7 +1,31 @@
+/**
+ * Back to Top Button Component
+ * 
+ * Floating button that appears after scrolling down.
+ * Smoothly scrolls the page back to the top when clicked.
+ * 
+ * @module components/BackToTopButton
+ */
+
 import { useEffect, useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowUp } from '@phosphor-icons/react'
 
+/**
+ * Floating back-to-top button.
+ * 
+ * Features:
+ * - Appears after scrolling 400px
+ * - Uses requestAnimationFrame for smooth visibility updates
+ * - Smooth scroll animation to top
+ * - Responsive sizing for mobile/desktop
+ * 
+ * @example
+ * ```tsx
+ * // Add to App.tsx or layout component
+ * <BackToTopButton />
+ * ```
+ */
 export function BackToTopButton() {
   const [visible, setVisible] = useState(false)
   const ticking = useRef(false)

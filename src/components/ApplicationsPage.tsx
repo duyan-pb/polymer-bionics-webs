@@ -1,3 +1,12 @@
+/**
+ * Applications Page Component
+ * 
+ * Displays clinical applications enabled by Polymer Bionics materials.
+ * Features application cards with modal detail view.
+ * 
+ * @module components/ApplicationsPage
+ */
+
 import { useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -14,10 +23,27 @@ import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import NeuralCells from '@/assets/images/Neural_Cells.png'
 
+/**
+ * Props for the ApplicationsPage component.
+ */
 interface ApplicationsPageProps {
+  /** Navigation handler */
   onNavigate: (page: string) => void
 }
 
+/**
+ * Applications page component.
+ * 
+ * Features:
+ * - Application cards with gradient backgrounds
+ * - Modal with benefits, use cases, and related materials
+ * - Contact CTA for application inquiries
+ * 
+ * @example
+ * ```tsx
+ * <ApplicationsPage onNavigate={handleNavigate} />
+ * ```
+ */
 export function ApplicationsPage({ onNavigate }: ApplicationsPageProps) {
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
 
