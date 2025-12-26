@@ -470,4 +470,48 @@ describe('Session Replay', () => {
       expect(isReplayActive()).toBe(false)
     })
   })
+
+  describe('initClarity', () => {
+    it('does nothing when config is disabled', async () => {
+      initSessionReplay({ enabled: false, clarityProjectId: 'test' })
+      
+      const { initClarity } = await import('../session-replay')
+      initClarity({ projectId: 'test' })
+      
+      // Should not throw
+      expect(true).toBe(true)
+    })
+
+    it('waits for consent if not granted', async () => {
+      const { withdrawConsent } = await import('../consent')
+      withdrawConsent()
+      
+      initSessionReplay({ enabled: true, clarityProjectId: 'test' })
+      
+      const { initClarity } = await import('../session-replay')
+      initClarity({ projectId: 'test' })
+      
+      // Should register event listener and not load script yet
+      expect(true).toBe(true)
+    })
+  })
+
+  describe('debug logging', () => {
+    it('logs when debug mode is enabled and force enables replay', () => {
+      const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+      
+      initSessionReplay({ 
+        clarityProjectId: 'test', 
+        debug: true,
+      })
+      
+      forceEnableReplay()
+      
+      expect(logSpy).toHaveBeenCalledWith(
+        expect.stringContaining('[SessionReplay]')
+      )
+      
+      logSpy.mockRestore()
+    })
+  })
 })

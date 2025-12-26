@@ -262,5 +262,70 @@ describe('Application Insights', () => {
         connectionString: 'InstrumentationKey=test-key;IngestionEndpoint=https://test.in.applicationinsights.azure.com/',
       })).resolves.not.toThrow()
     })
+
+    it('warns if already initialized', async () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      
+      // First init
+      await initAppInsights({
+        connectionString: 'InstrumentationKey=test-key;',
+      })
+      
+      // Second init attempt
+      await initAppInsights({
+        connectionString: 'InstrumentationKey=another-key;',
+      })
+      
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Already initialized'))
+    })
+  })
+
+  describe('consent-withdrawn event', () => {
+    it('handles consent withdrawal by flushing and stopping', () => {
+      // Dispatch consent-withdrawn event
+      window.dispatchEvent(new Event('consent-withdrawn'))
+      
+      // isAppInsightsInitialized should reflect the reset
+      // Note: This may or may not change state based on whether it was initialized
+      expect(isAppInsightsInitialized()).toBe(false)
+    })
+  })
+
+  describe('when AppInsights is initialized', () => {
+    const mockAppInsights = {
+      trackPageView: vi.fn(),
+      trackEvent: vi.fn(),
+      trackException: vi.fn(),
+      trackMetric: vi.fn(),
+      trackTrace: vi.fn(),
+      flush: vi.fn(),
+      context: {
+        application: { ver: '1.0.0' },
+        session: { id: 'sess-123' },
+        user: { id: 'user-123' },
+        operation: { id: 'op-123', name: 'default' },
+      },
+      config: {},
+    }
+
+    beforeEach(() => {
+      window.appInsights = mockAppInsights as unknown as typeof window.appInsights
+    })
+
+    afterEach(() => {
+      delete (window as Record<string, unknown>).appInsights
+    })
+
+    it('getOperationId returns operation ID when available', () => {
+      // The mock returns 'mock-operation-id' when getTelemetryContext is called
+      const result = getOperationId()
+      expect(result).toBe('mock-operation-id')
+    })
+
+    it('getCorrelationHeaders returns headers when operation ID exists', () => {
+      const headers = getCorrelationHeaders()
+      expect(headers['Request-Id']).toBe('mock-operation-id')
+      expect(headers['traceparent']).toMatch(/^00-mock-operation-id-[a-f0-9]{16}-01$/)
+    })
   })
 })
