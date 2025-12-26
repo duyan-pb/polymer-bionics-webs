@@ -7,6 +7,17 @@ interface ImportMetaEnv {
   readonly VITE_BUILD_TIME?: string
   readonly VITE_BUILD_SHA?: string
   readonly VITE_BUILD_REF?: string
+  
+  // Analytics configuration (Epic 2, 3, 4)
+  readonly VITE_APPINSIGHTS_CONNECTION_STRING?: string
+  readonly VITE_GA4_MEASUREMENT_ID?: string
+  readonly VITE_EVENTS_ENDPOINT?: string
+  
+  // Feature flags (Epic 11)
+  readonly VITE_APP_CONFIG_ENDPOINT?: string
+  
+  // Mode
+  readonly MODE: 'development' | 'staging' | 'production'
 }
 
 interface ImportMeta {

@@ -29,6 +29,8 @@ export default defineConfig({
     sourcemap: false,
     // Optimize chunk splitting
     rollupOptions: {
+      // Mark optional dependencies as external - they are loaded dynamically at runtime
+      external: ['@microsoft/applicationinsights-web', 'web-vitals'],
       output: {
         manualChunks: {
           // Vendor chunks for better caching

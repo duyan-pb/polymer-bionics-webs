@@ -3,6 +3,7 @@ import { EnvelopeSimple, WhatsappLogo, Copy } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
+import { ManageCookiesLink, ConsentStatusIndicator } from '@/components/ConsentBanner'
 
 export const Footer = memo(() => {
   const handleWhatsAppClick = useCallback(async () => {
@@ -62,6 +63,12 @@ export const Footer = memo(() => {
             <p className="text-sm text-muted-foreground font-medium">
               Copyright © {new Date().getFullYear()} Polymer Bionics Limited. All rights reserved
             </p>
+            {/* Privacy & Cookie Links */}
+            <div className="flex items-center justify-center gap-4 pt-2">
+              <ManageCookiesLink />
+              <span className="text-muted-foreground">|</span>
+              <ConsentStatusIndicator />
+            </div>
           </div>
         </div>
       </div>

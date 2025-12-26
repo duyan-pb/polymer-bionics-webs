@@ -11,7 +11,10 @@ import { MediaInitializer } from '@/components/MediaInitializer'
 import { DatasheetsInitializer } from '@/components/DatasheetsInitializer'
 import { FloatingContactButton } from '@/components/FloatingContactButton'
 import { BackToTopButton } from '@/components/BackToTopButton'
+import { AnalyticsProvider } from '@/components/AnalyticsProvider'
+import { ConsentBanner } from '@/components/ConsentBanner'
 import { useTheme } from '@/hooks/use-theme'
+import { usePageTracking } from '@/lib/analytics/hooks'
 import { PAGE_TRANSITION } from '@/lib/constants'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
 import { placeholderPublications, placeholderNews } from '@/lib/publications-data'
@@ -41,6 +44,9 @@ function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const { isDark, toggleTheme } = useTheme()
+  
+  // Track page views when currentPage changes
+  usePageTracking(currentPage)
   
   const [team] = useKV<TeamMember[]>('team', [])
   const [products] = useKV<Product[]>('products', [])
@@ -116,49 +122,52 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <ProductsInitializer />
-      <TeamInitializer />
-      <NewsInitializer />
-      <MediaInitializer />
-      <DatasheetsInitializer />
-      <Navigation 
-        currentPage={currentPage} 
-        onNavigate={handleNavigate} 
-        onOpenSearch={() => setIsSearchOpen(true)} 
-        isDark={isDark} 
-        onToggleTheme={toggleTheme} 
-      />
-      <div className="flex-1">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentPage}
-            initial={PAGE_TRANSITION.initial}
-            animate={PAGE_TRANSITION.animate}
-            exit={PAGE_TRANSITION.exit}
-            transition={PAGE_TRANSITION.transition}
-          >
-            {renderPage()}
-          </motion.div>
-        </AnimatePresence>
+    <AnalyticsProvider>
+      <div className="min-h-screen bg-background flex flex-col">
+        <ProductsInitializer />
+        <TeamInitializer />
+        <NewsInitializer />
+        <MediaInitializer />
+        <DatasheetsInitializer />
+        <Navigation 
+          currentPage={currentPage} 
+          onNavigate={handleNavigate} 
+          onOpenSearch={() => setIsSearchOpen(true)} 
+          isDark={isDark} 
+          onToggleTheme={toggleTheme} 
+        />
+        <div className="flex-1">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentPage}
+              initial={PAGE_TRANSITION.initial}
+              animate={PAGE_TRANSITION.animate}
+              exit={PAGE_TRANSITION.exit}
+              transition={PAGE_TRANSITION.transition}
+            >
+              {renderPage()}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        <Footer />
+        <FloatingContactButton />
+        {isSearchOpen && (
+          <Suspense fallback={null}>
+            <GlobalSearch
+              open={isSearchOpen}
+              onOpenChange={setIsSearchOpen}
+              onNavigate={handleNavigate}
+              products={products || []}
+              team={team || []}
+              datasheets={datasheets || []}
+              news={news || []}
+            />
+          </Suspense>
+        )}
+        <BackToTopButton />
+        <ConsentBanner />
       </div>
-      <Footer />
-      <FloatingContactButton />
-      {isSearchOpen && (
-        <Suspense fallback={null}>
-          <GlobalSearch
-            open={isSearchOpen}
-            onOpenChange={setIsSearchOpen}
-            onNavigate={handleNavigate}
-            products={products || []}
-            team={team || []}
-            datasheets={datasheets || []}
-            news={news || []}
-          />
-        </Suspense>
-      )}
-      <BackToTopButton />
-    </div>
+    </AnalyticsProvider>
   )
 }
 
