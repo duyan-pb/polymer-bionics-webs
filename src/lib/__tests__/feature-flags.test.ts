@@ -490,6 +490,56 @@ describe('Feature Flags', () => {
       const { stopFeatureFlags } = await import('../feature-flags')
       expect(() => stopFeatureFlags()).not.toThrow()
     })
+
+    it('clears interval timer', async () => {
+      await initFeatureFlags({ 
+        defaults: {},
+        refreshInterval: 60,
+      })
+      
+      const { stopFeatureFlags } = await import('../feature-flags')
+      stopFeatureFlags()
+      
+      // Should be safe to call twice
+      expect(() => stopFeatureFlags()).not.toThrow()
+    })
+  })
+
+  describe('debug mode', () => {
+    it('logs experiment assignment in debug mode', async () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+      
+      await initFeatureFlags({ 
+        defaults: {},
+        debug: true,
+      })
+      
+      assignExperimentVariant('debug_exp', ['a', 'b'])
+      
+      const hasDebugLog = consoleSpy.mock.calls.some(call =>
+        call.some(arg => typeof arg === 'string' && arg.includes('[FeatureFlags] Experiment assigned'))
+      )
+      expect(hasDebugLog).toBe(true)
+      consoleSpy.mockRestore()
+    })
+
+    it('logs experiment exposure in debug mode', async () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+      
+      await initFeatureFlags({ 
+        defaults: {},
+        debug: true,
+      })
+      
+      assignExperimentVariant('debug_exposure_exp', ['a', 'b'])
+      trackExperimentExposed('debug_exposure_exp')
+      
+      const hasDebugLog = consoleSpy.mock.calls.some(call =>
+        call.some(arg => typeof arg === 'string' && arg.includes('[FeatureFlags] Experiment exposed'))
+      )
+      expect(hasDebugLog).toBe(true)
+      consoleSpy.mockRestore()
+    })
   })
 
   describe('getFeatureFlagsConfig', () => {
