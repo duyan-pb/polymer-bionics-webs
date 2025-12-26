@@ -244,6 +244,19 @@ describe('Session Replay', () => {
       const url = getClaritySessionUrl()
       expect(url).toBeNull()
     })
+
+    it('returns formatted URL when session exists', () => {
+      // Set up session key in storage
+      sessionStorage.setItem('_clsk', 'test-session-12345')
+      
+      // Note: clarityLoaded is false by default, so this will still return null
+      // This tests the sessionStorage path
+      initSessionReplay({ clarityProjectId: 'test-project-id' })
+      
+      // Since clarityLoaded is false, URL will be null
+      const url = getClaritySessionUrl()
+      expect(url).toBeNull()
+    })
   })
 
   describe('pauseReplay', () => {

@@ -543,5 +543,95 @@ describe('Cost Control', () => {
       const afterMetrics = getUsageMetrics()
       expect(afterMetrics.eventsThisSession).toBeGreaterThanOrEqual(initialMetrics.eventsThisSession + 1)
     })
+
+    it('calls tracking function when event is allowed', () => {
+      const mockTrackFn = vi.fn(() => true)
+      
+      localStorage.clear()
+      acceptAllConsent()
+      resetSessionMetrics()
+      initCostControls({ 
+        enabled: true,
+        eventsPerSession: 1000,
+        eventsPerMinute: 100,
+      })
+      
+      const wrappedFn = withCostControl(mockTrackFn as (...args: unknown[]) => boolean, 'test_event')
+      const result = wrappedFn('arg1', 'arg2')
+      
+      expect(mockTrackFn).toHaveBeenCalledWith('arg1', 'arg2')
+      expect(result).toBe(true)
+    })
+
+    it('returns false when event is blocked', () => {
+      const mockTrackFn = vi.fn(() => true)
+      
+      localStorage.clear()
+      acceptAllConsent()
+      resetSessionMetrics()
+      initCostControls({ 
+        enabled: true,
+        eventsPerSession: 1,
+        eventsPerMinute: 100,
+      })
+      
+      // First event
+      recordEventSent()
+      
+      const wrappedFn = withCostControl(mockTrackFn as (...args: unknown[]) => boolean, 'test_event')
+      const result = wrappedFn()
+      
+      // Should return false because session limit exceeded
+      expect(result).toBe(false)
+      expect(mockTrackFn).not.toHaveBeenCalled()
+    })
+
+    it('does not record event when tracking function returns false', () => {
+      const mockTrackFn = vi.fn(() => false)
+      
+      localStorage.clear()
+      acceptAllConsent()
+      resetSessionMetrics()
+      initCostControls({ 
+        enabled: true,
+        eventsPerSession: 1000,
+        eventsPerMinute: 100,
+      })
+      
+      const initialMetrics = getUsageMetrics()
+      
+      const wrappedFn = withCostControl(mockTrackFn as (...args: unknown[]) => boolean, 'test_event')
+      const result = wrappedFn()
+      
+      expect(result).toBe(false)
+      
+      const afterMetrics = getUsageMetrics()
+      // Event count should not increase since tracking returned false
+      expect(afterMetrics.eventsThisSession).toBe(initialMetrics.eventsThisSession)
+    })
+
+    it('logs when event dropped in debug mode', () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+      const mockTrackFn = vi.fn(() => true)
+      
+      localStorage.clear()
+      acceptAllConsent()
+      resetSessionMetrics()
+      initCostControls({ 
+        debug: true,
+        enabled: true,
+        eventsPerSession: 1,
+        eventsPerMinute: 100,
+      })
+      
+      // First event
+      recordEventSent()
+      
+      const wrappedFn = withCostControl(mockTrackFn as (...args: unknown[]) => boolean, 'test_event')
+      wrappedFn()
+      
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[CostControl] Event dropped'))
+      consoleSpy.mockRestore()
+    })
   })
 })

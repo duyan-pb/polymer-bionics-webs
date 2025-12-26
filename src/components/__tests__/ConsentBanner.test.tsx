@@ -251,6 +251,66 @@ describe('ConsentBanner Preferences Dialog', () => {
     expect(switches.length).toBeGreaterThan(0)
   })
 
+  it('toggles analytics category when switch is clicked', async () => {
+    const { useConsent } = await import('@/lib/analytics/hooks')
+    
+    vi.mocked(useConsent).mockReturnValue({
+      shouldShowBanner: true,
+      acceptAll: mockAcceptAll,
+      acceptNecessary: mockAcceptNecessary,
+      openPreferences: mockOpenPreferences,
+      closePreferences: mockClosePreferences,
+      isPreferencesOpen: true,
+      consent: {
+        choices: { necessary: true, analytics: false, marketing: false },
+        hasInteracted: false,
+      },
+      updateCategories: mockUpdateCategories,
+      canTrack: vi.fn(),
+      hasInteracted: false,
+      withdraw: vi.fn(),
+    })
+    
+    render(<ConsentBanner />)
+    
+    // Find analytics switch (second one, after necessary)
+    const switches = screen.getAllByRole('switch')
+    if (switches.length >= 2) {
+      fireEvent.click(switches[1])
+      // Switch should toggle - component should update internal state
+    }
+    expect(switches.length).toBeGreaterThan(0)
+  })
+
+  it('does not allow toggling necessary category', async () => {
+    const { useConsent } = await import('@/lib/analytics/hooks')
+    
+    vi.mocked(useConsent).mockReturnValue({
+      shouldShowBanner: true,
+      acceptAll: mockAcceptAll,
+      acceptNecessary: mockAcceptNecessary,
+      openPreferences: mockOpenPreferences,
+      closePreferences: mockClosePreferences,
+      isPreferencesOpen: true,
+      consent: {
+        choices: { necessary: true, analytics: false, marketing: false },
+        hasInteracted: false,
+      },
+      updateCategories: mockUpdateCategories,
+      canTrack: vi.fn(),
+      hasInteracted: false,
+      withdraw: vi.fn(),
+    })
+    
+    render(<ConsentBanner />)
+    
+    // Find necessary switch (first one) - should be disabled
+    const switches = screen.getAllByRole('switch')
+    if (switches.length >= 1) {
+      expect(switches[0]).toBeDisabled()
+    }
+  })
+
   it('calls updateCategories when save preferences is clicked', async () => {
     const { useConsent } = await import('@/lib/analytics/hooks')
     

@@ -314,4 +314,101 @@ describe('Analytics Hooks', () => {
       expect(result.current.hasConverted).toBe(true)
     })
   })
+
+  describe('useConsent storage events', () => {
+    it('updates consent when storage event fires with valid data', async () => {
+      const { result } = renderHook(() => useConsent())
+      
+      const newConsentState = {
+        choices: { necessary: true, analytics: true, marketing: false },
+        hasInteracted: true,
+        timestamp: Date.now(),
+      }
+      
+      act(() => {
+        const event = new StorageEvent('storage', {
+          key: 'pb_consent',
+          newValue: JSON.stringify(newConsentState),
+        })
+        window.dispatchEvent(event)
+      })
+      
+      await waitFor(() => {
+        expect(result.current.consent.choices.analytics).toBe(true)
+      })
+    })
+
+    it('ignores storage events for other keys', () => {
+      const { result } = renderHook(() => useConsent())
+      
+      const initialAnalyticsChoice = result.current.consent.choices.analytics
+      
+      act(() => {
+        const event = new StorageEvent('storage', {
+          key: 'other_key',
+          newValue: JSON.stringify({ different: 'data' }),
+        })
+        window.dispatchEvent(event)
+      })
+      
+      // Should remain unchanged
+      expect(result.current.consent.choices.analytics).toBe(initialAnalyticsChoice)
+    })
+
+    it('ignores storage events with null value', () => {
+      const { result } = renderHook(() => useConsent())
+      
+      const initialState = result.current.consent
+      
+      act(() => {
+        const event = new StorageEvent('storage', {
+          key: 'pb_consent',
+          newValue: null,
+        })
+        window.dispatchEvent(event)
+      })
+      
+      expect(result.current.consent).toEqual(initialState)
+    })
+
+    it('handles invalid JSON in storage event gracefully', () => {
+      const { result } = renderHook(() => useConsent())
+      
+      const initialState = result.current.consent
+      
+      act(() => {
+        const event = new StorageEvent('storage', {
+          key: 'pb_consent',
+          newValue: 'invalid json{{{',
+        })
+        window.dispatchEvent(event)
+      })
+      
+      // Should remain unchanged due to parse error
+      expect(result.current.consent).toEqual(initialState)
+    })
+  })
+
+  describe('usePageTracking error handling', () => {
+    it('handles page tracking errors gracefully', async () => {
+      const { analytics } = await import('../tracker')
+      vi.mocked(analytics.page).mockImplementation(() => {
+        throw new Error('Tracking error')
+      })
+      
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      
+      // Should not throw
+      expect(() => {
+        renderHook(() => usePageTracking('error-page'))
+      }).not.toThrow()
+      
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to track page view'),
+        expect.any(Error)
+      )
+      
+      warnSpy.mockRestore()
+    })
+  })
 })

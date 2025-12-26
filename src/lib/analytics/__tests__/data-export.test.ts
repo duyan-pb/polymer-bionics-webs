@@ -526,4 +526,88 @@ describe('Data Export (ADLS)', () => {
       // Should trigger flush
     })
   })
+
+  describe('retryFailedBatches', () => {
+    it('retries batches stored in localStorage', async () => {
+      const failedBatch = {
+        batch_id: 'failed-batch-1',
+        events: [{
+          event_id: 'test-1',
+          event_type: 'track',
+          event_name: 'test',
+          properties: {},
+          timestamp: new Date().toISOString(),
+          date_partition: '2024-01-15',
+          hour_partition: '10',
+          identifiers: {},
+          context: {},
+        }],
+        created_at: new Date().toISOString(),
+        source: 'polymer-bionics-web',
+        schema_version: '1.0.0',
+      }
+      
+      localStorage.setItem('pb_failed_batches', JSON.stringify([failedBatch]))
+      
+      initDataExport({
+        enabled: true,
+        endpoint: '/api/events/export',
+        useSendBeacon: false,
+      })
+      
+      await retryFailedBatches()
+      
+      // Batches should be cleared from localStorage
+      await new Promise(resolve => setTimeout(resolve, 100))
+      expect(localStorage.getItem('pb_failed_batches')).toBeNull()
+    })
+
+    it('does nothing when no failed batches', async () => {
+      localStorage.removeItem('pb_failed_batches')
+      
+      await retryFailedBatches()
+      
+      // Should not throw
+      expect(true).toBe(true)
+    })
+
+    it('handles malformed localStorage data', async () => {
+      localStorage.setItem('pb_failed_batches', 'not valid json')
+      
+      // Should not throw
+      await expect(retryFailedBatches()).resolves.not.toThrow()
+    })
+  })
+
+  describe('debug mode logging', () => {
+    it('logs buffered events in debug mode', () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+      
+      initDataExport({
+        enabled: true,
+        endpoint: '/api/events/export',
+        debug: true,
+      })
+      
+      bufferEvent({
+        event_id: 'test-1',
+        event_type: 'track',
+        event_name: 'test',
+        properties: {},
+        timestamp: new Date().toISOString(),
+        date_partition: '2024-01-15',
+        hour_partition: '10',
+        identifiers: {},
+        context: {},
+      })
+      
+      // Check that console.log was called with a message containing 'Event buffered'
+      const calls = consoleSpy.mock.calls
+      const hasBufferedLog = calls.some(call => 
+        call.some(arg => typeof arg === 'string' && arg.includes('[DataExport] Event buffered'))
+      )
+      expect(hasBufferedLog).toBe(true)
+      consoleSpy.mockRestore()
+    })
+  })
 })

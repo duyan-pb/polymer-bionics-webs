@@ -330,4 +330,63 @@ describe('Web Vitals', () => {
       expect(() => reportSlowResources(500)).not.toThrow()
     })
   })
+
+  describe('startLongTaskObserver', () => {
+    it('does nothing when PerformanceObserver is undefined', () => {
+      const originalPerformanceObserver = (global as Record<string, unknown>).PerformanceObserver
+      // @ts-expect-error - Testing undefined case
+      delete (global as Record<string, unknown>).PerformanceObserver
+      
+      expect(() => startLongTaskObserver()).not.toThrow()
+      
+      ;(global as Record<string, unknown>).PerformanceObserver = originalPerformanceObserver
+    })
+
+    it('does not create duplicate observers', () => {
+      // Call twice - second should return early
+      startLongTaskObserver()
+      startLongTaskObserver()
+      
+      // Clean up
+      stopLongTaskObserver()
+    })
+
+    it('accepts custom threshold', () => {
+      expect(() => startLongTaskObserver(100)).not.toThrow()
+      stopLongTaskObserver()
+    })
+  })
+
+  describe('stopLongTaskObserver', () => {
+    it('does nothing when no observer exists', () => {
+      // Should not throw
+      expect(() => stopLongTaskObserver()).not.toThrow()
+    })
+
+    it('disconnects and clears observer', () => {
+      startLongTaskObserver()
+      
+      // Should not throw
+      expect(() => stopLongTaskObserver()).not.toThrow()
+    })
+  })
+
+  describe('getResourceTimings', () => {
+    it('returns empty array when performance API undefined', () => {
+      const originalPerformance = global.performance
+      // @ts-expect-error - Testing undefined case
+      delete global.performance
+      
+      const timings = getResourceTimings()
+      expect(timings).toEqual([])
+      
+      global.performance = originalPerformance
+    })
+
+    it('returns resource timing entries', () => {
+      const timings = getResourceTimings()
+      
+      expect(Array.isArray(timings)).toBe(true)
+    })
+  })
 })

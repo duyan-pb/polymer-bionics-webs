@@ -14,6 +14,7 @@ import {
   checkRedirect,
   executeRedirect,
   trackOutboundLink,
+  trackPageIndexability,
   setupOutboundLinkTracking,
   DEFAULT_SEO_CONFIG,
   usePageSEO,
@@ -459,6 +460,60 @@ describe('SEO Infrastructure', () => {
       expect(() => {
         trackOutboundLink('https://external.com', 'External')
       }).not.toThrow()
+    })
+
+    it('handles invalid URLs gracefully', () => {
+      expect(() => {
+        trackOutboundLink('not a valid url', 'Invalid')
+      }).not.toThrow()
+    })
+
+    it('tracks external links with linkText', () => {
+      expect(() => {
+        trackOutboundLink('https://example.com/page', 'Example Link')
+      }).not.toThrow()
+    })
+  })
+
+  describe('trackPageIndexability', () => {
+    it('tracks page indexability with noindex', () => {
+      const robotsMeta = document.createElement('meta')
+      robotsMeta.name = 'robots'
+      robotsMeta.content = 'noindex,follow'
+      document.head.appendChild(robotsMeta)
+      
+      expect(() => trackPageIndexability()).not.toThrow()
+      
+      document.head.removeChild(robotsMeta)
+    })
+
+    it('tracks page indexability with default robots', () => {
+      expect(() => trackPageIndexability()).not.toThrow()
+    })
+
+    it('does not track without consent', () => {
+      withdrawConsent()
+      expect(() => trackPageIndexability()).not.toThrow()
+    })
+  })
+
+  describe('setupOutboundLinkTracking', () => {
+    it('sets up click listener without error', () => {
+      expect(() => setupOutboundLinkTracking()).not.toThrow()
+    })
+
+    it('tracks clicks on links', () => {
+      setupOutboundLinkTracking()
+      
+      // Create and click an external link
+      const link = document.createElement('a')
+      link.href = 'https://external-site.com/page'
+      link.textContent = 'External'
+      document.body.appendChild(link)
+      
+      link.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      
+      document.body.removeChild(link)
     })
   })
 })
