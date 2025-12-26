@@ -360,4 +360,79 @@ describe('Analytics Tracker', () => {
       expect(event.properties.device_class).toBe('desktop')
     })
   })
+
+  describe('destination error handling', () => {
+    beforeEach(() => {
+      initAnalytics()
+      acceptAllConsent()
+    })
+
+    it('continues to other destinations if one throws', () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      const failingDest = vi.fn().mockImplementation(() => {
+        throw new Error('Destination failure')
+      })
+      const workingDest = vi.fn()
+      
+      registerDestination(failingDest)
+      registerDestination(workingDest)
+      
+      track('test_event')
+      
+      expect(failingDest).toHaveBeenCalled()
+      expect(workingDest).toHaveBeenCalled()
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[Analytics] Destination error'), expect.any(Error))
+      consoleSpy.mockRestore()
+    })
+  })
+
+  describe('conversion server-side', () => {
+    beforeEach(() => {
+      initAnalytics()
+      acceptAllConsent()
+    })
+
+    it('sends conversion events to server', async () => {
+      const fetchSpy = vi.mocked(global.fetch)
+      fetchSpy.mockResolvedValueOnce({ ok: true } as Response)
+      
+      conversion('purchase', { value: 100 })
+      
+      // Wait for async server call
+      await new Promise(resolve => setTimeout(resolve, 50))
+      
+      expect(fetchSpy).toHaveBeenCalled()
+    })
+
+    it('handles server errors gracefully', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      vi.mocked(global.fetch).mockRejectedValueOnce(new Error('Network error'))
+      
+      conversion('purchase', { value: 100 })
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      
+      // Should not throw, but log error
+      expect(consoleSpy).toHaveBeenCalled()
+      consoleSpy.mockRestore()
+    })
+  })
+
+  describe('handleConsentWithdrawn', () => {
+    beforeEach(() => {
+      initAnalytics()
+    })
+
+    it('clears fired events when consent withdrawn', () => {
+      acceptAllConsent()
+      trackOnce('test_event')
+      expect(hasFired('test_event')).toBe(true)
+      
+      // Simulate consent withdrawal
+      window.dispatchEvent(new Event('consent-withdrawn'))
+      
+      // firedEvents should be cleared
+      expect(hasFired('test_event')).toBe(false)
+    })
+  })
 })

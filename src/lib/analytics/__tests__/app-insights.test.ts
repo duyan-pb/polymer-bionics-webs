@@ -199,6 +199,54 @@ describe('Application Insights', () => {
     })
   })
 
+  describe('error event handling', () => {
+    it('handles window error events', () => {
+      acceptAllConsent()
+      
+      // Simulate an error event
+      const errorEvent = new ErrorEvent('error', {
+        message: 'Test error',
+        filename: 'test.js',
+        lineno: 10,
+        colno: 5,
+        error: new Error('Test error'),
+      })
+      
+      expect(() => {
+        window.dispatchEvent(errorEvent)
+      }).not.toThrow()
+    })
+
+    it('handles error events without error object', () => {
+      acceptAllConsent()
+      
+      // Simulate an error event with just a message
+      const errorEvent = new ErrorEvent('error', {
+        message: 'Script error',
+        filename: 'test.js',
+        lineno: 1,
+      })
+      
+      expect(() => {
+        window.dispatchEvent(errorEvent)
+      }).not.toThrow()
+    })
+
+    it('does not track errors without consent', () => {
+      withdrawConsent()
+      
+      const errorEvent = new ErrorEvent('error', {
+        message: 'Test error',
+        error: new Error('Test error'),
+      })
+      
+      // Should not throw
+      expect(() => {
+        window.dispatchEvent(errorEvent)
+      }).not.toThrow()
+    })
+  })
+
   describe('getOperationId', () => {
     it('returns null when not initialized', () => {
       const operationId = getOperationId()

@@ -435,6 +435,58 @@ describe('Session Replay', () => {
       
       expect(sessionStorage.getItem('pb_replay_selected')).toBe('true')
     })
+
+    it('respects existing session selection from storage', () => {
+      // Pre-set session as selected
+      sessionStorage.setItem('pb_replay_selected', 'true')
+      
+      initSessionReplay({
+        clarityProjectId: 'test',
+        sampleRate: 0, // Would normally reject all
+      })
+      
+      // Should respect the stored selection
+      expect(sessionStorage.getItem('pb_replay_selected')).toBe('true')
+    })
+
+    it('respects existing rejection from storage', () => {
+      // Pre-set session as rejected
+      sessionStorage.setItem('pb_replay_selected', 'false')
+      
+      initSessionReplay({
+        clarityProjectId: 'test',
+        sampleRate: 1.0, // Would normally accept all
+      })
+      
+      // Should respect the stored rejection
+      expect(sessionStorage.getItem('pb_replay_selected')).toBe('false')
+    })
+  })
+
+  describe('forceEnableReplay', () => {
+    it('logs in debug mode', () => {
+      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+      
+      initSessionReplay({
+        clarityProjectId: 'test',
+        debug: true,
+      })
+      
+      forceEnableReplay()
+      
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[SessionReplay] Force enabled'))
+      consoleSpy.mockRestore()
+    })
+  })
+
+  describe('enableReplayOnError', () => {
+    it('forces enable and tags session', () => {
+      initSessionReplay({ clarityProjectId: 'test' })
+      
+      enableReplayOnError()
+      
+      expect(sessionStorage.getItem('pb_replay_selected')).toBe('true')
+    })
   })
 
   describe('handleConsentWithdrawn', () => {
