@@ -1,3 +1,12 @@
+/**
+ * Home Page Component
+ * 
+ * Landing page with hero section, feature highlights, and newsletter signup.
+ * Serves as the main entry point for the website.
+ * 
+ * @module components/HomePage
+ */
+
 import { useState, useCallback, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -10,10 +19,28 @@ import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 
+/**
+ * Props for the HomePage component.
+ */
 interface HomePageProps {
+  /** Navigation handler */
   onNavigate: (page: string) => void
 }
 
+/**
+ * Home page component - the main landing page.
+ * 
+ * Features:
+ * - Hero section with animated background
+ * - Feature highlight cards linking to other sections
+ * - Newsletter subscription form
+ * - Responsive layout for mobile and desktop
+ * 
+ * @example
+ * ```tsx
+ * <HomePage onNavigate={handleNavigate} />
+ * ```
+ */
 export const HomePage = memo(({ onNavigate }: HomePageProps) => {
   const [email, setEmail] = useState('')
   const [isSubscribing, setIsSubscribing] = useState(false)

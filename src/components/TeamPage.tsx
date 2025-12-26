@@ -1,3 +1,12 @@
+/**
+ * Team Page Component
+ * 
+ * Displays team member profiles organized by category.
+ * Features profile cards with modal detail view.
+ * 
+ * @module components/TeamPage
+ */
+
 import { useState, useMemo, useCallback } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Card } from '@/components/ui/card'
@@ -12,11 +21,30 @@ import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { TEAM_CATEGORIES, type TeamCategory } from '@/lib/constants'
 import type { TeamMember } from '@/lib/types'
 
+/**
+ * Props for the TeamPage component.
+ */
 interface TeamPageProps {
+  /** Initial team member data from parent */
   team: TeamMember[]
+  /** Navigation handler */
   onNavigate: (page: string) => void
 }
 
+/**
+ * Team page component displaying member profiles.
+ * 
+ * Features:
+ * - Team members grouped by category (founders, research, etc.)
+ * - Clickable profile cards with photos
+ * - Modal dialog with full biography
+ * - LinkedIn and Scholar profile links
+ * 
+ * @example
+ * ```tsx
+ * <TeamPage team={teamMembers} onNavigate={handleNavigate} />
+ * ```
+ */
 export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
   const [team] = useKV<TeamMember[]>('team', initialTeam)

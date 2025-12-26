@@ -59,6 +59,56 @@ npm run dev
 | `npm run build` | Build for production |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
+| `npm run test` | Run tests with Vitest |
+| `npm run test:coverage` | Run tests with coverage report |
+| `npm run test:ui` | Run tests with Vitest UI |
+
+## Testing
+
+The project uses [Vitest](https://vitest.dev/) with [React Testing Library](https://testing-library.com/react) for comprehensive testing.
+
+### Test Coverage
+
+| Metric | Coverage | Threshold |
+|--------|----------|-----------|
+| Statements | 83.87% | 75% ✅ |
+| Branches | 74.78% | 65% ✅ |
+| Functions | 90.93% | 80% ✅ |
+| Lines | 84.27% | 75% ✅ |
+
+### Running Tests
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests in watch mode
+npm run test -- --watch
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run specific test file
+npm run test -- src/lib/analytics/__tests__/consent.test.ts
+```
+
+### Test Structure
+
+```
+src/
+├── components/__tests__/     # Component tests
+│   ├── ConsentBanner.test.tsx
+│   ├── Navigation.test.tsx
+│   └── ...
+├── lib/__tests__/            # Utility/library tests
+│   ├── feature-flags.test.ts
+│   └── utils.test.ts
+└── lib/analytics/__tests__/  # Analytics module tests
+    ├── consent.test.ts
+    ├── tracker.test.ts
+    ├── identity.test.ts
+    └── ...
+```
 
 ## Project Structure
 
@@ -66,18 +116,30 @@ npm run dev
 src/
 ├── components/           # Feature pages + shared components
 │   ├── ui/               # shadcn/ui primitives (DO NOT edit)
+│   ├── __tests__/        # Component unit tests
 │   ├── HomePage.tsx      # Landing page
 │   ├── TeamPage.tsx      # Team member profiles
 │   ├── ProductsPage.tsx  # Product showcase
 │   └── ...               # Other page components
 ├── hooks/
-│   ├── use-theme.ts      # Theme management
-│   └── use-mobile.ts     # Responsive detection
+│   ├── use-theme.ts      # Theme management hook
+│   └── use-mobile.ts     # Responsive breakpoint detection
 ├── lib/
+│   ├── analytics/        # Analytics infrastructure
+│   │   ├── __tests__/    # Analytics unit tests
+│   │   ├── consent.ts    # Consent management (GDPR)
+│   │   ├── tracker.ts    # Event tracking wrapper
+│   │   ├── identity.ts   # Anonymous identity
+│   │   └── ...           # GA4, App Insights, etc.
+│   ├── __tests__/        # Library unit tests
 │   ├── constants.ts      # Navigation, categories, transitions
 │   ├── types.ts          # TypeScript interfaces
+│   ├── feature-flags.ts  # Feature flag system
 │   ├── utils.ts          # Utility functions
 │   └── *-data.ts         # Seed data files
+├── test/                 # Test configuration
+│   ├── setup.ts          # Vitest setup
+│   └── mocks/            # Test mocks (Spark, window, etc.)
 └── styles/
     └── theme.css         # CSS custom properties
 ```
@@ -89,7 +151,7 @@ src/
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
 | **Build & Deploy** | Push to `main` | Deploys to Azure Web App |
-| **PR Validation** | Pull requests | Lint, type check, build verification |
+| **PR Validation** | Pull requests | Lint, type check, test, build verification |
 | **Dependency Review** | Pull requests | Security vulnerability scanning |
 | **CodeQL Analysis** | Push/PR/Weekly | Static code security analysis |
 | **Dependabot** | Weekly | Automated dependency updates |
@@ -99,9 +161,25 @@ src/
 The site automatically deploys to Azure Web App when changes are pushed to `main`:
 
 1. Builds the Vite application
-2. Creates `web.config` for SPA routing
-3. Deploys to Azure using OIDC authentication
-4. Runs health check to verify deployment
+2. Runs all tests and coverage checks
+3. Creates `web.config` for SPA routing
+4. Deploys to Azure using OIDC authentication
+5. Runs health check to verify deployment
+
+## Analytics
+
+The project includes a comprehensive analytics infrastructure with privacy-first design:
+
+| Feature | Description |
+|---------|-------------|
+| **Consent Management** | GDPR-compliant consent banner with granular controls |
+| **Azure App Insights** | Application performance monitoring |
+| **Google Analytics 4** | User behavior analytics |
+| **Microsoft Clarity** | Session replay and heatmaps |
+| **Web Vitals** | Core Web Vitals tracking (LCP, FID, CLS) |
+| **Feature Flags** | A/B testing and feature rollouts |
+
+For detailed documentation, see [docs/ANALYTICS.md](docs/ANALYTICS.md).
 
 ## Contributing
 

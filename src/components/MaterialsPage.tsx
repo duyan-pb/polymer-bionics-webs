@@ -1,3 +1,12 @@
+/**
+ * Materials Page Component
+ * 
+ * Displays the biomaterials catalog with detailed specifications.
+ * Features material cards with modal detail view.
+ * 
+ * @module components/MaterialsPage
+ */
+
 import { useState, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -12,10 +21,27 @@ import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import CESheet from '@/assets/images/CE_sheet.png'
 
+/**
+ * Props for the MaterialsPage component.
+ */
 interface MaterialsPageProps {
+  /** Navigation handler */
   onNavigate: (page: string) => void
 }
 
+/**
+ * Materials page component displaying the biomaterials catalog.
+ * 
+ * Features:
+ * - Material cards with gradient backgrounds
+ * - Modal with detailed properties and advantages
+ * - Contact CTA for material inquiries
+ * 
+ * @example
+ * ```tsx
+ * <MaterialsPage onNavigate={handleNavigate} />
+ * ```
+ */
 export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
 

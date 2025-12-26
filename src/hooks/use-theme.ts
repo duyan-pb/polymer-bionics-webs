@@ -1,10 +1,41 @@
+/**
+ * Theme Management Hook
+ * 
+ * Provides theme state management with localStorage persistence and
+ * system preference detection. Follows the single responsibility principle.
+ * 
+ * @module hooks/use-theme
+ */
+
 import { useState, useEffect, useCallback } from 'react'
 
+/** localStorage key for persisting theme preference */
 const THEME_KEY = 'pb-theme'
 
 /**
  * Custom hook for managing theme state with localStorage persistence.
- * Follows the single responsibility principle for theme management.
+ * 
+ * Features:
+ * - Persists theme choice to localStorage
+ * - Respects system preference on first visit
+ * - Updates `data-appearance` attribute on `<html>` for Tailwind dark mode
+ * 
+ * @returns {Object} Theme state and controls
+ * @returns {boolean} isDark - Current theme state (`true` for dark mode)
+ * @returns {Function} toggleTheme - Function to toggle between light and dark
+ * 
+ * @example
+ * ```tsx
+ * function ThemeToggle() {
+ *   const { isDark, toggleTheme } = useTheme()
+ *   
+ *   return (
+ *     <button onClick={toggleTheme}>
+ *       {isDark ? 'Switch to Light' : 'Switch to Dark'}
+ *     </button>
+ *   )
+ * }
+ * ```
  */
 export function useTheme() {
   const [isDark, setIsDark] = useState(() => {

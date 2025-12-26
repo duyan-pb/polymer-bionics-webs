@@ -1,17 +1,51 @@
+/**
+ * Contact Links Component
+ * 
+ * Reusable contact action buttons for WhatsApp and Email.
+ * Handles clipboard copying for WhatsApp (since direct links are blocked in Spark)
+ * and opens email client for email contacts.
+ * 
+ * @module components/ContactLinks
+ */
+
 import { Button } from '@/components/ui/button'
 import { EnvelopeSimple, WhatsappLogo, Copy } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
 
+/**
+ * Props for the ContactLinks component.
+ */
 interface ContactLinksProps {
+  /** Button variant style */
   variant?: 'default' | 'outline' | 'ghost'
+  /** Button size */
   size?: 'default' | 'sm' | 'lg'
+  /** Additional CSS classes */
   className?: string
+  /** Show WhatsApp button (default: true) */
   showWhatsApp?: boolean
+  /** Show Email button (default: true) */
   showEmail?: boolean
+  /** Email type to use (general or sales) */
   emailType?: 'general' | 'sales'
 }
 
+/**
+ * Contact action buttons component.
+ * 
+ * Provides WhatsApp and Email contact options with appropriate
+ * handling for GitHub Spark environment (where mailto links are blocked).
+ * 
+ * @example
+ * ```tsx
+ * <ContactLinks 
+ *   variant="outline" 
+ *   showWhatsApp={true} 
+ *   emailType="sales" 
+ * />
+ * ```
+ */
 export function ContactLinks({ 
   variant = 'default', 
   size = 'default',

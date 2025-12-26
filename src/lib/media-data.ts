@@ -1,5 +1,20 @@
+/**
+ * Media Data
+ * 
+ * Seed data for videos, case studies, and datasheets.
+ * Used for the media gallery and datasheets library pages.
+ * 
+ * @module lib/media-data
+ */
+
 import type { Video, CaseStudy, Datasheet } from './types'
 
+/**
+ * Placeholder video content.
+ * 
+ * Video URLs should be updated to point to actual hosted content
+ * (e.g., YouTube embeds, Vimeo, or self-hosted video files).
+ */
 export const placeholderVideos: Video[] = [
   {
     id: 'vid-1',

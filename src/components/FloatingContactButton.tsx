@@ -1,3 +1,13 @@
+/**
+ * Floating Contact Button Component
+ * 
+ * Fixed-position floating action button (FAB) that expands to show
+ * contact options. Provides quick access to WhatsApp, Email, and
+ * location from any page.
+ * 
+ * @module components/FloatingContactButton
+ */
+
 import { useState } from 'react'
 import { EnvelopeSimple, WhatsappLogo, X, ChatCircleDots, MapPin, Copy } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
@@ -5,6 +15,23 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
 
+/**
+ * Floating contact button with expandable menu.
+ * 
+ * Features:
+ * - Fixed position in bottom-right corner
+ * - Animated expansion/collapse
+ * - WhatsApp (with clipboard copy)
+ * - Email links (general and sales)
+ * - Google Maps location link
+ * - Responsive sizing for mobile/desktop
+ * 
+ * @example
+ * ```tsx
+ * // Add to App.tsx or layout component
+ * <FloatingContactButton />
+ * ```
+ */
 export function FloatingContactButton() {
   const [isOpen, setIsOpen] = useState(false)
 

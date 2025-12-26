@@ -1,3 +1,12 @@
+/**
+ * Datasheets Page Component
+ * 
+ * Technical datasheets library with search and filtering.
+ * Provides downloadable PDF documents for products and materials.
+ * 
+ * @module components/DatasheetsPage
+ */
+
 import { useState, useMemo, useCallback, useEffect, type MouseEvent } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -13,11 +22,31 @@ import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
+/**
+ * Props for the DatasheetsPage component.
+ */
 interface DatasheetsPageProps {
+  /** Array of datasheet documents */
   datasheets: Datasheet[]
+  /** Navigation handler */
   onNavigate: (page: string) => void
 }
 
+/**
+ * Datasheets library page component.
+ * 
+ * Features:
+ * - Search with debounced input
+ * - Category filtering
+ * - Table view with version and date info
+ * - Detail modal with technical specifications
+ * - PDF download links
+ * 
+ * @example
+ * ```tsx
+ * <DatasheetsPage datasheets={sheets} onNavigate={handleNavigate} />
+ * ```
+ */
 export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')

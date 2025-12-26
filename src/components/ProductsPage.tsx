@@ -1,3 +1,12 @@
+/**
+ * Products Page Component
+ * 
+ * Displays the product catalog with filtering and detail modals.
+ * Products are categorized and can include images, specifications, and datasheets.
+ * 
+ * @module components/ProductsPage
+ */
+
 import { useState, useMemo, useCallback, type MouseEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -13,11 +22,31 @@ import { ClickableCard } from '@/components/ClickableCard'
 import { Card } from '@/components/ui/card'
 import ElastomerArray from '@/assets/images/Elastomer_array.png'
 
+/**
+ * Props for the ProductsPage component.
+ */
 interface ProductsPageProps {
+  /** Array of products to display */
   products: Product[]
+  /** Navigation handler */
   onNavigate: (page: string) => void
 }
 
+/**
+ * Products page component with filtering and modal details.
+ * 
+ * Features:
+ * - Category filtering tabs
+ * - Product cards with images and descriptions
+ * - Modal with full specifications and image gallery
+ * - Links to related datasheets and case studies
+ * - Contact CTA for inquiries
+ * 
+ * @example
+ * ```tsx
+ * <ProductsPage products={productList} onNavigate={handleNavigate} />
+ * ```
+ */
 export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')

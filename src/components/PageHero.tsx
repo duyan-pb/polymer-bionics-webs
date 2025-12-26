@@ -1,25 +1,62 @@
+/**
+ * Page Hero Component
+ * 
+ * Reusable hero section for page headers. Provides consistent styling
+ * and animation across all page components with support for breadcrumbs,
+ * background images, and action buttons.
+ * 
+ * @module components/PageHero
+ */
+
 import { motion } from 'framer-motion'
 import { HeroImage } from '@/components/HeroImage'
 import { Breadcrumbs, type BreadcrumbItem } from '@/components/Breadcrumbs'
 import { HERO_SECTION_CLASSES, CONTENT_MAX_WIDTH } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
+/**
+ * Props for the PageHero component.
+ */
 export interface PageHeroProps {
+  /** Page title displayed as h1 */
   title: string
+  /** Page description text */
   description: string
+  /** Optional background image URL */
   backgroundImage?: string
+  /** Background image opacity (0-1, default: 0.7) */
   backgroundOpacity?: number
+  /** Breadcrumb navigation trail */
   breadcrumbs?: BreadcrumbItem[]
+  /** Navigation handler for breadcrumb links */
   onNavigate?: (page: string) => void
+  /** Action buttons or elements to display */
   actions?: React.ReactNode
+  /** Additional CSS classes */
   className?: string
+  /** Additional content below description */
   children?: React.ReactNode
 }
 
 /**
  * Reusable hero section component for page headers.
- * Reduces duplication across all page components.
- * Mobile-optimized with responsive typography and padding.
+ * 
+ * Features:
+ * - Animated entrance with Framer Motion
+ * - Optional background image with gradient overlay
+ * - Breadcrumb navigation support
+ * - Responsive typography and padding
+ * - Action button slot for CTAs
+ * 
+ * @example
+ * ```tsx
+ * <PageHero
+ *   title="Our Team"
+ *   description="Meet the experts behind our innovations"
+ *   breadcrumbs={[{ label: 'Home', page: 'home' }]}
+ *   onNavigate={handleNavigate}
+ * />
+ * ```
  */
 export function PageHero({
   title,

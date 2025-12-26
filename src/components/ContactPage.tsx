@@ -1,3 +1,12 @@
+/**
+ * Contact Page Component
+ * 
+ * Contact form and company information page.
+ * Includes form validation and submission handling.
+ * 
+ * @module components/ContactPage
+ */
+
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
@@ -11,10 +20,17 @@ import { contactConfig, getEmailUrl } from '@/lib/contact-config'
 import { PageHero } from '@/components/PageHero'
 import { cn } from '@/lib/utils'
 
+/**
+ * Props for the ContactPage component.
+ */
 interface ContactPageProps {
+  /** Navigation handler */
   onNavigate: (page: string) => void
 }
 
+/**
+ * Form validation error state.
+ */
 interface FormErrors {
   name?: string
   email?: string
@@ -22,6 +38,20 @@ interface FormErrors {
   message?: string
 }
 
+/**
+ * Contact page component with form and info.
+ * 
+ * Features:
+ * - Contact form with validation
+ * - Company address and email
+ * - Social media links
+ * - Form submission with toast notifications
+ * 
+ * @example
+ * ```tsx
+ * <ContactPage onNavigate={handleNavigate} />
+ * ```
+ */
 export function ContactPage({ onNavigate }: ContactPageProps) {
   const [formData, setFormData] = useState({
     name: '',

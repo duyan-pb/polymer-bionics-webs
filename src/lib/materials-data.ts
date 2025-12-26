@@ -1,5 +1,20 @@
+/**
+ * Materials and Applications Data
+ * 
+ * Seed data for the materials catalog and clinical applications.
+ * Contains biomaterial specifications and medical application use cases.
+ * 
+ * @module lib/materials-data
+ */
+
 import type { Material, Application } from './types'
 
+/**
+ * Biomaterials catalog.
+ * 
+ * Each material represents a unique polymer or composite developed
+ * by Polymer Bionics for medical device applications.
+ */
 export const materials: Material[] = [
   {
     id: 'biongel',

@@ -1,5 +1,20 @@
+/**
+ * Publications and News Data
+ * 
+ * Seed data for the news feed and scientific publications.
+ * Contains company announcements and academic publications.
+ * 
+ * @module lib/publications-data
+ */
+
 import type { Publication, NewsItem } from './types'
 
+/**
+ * Placeholder news items.
+ * 
+ * Replace these with actual company news, announcements,
+ * and press releases.
+ */
 export const placeholderNews: NewsItem[] = [
   {
     id: 'news-1',

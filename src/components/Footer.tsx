@@ -1,3 +1,12 @@
+/**
+ * Footer Component
+ * 
+ * Site footer with contact information, social links, and legal links.
+ * Includes consent management controls.
+ * 
+ * @module components/Footer
+ */
+
 import { memo, useCallback } from 'react'
 import { EnvelopeSimple, WhatsappLogo, Copy } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
@@ -5,6 +14,20 @@ import { toast } from 'sonner'
 import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
 import { ManageCookiesLink, ConsentStatusIndicator } from '@/components/ConsentBanner'
 
+/**
+ * Site footer component.
+ * 
+ * Features:
+ * - Contact action buttons (WhatsApp, Email)
+ * - Company address and copyright
+ * - Cookie consent management links
+ * - Consent status indicator
+ * 
+ * @example
+ * ```tsx
+ * <Footer />
+ * ```
+ */
 export const Footer = memo(() => {
   const handleWhatsAppClick = useCallback(async () => {
     const success = await copyWhatsAppNumber()

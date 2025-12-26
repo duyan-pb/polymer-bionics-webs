@@ -1,3 +1,12 @@
+/**
+ * News Page Component
+ * 
+ * Displays company news and scientific publications.
+ * Features tabbed interface with filtering for publications.
+ * 
+ * @module components/NewsPage
+ */
+
 import { useState, useMemo, useCallback } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -12,12 +21,32 @@ import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
+/**
+ * Props for the NewsPage component.
+ */
 interface NewsPageProps {
+  /** Array of news articles */
   news: NewsItem[]
+  /** Array of publications */
   publications: Publication[]
+  /** Navigation handler */
   onNavigate: (page: string) => void
 }
 
+/**
+ * News and publications page component.
+ * 
+ * Features:
+ * - Tabbed interface (News / Publications)
+ * - News article detail modal
+ * - Publication filtering by topic tags
+ * - DOI and external links for publications
+ * 
+ * @example
+ * ```tsx
+ * <NewsPage news={newsItems} publications={pubs} onNavigate={handleNavigate} />
+ * ```
+ */
 export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null)
   const [selectedPublication, setSelectedPublication] = useState<Publication | null>(null)

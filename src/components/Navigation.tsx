@@ -1,3 +1,12 @@
+/**
+ * Navigation Component
+ * 
+ * Main site navigation with responsive mobile drawer.
+ * Includes logo, navigation links, search, and theme toggle.
+ * 
+ * @module components/Navigation
+ */
+
 import { useState, memo, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
@@ -6,14 +15,44 @@ import { List, MagnifyingGlass, MoonStars, SunDim } from '@phosphor-icons/react'
 import { NAV_ITEMS } from '@/lib/constants'
 import logoPng from '@/assets/images/unnamed.png'
 
+/**
+ * Props for the Navigation component.
+ */
 interface NavigationProps {
+  /** Currently active page ID */
   currentPage: string
+  /** Navigation handler */
   onNavigate: (page: string) => void
+  /** Handler to open the global search modal */
   onOpenSearch: () => void
+  /** Current theme state */
   isDark: boolean
+  /** Theme toggle handler */
   onToggleTheme: () => void
 }
 
+/**
+ * Main site navigation component.
+ * 
+ * Features:
+ * - Sticky header with blur backdrop
+ * - Desktop horizontal nav links
+ * - Mobile hamburger menu with Sheet drawer
+ * - Global search trigger
+ * - Theme toggle button
+ * - Animated logo hover effects
+ * 
+ * @example
+ * ```tsx
+ * <Navigation
+ *   currentPage={activePage}
+ *   onNavigate={handleNavigate}
+ *   onOpenSearch={openSearch}
+ *   isDark={isDark}
+ *   onToggleTheme={toggleTheme}
+ * />
+ * ```
+ */
 export const Navigation = memo(({ currentPage, onNavigate, onOpenSearch, isDark, onToggleTheme }: NavigationProps) => {
   const [mobileOpen, setMobileOpen] = useState(false)
 

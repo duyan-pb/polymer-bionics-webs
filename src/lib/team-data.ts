@@ -1,5 +1,20 @@
+/**
+ * Team Data
+ * 
+ * Seed data for team member profiles.
+ * This data is used to initialize the KV store on first load.
+ * 
+ * @module lib/team-data
+ */
+
 import type { TeamMember } from './types'
 
+/**
+ * Initial team members data.
+ * 
+ * Note: Placeholder content should be replaced with actual team information.
+ * Team members are organized by category (founders, lab-management, etc.)
+ */
 export const teamMembers: TeamMember[] = [
   {
     id: 'rylie-green',

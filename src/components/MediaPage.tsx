@@ -1,3 +1,12 @@
+/**
+ * Media Page Component
+ * 
+ * Displays videos and case studies in a tabbed interface.
+ * Features video players and case study modals.
+ * 
+ * @module components/MediaPage
+ */
+
 import { useState, useCallback } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -12,12 +21,32 @@ import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
+/**
+ * Props for the MediaPage component.
+ */
 interface MediaPageProps {
+  /** Array of video content */
   videos: Video[]
+  /** Array of case studies */
   caseStudies: CaseStudy[]
+  /** Navigation handler */
   onNavigate: (page: string) => void
 }
 
+/**
+ * Media page component with videos and case studies.
+ * 
+ * Features:
+ * - Tabbed interface (Videos / Case Studies)
+ * - Video player modal
+ * - Case study detail modal with PDF download
+ * - Contact CTA
+ * 
+ * @example
+ * ```tsx
+ * <MediaPage videos={videos} caseStudies={cases} onNavigate={handleNavigate} />
+ * ```
+ */
 export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null)
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudy | null>(null)

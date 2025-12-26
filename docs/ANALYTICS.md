@@ -1843,6 +1843,67 @@ useEffect(() => {
 
 ---
 
+## Testing
+
+The analytics infrastructure includes comprehensive test coverage.
+
+### Running Tests
+
+```bash
+# Run all analytics tests
+npm run test -- src/lib/analytics
+
+# Run with coverage
+npm run test:coverage -- src/lib/analytics
+
+# Run specific test file
+npm run test -- src/lib/analytics/__tests__/consent.test.ts
+```
+
+### Test Coverage
+
+Current analytics module coverage:
+
+| Module | Statements | Branches | Functions |
+|--------|------------|----------|-----------|
+| consent.ts | 90%+ | 80%+ | 95%+ |
+| tracker.ts | 90%+ | 75%+ | 90%+ |
+| identity.ts | 85%+ | 75%+ | 90%+ |
+| hooks.ts | 100% | 90%+ | 100% |
+| ga4.ts | 85%+ | 75%+ | 90%+ |
+| attribution.ts | 85%+ | 75%+ | 90%+ |
+| app-insights.ts | 80%+ | 70%+ | 85%+ |
+
+### Mocking in Tests
+
+The analytics tests use comprehensive mocking for browser APIs:
+
+```typescript
+// Mock localStorage
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+}
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
+// Mock consent state
+vi.mock('@/lib/analytics/consent', () => ({
+  canTrack: vi.fn().mockReturnValue(true),
+  getConsentState: vi.fn().mockReturnValue({ choices: { analytics: true } }),
+}))
+```
+
+### Key Test Patterns
+
+1. **Consent gating tests** - Verify tracking respects consent
+2. **Storage fallback tests** - Test localStorage/cookie fallbacks
+3. **Error handling tests** - Verify graceful degradation
+4. **Cost control tests** - Test rate limiting and budgets
+
+---
+
 ## Troubleshooting
 
 ### Events not tracking

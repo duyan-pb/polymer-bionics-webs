@@ -7,6 +7,7 @@ Thank you for your interest in contributing to the Polymer Bionics website! This
 - [Code of Conduct](#code-of-conduct)
 - [Getting Started](#getting-started)
 - [Development Workflow](#development-workflow)
+- [Testing Guidelines](#testing-guidelines)
 - [Code Style](#code-style)
 - [Commit Messages](#commit-messages)
 - [Pull Request Process](#pull-request-process)
@@ -68,12 +69,75 @@ This project adheres to a code of conduct. By participating, you are expected to
 4. **Run checks**:
    ```bash
    npm run lint
+   npm run test
    npm run build
    ```
 
 5. **Commit your changes** using [conventional commits](#commit-messages)
 
 6. **Push and create a PR**
+
+## Testing Guidelines
+
+We use [Vitest](https://vitest.dev/) with [React Testing Library](https://testing-library.com/react) for testing.
+
+### Running Tests
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests in watch mode
+npm run test -- --watch
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run specific test file
+npm run test -- path/to/test.ts
+```
+
+### Coverage Thresholds
+
+All PRs must maintain these minimum coverage thresholds:
+
+| Metric | Threshold |
+|--------|-----------|
+| Statements | 75% |
+| Branches | 65% |
+| Functions | 80% |
+| Lines | 75% |
+
+### Writing Tests
+
+1. **Place tests** in `__tests__/` directories adjacent to source files
+2. **Name test files** with `.test.ts` or `.test.tsx` extension
+3. **Use descriptive test names** that explain the expected behavior
+4. **Follow AAA pattern**: Arrange, Act, Assert
+
+```tsx
+// Good test example
+describe('useTheme', () => {
+  it('should return dark theme when system prefers dark', () => {
+    // Arrange
+    mockMatchMedia(true) // prefers dark
+    
+    // Act
+    const { result } = renderHook(() => useTheme())
+    
+    // Assert
+    expect(result.current.theme).toBe('dark')
+  })
+})
+```
+
+### Test Categories
+
+| Category | Location | Description |
+|----------|----------|-------------|
+| Unit Tests | `src/**/__tests__/` | Test individual functions and hooks |
+| Component Tests | `src/components/__tests__/` | Test React component behavior |
+| Integration Tests | `src/lib/analytics/__tests__/` | Test module interactions |
 
 ## Code Style
 
@@ -167,14 +231,20 @@ chore(deps): update dependencies to latest versions
 2. **Ensure all checks pass**:
    - ESLint (code quality)
    - TypeScript (type checking)
+   - Vitest (unit tests with coverage thresholds)
    - Build (production build)
    - Dependency review (security)
 
-3. **Request review** from @duyan-pb
+3. **Add tests** for new functionality:
+   - New features require corresponding test coverage
+   - Bug fixes should include regression tests
+   - Maintain or improve existing coverage
 
-4. **Address feedback** promptly
+4. **Request review** from @duyan-pb
 
-5. **Squash commits** if requested
+5. **Address feedback** promptly
+
+6. **Squash commits** if requested
 
 ### PR Title Format
 

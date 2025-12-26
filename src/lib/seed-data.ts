@@ -1,3 +1,12 @@
+/**
+ * Seed Data Generator
+ * 
+ * Generates initial product data from materials and applications.
+ * Used to populate the KV store on first load.
+ * 
+ * @module lib/seed-data
+ */
+
 import type { Product } from './types'
 import { materials, applications } from './materials-data'
 
@@ -10,10 +19,20 @@ import pxl11 from '@/assets/images/PXL_20251216_115937300.jpg'
 import pxl13 from '@/assets/images/PXL_20251216_115958662.jpg'
 import pxl15 from '@/assets/images/PXL_20251216_120056575.jpg'
 
+/** Product images for the in-ear EEG device */
 const inEarDeviceImages = [
   pxl1, pxl2, pxl5, pxl9, pxl10, pxl11, pxl13, pxl15
 ]
 
+/**
+ * Generates products from materials and applications data.
+ * 
+ * Creates two types of products:
+ * 1. Material-based products (advanced-materials category)
+ * 2. Application-based products (clinical-applications category)
+ * 
+ * @returns Promise resolving to array of Product objects
+ */
 export async function generateBiomaterialsProducts(): Promise<Product[]> {
   const products: Product[] = []
   
