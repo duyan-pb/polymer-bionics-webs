@@ -2,7 +2,7 @@
  * Identity Management Tests (Epic 6)
  */
 
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import {
   getIdentity,
   getAnonymousId,
@@ -432,6 +432,232 @@ describe('Identity Management', () => {
       // Both should be valid timestamps
       expect(new Date(firstActivity).getTime()).toBeGreaterThan(0)
       expect(new Date(secondActivity).getTime()).toBeGreaterThan(0)
+    })
+  })
+
+  describe('localStorage write failure handling', () => {
+    it('handles localStorage.setItem failure for anonymous ID', () => {
+      // Clear storage to ensure new ID generation
+      localStorage.clear()
+      
+      // Mock localStorage.setItem to throw
+      const originalSetItem = localStorage.setItem.bind(localStorage)
+      localStorage.setItem = vi.fn().mockImplementation(() => {
+        throw new Error('Storage quota exceeded')
+      })
+      
+      // Should still return an ID even if storage fails
+      const id = getAnonymousId()
+      expect(id).toBeTruthy()
+      expect(typeof id).toBe('string')
+      
+      // Restore
+      localStorage.setItem = originalSetItem
+    })
+
+    it('handles sessionStorage.setItem failure for session', () => {
+      // Clear storage to ensure new session generation
+      sessionStorage.clear()
+      
+      // Mock sessionStorage.setItem to throw
+      const originalSetItem = sessionStorage.setItem.bind(sessionStorage)
+      sessionStorage.setItem = vi.fn().mockImplementation(() => {
+        throw new Error('Storage quota exceeded')
+      })
+      
+      // Should still return a session ID even if storage fails
+      const id = getSessionId()
+      expect(id).toBeTruthy()
+      expect(typeof id).toBe('string')
+      
+      // Restore
+      sessionStorage.setItem = originalSetItem
+    })
+  })
+
+  describe('getIdentityWithFallback storage unavailable', () => {
+    it('returns ephemeral IDs when localStorage is unavailable', () => {
+      // Mock localStorage to throw on all operations
+      const originalLocalStorage = window.localStorage
+      const mockStorage = {
+        getItem: vi.fn().mockImplementation(() => { throw new Error('Storage blocked') }),
+        setItem: vi.fn().mockImplementation(() => { throw new Error('Storage blocked') }),
+        removeItem: vi.fn().mockImplementation(() => { throw new Error('Storage blocked') }),
+        clear: vi.fn(),
+        length: 0,
+        key: vi.fn(),
+      }
+      
+      Object.defineProperty(window, 'localStorage', {
+        value: mockStorage,
+        writable: true,
+      })
+      
+      const identity = getIdentityWithFallback()
+      
+      // Should have returned an identity with isPersisted = false
+      expect(identity.anonymousId).toBeTruthy()
+      expect(identity.sessionId).toBeTruthy()
+      expect(identity.isPersisted).toBe(false)
+      
+      // Restore
+      Object.defineProperty(window, 'localStorage', {
+        value: originalLocalStorage,
+        writable: true,
+      })
+    })
+
+    it('returns ephemeral IDs when sessionStorage is unavailable', () => {
+      // Mock sessionStorage to throw on all operations
+      const originalSessionStorage = window.sessionStorage
+      const mockStorage = {
+        getItem: vi.fn().mockImplementation(() => { throw new Error('Storage blocked') }),
+        setItem: vi.fn().mockImplementation(() => { throw new Error('Storage blocked') }),
+        removeItem: vi.fn().mockImplementation(() => { throw new Error('Storage blocked') }),
+        clear: vi.fn(),
+        length: 0,
+        key: vi.fn(),
+      }
+      
+      Object.defineProperty(window, 'sessionStorage', {
+        value: mockStorage,
+        writable: true,
+      })
+      
+      const identity = getIdentityWithFallback()
+      
+      // Should have returned an identity with isPersisted = false
+      expect(identity.anonymousId).toBeTruthy()
+      expect(identity.sessionId).toBeTruthy()
+      expect(identity.isPersisted).toBe(false)
+      
+      // Restore
+      Object.defineProperty(window, 'sessionStorage', {
+        value: originalSessionStorage,
+        writable: true,
+      })
+    })
+  })
+
+  describe('resetSession storage failure handling', () => {
+    it('handles sessionStorage.removeItem failure', () => {
+      // First create a session
+      getSessionId()
+      
+      // Mock sessionStorage.removeItem to throw
+      const originalRemoveItem = sessionStorage.removeItem.bind(sessionStorage)
+      sessionStorage.removeItem = vi.fn().mockImplementation(() => {
+        throw new Error('Storage error')
+      })
+      
+      // Should not throw
+      expect(() => resetSession()).not.toThrow()
+      
+      // Restore
+      sessionStorage.removeItem = originalRemoveItem
+    })
+  })
+
+  describe('clearIdentity storage failure handling', () => {
+    it('handles storage operation failures during clearIdentity', () => {
+      // First create an identity
+      getIdentity()
+      
+      // Mock removeItem to throw
+      const originalLocalRemove = localStorage.removeItem.bind(localStorage)
+      const originalSessionRemove = sessionStorage.removeItem.bind(sessionStorage)
+      
+      localStorage.removeItem = vi.fn().mockImplementation(() => {
+        throw new Error('Storage error')
+      })
+      sessionStorage.removeItem = vi.fn().mockImplementation(() => {
+        throw new Error('Storage error')
+      })
+      
+      // Should not throw
+      expect(() => clearIdentity()).not.toThrow()
+      
+      // Restore
+      localStorage.removeItem = originalLocalRemove
+      sessionStorage.removeItem = originalSessionRemove
+    })
+  })
+
+  describe('generateAnonymousId fallback', () => {
+    it('uses fallback when crypto.randomUUID is not available', () => {
+      // Clear storage to ensure new ID generation
+      localStorage.clear()
+      
+      // Store original crypto
+      const originalCrypto = window.crypto
+      
+      // Mock crypto without randomUUID
+      Object.defineProperty(window, 'crypto', {
+        value: {
+          getRandomValues: originalCrypto.getRandomValues.bind(originalCrypto),
+          // No randomUUID
+        },
+        writable: true,
+        configurable: true,
+      })
+      
+      // Should still generate an ID using fallback
+      const id = getAnonymousId()
+      expect(id).toBeTruthy()
+      expect(typeof id).toBe('string')
+      // Fallback generates UUID-like format
+      expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
+      
+      // Restore crypto
+      Object.defineProperty(window, 'crypto', {
+        value: originalCrypto,
+        writable: true,
+        configurable: true,
+      })
+    })
+  })
+
+  describe('stored session with missing fields', () => {
+    it('handles stored session without id field', () => {
+      // Store a session without the id field
+      const storedSession = {
+        startedAt: new Date().toISOString(),
+        lastActivityAt: new Date().toISOString(),
+        dayKey: new Date().toISOString().split('T')[0],
+      }
+      sessionStorage.setItem('pb_session', JSON.stringify(storedSession))
+      
+      // Should generate a new id but keep the session
+      const sessionId = getSessionId()
+      expect(sessionId).toBeTruthy()
+      expect(typeof sessionId).toBe('string')
+    })
+
+    it('handles stored session without startedAt field', () => {
+      // Store a session without the startedAt field
+      const storedSession = {
+        id: 'test-session-id',
+        lastActivityAt: new Date().toISOString(),
+        dayKey: new Date().toISOString().split('T')[0],
+      }
+      sessionStorage.setItem('pb_session', JSON.stringify(storedSession))
+      
+      // Should still work and use the id
+      const identity = getIdentity()
+      expect(identity.sessionId).toBe('test-session-id')
+      expect(identity.sessionStartedAt).toBeTruthy()
+    })
+  })
+
+  describe('getTodayKey edge cases', () => {
+    it('returns consistent date format', () => {
+      // Get session to exercise getTodayKey
+      const session1 = getSessionId()
+      expect(session1).toBeTruthy()
+      
+      // Check stored session has dayKey
+      const stored = JSON.parse(sessionStorage.getItem('pb_session')!)
+      expect(stored.dayKey).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     })
   })
 })

@@ -291,5 +291,3 @@ export const ConsentStatusIndicator = memo(() => {
     </button>
   )
 })
-
-export default ConsentBanner

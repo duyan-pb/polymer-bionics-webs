@@ -464,5 +464,3 @@ export const analytics = {
   registerDestination,
   getConfig: getAnalyticsConfig,
 }
-
-export default analytics

@@ -435,4 +435,183 @@ describe('Analytics Tracker', () => {
       expect(hasFired('test_event')).toBe(false)
     })
   })
+
+  describe('page view queuing', () => {
+    it('queues page views before initialization', () => {
+      resetForTesting()
+      acceptAllConsent()
+      
+      // Call page before init
+      const result = page('queued_page', { queued: true })
+      expect(result).toBe(false) // Returns false because not initialized
+      
+      const destination = vi.fn()
+      registerDestination(destination)
+      
+      // Initialize - should process queued page views
+      initAnalytics()
+      
+      // The queued page view should have been processed
+      expect(destination).toHaveBeenCalled()
+      const event = destination.mock.calls[0][0]
+      expect(event.type).toBe('page_view')
+      expect(event.properties.page_name).toBe('queued_page')
+    })
+  })
+
+  describe('track with fireOnce option', () => {
+    beforeEach(() => {
+      initAnalytics()
+      acceptAllConsent()
+    })
+
+    it('marks event as fired when using fireOnce option directly', () => {
+      const destination = vi.fn()
+      registerDestination(destination)
+      
+      // Track with fireOnce option
+      const firstResult = track('once_event', {}, { fireOnce: true })
+      expect(firstResult).toBe(true)
+      
+      // Second call should be blocked
+      const secondResult = track('once_event', {}, { fireOnce: true })
+      expect(secondResult).toBe(false)
+      
+      // Destination should only be called once
+      expect(destination).toHaveBeenCalledTimes(1)
+    })
+
+    it('uses custom fireOnceKey when provided', () => {
+      const destination = vi.fn()
+      registerDestination(destination)
+      
+      // Track with custom key
+      track('video_played', { id: 1 }, { fireOnce: true, fireOnceKey: 'video:1' })
+      track('video_played', { id: 2 }, { fireOnce: true, fireOnceKey: 'video:2' })
+      track('video_played', { id: 1 }, { fireOnce: true, fireOnceKey: 'video:1' }) // Duplicate
+      
+      // Only first two should fire
+      expect(destination).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  describe('conversion deduplication', () => {
+    beforeEach(() => {
+      initAnalytics()
+      acceptAllConsent()
+    })
+
+    it('prevents duplicate conversions with same event ID', () => {
+      const destination = vi.fn()
+      registerDestination(destination)
+      
+      conversion('purchase', 'order-123', { value: 100 })
+      conversion('purchase', 'order-123', { value: 100 }) // Duplicate
+      
+      // Should only fire once
+      expect(destination).toHaveBeenCalledTimes(1)
+    })
+
+    it('allows different conversion types with same event ID', () => {
+      const destination = vi.fn()
+      registerDestination(destination)
+      
+      conversion('purchase', 'order-123', { value: 100 })
+      conversion('refund', 'order-123', { value: 100 })
+      
+      // Both should fire (different conversion types)
+      expect(destination).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  describe('conversion without consent', () => {
+    beforeEach(() => {
+      initAnalytics()
+    })
+
+    it('blocks conversion when consent not granted', () => {
+      withdrawConsent()
+      
+      const destination = vi.fn()
+      registerDestination(destination)
+      
+      const result = conversion('purchase', 'test-id', { value: 100 })
+      
+      expect(result).toBe(false)
+      expect(destination).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('track with marketing consent category', () => {
+    beforeEach(() => {
+      initAnalytics()
+    })
+
+    it('blocks marketing events when marketing consent not granted', () => {
+      // Accept only analytics, not marketing
+      localStorage.setItem('pb_consent', JSON.stringify({
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        choices: { necessary: true, analytics: true, marketing: false },
+        bannerShown: true,
+        hasInteracted: true,
+      }))
+      
+      const result = track('marketing_event', {}, { category: 'marketing' })
+      
+      expect(result).toBe(false)
+    })
+
+    it('allows marketing events when marketing consent granted', () => {
+      acceptAllConsent()
+      
+      const destination = vi.fn()
+      registerDestination(destination)
+      
+      const result = track('marketing_event', {}, { category: 'marketing' })
+      
+      expect(result).toBe(true)
+      expect(destination).toHaveBeenCalled()
+    })
+  })
+
+  describe('page view without consent', () => {
+    beforeEach(() => {
+      initAnalytics()
+    })
+
+    it('blocks page view when no analytics consent', () => {
+      withdrawConsent()
+      
+      const destination = vi.fn()
+      registerDestination(destination)
+      
+      const result = page('home')
+      
+      expect(result).toBe(false)
+      expect(destination).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('conversion already fired', () => {
+    beforeEach(() => {
+      initAnalytics()
+      acceptAllConsent()
+    })
+
+    it('skips duplicate conversion events', () => {
+      const destination = vi.fn()
+      registerDestination(destination)
+      
+      // First conversion
+      const first = conversion('lead', 'unique-id-1', { form: 'contact' })
+      expect(first).toBe(true)
+      
+      // Duplicate conversion with same ID and type
+      const second = conversion('lead', 'unique-id-1', { form: 'contact' })
+      expect(second).toBe(false)
+      
+      expect(destination).toHaveBeenCalledTimes(1)
+    })
+  })
 })

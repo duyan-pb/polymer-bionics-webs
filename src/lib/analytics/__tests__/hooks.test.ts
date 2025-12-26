@@ -313,6 +313,21 @@ describe('Analytics Hooks', () => {
       
       expect(result.current.hasConverted).toBe(true)
     })
+
+    it('does not update hasConverted when conversion fails', async () => {
+      const { analytics } = await import('../tracker')
+      vi.mocked(analytics.conversion).mockReturnValueOnce(false)
+      
+      const { result } = renderHook(() => useConversionTracking('lead_submitted'))
+      
+      expect(result.current.hasConverted).toBe(false)
+      
+      act(() => {
+        result.current.trackConversion()
+      })
+      
+      expect(result.current.hasConverted).toBe(false)
+    })
   })
 
   describe('useConsent storage events', () => {

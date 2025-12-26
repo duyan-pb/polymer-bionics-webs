@@ -32,8 +32,13 @@ type EventPayload = z.infer<typeof EventPayloadSchema>
 // =============================================================================
 
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>()
-const RATE_LIMIT_WINDOW_MS = 60 * 1000 // 1 minute
+
+/** Rate limit window duration (ms) - 1 minute */
+const RATE_LIMIT_WINDOW_MS = 60 * 1000
 const RATE_LIMIT_MAX_REQUESTS = parseInt(process.env.RATE_LIMIT_REQUESTS_PER_MINUTE || '100', 10)
+
+/** HTTP status code for conflict (duplicate) */
+const HTTP_STATUS_CONFLICT = 409
 
 function checkRateLimit(clientIp: string): boolean {
   const now = Date.now()
@@ -84,7 +89,7 @@ async function getTableClient(): Promise<TableClient | null> {
   } catch (error: unknown) {
     // Table might already exist
     const err = error as { statusCode?: number }
-    if (err.statusCode !== 409) {
+    if (err.statusCode !== HTTP_STATUS_CONFLICT) {
       console.error('Failed to create dedup table:', error)
       return null
     }

@@ -165,6 +165,18 @@ describe('UTM Attribution', () => {
         const stored = localStorage.getItem('pb_utm')
         expect(stored).toBe(null)
       })
+
+      it('returns existing session UTM when no new URL params', () => {
+        // First capture with UTM
+        mockLocation.search = '?utm_source=google'
+        captureUTM('session')
+        
+        // Now call without UTM in URL
+        mockLocation.search = ''
+        const result = captureUTM('session')
+        
+        expect(result?.utm_source).toBe('google')
+      })
     })
 
     it('captures all UTM parameters', () => {

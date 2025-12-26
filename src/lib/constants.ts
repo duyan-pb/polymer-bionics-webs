@@ -81,3 +81,22 @@ export const CONTENT_SECTION_CLASSES = 'py-20 px-8'
  * Max content width wrapper
  */
 export const CONTENT_MAX_WIDTH = 'max-w-[1280px] mx-auto'
+
+// =============================================================================
+// TIMING CONSTANTS
+// =============================================================================
+
+/**
+ * Default debounce delay for search inputs (ms)
+ */
+export const DEBOUNCE_DELAY_MS = 200
+
+/**
+ * Idle callback fallback timeout (ms)
+ */
+export const IDLE_CALLBACK_TIMEOUT_MS = 500
+
+/**
+ * Scroll threshold for showing back-to-top button (px)
+ */
+export const SCROLL_THRESHOLD_PX = 400

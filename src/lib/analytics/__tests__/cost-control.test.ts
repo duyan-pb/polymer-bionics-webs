@@ -634,4 +634,259 @@ describe('Cost Control', () => {
       consoleSpy.mockRestore()
     })
   })
+
+  describe('session limit enforcement', () => {
+    it('blocks low-priority events at session limit', () => {
+      localStorage.removeItem('pb_cost_metrics')
+      initCostControls({
+        eventsPerSession: 5,
+        eventsPerMinute: 1000, // High to avoid rate limit
+        eventPriorities: {
+          click: 3, // Low priority
+        },
+      })
+      
+      // Fill to limit
+      for (let i = 0; i < 5; i++) {
+        recordEventSent()
+      }
+      
+      const decision = shouldAllowEvent('click')
+      expect(decision.reason).toBe('session_limit')
+    })
+
+    it('allows critical events at session limit', () => {
+      localStorage.removeItem('pb_cost_metrics')
+      initCostControls({
+        eventsPerSession: 5,
+        eventsPerMinute: 1000,
+        eventPriorities: {
+          conversion: 10, // Critical priority (>= 8)
+        },
+      })
+      
+      // Fill to limit
+      for (let i = 0; i < 5; i++) {
+        recordEventSent()
+      }
+      
+      const decision = shouldAllowEvent('conversion')
+      expect(decision.allowed).toBe(true)
+    })
+  })
+
+  describe('daily limit enforcement', () => {
+    it('blocks low-priority events at daily limit', () => {
+      localStorage.removeItem('pb_cost_metrics')
+      initCostControls({
+        eventsPerDay: 5,
+        eventsPerSession: 1000,
+        eventsPerMinute: 1000,
+        eventPriorities: {
+          click: 3, // Low priority
+        },
+      })
+      
+      // Fill to daily limit
+      for (let i = 0; i < 5; i++) {
+        recordEventSent()
+      }
+      
+      const decision = shouldAllowEvent('click')
+      expect(decision.reason).toBe('daily_limit')
+    })
+  })
+
+  describe('monthly limit enforcement', () => {
+    it('blocks low-priority events at monthly limit', () => {
+      // Simulate stored metrics with high daily count but at monthly limit
+      const storedMetrics = {
+        eventsThisMinute: 0,
+        eventsThisSession: 0,
+        eventsToday: 0, // Reset daily to avoid daily limit
+        eventsThisMonth: 100, // At monthly limit
+        lastMinuteReset: Date.now(),
+        lastDayReset: new Date().toISOString().split('T')[0],
+        lastMonthReset: new Date().toISOString().substring(0, 7),
+        eventsDropped: 0,
+        currentSamplingRate: 1.0,
+      }
+      localStorage.setItem('pb_cost_metrics', JSON.stringify(storedMetrics))
+      
+      initCostControls({
+        eventsPerMonth: 100, // Match the stored monthly count
+        eventsPerDay: 10000, // High to avoid daily limit
+        eventsPerSession: 10000, // High to avoid session limit
+        eventsPerMinute: 10000, // High to avoid rate limit
+        eventPriorities: {
+          click: 3, // Low priority
+        },
+      })
+      
+      const decision = shouldAllowEvent('click')
+      expect(decision.reason).toBe('monthly_limit')
+    })
+  })
+
+  describe('budget exceeded enforcement', () => {
+    it('blocks low-priority events when budget exceeded', () => {
+      // Simulate stored metrics with high event count to exceed budget
+      const storedMetrics = {
+        eventsThisMinute: 0,
+        eventsThisSession: 0,
+        eventsToday: 0,
+        eventsThisMonth: 1000000, // High enough to exceed budget
+        lastMinuteReset: Date.now(),
+        lastDayReset: new Date().toISOString().split('T')[0],
+        lastMonthReset: new Date().toISOString().substring(0, 7),
+        eventsDropped: 0,
+        currentSamplingRate: 1.0,
+      }
+      localStorage.setItem('pb_cost_metrics', JSON.stringify(storedMetrics))
+      
+      initCostControls({
+        monthlyBudget: 1, // $1 budget
+        costPer1000Events: 1, // $1 per 1000 events = $1000 cost with 1M events
+        eventsPerMonth: 10000000, // High to avoid monthly limit
+        eventsPerDay: 10000000,
+        eventsPerSession: 10000000,
+        eventsPerMinute: 10000000,
+        eventPriorities: {
+          click: 3, // Low priority
+        },
+      })
+      
+      const decision = shouldAllowEvent('click')
+      expect(decision.reason).toBe('budget_exceeded')
+    })
+  })
+
+  describe('sampling behavior', () => {
+    it('samples out low-priority events when approaching limits', () => {
+      // Simulate stored metrics at 85% of monthly limit
+      const storedMetrics = {
+        eventsThisMinute: 0,
+        eventsThisSession: 0,
+        eventsToday: 0,
+        eventsThisMonth: 85, // 85% of 100
+        lastMinuteReset: Date.now(),
+        lastDayReset: new Date().toISOString().split('T')[0],
+        lastMonthReset: new Date().toISOString().substring(0, 7),
+        eventsDropped: 0,
+        currentSamplingRate: 1.0,
+      }
+      localStorage.setItem('pb_cost_metrics', JSON.stringify(storedMetrics))
+      
+      initCostControls({
+        eventsPerMonth: 100, // 85% utilization triggers aggressive sampling
+        eventsPerDay: 10000, // High to avoid daily limit
+        eventsPerSession: 10000,
+        eventsPerMinute: 10000,
+        aggressiveSamplingThreshold: 0.8,
+        aggressiveSamplingRate: 0.01,
+        eventPriorities: {
+          scroll: 1, // Very low priority (< 5)
+        },
+      })
+      
+      // Mock random to always be above sampling rate
+      vi.spyOn(Math, 'random').mockReturnValue(0.99)
+      
+      const decision = shouldAllowEvent('scroll')
+      expect(decision.reason).toBe('sampled_out')
+      
+      vi.spyOn(Math, 'random').mockRestore()
+    })
+
+    it('allows events when random is below sampling rate', () => {
+      // Simulate stored metrics at 85% of monthly limit
+      const storedMetrics = {
+        eventsThisMinute: 0,
+        eventsThisSession: 0,
+        eventsToday: 0,
+        eventsThisMonth: 85, // 85% of 100
+        lastMinuteReset: Date.now(),
+        lastDayReset: new Date().toISOString().split('T')[0],
+        lastMonthReset: new Date().toISOString().substring(0, 7),
+        eventsDropped: 0,
+        currentSamplingRate: 1.0,
+      }
+      localStorage.setItem('pb_cost_metrics', JSON.stringify(storedMetrics))
+      
+      initCostControls({
+        eventsPerMonth: 100, // 85% utilization triggers sampling
+        eventsPerDay: 10000, // High to avoid daily limit
+        eventsPerSession: 10000,
+        eventsPerMinute: 10000,
+        aggressiveSamplingThreshold: 0.8,
+        aggressiveSamplingRate: 0.5, // 50% sampling rate
+        eventPriorities: {
+          scroll: 1, // Very low priority
+        },
+      })
+      
+      // Mock random to be below sampling rate
+      vi.spyOn(Math, 'random').mockReturnValue(0.1)
+      
+      const decision = shouldAllowEvent('scroll')
+      expect(decision.allowed).toBe(true)
+      
+      vi.spyOn(Math, 'random').mockRestore()
+    })
+  })
+
+  describe('gradual sampling reduction', () => {
+    it('applies gradual sampling between 50% and threshold', () => {
+      localStorage.removeItem('pb_cost_metrics')
+      initCostControls({
+        eventsPerDay: 100,
+        eventsPerSession: 10000,
+        eventsPerMinute: 10000,
+        baseSamplingRate: 1.0,
+        aggressiveSamplingThreshold: 0.8,
+        aggressiveSamplingRate: 0.1,
+      })
+      
+      // Fill to 65% of daily limit (between 50% and 80% threshold)
+      for (let i = 0; i < 65; i++) {
+        recordEventSent()
+      }
+      
+      const status = getThrottlingStatus()
+      // Sampling rate should be between aggressive (0.1) and base (1.0)
+      expect(status.currentSamplingRate).toBeLessThan(1.0)
+      expect(status.currentSamplingRate).toBeGreaterThan(0.1)
+    })
+  })
+
+  describe('storage failure handling', () => {
+    it('handles localStorage.getItem failure gracefully', () => {
+      const originalGetItem = localStorage.getItem.bind(localStorage)
+      localStorage.getItem = vi.fn().mockImplementation(() => {
+        throw new Error('Storage error')
+      })
+      
+      // Should not throw
+      expect(() => initCostControls({})).not.toThrow()
+      
+      localStorage.getItem = originalGetItem
+    })
+
+    it('handles localStorage.setItem failure gracefully', () => {
+      localStorage.removeItem('pb_cost_metrics')
+      initCostControls({})
+      
+      const originalSetItem = localStorage.setItem.bind(localStorage)
+      localStorage.setItem = vi.fn().mockImplementation(() => {
+        throw new Error('Storage quota exceeded')
+      })
+      
+      // Record multiple events to trigger save
+      for (let i = 0; i < 15; i++) {
+        expect(() => recordEventSent()).not.toThrow()
+      }
+      
+      localStorage.setItem = originalSetItem
+    })
+  })
 })

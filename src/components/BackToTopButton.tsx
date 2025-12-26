@@ -8,6 +8,7 @@
  */
 
 import { useEffect, useState, useRef } from 'react'
+import { SCROLL_THRESHOLD_PX } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { ArrowUp } from '@phosphor-icons/react'
 
@@ -34,7 +35,7 @@ export function BackToTopButton() {
     const onScroll = () => {
       if (!ticking.current) {
         window.requestAnimationFrame(() => {
-          setVisible(window.scrollY > 400)
+          setVisible(window.scrollY > SCROLL_THRESHOLD_PX)
           ticking.current = false
         })
         ticking.current = true

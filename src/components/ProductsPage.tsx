@@ -371,5 +371,3 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
     </div>
   )
 }
-
-export default ProductsPage

@@ -14,6 +14,32 @@ import Fuse from 'fuse.js'
 import { NAV_ITEMS } from '@/lib/constants'
 import type { TeamMember, Product, Datasheet, NewsItem } from '@/lib/types'
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/** Maximum number of results to display per category */
+const MAX_RESULTS_PER_CATEGORY = 8
+
+/** Maximum total search results to show */
+const MAX_SEARCH_RESULTS = 12
+
+/** Fuse.js search threshold (lower = stricter matching) */
+const SEARCH_THRESHOLD = 0.38
+
+type SearchType = 'nav' | 'product' | 'team' | 'datasheet' | 'news'
+
+/**
+ * Search item structure for unified search.
+ */
+interface SearchItem {
+  id: string
+  label: string
+  subtitle?: string
+  page: string
+  type: SearchType
+}
+
 /**
  * Props for the GlobalSearch component.
  */
@@ -70,47 +96,45 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
     return () => window.removeEventListener('keydown', listener)
   }, [open, onOpenChange])
 
-  type SearchType = 'nav' | 'product' | 'team' | 'datasheet' | 'news'
-
-  const searchItems = useMemo(() => {
-    const navItems = NAV_ITEMS.map((item) => ({
+  const searchItems = useMemo((): SearchItem[] => {
+    const navItems: SearchItem[] = NAV_ITEMS.map((item) => ({
       id: `nav-${item.id}`,
       label: item.label,
       subtitle: item.description,
       page: item.id,
-      type: 'nav' as SearchType,
+      type: 'nav',
     }))
 
-    const productItems = (products || []).map((p) => ({
+    const productItems: SearchItem[] = (products || []).map((p) => ({
       id: `product-${p.id}`,
       label: p.name,
       subtitle: p.category,
       page: 'products',
-      type: 'product' as SearchType,
+      type: 'product',
     }))
 
-    const teamItems = (team || []).map((m) => ({
+    const teamItems: SearchItem[] = (team || []).map((m) => ({
       id: `team-${m.id}`,
       label: m.name,
       subtitle: m.role,
       page: 'team',
-      type: 'team' as SearchType,
+      type: 'team',
     }))
 
-    const datasheetItems = (datasheets || []).map((d) => ({
+    const datasheetItems: SearchItem[] = (datasheets || []).map((d) => ({
       id: `datasheet-${d.id}`,
       label: d.title,
       subtitle: d.category,
       page: 'datasheets',
-      type: 'datasheet' as SearchType,
+      type: 'datasheet',
     }))
 
-    const newsItems = (news || []).map((n) => ({
+    const newsItems: SearchItem[] = (news || []).map((n) => ({
       id: `news-${n.id}`,
       label: n.title,
       subtitle: n.category,
       page: 'news',
-      type: 'news' as SearchType,
+      type: 'news',
     }))
 
     return [...navItems, ...productItems, ...teamItems, ...datasheetItems, ...newsItems]
@@ -122,7 +146,7 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
       { name: 'subtitle', weight: 0.3 },
       { name: 'type', weight: 0.1 },
     ],
-    threshold: 0.38,
+    threshold: SEARCH_THRESHOLD,
     ignoreLocation: true,
   }), [searchItems])
 
@@ -131,7 +155,7 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
     if (!trimmed) {
       return []
     }
-    return fuse.search(trimmed).slice(0, 12).map(result => result.item)
+    return fuse.search(trimmed).slice(0, MAX_SEARCH_RESULTS).map(result => result.item)
   }, [fuse, searchQuery])
 
   const hasQuery = searchQuery.trim().length > 0
@@ -196,7 +220,7 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
             </CommandGroup>
 
             <CommandGroup heading="Products">
-              {(products || []).slice(0, 8).map((p) => (
+              {(products || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((p) => (
                 <CommandItem key={p.id} value={p.name} onSelect={() => handleSelect('products')}>
                   <Package className="mr-2" size={16} weight="duotone" />
                   {p.name} – {p.category}
@@ -205,7 +229,7 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
             </CommandGroup>
 
             <CommandGroup heading="Team">
-              {(team || []).slice(0, 8).map((m) => (
+              {(team || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((m) => (
                 <CommandItem key={m.id} value={m.name} onSelect={() => handleSelect('team')}>
                   <Users className="mr-2" size={16} weight="duotone" />
                   {m.name} – {m.role}
@@ -214,7 +238,7 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
             </CommandGroup>
 
             <CommandGroup heading="Datasheets">
-              {(datasheets || []).slice(0, 8).map((d) => (
+              {(datasheets || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((d) => (
                 <CommandItem key={d.id} value={d.title} onSelect={() => handleSelect('datasheets')}>
                   <FileText className="mr-2" size={16} weight="duotone" />
                   {d.title}
@@ -223,7 +247,7 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
             </CommandGroup>
 
             <CommandGroup heading="News & Publications">
-              {(news || []).slice(0, 8).map((n) => (
+              {(news || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((n) => (
                 <CommandItem key={n.id} value={n.title} onSelect={() => handleSelect('news')}>
                   <Newspaper className="mr-2" size={16} weight="duotone" />
                   {n.title}
@@ -236,5 +260,3 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
     </CommandDialog>
   )
 }
-
-export default GlobalSearch

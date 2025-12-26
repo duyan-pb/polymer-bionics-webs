@@ -761,6 +761,18 @@ describe('Schema Validation', () => {
       expect(required).toContain('conversion_type')
       expect(required).toContain('lead_type')
     })
+
+    it('returns only base properties for unknown event name', () => {
+      const required = getRequiredProperties('unknown_custom_event')
+      // Should have base properties but no event-specific ones
+      expect(required).toContain('anonymous_id')
+      expect(required).toContain('session_id')
+      expect(required).toContain('page_url')
+      // Should not have any event-specific properties
+      expect(required).not.toContain('page_name')
+      expect(required).not.toContain('button_id')
+      expect(required).not.toContain('form_id')
+    })
   })
 
   describe('StandardEventPropertiesSchema edge cases', () => {

@@ -28,7 +28,7 @@ import { AnalyticsProvider } from '@/components/AnalyticsProvider'
 import { ConsentBanner } from '@/components/ConsentBanner'
 import { useTheme } from '@/hooks/use-theme'
 import { usePageTracking } from '@/lib/analytics/hooks'
-import { PAGE_TRANSITION } from '@/lib/constants'
+import { PAGE_TRANSITION, IDLE_CALLBACK_TIMEOUT_MS } from '@/lib/constants'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
 import { placeholderPublications, placeholderNews } from '@/lib/publications-data'
 
@@ -136,7 +136,7 @@ function App() {
     if (win.requestIdleCallback) {
       idleId = win.requestIdleCallback(preload)
     } else {
-      timeoutId = window.setTimeout(preload, 500)
+      timeoutId = window.setTimeout(preload, IDLE_CALLBACK_TIMEOUT_MS)
     }
 
     return () => {

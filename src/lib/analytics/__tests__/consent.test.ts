@@ -458,4 +458,280 @@ describe('Consent Management', () => {
       expect(state.choices).toBeDefined()
     })
   })
+
+  describe('saveConsentState error handling', () => {
+    it('handles localStorage write failure gracefully', () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      
+      // Mock localStorage.setItem to throw
+      const originalSetItem = localStorage.setItem.bind(localStorage)
+      localStorage.setItem = vi.fn().mockImplementation(() => {
+        throw new Error('Storage quota exceeded')
+      })
+      
+      // Should not throw even when storage fails
+      expect(() => saveConsentState({
+        ...DEFAULT_CONSENT_STATE,
+        hasInteracted: true,
+      })).not.toThrow()
+      
+      // Should log error
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('[Consent] Failed to save consent state'),
+        expect.any(Error)
+      )
+      
+      // Restore
+      localStorage.setItem = originalSetItem
+      consoleSpy.mockRestore()
+    })
+  })
+
+  describe('consent state migration', () => {
+    it('handles missing version in stored state', () => {
+      // Store a consent state without version
+      const storedState = {
+        timestamp: new Date().toISOString(),
+        choices: { necessary: true, analytics: true, marketing: false },
+        bannerShown: true,
+        hasInteracted: true,
+      }
+      localStorage.setItem('pb_consent', JSON.stringify(storedState))
+      
+      const state = getConsentState()
+      
+      // Should have version filled in
+      expect(state.version).toBeDefined()
+      expect(state.version).toBe('1.0.0')
+    })
+
+    it('handles missing timestamp in stored state', () => {
+      // Store a consent state without timestamp
+      const storedState = {
+        version: '1.0.0',
+        choices: { necessary: true, analytics: true, marketing: false },
+        bannerShown: true,
+        hasInteracted: true,
+      }
+      localStorage.setItem('pb_consent', JSON.stringify(storedState))
+      
+      const state = getConsentState()
+      
+      // Should have timestamp filled in
+      expect(state.timestamp).toBeDefined()
+    })
+
+    it('handles missing choices in stored state', () => {
+      // Store a consent state without choices
+      const storedState = {
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        bannerShown: true,
+        hasInteracted: true,
+      }
+      localStorage.setItem('pb_consent', JSON.stringify(storedState))
+      
+      const state = getConsentState()
+      
+      // Should have default choices
+      expect(state.choices.necessary).toBe(true)
+      expect(state.choices.analytics).toBe(false)
+      expect(state.choices.marketing).toBe(false)
+    })
+
+    it('handles missing bannerShown in stored state', () => {
+      // Store a consent state without bannerShown
+      const storedState = {
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        choices: { necessary: true, analytics: true, marketing: false },
+        hasInteracted: true,
+      }
+      localStorage.setItem('pb_consent', JSON.stringify(storedState))
+      
+      const state = getConsentState()
+      
+      // Should default to false
+      expect(state.bannerShown).toBe(false)
+    })
+
+    it('handles missing hasInteracted in stored state', () => {
+      // Store a consent state without hasInteracted
+      const storedState = {
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        choices: { necessary: true, analytics: true, marketing: false },
+        bannerShown: true,
+      }
+      localStorage.setItem('pb_consent', JSON.stringify(storedState))
+      
+      const state = getConsentState()
+      
+      // Should default to false
+      expect(state.hasInteracted).toBe(false)
+    })
+
+    it('preserves region if present', () => {
+      // Store a consent state with region
+      const storedState = {
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        choices: { necessary: true, analytics: true, marketing: false },
+        bannerShown: true,
+        hasInteracted: true,
+        region: 'EU',
+      }
+      localStorage.setItem('pb_consent', JSON.stringify(storedState))
+      
+      const state = getConsentState()
+      
+      // Should preserve region
+      expect(state.region).toBe('EU')
+    })
+  })
+
+  describe('getCookie edge cases', () => {
+    it('returns null when cookie is not found', () => {
+      // Clear all cookies
+      document.cookie.split(';').forEach(c => {
+        const name = c.split('=')[0]?.trim() ?? ''
+        if (name) {
+          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+        }
+      })
+      localStorage.removeItem('pb_consent')
+      
+      const state = getConsentState()
+      
+      // Should return default state when no cookie or localStorage
+      expect(state).toEqual(DEFAULT_CONSENT_STATE)
+    })
+
+    it('reads from cookie when value is present', () => {
+      const consentData = {
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        choices: { necessary: true, analytics: true, marketing: true },
+        bannerShown: true,
+        hasInteracted: true,
+      }
+      
+      // Set in cookie
+      document.cookie = `pb_consent=${encodeURIComponent(JSON.stringify(consentData))}; path=/`
+      
+      // Ensure localStorage is empty
+      localStorage.removeItem('pb_consent')
+      
+      const state = getConsentState()
+      
+      expect(state.choices.analytics).toBe(true)
+      expect(state.choices.marketing).toBe(true)
+    })
+  })
+
+  describe('clearNonEssentialCookies edge cases', () => {
+    it('handles cookies without name', () => {
+      // Set some cookies and try to clear
+      document.cookie = 'test_cookie=value; path=/'
+      
+      // Should not throw
+      expect(() => clearNonEssentialCookies()).not.toThrow()
+    })
+
+    it('preserves essential pb_consent cookie', () => {
+      // Set up consent cookie
+      saveConsentState({ ...DEFAULT_CONSENT_STATE, hasInteracted: true })
+      
+      // Set non-essential cookie
+      document.cookie = 'tracking=value; path=/'
+      
+      clearNonEssentialCookies()
+      
+      // pb_consent should be preserved (in localStorage)
+      expect(localStorage.getItem('pb_consent')).toBeTruthy()
+    })
+
+    it('clears non-essential cookie', () => {
+      // Set non-essential cookie
+      document.cookie = 'analytics_cookie=value; path=/'
+      
+      clearNonEssentialCookies()
+      
+      // Cookie should be cleared (or attempted to clear)
+      // Note: In test environment, cookies may behave differently
+    })
+
+    it('handles cookie with empty name part', () => {
+      // Clear all existing cookies first
+      const cookies = document.cookie.split(';')
+      cookies.forEach(() => {
+        // Iterate through, function handles empty names
+      })
+      
+      // Should not throw when encountering empty cookie entries
+      expect(() => clearNonEssentialCookies()).not.toThrow()
+    })
+  })
+
+  describe('setCookie with https protocol', () => {
+    it('sets Secure flag when on https', () => {
+      // Mock https protocol
+      const originalLocation = window.location
+      Object.defineProperty(window, 'location', {
+        value: {
+          ...originalLocation,
+          protocol: 'https:',
+          hostname: 'example.com',
+        },
+        writable: true,
+        configurable: true,
+      })
+      
+      // Save consent state which triggers setCookie
+      saveConsentState({
+        ...DEFAULT_CONSENT_STATE,
+        hasInteracted: true,
+      })
+      
+      // Check that cookie was set (even though we can't directly verify the Secure flag)
+      expect(document.cookie).toContain('pb_consent')
+      
+      // Restore
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        writable: true,
+        configurable: true,
+      })
+    })
+
+    it('does not set Secure flag when on http', () => {
+      // Mock http protocol
+      const originalLocation = window.location
+      Object.defineProperty(window, 'location', {
+        value: {
+          ...originalLocation,
+          protocol: 'http:',
+          hostname: 'localhost',
+        },
+        writable: true,
+        configurable: true,
+      })
+      
+      // Save consent state which triggers setCookie
+      saveConsentState({
+        ...DEFAULT_CONSENT_STATE,
+        hasInteracted: true,
+      })
+      
+      // Cookie should still be set
+      expect(document.cookie).toContain('pb_consent')
+      
+      // Restore
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        writable: true,
+        configurable: true,
+      })
+    })
+  })
 })

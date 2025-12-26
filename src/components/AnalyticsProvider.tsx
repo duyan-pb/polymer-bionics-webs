@@ -151,5 +151,3 @@ export const AnalyticsProvider = memo(({
   
   return <>{children}</>
 })
-
-export default AnalyticsProvider

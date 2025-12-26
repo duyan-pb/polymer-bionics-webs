@@ -20,6 +20,7 @@ import { Download, MagnifyingGlass, FileText, Calendar } from '@phosphor-icons/r
 import type { Datasheet } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
+import { DEBOUNCE_DELAY_MS } from '@/lib/constants'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 /**
@@ -56,7 +57,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
   useEffect(() => {
     const handle = window.setTimeout(() => {
       setDebouncedSearch(searchTerm.trim().toLowerCase())
-    }, 200)
+    }, DEBOUNCE_DELAY_MS)
     return () => window.clearTimeout(handle)
   }, [searchTerm])
 
@@ -266,5 +267,3 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
     </div>
   )
 }
-
-export default DatasheetsPage

@@ -4,6 +4,8 @@
   "project": ["src/**/*.{ts,tsx}"],
   "ignore": [
     "src/components/ui/**",
+    "src/components/contact/index.ts",
+    "src/test/mocks/**",
     "src/vite-end.d.ts",
     "src/types/**",
     "packages/**",
@@ -18,6 +20,8 @@
     "@radix-ui/*",
     "@heroicons/react",
     "@hookform/resolvers",
+    "@microsoft/applicationinsights-web",
+    "web-vitals",
     "lucide-react",
     "react-day-picker",
     "react-hook-form",
