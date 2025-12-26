@@ -1,3 +1,18 @@
+/**
+ * Vite Configuration
+ * 
+ * Build tooling configuration for the Polymer Bionics React application.
+ * 
+ * Features:
+ * - React with SWC for fast compilation
+ * - Tailwind CSS v4 integration
+ * - GitHub Spark plugin integration
+ * - Phosphor Icons proxy plugin
+ * - Optimized chunk splitting for better caching
+ * - Path alias (@/) for clean imports
+ * 
+ * @see https://vite.dev/config/
+ */
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig, type PluginOption } from "vite";

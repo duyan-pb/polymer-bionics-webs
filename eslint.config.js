@@ -1,3 +1,20 @@
+/**
+ * ESLint Configuration
+ * 
+ * Code quality and consistency rules for TypeScript/React development.
+ * 
+ * Rule Categories:
+ * - Type Safety: No `any`, consistent type imports
+ * - Complexity: Cyclomatic < 18, max depth 4
+ * - Code Style: React hooks rules, refresh constraints
+ * 
+ * Ignored Paths:
+ * - dist/, node_modules/, packages/
+ * - src/components/ui/** (shadcn primitives)
+ * - *.config.* files
+ * 
+ * Run: npm run lint | npm run lint -- --fix
+ */
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'

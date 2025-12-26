@@ -1,3 +1,22 @@
+/**
+ * Theme CSS Variables
+ * 
+ * Design token definitions using Radix UI color scales.
+ * 
+ * Color System:
+ * - Radix UI semantic color scales (1-12 steps + alpha variants)
+ * - Light/dark mode variants auto-imported
+ * - Primary accent: Teal scale
+ * - Neutral: Sage/Olive/Sand options
+ * - Semantic: Success, Warning, Error, Info
+ * 
+ * Usage:
+ * - var(--teal-9) for primary actions
+ * - var(--sage-1) for backgrounds
+ * - var(--red-9) for error states
+ * 
+ * @see tailwind.config.js for Tailwind color mappings
+ */
 @import "tailwindcss";
 
 @import '@radix-ui/colors/sage-dark.css' layer(base);

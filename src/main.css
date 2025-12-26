@@ -1,3 +1,20 @@
+/**
+ * Main Stylesheet Entry Point
+ * 
+ * Primary CSS entry point that imports all styling modules.
+ * 
+ * Import Order:
+ * 1. Tailwind CSS base utilities
+ * 2. Theme CSS variables (colors, spacing)
+ * 3. Global styles (typography, scrollbar)
+ * 4. Animation utilities (tw-animate-css)
+ * 
+ * Tailwind v4 Compatibility:
+ * - Border color defaults to currentColor
+ * - Dark mode via @custom-variant
+ * 
+ * @see tailwind.config.js for Tailwind configuration
+ */
 @import 'tailwindcss';
 
 @import './styles/theme.css';

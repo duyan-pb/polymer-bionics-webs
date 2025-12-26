@@ -1,3 +1,18 @@
+/**
+ * Global Styles
+ * 
+ * Base layer styles and utilities for the Polymer Bionics website.
+ * 
+ * Features:
+ * - Smooth scrolling and optimized text rendering
+ * - Content visibility optimization for off-screen sections
+ * - Typography system with Lato/Lora fonts
+ * - Scrollbar styling for dark/light themes
+ * - Reduced motion preferences support
+ * 
+ * @see main.css for the complete style import chain
+ * @see styles/theme.css for color variables
+ */
 @import 'tailwindcss';
 @import "tw-animate-css";
 

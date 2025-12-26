@@ -1,3 +1,23 @@
+/**
+ * Test Setup Configuration
+ * 
+ * Global test setup for Vitest with React Testing Library.
+ * 
+ * Mocks Provided:
+ * - localStorage: In-memory storage with spy functions
+ * - sessionStorage: In-memory storage with spy functions
+ * - document.cookie: Cookie parsing and storage
+ * - matchMedia: Media query mocking for responsive tests
+ * - ResizeObserver: For components using resize detection
+ * - IntersectionObserver: For lazy-loading components
+ * - window.spark: GitHub Spark API mock
+ * 
+ * Lifecycle:
+ * - beforeEach: Resets all storage mocks
+ * - afterEach: Clears all mocks and timers
+ * 
+ * @see vitest.config.ts for test configuration
+ */
 import '@testing-library/jest-dom'
 import { vi, beforeEach, afterEach } from 'vitest'
 

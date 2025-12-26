@@ -1,3 +1,23 @@
+/**
+ * Tailwind CSS Configuration
+ * 
+ * Extends Tailwind CSS v4 with custom design tokens and utilities.
+ * 
+ * Features:
+ * - Dynamic theme loading from theme.json
+ * - CSS variable-based color system (neutral, accent, semantic)
+ * - Custom screens: coarse/fine pointer, PWA display mode
+ * - Container centering with responsive padding
+ * - Animation utilities for UI transitions
+ * 
+ * Color System:
+ * - 12-step neutral scale with alpha variants
+ * - 12-step accent scale for brand colors
+ * - Semantic colors mapped to CSS variables
+ * 
+ * @see theme.json for color definitions
+ * @see src/styles/theme.css for CSS variable declarations
+ */
 import fs from "fs";
 
 /** @type {import('tailwindcss').Config} */

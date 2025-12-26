@@ -1,3 +1,22 @@
+/**
+ * Vitest Configuration
+ * 
+ * Test framework configuration for unit and integration testing.
+ * 
+ * Features:
+ * - React Testing Library with happy-dom environment
+ * - V8 coverage provider with HTML and LCOV reporters
+ * - Coverage thresholds per critical module (≥80% for analytics)
+ * - Mock configuration for external dependencies
+ * - JSON reporter for CI/CD integration
+ * 
+ * Coverage Targets:
+ * - Global: 75% statements, 65% branches, 80% functions
+ * - Analytics core (consent, identity, tracker): 85-90%
+ * - Schemas: 95%+
+ * 
+ * Run: npm run test | npm run test:coverage
+ */
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'

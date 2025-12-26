@@ -1,3 +1,22 @@
+/**
+ * Vite Environment Type Declarations
+ * 
+ * TypeScript type definitions for Vite build-time environment variables
+ * and GitHub Spark runtime constants.
+ * 
+ * Build Metadata (from GitHub Actions):
+ * - VITE_BUILD_TIME: Commit timestamp
+ * - VITE_BUILD_SHA: Git commit SHA
+ * - VITE_BUILD_REF: Branch name
+ * 
+ * Analytics Configuration:
+ * - VITE_APPINSIGHTS_CONNECTION_STRING: Azure App Insights
+ * - VITE_GA4_MEASUREMENT_ID: Google Analytics 4
+ * - VITE_EVENTS_ENDPOINT: Custom events API
+ * - VITE_CLARITY_PROJECT_ID: Microsoft Clarity
+ * 
+ * @see docs/ANALYTICS.md for analytics setup
+ */
 /// <reference types="vite/client" />
 declare const GITHUB_RUNTIME_PERMANENT_NAME: string
 declare const BASE_KV_SERVICE_URL: string
