@@ -213,8 +213,12 @@ export function usePageTracking(
   _properties: Record<string, unknown> = {}
 ): void {
   useEffect(() => {
-    analytics.page(pageName)
-  }, [pageName]) // Only track when page name changes
+    try {
+      analytics.page(pageName)
+    } catch (err) {
+      console.warn('[Analytics] Failed to track page view:', err)
+    }
+  }, [pageName])
 }
 
 // =============================================================================

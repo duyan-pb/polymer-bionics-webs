@@ -56,6 +56,27 @@ function App() {
   const [news] = useKV<NewsItem[]>('news', placeholderNews)
   const [publications] = useKV<Publication[]>('publications', placeholderPublications)
 
+  // Global error handler
+  useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      console.error('[App] Unhandled error:', event.error)
+      event.preventDefault()
+    }
+    
+    const handleRejection = (event: PromiseRejectionEvent) => {
+      console.error('[App] Unhandled promise rejection:', event.reason)
+      event.preventDefault()
+    }
+    
+    window.addEventListener('error', handleError)
+    window.addEventListener('unhandledrejection', handleRejection)
+    
+    return () => {
+      window.removeEventListener('error', handleError)
+      window.removeEventListener('unhandledrejection', handleRejection)
+    }
+  }, [])
+
   const handleNavigate = useCallback((page: string) => {
     setCurrentPage(page)
     window.scrollTo({ top: 0, behavior: 'smooth' })

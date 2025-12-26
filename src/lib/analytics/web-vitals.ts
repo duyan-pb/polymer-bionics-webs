@@ -158,75 +158,95 @@ function reportMetric(metric: WebVitalsMetric): void {
  * Handle LCP (Largest Contentful Paint)
  */
 function handleLCP(metric: { value: number; delta: number; id: string; navigationType: string; attribution?: unknown }): void {
-  reportMetric({
-    name: 'LCP',
-    value: metric.value,
-    delta: metric.delta,
-    id: metric.id,
-    rating: getRating('LCP', metric.value),
-    navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
-    attribution: metric.attribution as Record<string, unknown>,
-  })
+  try {
+    reportMetric({
+      name: 'LCP',
+      value: metric.value,
+      delta: metric.delta,
+      id: metric.id,
+      rating: getRating('LCP', metric.value),
+      navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
+      attribution: metric.attribution as Record<string, unknown>,
+    })
+  } catch (err) {
+    console.warn('[WebVitals] Error handling LCP metric:', err)
+  }
 }
 
 /**
  * Handle INP (Interaction to Next Paint)
  */
 function handleINP(metric: { value: number; delta: number; id: string; navigationType: string; attribution?: unknown }): void {
-  reportMetric({
-    name: 'INP',
-    value: metric.value,
-    delta: metric.delta,
-    id: metric.id,
-    rating: getRating('INP', metric.value),
-    navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
-    attribution: metric.attribution as Record<string, unknown>,
-  })
+  try {
+    reportMetric({
+      name: 'INP',
+      value: metric.value,
+      delta: metric.delta,
+      id: metric.id,
+      rating: getRating('INP', metric.value),
+      navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
+      attribution: metric.attribution as Record<string, unknown>,
+    })
+  } catch (err) {
+    console.warn('[WebVitals] Error handling INP metric:', err)
+  }
 }
 
 /**
  * Handle CLS (Cumulative Layout Shift)
  */
 function handleCLS(metric: { value: number; delta: number; id: string; navigationType: string; attribution?: unknown }): void {
-  reportMetric({
-    name: 'CLS',
-    value: metric.value,
-    delta: metric.delta,
-    id: metric.id,
-    rating: getRating('CLS', metric.value),
-    navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
-    attribution: metric.attribution as Record<string, unknown>,
-  })
+  try {
+    reportMetric({
+      name: 'CLS',
+      value: metric.value,
+      delta: metric.delta,
+      id: metric.id,
+      rating: getRating('CLS', metric.value),
+      navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
+      attribution: metric.attribution as Record<string, unknown>,
+    })
+  } catch (err) {
+    console.warn('[WebVitals] Error handling CLS metric:', err)
+  }
 }
 
 /**
  * Handle FCP (First Contentful Paint)
  */
 function handleFCP(metric: { value: number; delta: number; id: string; navigationType: string; attribution?: unknown }): void {
-  reportMetric({
-    name: 'FCP',
-    value: metric.value,
-    delta: metric.delta,
-    id: metric.id,
-    rating: getRating('FCP', metric.value),
-    navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
-    attribution: metric.attribution as Record<string, unknown>,
-  })
+  try {
+    reportMetric({
+      name: 'FCP',
+      value: metric.value,
+      delta: metric.delta,
+      id: metric.id,
+      rating: getRating('FCP', metric.value),
+      navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
+      attribution: metric.attribution as Record<string, unknown>,
+    })
+  } catch (err) {
+    console.warn('[WebVitals] Error handling FCP metric:', err)
+  }
 }
 
 /**
  * Handle TTFB (Time to First Byte)
  */
 function handleTTFB(metric: { value: number; delta: number; id: string; navigationType: string; attribution?: unknown }): void {
-  reportMetric({
-    name: 'TTFB',
-    value: metric.value,
-    delta: metric.delta,
-    id: metric.id,
-    rating: getRating('TTFB', metric.value),
-    navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
-    attribution: metric.attribution as Record<string, unknown>,
-  })
+  try {
+    reportMetric({
+      name: 'TTFB',
+      value: metric.value,
+      delta: metric.delta,
+      id: metric.id,
+      rating: getRating('TTFB', metric.value),
+      navigationType: metric.navigationType as WebVitalsMetric['navigationType'],
+      attribution: metric.attribution as Record<string, unknown>,
+    })
+  } catch (err) {
+    console.warn('[WebVitals] Error handling TTFB metric:', err)
+  }
 }
 
 // =============================================================================
@@ -239,28 +259,34 @@ function handleTTFB(metric: { value: number; delta: number; id: string; navigati
  * @param options - Configuration options
  */
 export async function initWebVitals(options: Partial<WebVitalsConfig> = {}): Promise<void> {
-  if (isInitialized) {
-    return
+  try {
+    if (isInitialized) {
+      return
+    }
+    
+    config = { ...config, ...options }
+    
+    if (!config.enabled) {
+      return
+    }
+    
+    // Check consent before loading
+    if (!canTrack('analytics')) {
+      // Listen for consent changes
+      window.addEventListener('consent-changed', () => {
+        if (canTrack('analytics') && !isInitialized) {
+          loadWebVitals().catch((err) => {
+            console.warn('[WebVitals] Failed to load after consent:', err)
+          })
+        }
+      })
+      return
+    }
+    
+    await loadWebVitals()
+  } catch (error) {
+    console.error('[WebVitals] Failed to initialize:', error)
   }
-  
-  config = { ...config, ...options }
-  
-  if (!config.enabled) {
-    return
-  }
-  
-  // Check consent before loading
-  if (!canTrack('analytics')) {
-    // Listen for consent changes
-    window.addEventListener('consent-changed', () => {
-      if (canTrack('analytics') && !isInitialized) {
-        loadWebVitals()
-      }
-    })
-    return
-  }
-  
-  await loadWebVitals()
 }
 
 /**
@@ -270,7 +296,10 @@ async function loadWebVitals(): Promise<void> {
   try {
     // Dynamic import to avoid bundling if not used
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webVitals = await import('web-vitals' as any).catch(() => null)
+    const webVitals = await import('web-vitals' as any).catch((err) => {
+      console.warn('[WebVitals] Failed to import library:', err)
+      return null
+    })
     
     if (!webVitals) {
       console.warn('[WebVitals] Library not installed. Run: npm install web-vitals')
@@ -281,21 +310,45 @@ async function loadWebVitals(): Promise<void> {
       reportAllChanges: config.reportAllChanges,
     }
     
-    // Register handlers for each metric
-    if (webVitals.onLCP) {
-      webVitals.onLCP(handleLCP, reportOptions)
+    // Register handlers for each metric with additional error handling
+    try {
+      if (webVitals.onLCP && typeof webVitals.onLCP === 'function') {
+        webVitals.onLCP(handleLCP, reportOptions)
+      }
+    } catch (err) {
+      console.warn('[WebVitals] Failed to register LCP handler:', err)
     }
-    if (webVitals.onINP) {
-      webVitals.onINP(handleINP, reportOptions)
+    
+    try {
+      if (webVitals.onINP && typeof webVitals.onINP === 'function') {
+        webVitals.onINP(handleINP, reportOptions)
+      }
+    } catch (err) {
+      console.warn('[WebVitals] Failed to register INP handler:', err)
     }
-    if (webVitals.onCLS) {
-      webVitals.onCLS(handleCLS, reportOptions)
+    
+    try {
+      if (webVitals.onCLS && typeof webVitals.onCLS === 'function') {
+        webVitals.onCLS(handleCLS, reportOptions)
+      }
+    } catch (err) {
+      console.warn('[WebVitals] Failed to register CLS handler:', err)
     }
-    if (webVitals.onFCP) {
-      webVitals.onFCP(handleFCP, reportOptions)
+    
+    try {
+      if (webVitals.onFCP && typeof webVitals.onFCP === 'function') {
+        webVitals.onFCP(handleFCP, reportOptions)
+      }
+    } catch (err) {
+      console.warn('[WebVitals] Failed to register FCP handler:', err)
     }
-    if (webVitals.onTTFB) {
-      webVitals.onTTFB(handleTTFB, reportOptions)
+    
+    try {
+      if (webVitals.onTTFB && typeof webVitals.onTTFB === 'function') {
+        webVitals.onTTFB(handleTTFB, reportOptions)
+      }
+    } catch (err) {
+      console.warn('[WebVitals] Failed to register TTFB handler:', err)
     }
     
     isInitialized = true
