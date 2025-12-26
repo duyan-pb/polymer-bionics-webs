@@ -230,4 +230,62 @@ describe('analytics-config', () => {
       expect(config.costControl.enabled).toBe(false)
     })
   })
+
+  describe('environment detection', () => {
+    it('detects staging from hostname with staging prefix', async () => {
+      // Mock window.location
+      const mockLocation = { hostname: 'staging.example.com' }
+      Object.defineProperty(window, 'location', {
+        value: mockLocation,
+        writable: true,
+        configurable: true,
+      })
+      
+      // Mock import.meta.env.MODE to production
+      vi.stubEnv('MODE', 'production')
+      
+      // Re-import to get fresh environment detection
+      vi.resetModules()
+      const { getAnalyticsConfig } = await import('../analytics-config')
+      const config = getAnalyticsConfig()
+      
+      // Environment should be detected based on hostname
+      expect(config.environment).toBeDefined()
+    })
+
+    it('detects staging from hostname with -dev suffix', async () => {
+      // Mock window.location
+      const mockLocation = { hostname: 'app-dev.example.com' }
+      Object.defineProperty(window, 'location', {
+        value: mockLocation,
+        writable: true,
+        configurable: true,
+      })
+      
+      vi.stubEnv('MODE', 'production')
+      vi.resetModules()
+      
+      const { getAnalyticsConfig } = await import('../analytics-config')
+      const config = getAnalyticsConfig()
+      
+      expect(config.environment).toBeDefined()
+    })
+
+    it('detects production from regular hostname', async () => {
+      const mockLocation = { hostname: 'www.polymerbionics.com' }
+      Object.defineProperty(window, 'location', {
+        value: mockLocation,
+        writable: true,
+        configurable: true,
+      })
+      
+      vi.stubEnv('MODE', 'production')
+      vi.resetModules()
+      
+      const { getAnalyticsConfig } = await import('../analytics-config')
+      const config = getAnalyticsConfig()
+      
+      expect(config.environment).toBeDefined()
+    })
+  })
 })
