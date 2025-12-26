@@ -1,8 +1,25 @@
+/**
+ * Products Initializer Component
+ * 
+ * Seeds the KV store with product data on first load.
+ * Generates products from materials and applications data.
+ * 
+ * @module components/ProductsInitializer
+ */
+
 import { useEffect, useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { generateBiomaterialsProducts } from '@/lib/seed-data'
 import type { Product } from '@/lib/types'
 
+/**
+ * Initializes products in the KV store.
+ * 
+ * Automatically generates products from materials and applications
+ * data when the KV store is empty. Renders nothing to the DOM.
+ * 
+ * @returns null - This is a headless component
+ */
 export function ProductsInitializer() {
   const [products, setProducts] = useKV<Product[]>('products', [])
   const [isInitialized, setIsInitialized] = useState(false)

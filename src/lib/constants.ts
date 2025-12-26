@@ -1,16 +1,27 @@
 /**
+ * Application Constants
+ * 
  * Centralized constants for the application.
- * Single source of truth for navigation, categories, and other config.
+ * Single source of truth for navigation, categories, animations, and styling.
+ * 
+ * @module lib/constants
  */
 
+/**
+ * Navigation item configuration.
+ */
 export interface NavItem {
+  /** Unique page identifier */
   id: string
+  /** Display label */
   label: string
+  /** Description for search and tooltips */
   description?: string
 }
 
 /**
- * Navigation items - used by Navigation, GlobalSearch, and Footer
+ * Navigation items for the site.
+ * Used by Navigation, GlobalSearch, and Footer components.
  */
 export const NAV_ITEMS: NavItem[] = [
   { id: 'home', label: 'Home', description: 'Return to home page' },

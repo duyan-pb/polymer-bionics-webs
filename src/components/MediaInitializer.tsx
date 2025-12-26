@@ -1,8 +1,25 @@
+/**
+ * Media Initializer Component
+ * 
+ * Seeds the KV store with videos and case studies on first load.
+ * Uses placeholder data from media-data.ts.
+ * 
+ * @module components/MediaInitializer
+ */
+
 import { useEffect, useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { placeholderVideos, placeholderCaseStudies } from '@/lib/media-data'
 import type { Video, CaseStudy } from '@/lib/types'
 
+/**
+ * Initializes videos and case studies in the KV store.
+ * 
+ * Populates media content when the KV store is empty.
+ * Renders nothing to the DOM.
+ * 
+ * @returns null - This is a headless component
+ */
 export function MediaInitializer() {
   const [videos, setVideos] = useKV<Video[]>('videos', [])
   const [caseStudies, setCaseStudies] = useKV<CaseStudy[]>('caseStudies', [])

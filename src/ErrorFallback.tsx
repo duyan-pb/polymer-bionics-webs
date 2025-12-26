@@ -1,13 +1,43 @@
+/**
+ * Error Fallback Component
+ * 
+ * Displayed when an unhandled error occurs in the application.
+ * Provides error details and a retry button.
+ * 
+ * @module ErrorFallback
+ */
+
 import { Alert, AlertTitle, AlertDescription } from "./components/ui/alert";
 import { Button } from "./components/ui/button";
 
 import { AlertTriangleIcon, RefreshCwIcon } from "lucide-react";
 
+/**
+ * Props for the ErrorFallback component.
+ */
 interface ErrorFallbackProps {
+  /** The error that was caught */
   error: Error;
+  /** Function to reset the error boundary and retry */
   resetErrorBoundary: () => void;
 }
 
+/**
+ * Error boundary fallback UI.
+ * 
+ * Features:
+ * - Displays error message in a destructive alert
+ * - Shows error details for debugging
+ * - Provides retry button to reset the boundary
+ * - In dev mode, rethrows errors for better debugging
+ * 
+ * @example
+ * ```tsx
+ * <ErrorBoundary FallbackComponent={ErrorFallback}>
+ *   <App />
+ * </ErrorBoundary>
+ * ```
+ */
 export const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps) => {
   // When encountering an error in the development mode, rethrow it and don't display the boundary.
   // The parent UI will take care of showing a more helpful dialog.

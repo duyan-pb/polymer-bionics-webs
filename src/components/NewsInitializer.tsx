@@ -1,11 +1,24 @@
+/**
+ * News Initializer Component
+ * 
+ * Seeds the KV store with news and publications on first load.
+ * Uses placeholder data from publications-data.ts.
+ * 
+ * @module components/NewsInitializer
+ */
+
 import { useEffect, useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { placeholderNews, placeholderPublications } from '@/lib/publications-data'
 import type { NewsItem, Publication } from '@/lib/types'
 
 /**
- * Initializes News & Publications with placeholder data.
- * Forces reset to ensure placeholder content is used.
+ * Initializes news and publications in the KV store.
+ * 
+ * Populates both news items and scientific publications
+ * when the KV store is empty. Renders nothing to the DOM.
+ * 
+ * @returns null - This is a headless component
  */
 export function NewsInitializer() {
   const [news, setNews] = useKV<NewsItem[]>('news', [])
