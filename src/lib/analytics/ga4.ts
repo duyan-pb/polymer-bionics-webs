@@ -424,6 +424,16 @@ export function isGA4Initialized(): boolean {
   return isInitialized && scriptLoaded
 }
 
+/**
+ * Reset GA4 state for testing
+ * Only use in test environments
+ */
+export function resetGA4ForTesting(): void {
+  ga4Config = null
+  isInitialized = false
+  scriptLoaded = false
+}
+
 // Handle consent withdrawal
 if (typeof window !== 'undefined') {
   window.addEventListener('consent-withdrawn', () => {

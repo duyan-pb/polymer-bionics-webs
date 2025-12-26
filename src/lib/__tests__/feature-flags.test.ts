@@ -3,6 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { renderHook, act } from '@testing-library/react'
 import {
   initFeatureFlags,
   isFeatureEnabled,
@@ -13,6 +14,8 @@ import {
   getExperimentAssignment,
   checkGuardrails,
   getFeatureFlagsConfig,
+  useFeatureFlag,
+  useExperiment,
 } from '../feature-flags'
 import { acceptAllConsent } from '../analytics/consent'
 
@@ -362,23 +365,37 @@ describe('Feature Flags', () => {
         },
       })
       
-      const { useFeatureFlag: _useFeatureFlag } = await import('../feature-flags')
+      const { result } = renderHook(() => useFeatureFlag('test.hook.feature', false))
       
-      // Test the hook logic directly
-      const enabled = isFeatureEnabled('test.hook.feature', false)
-      expect(enabled).toBe(true)
+      expect(result.current).toBe(true)
     })
 
     it('returns default value for unknown flag', async () => {
       await initFeatureFlags({ defaults: {} })
       
-      const enabled = isFeatureEnabled('unknown.flag', true)
-      expect(enabled).toBe(true)
+      const { result } = renderHook(() => useFeatureFlag('unknown.flag', true))
+      
+      expect(result.current).toBe(true)
     })
 
-    it('can be imported from feature-flags module', async () => {
-      const { useFeatureFlag: _useFeatureFlagImport } = await import('../feature-flags')
-      expect(typeof _useFeatureFlagImport).toBe('function')
+    it('rechecks flag on mount with different props', async () => {
+      await initFeatureFlags({
+        defaults: {
+          'flag.a': true,
+          'flag.b': false,
+        },
+      })
+      
+      const { result, rerender } = renderHook(
+        ({ flagName }) => useFeatureFlag(flagName, false),
+        { initialProps: { flagName: 'flag.a' } }
+      )
+      
+      expect(result.current).toBe(true)
+      
+      rerender({ flagName: 'flag.b' })
+      
+      expect(result.current).toBe(false)
     })
   })
 
@@ -386,16 +403,42 @@ describe('Feature Flags', () => {
     it('returns variant and trackExposure function', async () => {
       await initFeatureFlags({ defaults: {} })
       
-      const variant = assignExperimentVariant('hook_exp', ['control', 'treatment'])
-      expect(['control', 'treatment']).toContain(variant)
+      const { result } = renderHook(() => 
+        useExperiment('hook_exp_v2', ['control', 'treatment'])
+      )
       
-      // Track exposure should work
-      expect(() => trackExperimentExposed('hook_exp')).not.toThrow()
+      expect(['control', 'treatment']).toContain(result.current.variant)
+      expect(typeof result.current.trackExposure).toBe('function')
     })
 
-    it('can be imported from feature-flags module', async () => {
-      const { useExperiment } = await import('../feature-flags')
-      expect(typeof useExperiment).toBe('function')
+    it('trackExposure can be called without error', async () => {
+      await initFeatureFlags({ defaults: {} })
+      
+      const { result } = renderHook(() => 
+        useExperiment('exposure_test', ['a', 'b'])
+      )
+      
+      act(() => {
+        result.current.trackExposure()
+      })
+      
+      // Should not throw
+      expect(true).toBe(true)
+    })
+
+    it('consistent variant assignment', async () => {
+      await initFeatureFlags({ defaults: {} })
+      
+      const { result: result1 } = renderHook(() => 
+        useExperiment('consistent_exp', ['x', 'y'])
+      )
+      
+      const { result: result2 } = renderHook(() => 
+        useExperiment('consistent_exp', ['x', 'y'])
+      )
+      
+      // Same experiment ID should return same variant
+      expect(result1.current.variant).toBe(result2.current.variant)
     })
   })
 

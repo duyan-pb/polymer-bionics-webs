@@ -237,4 +237,130 @@ describe('AnalyticsProvider', () => {
     // useEffect with [] deps only runs once
     expect(initAnalytics).toHaveBeenCalledTimes(1)
   })
+
+  it('initializes Clarity when enabled with project ID', async () => {
+    const { getClarityConfig } = await import('@/lib/analytics-config')
+    vi.mocked(getClarityConfig).mockReturnValue({
+      projectId: 'test-clarity-id',
+      enabled: true,
+      sampleRate: 0.1,
+    })
+    
+    const { initClarity } = await import('@/lib/analytics/session-replay')
+    
+    render(
+      <AnalyticsProvider>
+        <div>App</div>
+      </AnalyticsProvider>
+    )
+    
+    await waitFor(() => {
+      expect(initClarity).toHaveBeenCalledWith({
+        projectId: 'test-clarity-id',
+      })
+    })
+  })
+
+  it('does not initialize Clarity when disabled', async () => {
+    const { getClarityConfig } = await import('@/lib/analytics-config')
+    vi.mocked(getClarityConfig).mockReturnValue({
+      projectId: 'test-clarity-id',
+      enabled: false,
+      sampleRate: 0.1,
+    })
+    
+    const { initClarity } = await import('@/lib/analytics/session-replay')
+    vi.mocked(initClarity).mockClear()
+    
+    render(
+      <AnalyticsProvider>
+        <div>App</div>
+      </AnalyticsProvider>
+    )
+    
+    // Clarity should not be initialized when disabled
+    await waitFor(() => {
+      expect(initClarity).not.toHaveBeenCalled()
+    })
+  })
+
+  it('handles Clarity initialization error gracefully', async () => {
+    const { getClarityConfig } = await import('@/lib/analytics-config')
+    vi.mocked(getClarityConfig).mockReturnValue({
+      projectId: 'test-clarity-id',
+      enabled: true,
+      sampleRate: 0.1,
+    })
+    
+    const { initClarity } = await import('@/lib/analytics/session-replay')
+    vi.mocked(initClarity).mockImplementation(() => {
+      throw new Error('Clarity error')
+    })
+    
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    
+    render(
+      <AnalyticsProvider>
+        <div>App</div>
+      </AnalyticsProvider>
+    )
+    
+    await waitFor(() => {
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to initialize Clarity'),
+        expect.any(Error)
+      )
+    })
+  })
+
+  it('handles data export initialization error gracefully', async () => {
+    const { getDataExportConfig } = await import('@/lib/analytics-config')
+    vi.mocked(getDataExportConfig).mockReturnValue({
+      enabled: true,
+      endpoint: '/api/export',
+      batchSize: 10,
+    })
+    
+    const { initDataExport } = await import('@/lib/analytics/data-export')
+    vi.mocked(initDataExport).mockImplementation(() => {
+      throw new Error('Data export error')
+    })
+    
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    
+    render(
+      <AnalyticsProvider>
+        <div>App</div>
+      </AnalyticsProvider>
+    )
+    
+    await waitFor(() => {
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to initialize data export'),
+        expect.any(Error)
+      )
+    })
+  })
+
+  it('handles overall initialization error gracefully', async () => {
+    const { initAnalytics } = await import('@/lib/analytics')
+    vi.mocked(initAnalytics).mockImplementation(() => {
+      throw new Error('Critical error')
+    })
+    
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    
+    render(
+      <AnalyticsProvider>
+        <div>App</div>
+      </AnalyticsProvider>
+    )
+    
+    await waitFor(() => {
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to initialize analytics provider'),
+        expect.any(Error)
+      )
+    })
+  })
 })

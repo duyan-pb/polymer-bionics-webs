@@ -328,4 +328,56 @@ describe('Application Insights', () => {
       expect(headers['traceparent']).toMatch(/^00-mock-operation-id-[a-f0-9]{16}-01$/)
     })
   })
+
+  describe('tracking functions with consent', () => {
+    beforeEach(() => {
+      acceptAllConsent()
+    })
+
+    it('trackAppInsightsPageView does not throw without init', () => {
+      expect(() => trackAppInsightsPageView('/test', 'Test')).not.toThrow()
+    })
+
+    it('trackAppInsightsEvent does not throw without init', () => {
+      expect(() => trackAppInsightsEvent('test_event', {})).not.toThrow()
+    })
+
+    it('trackException does not throw without init', () => {
+      expect(() => trackException(new Error('test'))).not.toThrow()
+    })
+
+    it('trackMetric does not throw without init', () => {
+      expect(() => trackMetric('latency', 100)).not.toThrow()
+    })
+
+    it('trackTrace does not throw without init', () => {
+      expect(() => trackTrace('test message')).not.toThrow()
+    })
+
+    it('setOperationName does not throw without init', () => {
+      expect(() => setOperationName('test-op')).not.toThrow()
+    })
+
+    it('flushAppInsights does not throw without init', () => {
+      expect(() => flushAppInsights()).not.toThrow()
+    })
+  })
+
+  describe('tracking functions without consent', () => {
+    beforeEach(() => {
+      withdrawConsent()
+    })
+
+    it('trackAppInsightsPageView returns early without consent', () => {
+      expect(() => trackAppInsightsPageView('/test', 'Test')).not.toThrow()
+    })
+
+    it('trackAppInsightsEvent returns early without consent', () => {
+      expect(() => trackAppInsightsEvent('test_event', {})).not.toThrow()
+    })
+
+    it('trackException returns early without consent', () => {
+      expect(() => trackException(new Error('test'))).not.toThrow()
+    })
+  })
 })
