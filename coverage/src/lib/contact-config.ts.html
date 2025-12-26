@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -127,7 +127,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,30 +163,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Contact configuration for the website.
  * Update these values with your actual contact information.
  */
 &nbsp;
-export const contactConfig = <span class="cstat-no" title="statement not covered" >{</span>
+export const contactConfig = {
   // Email addresses
   email: {
     general: 'info@polymerbionics.com',
@@ -221,24 +221,24 @@ export const contactConfig = <span class="cstat-no" title="statement not covered
 /**
  * Copies WhatsApp number to clipboard and returns success status
  */
-export async function <span class="fstat-no" title="function not covered" >copyWhatsAppNumber(): Promise&lt;boolean&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await navigator.clipboard.writeText(contactConfig.whatsapp.number)</span>
-<span class="cstat-no" title="statement not covered" >    return true</span>
+export async function copyWhatsAppNumber(): Promise&lt;boolean&gt; {
+  try {
+    await navigator.clipboard.writeText(contactConfig.whatsapp.number)
+    return true
   } catch {
-<span class="cstat-no" title="statement not covered" >    return false</span>
+    return false
   }
 }
 &nbsp;
 /**
  * Generates a mailto URL
  */
-export function <span class="fstat-no" title="function not covered" >getEmailUrl(t</span>ype: 'general' | 'sales' = <span class="branch-0 cbranch-no" title="branch not covered" >'general',</span> subject?: string): string {
-  const email = <span class="cstat-no" title="statement not covered" >contactConfig.email[type]</span>
-<span class="cstat-no" title="statement not covered" >  if (subject) {</span>
-<span class="cstat-no" title="statement not covered" >    return `mailto:${email}?subject=${encodeURIComponent(subject)}`</span>
+export function getEmailUrl(type: 'general' | 'sales' = 'general', subject?: string): string {
+  const email = contactConfig.email[type]
+  if (subject) {
+    return `mailto:${email}?subject=${encodeURIComponent(subject)}`
   }
-<span class="cstat-no" title="statement not covered" >  return `mailto:${email}`</span>
+  return `mailto:${email}`
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -247,7 +247,7 @@ export function <span class="fstat-no" title="function not covered" >getEmailUrl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-26T08:46:28.949Z
+                at 2025-12-26T09:28:30.492Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
