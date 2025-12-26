@@ -13,6 +13,9 @@ interface ImportMetaEnv {
   readonly VITE_GA4_MEASUREMENT_ID?: string
   readonly VITE_EVENTS_ENDPOINT?: string
   
+  // Session Replay (Epic 12)
+  readonly VITE_CLARITY_PROJECT_ID?: string
+  
   // Feature flags (Epic 11)
   readonly VITE_APP_CONFIG_ENDPOINT?: string
   

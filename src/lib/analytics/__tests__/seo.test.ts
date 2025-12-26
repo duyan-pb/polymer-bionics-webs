@@ -18,7 +18,7 @@ import {
   DEFAULT_SEO_CONFIG,
   usePageSEO,
 } from '../seo'
-import { withdrawConsent, acceptAllConsent } from '../consent'
+import { withdrawConsent } from '../consent'
 
 // Create a mock location object that we can modify
 const createMockLocation = () => ({

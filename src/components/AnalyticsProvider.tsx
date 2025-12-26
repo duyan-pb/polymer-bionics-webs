@@ -9,11 +9,19 @@ import { useEffect, memo, type ReactNode } from 'react'
 import { initAnalytics } from '@/lib/analytics'
 import { initAppInsights } from '@/lib/analytics/app-insights'
 import { initGA4 } from '@/lib/analytics/ga4'
+import { initWebVitals } from '@/lib/analytics/web-vitals'
+import { initClarity } from '@/lib/analytics/session-replay'
+import { initCostControls } from '@/lib/analytics/cost-control'
+import { initDataExport } from '@/lib/analytics/data-export'
 import { captureUTM } from '@/lib/analytics/attribution'
 import { 
   getAnalyticsConfig, 
   getAppInsightsConfig, 
-  getGA4Config 
+  getGA4Config,
+  getClarityConfig,
+  getWebVitalsConfig,
+  getCostControlConfig,
+  getDataExportConfig,
 } from '@/lib/analytics-config'
 
 interface AnalyticsProviderProps {
@@ -33,6 +41,15 @@ export const AnalyticsProvider = memo(({
     // Initialize core analytics tracker
     const analyticsConfig = getAnalyticsConfig()
     initAnalytics(analyticsConfig)
+    
+    // Initialize Cost Controls (Epic 15) - should be early to gate other tracking
+    const costControlConfig = getCostControlConfig()
+    if (costControlConfig.enabled) {
+      initCostControls({
+        eventsPerDay: costControlConfig.eventsPerDay,
+        baseSamplingRate: costControlConfig.baseSamplingRate,
+      })
+    }
     
     // Initialize Application Insights (consent-gated internally)
     const appInsightsConfig = getAppInsightsConfig()
@@ -55,6 +72,34 @@ export const AnalyticsProvider = memo(({
       }).catch(console.error)
     }
     
+    // Initialize Web Vitals (Epic 14)
+    const webVitalsConfig = getWebVitalsConfig()
+    if (webVitalsConfig.enabled) {
+      initWebVitals({
+        enabled: webVitalsConfig.enabled,
+        reportAttribution: webVitalsConfig.reportAttribution,
+        reportAllChanges: false,
+      })
+    }
+    
+    // Initialize Session Replay / Clarity (Epic 12)
+    const clarityConfig = getClarityConfig()
+    if (clarityConfig.enabled && clarityConfig.projectId) {
+      initClarity({
+        projectId: clarityConfig.projectId,
+      })
+    }
+    
+    // Initialize Data Export (Epic 9)
+    const dataExportConfig = getDataExportConfig()
+    if (dataExportConfig.enabled) {
+      initDataExport({
+        enabled: dataExportConfig.enabled,
+        endpoint: dataExportConfig.endpoint,
+        batchSize: dataExportConfig.batchSize,
+      })
+    }
+    
     // Log initialization in debug mode
     if (analyticsConfig.debugMode) {
       // eslint-disable-next-line no-console
@@ -63,6 +108,10 @@ export const AnalyticsProvider = memo(({
         appVersion: analyticsConfig.appVersion,
         appInsights: !!appInsightsConfig.connectionString,
         ga4: !!ga4Config.measurementId,
+        clarity: clarityConfig.enabled && !!clarityConfig.projectId,
+        webVitals: webVitalsConfig.enabled,
+        costControl: costControlConfig.enabled,
+        dataExport: dataExportConfig.enabled,
       })
     }
   }, [])

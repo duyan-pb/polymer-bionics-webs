@@ -2,7 +2,7 @@
  * Identity Management Tests (Epic 6)
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import {
   getIdentity,
   getAnonymousId,
@@ -65,7 +65,8 @@ describe('Identity Management', () => {
 
     it('respects custom config for expiry days', () => {
       const config = { ...DEFAULT_IDENTITY_CONFIG, anonymousIdExpiryDays: 30 }
-      const identity = getIdentity(config)
+      // Call getIdentity to trigger storage, we don't need the return value
+      getIdentity(config)
       
       const stored = JSON.parse(localStorage.getItem('pb_anonymous_id')!)
       const expiresAt = new Date(stored.expiresAt)

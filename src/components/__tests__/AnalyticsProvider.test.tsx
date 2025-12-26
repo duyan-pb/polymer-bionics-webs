@@ -21,6 +21,22 @@ vi.mock('@/lib/analytics/ga4', () => ({
   initGA4: vi.fn(() => Promise.resolve()),
 }))
 
+vi.mock('@/lib/analytics/web-vitals', () => ({
+  initWebVitals: vi.fn(),
+}))
+
+vi.mock('@/lib/analytics/session-replay', () => ({
+  initClarity: vi.fn(),
+}))
+
+vi.mock('@/lib/analytics/cost-control', () => ({
+  initCostControls: vi.fn(),
+}))
+
+vi.mock('@/lib/analytics/data-export', () => ({
+  initDataExport: vi.fn(),
+}))
+
 vi.mock('@/lib/analytics/attribution', () => ({
   captureUTM: vi.fn(),
 }))
@@ -37,6 +53,25 @@ vi.mock('@/lib/analytics-config', () => ({
   getGA4Config: vi.fn(() => ({
     measurementId: 'G-TEST123',
     enableDebugMode: false,
+  })),
+  getClarityConfig: vi.fn(() => ({
+    projectId: undefined,
+    enabled: false,
+    sampleRate: 0.1,
+  })),
+  getWebVitalsConfig: vi.fn(() => ({
+    enabled: false,
+    reportAttribution: false,
+  })),
+  getCostControlConfig: vi.fn(() => ({
+    enabled: false,
+    eventsPerDay: 100000,
+    baseSamplingRate: 1.0,
+  })),
+  getDataExportConfig: vi.fn(() => ({
+    enabled: false,
+    endpoint: '/api/events/export',
+    batchSize: 10,
   })),
 }))
 

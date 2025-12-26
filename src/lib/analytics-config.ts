@@ -53,6 +53,25 @@ interface EnvironmentConfig {
     endpoint: string
     enabled: boolean
   }
+  clarity: {
+    projectId?: string
+    enabled: boolean
+    sampleRate: number
+  }
+  webVitals: {
+    enabled: boolean
+    reportAttribution: boolean
+  }
+  costControl: {
+    enabled: boolean
+    eventsPerDay: number
+    baseSamplingRate: number
+  }
+  dataExport: {
+    enabled: boolean
+    endpoint: string
+    batchSize: number
+  }
 }
 
 const developmentConfig: EnvironmentConfig = {
@@ -77,6 +96,25 @@ const developmentConfig: EnvironmentConfig = {
     endpoint: 'http://localhost:7071/api/events/collect',
     enabled: false,
   },
+  clarity: {
+    projectId: import.meta.env.VITE_CLARITY_PROJECT_ID,
+    enabled: false, // Disabled in dev by default
+    sampleRate: 1.0,
+  },
+  webVitals: {
+    enabled: true,
+    reportAttribution: true, // More details in dev
+  },
+  costControl: {
+    enabled: false, // Disabled in dev
+    eventsPerDay: 100000,
+    baseSamplingRate: 1.0,
+  },
+  dataExport: {
+    enabled: false,
+    endpoint: 'http://localhost:7071/api/events/export',
+    batchSize: 10,
+  },
 }
 
 const stagingConfig: EnvironmentConfig = {
@@ -99,6 +137,25 @@ const stagingConfig: EnvironmentConfig = {
     endpoint: import.meta.env.VITE_EVENTS_ENDPOINT || '/api/events/collect',
     enabled: true,
   },
+  clarity: {
+    projectId: import.meta.env.VITE_CLARITY_PROJECT_ID,
+    enabled: true,
+    sampleRate: 0.5, // 50% in staging
+  },
+  webVitals: {
+    enabled: true,
+    reportAttribution: true,
+  },
+  costControl: {
+    enabled: true,
+    eventsPerDay: 50000,
+    baseSamplingRate: 1.0,
+  },
+  dataExport: {
+    enabled: true,
+    endpoint: import.meta.env.VITE_EVENTS_ENDPOINT || '/api/events/export',
+    batchSize: 20,
+  },
 }
 
 const productionConfig: EnvironmentConfig = {
@@ -120,6 +177,25 @@ const productionConfig: EnvironmentConfig = {
   serverEvents: {
     endpoint: import.meta.env.VITE_EVENTS_ENDPOINT || '/api/events/collect',
     enabled: true,
+  },
+  clarity: {
+    projectId: import.meta.env.VITE_CLARITY_PROJECT_ID,
+    enabled: true,
+    sampleRate: 0.1, // 10% in production
+  },
+  webVitals: {
+    enabled: true,
+    reportAttribution: false, // Smaller payload in production
+  },
+  costControl: {
+    enabled: true,
+    eventsPerDay: 100000,
+    baseSamplingRate: 1.0,
+  },
+  dataExport: {
+    enabled: true,
+    endpoint: import.meta.env.VITE_EVENTS_ENDPOINT || '/api/events/export',
+    batchSize: 50,
   },
 }
 
@@ -169,6 +245,34 @@ export function getGA4Config() {
  */
 export function getServerEventsConfig() {
   return getConfig().serverEvents
+}
+
+/**
+ * Get Clarity (session replay) config
+ */
+export function getClarityConfig() {
+  return getConfig().clarity
+}
+
+/**
+ * Get Web Vitals config
+ */
+export function getWebVitalsConfig() {
+  return getConfig().webVitals
+}
+
+/**
+ * Get Cost Control config
+ */
+export function getCostControlConfig() {
+  return getConfig().costControl
+}
+
+/**
+ * Get Data Export config
+ */
+export function getDataExportConfig() {
+  return getConfig().dataExport
 }
 
 // =============================================================================

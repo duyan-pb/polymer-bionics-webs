@@ -362,7 +362,7 @@ describe('Feature Flags', () => {
         },
       })
       
-      const { useFeatureFlag } = await import('../feature-flags')
+      const { useFeatureFlag: _useFeatureFlag } = await import('../feature-flags')
       
       // Test the hook logic directly
       const enabled = isFeatureEnabled('test.hook.feature', false)
@@ -377,8 +377,8 @@ describe('Feature Flags', () => {
     })
 
     it('can be imported from feature-flags module', async () => {
-      const { useFeatureFlag } = await import('../feature-flags')
-      expect(typeof useFeatureFlag).toBe('function')
+      const { useFeatureFlag: _useFeatureFlagImport } = await import('../feature-flags')
+      expect(typeof _useFeatureFlagImport).toBe('function')
     })
   })
 

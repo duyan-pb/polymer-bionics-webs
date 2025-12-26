@@ -56,8 +56,10 @@ Object.defineProperty(document, 'cookie', {
   }),
   set: vi.fn((value: string) => {
     const [cookiePart] = value.split(';')
+    if (!cookiePart) {return}
     const [key, val] = cookiePart.split('=')
-    if (val === '' || value.includes('max-age=0')) {
+    if (!key) {return}
+    if (val === '' || val === undefined || value.includes('max-age=0')) {
       delete cookieStore[key]
     } else {
       cookieStore[key] = val

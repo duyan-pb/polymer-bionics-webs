@@ -53,6 +53,8 @@
     "src"
   ],
   "exclude": [
-    "src/components/ui"
+    "src/components/ui",
+    "src/**/__tests__",
+    "src/test"
   ]
 }

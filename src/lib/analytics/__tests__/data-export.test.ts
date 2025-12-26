@@ -12,8 +12,8 @@ import {
   getExportConfig,
   getBufferSize,
   stopDataExport,
+  type ExportEvent,
 } from '../data-export'
-import type { ExportEvent } from '../data-export'
 import { acceptAllConsent } from '../consent'
 
 describe('Data Export (ADLS)', () => {

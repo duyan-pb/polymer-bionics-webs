@@ -406,7 +406,7 @@ async function sendToServer(event: AnalyticsEvent): Promise<void> {
   if (event.type !== 'conversion') {return}
   
   try {
-    // TODO: Replace with actual Azure Function endpoint
+    // Uses Azure Function endpoint configured via VITE_EVENTS_ENDPOINT
     const endpoint = import.meta.env.VITE_EVENTS_ENDPOINT || '/api/events/collect'
     
     await fetch(endpoint, {
