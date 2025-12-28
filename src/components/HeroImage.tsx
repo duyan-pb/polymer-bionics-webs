@@ -45,13 +45,13 @@ interface HeroImageProps {
  * />
  * ```
  */
-export const HeroImage = memo(({
+export const HeroImage = memo(function HeroImage({
   src, 
   alt = '', 
   opacity = 0.15, 
   className = '',
   priority = false 
-}: HeroImageProps) => {
+}: HeroImageProps) {
   const [isLoaded, setIsLoaded] = useState(false)
 
   return (

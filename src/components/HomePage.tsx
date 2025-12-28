@@ -41,7 +41,7 @@ interface HomePageProps {
  * <HomePage onNavigate={handleNavigate} />
  * ```
  */
-export const HomePage = memo(({ onNavigate }: HomePageProps) => {
+export const HomePage = memo(function HomePage({ onNavigate }: HomePageProps) {
   const [email, setEmail] = useState('')
   const [isSubscribing, setIsSubscribing] = useState(false)
 

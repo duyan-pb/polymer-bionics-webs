@@ -31,9 +31,9 @@ interface AnalyticsProviderProps {
 /**
  * Initialize analytics on app mount
  */
-export const AnalyticsProvider = memo(({ 
+export const AnalyticsProvider = memo(function AnalyticsProvider({ 
   children 
-}: AnalyticsProviderProps) => {
+}: AnalyticsProviderProps) {
   useEffect(() => {
     // Wrap entire initialization in try-catch
     const initializeAnalytics = async () => {

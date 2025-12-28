@@ -28,7 +28,7 @@ import { ManageCookiesLink, ConsentStatusIndicator } from '@/components/ConsentB
  * <Footer />
  * ```
  */
-export const Footer = memo(() => {
+export const Footer = memo(function Footer() {
   const handleWhatsAppClick = useCallback(async () => {
     const success = await copyWhatsAppNumber()
     if (success) {

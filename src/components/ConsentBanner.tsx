@@ -60,7 +60,7 @@ const CONSENT_CATEGORIES: ConsentCategoryInfo[] = [
 // BANNER COMPONENT
 // =============================================================================
 
-export const ConsentBanner = memo(() => {
+export const ConsentBanner = memo(function ConsentBanner() {
   const {
     shouldShowBanner,
     acceptAll,
