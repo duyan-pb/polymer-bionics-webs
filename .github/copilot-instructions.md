@@ -34,6 +34,9 @@ export function TeamPage({ team, onNavigate }: { team: TeamMember[], onNavigate:
 - `ClickableCard` - Accessible card with keyboard navigation ([src/components/ClickableCard.tsx](src/components/ClickableCard.tsx))
 - `Breadcrumbs` - Navigation breadcrumbs ([src/components/Breadcrumbs.tsx](src/components/Breadcrumbs.tsx))
 - `ContactLinks` - WhatsApp/Email contact buttons ([src/components/ContactLinks.tsx](src/components/ContactLinks.tsx))
+- `GlobalSearch` - Site-wide search with keyboard shortcuts ([src/components/GlobalSearch.tsx](src/components/GlobalSearch.tsx))
+- `BackToTopButton` - Scroll-to-top floating button ([src/components/BackToTopButton.tsx](src/components/BackToTopButton.tsx))
+- `FloatingContactButton` - Floating contact CTA ([src/components/FloatingContactButton.tsx](src/components/FloatingContactButton.tsx))
 
 ### Data Flow
 1. **Initializers** seed KV store on first load
@@ -71,18 +74,34 @@ export function TeamPage({ team, onNavigate }: { team: TeamMember[], onNavigate:
 src/
 ├── components/          # Feature pages + shared components
 │   ├── PageHero.tsx     # Reusable hero section
+│   ├── ClickableCard.tsx # Accessible clickable cards
+│   ├── Breadcrumbs.tsx  # Navigation breadcrumbs
+│   ├── GlobalSearch.tsx # Site-wide search
+│   ├── Navigation.tsx   # Header navigation
+│   ├── Footer.tsx       # Site footer
+│   ├── contact/         # Contact form components
+│   ├── __tests__/       # Component tests
 │   └── ui/              # shadcn/ui primitives (DO NOT edit)
 ├── hooks/
 │   ├── use-theme.ts     # Theme management hook
-│   └── use-mobile.ts    # Responsive detection hook
+│   ├── use-mobile.ts    # Responsive detection hook
+│   └── __tests__/       # Hook tests
 ├── lib/
-│   ├── constants.ts     # Centralized constants
+│   ├── analytics/       # Analytics infrastructure
+│   ├── constants.ts     # Centralized constants (NAV_ITEMS, etc.)
 │   ├── types.ts         # All TypeScript interfaces
-│   ├── utils.ts         # cn() helper
+│   ├── utils.ts         # cn() helper and utilities
+│   ├── feature-flags.ts # Feature flag system
+│   ├── analytics-config.ts # Analytics configuration
 │   ├── seed-data.ts     # Product generation
 │   ├── team-data.ts     # Team definitions
 │   ├── materials-data.ts # Materials & applications
+│   ├── media-data.ts    # Videos and case studies
+│   ├── publications-data.ts # Publications data
 │   └── contact-config.ts # Contact info
+├── test/
+│   ├── setup.ts         # Vitest setup
+│   └── mocks/           # Test mocks
 └── styles/theme.css     # CSS variables
 ```
 
@@ -129,8 +148,12 @@ These are injected during CI builds and accessible via `import.meta.env`:
 
 ## Testing Locally
 ```bash
-npm run dev      # Start dev server at localhost:5000
-npm run build    # Production build
-npm run preview  # Preview production build
-npm run lint     # Run ESLint
+npm run dev          # Start dev server at localhost:5000
+npm run build        # Production build (with type check)
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run test         # Run tests
+npm run test:watch   # Run tests in watch mode
+npm run test:coverage # Run tests with coverage
+npm run validate     # Run all checks (lint, typecheck, test, build)
 ```

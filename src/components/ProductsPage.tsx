@@ -268,8 +268,12 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
                           {selectedProduct.images.map((img, idx) => (
                             <div 
                               key={idx}
-                              className="cursor-pointer rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-colors"
+                              className="cursor-pointer rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
                               onClick={() => setSelectedImage(img)}
+                              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedImage(img); } }}
+                              tabIndex={0}
+                              role="button"
+                              aria-label={`View ${selectedProduct.name} image ${idx + 1}`}
                             >
                               <img 
                                 src={img} 

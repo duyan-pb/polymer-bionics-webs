@@ -229,7 +229,7 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
 
                   {selectedCaseStudy.datasheetId && (
                     <div className="pt-4 flex gap-3">
-                      <Button>
+                      <Button onClick={() => { setSelectedCaseStudy(null); onNavigate('datasheets'); }}>
                         <FileText className="mr-2" /> View Related Datasheet
                       </Button>
                       <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />

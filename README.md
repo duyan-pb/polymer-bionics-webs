@@ -56,25 +56,33 @@ npm run dev
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start development server on port 5000 |
-| `npm run build` | Build for production |
+| `npm run build` | Build for production (includes type check) |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
+| `npm run lint:fix` | Run ESLint with auto-fix |
 | `npm run test` | Run tests with Vitest |
+| `npm run test:watch` | Run tests in watch mode |
 | `npm run test:coverage` | Run tests with coverage report |
 | `npm run test:ui` | Run tests with Vitest UI |
+| `npm run test:mutation` | Run mutation tests with Stryker |
+| `npm run typecheck` | Run TypeScript type checking |
+| `npm run type-coverage` | Check type coverage (≥95%) |
+| `npm run knip` | Find unused code and dependencies |
+| `npm run validate` | Run all checks (lint, test, build) |
+| `npm run clean` | Clean build artifacts |
 
 ## Testing
 
-The project uses [Vitest](https://vitest.dev/) with [React Testing Library](https://testing-library.com/react) for comprehensive testing.
+The project uses [Vitest](https://vitest.dev/) with [React Testing Library](https://testing-library.com/react) for comprehensive testing with mutation testing support via [Stryker](https://stryker-mutator.io/).
 
-### Test Coverage
+### Coverage Thresholds
 
-| Metric | Coverage | Threshold |
-|--------|----------|-----------|
-| Statements | 83.87% | 75% ✅ |
-| Branches | 74.78% | 65% ✅ |
-| Functions | 90.93% | 80% ✅ |
-| Lines | 84.27% | 75% ✅ |
+| Metric | Global | Analytics Core | Schemas |
+|--------|--------|----------------|----------|
+| Statements | 75% | 85-90% | 95% |
+| Branches | 65% | 70-75% | 85% |
+| Functions | 80% | 90-95% | 100% |
+| Lines | 75% | 85-90% | 95% |
 
 ### Running Tests
 
@@ -83,10 +91,16 @@ The project uses [Vitest](https://vitest.dev/) with [React Testing Library](http
 npm run test
 
 # Run tests in watch mode
-npm run test -- --watch
+npm run test:watch
 
 # Run tests with coverage
 npm run test:coverage
+
+# Run tests with UI
+npm run test:ui
+
+# Run mutation tests
+npm run test:mutation
 
 # Run specific test file
 npm run test -- src/lib/analytics/__tests__/consent.test.ts
@@ -114,34 +128,71 @@ src/
 
 ```
 src/
-├── components/           # Feature pages + shared components
-│   ├── ui/               # shadcn/ui primitives (DO NOT edit)
-│   ├── __tests__/        # Component unit tests
-│   ├── HomePage.tsx      # Landing page
-│   ├── TeamPage.tsx      # Team member profiles
-│   ├── ProductsPage.tsx  # Product showcase
-│   └── ...               # Other page components
+├── components/              # Feature pages + shared components
+│   ├── ui/                  # shadcn/ui primitives (DO NOT edit)
+│   ├── contact/             # Contact form components
+│   ├── __tests__/           # Component unit tests
+│   ├── HomePage.tsx         # Landing page
+│   ├── TeamPage.tsx         # Team member profiles
+│   ├── ProductsPage.tsx     # Product showcase
+│   ├── MaterialsPage.tsx    # Materials library
+│   ├── ApplicationsPage.tsx # Clinical applications
+│   ├── MediaPage.tsx        # Videos & case studies
+│   ├── DatasheetsPage.tsx   # Technical datasheets
+│   ├── NewsPage.tsx         # News & publications
+│   ├── ContactPage.tsx      # Contact information
+│   ├── PageHero.tsx         # Reusable page hero section
+│   ├── ClickableCard.tsx    # Accessible clickable cards
+│   ├── Breadcrumbs.tsx      # Navigation breadcrumbs
+│   ├── Navigation.tsx       # Header navigation
+│   ├── Footer.tsx           # Site footer
+│   ├── GlobalSearch.tsx     # Site-wide search
+│   ├── ConsentBanner.tsx    # GDPR consent banner
+│   └── AnalyticsProvider.tsx # Analytics initialization
 ├── hooks/
-│   ├── use-theme.ts      # Theme management hook
-│   └── use-mobile.ts     # Responsive breakpoint detection
+│   ├── use-theme.ts         # Theme management hook
+│   ├── use-mobile.ts        # Responsive breakpoint detection
+│   └── __tests__/           # Hook unit tests
 ├── lib/
-│   ├── analytics/        # Analytics infrastructure
-│   │   ├── __tests__/    # Analytics unit tests
-│   │   ├── consent.ts    # Consent management (GDPR)
-│   │   ├── tracker.ts    # Event tracking wrapper
-│   │   ├── identity.ts   # Anonymous identity
-│   │   └── ...           # GA4, App Insights, etc.
-│   ├── __tests__/        # Library unit tests
-│   ├── constants.ts      # Navigation, categories, transitions
-│   ├── types.ts          # TypeScript interfaces
-│   ├── feature-flags.ts  # Feature flag system
-│   ├── utils.ts          # Utility functions
-│   └── *-data.ts         # Seed data files
-├── test/                 # Test configuration
-│   ├── setup.ts          # Vitest setup
-│   └── mocks/            # Test mocks (Spark, window, etc.)
+│   ├── analytics/           # Analytics infrastructure
+│   │   ├── __tests__/       # Analytics unit tests
+│   │   ├── consent.ts       # Consent management (GDPR)
+│   │   ├── tracker.ts       # Event tracking wrapper
+│   │   ├── identity.ts      # Anonymous identity
+│   │   ├── schemas.ts       # Zod validation schemas
+│   │   ├── attribution.ts   # UTM tracking
+│   │   ├── app-insights.ts  # Azure Application Insights
+│   │   ├── ga4.ts           # Google Analytics 4
+│   │   ├── session-replay.ts # Microsoft Clarity
+│   │   ├── web-vitals.ts    # Core Web Vitals
+│   │   └── cost-control.ts  # Budget management
+│   ├── __tests__/           # Library unit tests
+│   ├── constants.ts         # Navigation, categories, transitions
+│   ├── types.ts             # TypeScript interfaces
+│   ├── feature-flags.ts     # Feature flag system
+│   ├── analytics-config.ts  # Analytics configuration
+│   ├── utils.ts             # Utility functions (cn, etc.)
+│   ├── seed-data.ts         # Product seed data
+│   ├── team-data.ts         # Team member data
+│   ├── materials-data.ts    # Materials & applications
+│   ├── media-data.ts        # Video/case study data
+│   ├── publications-data.ts # Publications data
+│   └── contact-config.ts    # Contact information
+├── test/                    # Test configuration
+│   ├── setup.ts             # Vitest setup
+│   └── mocks/               # Test mocks (Spark, window, etc.)
+├── types/                   # Additional type definitions
+│   ├── spark.d.ts           # GitHub Spark types
+│   └── lucide-react.d.ts    # Lucide icon types
 └── styles/
-    └── theme.css         # CSS custom properties
+    └── theme.css            # CSS custom properties
+
+api/                         # Azure Functions
+└── src/functions/
+    └── events.ts            # Server-side event collection
+
+docs/                        # Documentation
+└── ANALYTICS.md             # Analytics infrastructure docs
 ```
 
 ## CI/CD Pipeline
@@ -153,8 +204,7 @@ src/
 | **Build & Deploy** | Push to `main` | Deploys to Azure Web App |
 | **PR Validation** | Pull requests | Lint, type check, test, build verification |
 | **Dependency Review** | Pull requests | Security vulnerability scanning |
-| **CodeQL Analysis** | Push/PR/Weekly | Static code security analysis |
-| **Dependabot** | Weekly | Automated dependency updates |
+| **CodeQL Analysis** | Push/PR/Weekly | Static code security analysis || **Code Quality** | Push/PR | Code quality metrics and analysis || **Dependabot** | Weekly | Automated dependency updates |
 
 ### Deployment
 

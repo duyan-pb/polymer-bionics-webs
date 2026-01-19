@@ -65,7 +65,19 @@ interface UseConsentReturn {
  * }
  */
 export function useConsent(): UseConsentReturn {
-  const [consent, setConsent] = useState<ConsentState>(() => getConsentState())
+  const [consent, setConsent] = useState<ConsentState>(() => {
+    try {
+      return getConsentState()
+    } catch {
+      return {
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        choices: { necessary: true, analytics: false, marketing: false },
+        bannerShown: false,
+        hasInteracted: false,
+      }
+    }
+  })
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false)
   
   // Listen for consent changes from other tabs/windows
@@ -81,43 +93,85 @@ export function useConsent(): UseConsentReturn {
     }
     
     const handleConsentChange = (e: CustomEvent<ConsentState>) => {
-      setConsent(e.detail)
+      try {
+        setConsent(e.detail)
+      } catch {
+        // Ignore errors
+      }
     }
     
-    window.addEventListener('storage', handleStorageChange)
-    window.addEventListener('consent-changed', handleConsentChange as EventListener)
+    try {
+      window.addEventListener('storage', handleStorageChange)
+      window.addEventListener('consent-changed', handleConsentChange as EventListener)
+    } catch {
+      // Ignore errors in adding listeners
+    }
     
     return () => {
-      window.removeEventListener('storage', handleStorageChange)
-      window.removeEventListener('consent-changed', handleConsentChange as EventListener)
+      try {
+        window.removeEventListener('storage', handleStorageChange)
+        window.removeEventListener('consent-changed', handleConsentChange as EventListener)
+      } catch {
+        // Ignore cleanup errors
+      }
     }
   }, [])
   
   const handleAcceptAll = useCallback(() => {
-    const newState = acceptAllConsent()
-    setConsent(newState)
-    setIsPreferencesOpen(false)
+    try {
+      const newState = acceptAllConsent()
+      setConsent(newState)
+      setIsPreferencesOpen(false)
+    } catch (error) {
+      console.warn('[Consent] Failed to accept all:', error)
+      // Still update local state to dismiss banner
+      setConsent(prev => ({ ...prev, hasInteracted: true, choices: { necessary: true, analytics: true, marketing: true } }))
+      setIsPreferencesOpen(false)
+    }
   }, [])
   
   const handleAcceptNecessary = useCallback(() => {
-    const newState = acceptNecessaryOnly()
-    setConsent(newState)
-    setIsPreferencesOpen(false)
+    try {
+      const newState = acceptNecessaryOnly()
+      setConsent(newState)
+      setIsPreferencesOpen(false)
+    } catch (error) {
+      console.warn('[Consent] Failed to accept necessary:', error)
+      // Still update local state to dismiss banner
+      setConsent(prev => ({ ...prev, hasInteracted: true, choices: { necessary: true, analytics: false, marketing: false } }))
+      setIsPreferencesOpen(false)
+    }
   }, [])
   
   const handleUpdateCategories = useCallback((choices: Partial<Record<ConsentCategory, boolean>>) => {
-    const newState = updateConsent(choices)
-    setConsent(newState)
+    try {
+      const newState = updateConsent(choices)
+      setConsent(newState)
+    } catch (error) {
+      console.warn('[Consent] Failed to update categories:', error)
+      // Still update local state
+      setConsent(prev => ({ ...prev, hasInteracted: true, choices: { ...prev.choices, ...choices, necessary: true } }))
+    }
   }, [])
   
   const handleWithdraw = useCallback(() => {
-    const newState = withdrawConsent()
-    setConsent(newState)
-    setIsPreferencesOpen(false)
+    try {
+      const newState = withdrawConsent()
+      setConsent(newState)
+      setIsPreferencesOpen(false)
+    } catch (error) {
+      console.warn('[Consent] Failed to withdraw:', error)
+      setConsent(prev => ({ ...prev, hasInteracted: true, choices: { necessary: true, analytics: false, marketing: false } }))
+      setIsPreferencesOpen(false)
+    }
   }, [])
   
   const handleCanTrack = useCallback((category: ConsentCategory) => {
-    return canTrack(category)
+    try {
+      return canTrack(category)
+    } catch {
+      return category === 'necessary'
+    }
   }, [])
   
   const shouldShowBanner = useMemo(() => {

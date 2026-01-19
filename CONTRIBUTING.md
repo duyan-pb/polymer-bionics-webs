@@ -88,10 +88,16 @@ We use [Vitest](https://vitest.dev/) with [React Testing Library](https://testin
 npm run test
 
 # Run tests in watch mode
-npm run test -- --watch
+npm run test:watch
 
 # Run tests with coverage
 npm run test:coverage
+
+# Run tests with UI
+npm run test:ui
+
+# Run mutation tests
+npm run test:mutation
 
 # Run specific test file
 npm run test -- path/to/test.ts
@@ -135,9 +141,11 @@ describe('useTheme', () => {
 
 | Category | Location | Description |
 |----------|----------|-------------|
-| Unit Tests | `src/**/__tests__/` | Test individual functions and hooks |
+| Unit Tests | `src/lib/__tests__/` | Test utility functions |
 | Component Tests | `src/components/__tests__/` | Test React component behavior |
-| Integration Tests | `src/lib/analytics/__tests__/` | Test module interactions |
+| Hook Tests | `src/hooks/__tests__/` | Test custom React hooks |
+| Analytics Tests | `src/lib/analytics/__tests__/` | Test analytics module |
+| Integration Tests | `src/__tests__/` | Test App-level integration |
 
 ## Code Style
 
@@ -296,9 +304,12 @@ const [data, setData] = useKV<DataType[]>('key', defaultValue);
 | Component | Purpose |
 |-----------|---------|
 | `PageHero` | Standardized page headers |
-| `ClickableCard` | Accessible clickable cards |
+| `ClickableCard` | Accessible clickable cards with keyboard navigation |
 | `Breadcrumbs` | Navigation breadcrumbs |
 | `ContactLinks` | Contact action buttons |
+| `GlobalSearch` | Site-wide search functionality |
+| `BackToTopButton` | Scroll-to-top button |
+| `FloatingContactButton` | Floating contact CTA |
 
 ## Questions?
 

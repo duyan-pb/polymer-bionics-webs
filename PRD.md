@@ -150,3 +150,32 @@ Animations should be subtle and purposeful, emphasizing content relationships an
   - Navigation: Full-width sheet drawer on mobile with large touch targets
   - Typography: Reduced heading sizes on mobile (H1: 32px → 48px)
   - Stacked layout for hero content on small screens
+
+## Analytics & Privacy
+
+The site implements a comprehensive analytics infrastructure with GDPR-compliant consent management:
+
+- **Consent Management**: Hard-gated tracking with granular user controls
+- **Azure Application Insights**: Application performance monitoring
+- **Google Analytics 4**: User behavior and conversion tracking
+- **Microsoft Clarity**: Session replay and heatmaps
+- **Core Web Vitals**: LCP, FID, CLS performance metrics
+- **Feature Flags**: A/B testing and controlled feature rollouts
+
+All tracking respects user consent preferences and implements privacy-first design principles.
+
+## Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| React 19 | UI Framework |
+| Vite 7 | Build Tool |
+| TypeScript 5.9 | Type Safety |
+| Tailwind CSS v4 | Styling |
+| shadcn/ui | Component Library |
+| Framer Motion | Animations |
+| Phosphor Icons | Icon System |
+| GitHub Spark | KV Store & Hosting |
+| Vitest | Unit Testing |
+| Stryker | Mutation Testing |
+| Azure Web App | Production Hosting |

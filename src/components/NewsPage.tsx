@@ -196,7 +196,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
                           </Button>
                         )}
                         {pub.pdfUrl && (
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" onClick={() => window.open(pub.pdfUrl, '_blank', 'noopener')}>
                             <Download className="mr-1" size={16} /> Download PDF
                           </Button>
                         )}
@@ -295,7 +295,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
                       </Button>
                     )}
                     {selectedPublication.pdfUrl && (
-                      <Button variant="outline">
+                      <Button variant="outline" onClick={() => window.open(selectedPublication.pdfUrl, '_blank', 'noopener')}>
                         <Download className="mr-2" /> Download PDF
                       </Button>
                     )}

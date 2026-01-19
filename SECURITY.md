@@ -53,6 +53,7 @@ This project implements the following security measures:
 - **Dependabot**: Automated dependency updates for security patches
 - **Dependency Review**: Blocks PRs with high-severity vulnerabilities
 - **CodeQL Analysis**: Static code analysis for security vulnerabilities
+- **Code Quality Workflow**: Continuous code quality metrics and analysis
 
 ### Best Practices
 
@@ -60,6 +61,8 @@ This project implements the following security measures:
 - No secrets are stored in the repository
 - Azure deployment uses OIDC authentication (no stored credentials)
 - Content Security Policy headers are configured
+- GDPR-compliant consent management for analytics
+- Type-safe codebase with ≥95% type coverage
 
 ## Security-Related Configuration
 
