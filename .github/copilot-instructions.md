@@ -96,6 +96,7 @@ src/
 │   ├── utils.ts         # cn() helper and utilities
 │   ├── feature-flags.ts # Feature flag system
 │   ├── analytics-config.ts # Analytics configuration
+│   ├── spark-stub.ts    # No-op Spark runtime (static deploys)
 │   ├── seed-data.ts     # Product generation
 │   ├── team-data.ts     # Team definitions
 │   ├── materials-data.ts # Materials & applications
@@ -165,5 +166,6 @@ npm run validate     # Run all checks (lint, typecheck, test, build)
 ### Static Deployment Notes
 - `build:static` uses localStorage-based KV instead of Spark backend
 - Set `STATIC_DEPLOY=true` to enable the fallback (automatic via netlify.toml)
+- Aliases `@github/spark/hooks` to local KV hook and `@github/spark/spark` to a no-op stub
 - Data persists in browser localStorage with `spark_kv_` prefix
 - Cross-tab synchronization via storage events

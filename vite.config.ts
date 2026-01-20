@@ -43,9 +43,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(projectRoot, 'src'),
-      // When doing static deploy, use localStorage-based KV hook instead of Spark's
+      // When doing static deploy, use localStorage-based KV hook and stub Spark runtime
       ...(isStaticDeploy ? {
         '@github/spark/hooks': resolve(projectRoot, 'src/hooks/use-kv.ts'),
+        '@github/spark/spark': resolve(projectRoot, 'src/lib/spark-stub.ts'),
       } : {}),
     }
   },

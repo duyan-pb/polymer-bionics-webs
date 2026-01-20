@@ -174,6 +174,7 @@ src/
 │   ├── feature-flags.ts     # Feature flag system
 │   ├── analytics-config.ts  # Analytics configuration
 │   ├── utils.ts             # Utility functions (cn, etc.)
+│   ├── spark-stub.ts        # No-op Spark runtime (static deployments)
 │   ├── seed-data.ts         # Product seed data
 │   ├── team-data.ts         # Team member data
 │   ├── materials-data.ts    # Materials & applications
@@ -227,7 +228,11 @@ The app can also be deployed to static hosting platforms like Netlify or Vercel:
 npm run build:static
 ```
 
-This uses a localStorage-based KV store instead of GitHub Spark's backend.
+This uses a localStorage-based KV store instead of GitHub Spark's backend. The build process:
+- Aliases `@github/spark/hooks` to a localStorage-based `useKV` hook
+- Aliases `@github/spark/spark` to a no-op stub (prevents `/_spark/` API calls)
+- Data persists in browser localStorage with `spark_kv_` prefix
+- Supports cross-tab synchronization via storage events
 
 **Netlify Configuration** (already included in `netlify.toml`):
 - Build command: `npm run build:static`
