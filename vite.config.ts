@@ -23,6 +23,13 @@ import { resolve } from 'path'
 
 const projectRoot = process.env.PROJECT_ROOT || import.meta.dirname
 
+/**
+ * Check if we're building for a static deployment (e.g., Netlify, Azure Static Web Apps)
+ * When STATIC_DEPLOY is set, we use a local localStorage-based KV implementation
+ * instead of the GitHub Spark KV backend.
+ */
+const isStaticDeploy = process.env.STATIC_DEPLOY === 'true'
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -30,11 +37,16 @@ export default defineConfig({
     tailwindcss(),
     // DO NOT REMOVE
     createIconImportProxy() as PluginOption,
-    sparkPlugin() as PluginOption,
+    // Only include Spark plugin when not doing static deploy
+    ...(isStaticDeploy ? [] : [sparkPlugin() as PluginOption]),
   ],
   resolve: {
     alias: {
-      '@': resolve(projectRoot, 'src')
+      '@': resolve(projectRoot, 'src'),
+      // When doing static deploy, use localStorage-based KV hook instead of Spark's
+      ...(isStaticDeploy ? {
+        '@github/spark/hooks': resolve(projectRoot, 'src/hooks/use-kv.ts'),
+      } : {}),
     }
   },
   build: {

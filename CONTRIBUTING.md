@@ -299,6 +299,8 @@ import { useKV } from '@github/spark/hooks';
 const [data, setData] = useKV<DataType[]>('key', defaultValue);
 ```
 
+> **Note**: For static deployments (Netlify, Vercel), the build process automatically aliases `useKV` to use a localStorage-based implementation. See [src/hooks/use-kv.ts](src/hooks/use-kv.ts) for details.
+
 ### Reusable Components
 
 | Component | Purpose |

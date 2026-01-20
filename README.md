@@ -57,6 +57,7 @@ npm run dev
 |---------|-------------|
 | `npm run dev` | Start development server on port 5000 |
 | `npm run build` | Build for production (includes type check) |
+| `npm run build:static` | Build for static hosting (Netlify, Vercel) |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint |
 | `npm run lint:fix` | Run ESLint with auto-fix |
@@ -152,6 +153,7 @@ src/
 ├── hooks/
 │   ├── use-theme.ts         # Theme management hook
 │   ├── use-mobile.ts        # Responsive breakpoint detection
+│   ├── use-kv.ts            # localStorage KV (static deployments)
 │   └── __tests__/           # Hook unit tests
 ├── lib/
 │   ├── analytics/           # Analytics infrastructure
@@ -215,6 +217,22 @@ The site automatically deploys to Azure Web App when changes are pushed to `main
 3. Creates `web.config` for SPA routing
 4. Deploys to Azure using OIDC authentication
 5. Runs health check to verify deployment
+
+### Static Hosting (Netlify/Vercel)
+
+The app can also be deployed to static hosting platforms like Netlify or Vercel:
+
+```bash
+# Build for static deployment
+npm run build:static
+```
+
+This uses a localStorage-based KV store instead of GitHub Spark's backend.
+
+**Netlify Configuration** (already included in `netlify.toml`):
+- Build command: `npm run build:static`
+- Publish directory: `dist`
+- SPA routing: All routes redirect to `index.html`
 
 ## Analytics
 

@@ -9,6 +9,7 @@ A **GitHub Spark** React application for a biotech company website showcasing me
 - Data persistence uses `useKV` hook from `@github/spark/hooks` (not React state or localStorage)
 - Pattern: `const [data, setData] = useKV<Type[]>('key', defaultValue)`
 - All entities (team, products, videos, etc.) stored in KV with typed interfaces from [src/lib/types.ts](src/lib/types.ts)
+- **Static Deployments**: When deployed to Netlify/Vercel, uses localStorage fallback via [src/hooks/use-kv.ts](src/hooks/use-kv.ts)
 
 ### Centralized Constants
 - Navigation items, team categories, and page transitions are defined in [src/lib/constants.ts](src/lib/constants.ts)
@@ -28,6 +29,7 @@ export function TeamPage({ team, onNavigate }: { team: TeamMember[], onNavigate:
 ### Custom Hooks
 - `useTheme()` - Theme management with localStorage persistence ([src/hooks/use-theme.ts](src/hooks/use-theme.ts))
 - `useMobile()` - Responsive breakpoint detection ([src/hooks/use-mobile.ts](src/hooks/use-mobile.ts))
+- `useLocalKV()` - localStorage KV store for static deployments ([src/hooks/use-kv.ts](src/hooks/use-kv.ts))
 
 ### Reusable Components
 - `PageHero` - Standardized hero section for all pages ([src/components/PageHero.tsx](src/components/PageHero.tsx))
@@ -85,6 +87,7 @@ src/
 ├── hooks/
 │   ├── use-theme.ts     # Theme management hook
 │   ├── use-mobile.ts    # Responsive detection hook
+│   ├── use-kv.ts        # localStorage KV for static deploys
 │   └── __tests__/       # Hook tests
 ├── lib/
 │   ├── analytics/       # Analytics infrastructure
@@ -150,6 +153,7 @@ These are injected during CI builds and accessible via `import.meta.env`:
 ```bash
 npm run dev          # Start dev server at localhost:5000
 npm run build        # Production build (with type check)
+npm run build:static # Build for static hosting (Netlify/Vercel)
 npm run preview      # Preview production build
 npm run lint         # Run ESLint
 npm run test         # Run tests
@@ -157,3 +161,9 @@ npm run test:watch   # Run tests in watch mode
 npm run test:coverage # Run tests with coverage
 npm run validate     # Run all checks (lint, typecheck, test, build)
 ```
+
+### Static Deployment Notes
+- `build:static` uses localStorage-based KV instead of Spark backend
+- Set `STATIC_DEPLOY=true` to enable the fallback (automatic via netlify.toml)
+- Data persists in browser localStorage with `spark_kv_` prefix
+- Cross-tab synchronization via storage events
