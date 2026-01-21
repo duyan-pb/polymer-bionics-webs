@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Download, CheckCircle, TestTube, Package, Image as ImageIcon } from '@phosphor-icons/react'
+import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, X } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
@@ -169,14 +169,37 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
                 ariaLabel={`View details for ${product.name}`}
               >
                 {product.imageUrl && (
-                  <div className="mb-4 md:mb-6 rounded-lg overflow-hidden">
+                  <div 
+                    className="mb-4 md:mb-6 rounded-lg overflow-hidden relative group cursor-zoom-in"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedImage(product.imageUrl ?? null)
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setSelectedImage(product.imageUrl ?? null)
+                      }
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`Enlarge image of ${product.name}`}
+                  >
                     <img 
                       src={product.imageUrl} 
                       alt={product.name}
-                      className="w-full h-40 md:h-56 object-cover"
+                      className="w-full h-40 md:h-56 object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
                       decoding="async"
                     />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
+                      <MagnifyingGlassPlus 
+                        size={40} 
+                        className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" 
+                        weight="bold"
+                      />
+                    </div>
                   </div>
                 )}
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 md:mb-4 gap-2">
@@ -268,20 +291,27 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
                           {selectedProduct.images.map((img, idx) => (
                             <div 
                               key={idx}
-                              className="cursor-pointer rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+                              className="cursor-zoom-in rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary relative group"
                               onClick={() => setSelectedImage(img)}
                               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedImage(img); } }}
                               tabIndex={0}
                               role="button"
-                              aria-label={`View ${selectedProduct.name} image ${idx + 1}`}
+                              aria-label={`View ${selectedProduct.name} image ${idx + 1} in full size`}
                             >
                               <img 
                                 src={img} 
                                 alt={`${selectedProduct.name} - Image ${idx + 1}`}
-                                className="w-full h-32 object-cover"
+                                className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105"
                                 loading="lazy"
                                 decoding="async"
                               />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
+                                <MagnifyingGlassPlus 
+                                  size={28} 
+                                  className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" 
+                                  weight="bold"
+                                />
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -359,15 +389,25 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
         </DialogContent>
       </Dialog>
 
+      {/* Image Lightbox */}
       <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-        <DialogContent className="max-w-5xl">
-          <div className="flex items-center justify-center">
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none">
+          <div className="relative flex items-center justify-center w-full h-full min-h-[50vh]">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-4 right-4 z-10 text-white hover:bg-white/20 rounded-full"
+              onClick={() => setSelectedImage(null)}
+              aria-label="Close image"
+            >
+              <X size={24} weight="bold" />
+            </Button>
             <img 
               src={selectedImage || ''} 
-              alt="Product detail"
-              className="max-w-full max-h-[80vh] object-contain"
-              loading="lazy"
-              decoding="async"
+              alt="Product detail - full size"
+              className="max-w-full max-h-[90vh] object-contain"
+              loading="eager"
+              decoding="sync"
             />
           </div>
         </DialogContent>
