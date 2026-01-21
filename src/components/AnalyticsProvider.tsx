@@ -13,6 +13,8 @@ import { initWebVitals } from '@/lib/analytics/web-vitals'
 import { initClarity } from '@/lib/analytics/session-replay'
 import { initCostControls } from '@/lib/analytics/cost-control'
 import { initDataExport } from '@/lib/analytics/data-export'
+import { initErrorReporting, cleanupErrorReporting } from '@/lib/analytics/error-reporting'
+import { initPerformanceMonitor, cleanupPerformanceMonitor } from '@/lib/analytics/performance-monitor'
 import { captureUTM } from '@/lib/analytics/attribution'
 import { 
   getAnalyticsConfig, 
@@ -127,6 +129,36 @@ export const AnalyticsProvider = memo(function AnalyticsProvider({
           }
         }
         
+        // Initialize Error Reporting (Epic 16)
+        try {
+          initErrorReporting({
+            enabled: true,
+            captureUnhandledExceptions: true,
+            captureUnhandledRejections: true,
+            captureConsoleErrors: false,
+            maxErrorsPerSession: 50,
+            samplingRate: 1.0,
+          })
+        } catch (err) {
+          console.warn('[Analytics] Failed to initialize error reporting:', err)
+        }
+        
+        // Initialize Performance Monitor (Epic 17)
+        try {
+          initPerformanceMonitor({
+            enabled: true,
+            trackResources: true,
+            resourceThresholdMs: 500,
+            trackLongTasks: true,
+            trackMemory: true,
+            trackFrameRate: false, // Disabled by default to reduce overhead
+            maxMetricsPerSession: 200,
+            samplingRate: 1.0,
+          })
+        } catch (err) {
+          console.warn('[Analytics] Failed to initialize performance monitor:', err)
+        }
+        
         // Log initialization in debug mode
         if (analyticsConfig.debugMode) {
           // eslint-disable-next-line no-console
@@ -139,6 +171,8 @@ export const AnalyticsProvider = memo(function AnalyticsProvider({
             webVitals: webVitalsConfig.enabled,
             costControl: costControlConfig.enabled,
             dataExport: dataExportConfig.enabled,
+            errorReporting: true,
+            performanceMonitor: true,
           })
         }
       } catch (error) {
@@ -147,6 +181,12 @@ export const AnalyticsProvider = memo(function AnalyticsProvider({
     }
     
     initializeAnalytics()
+    
+    // Cleanup on unmount
+    return () => {
+      cleanupErrorReporting()
+      cleanupPerformanceMonitor()
+    }
   }, [])
   
   return <>{children}</>

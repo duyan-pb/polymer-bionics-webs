@@ -30,22 +30,26 @@ This project adheres to a code of conduct. By participating, you are expected to
 1. **Fork the repository** on GitHub
 
 2. **Clone your fork**:
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/polymer-bionics-webs.git
    cd polymer-bionics-webs
    ```
 
 3. **Add upstream remote**:
+
    ```bash
    git remote add upstream https://github.com/duyan-pb/polymer-bionics-webs.git
    ```
 
 4. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 5. **Start development server**:
+
    ```bash
    npm run dev
    ```
@@ -53,6 +57,7 @@ This project adheres to a code of conduct. By participating, you are expected to
 ## Development Workflow
 
 1. **Sync with upstream**:
+
    ```bash
    git fetch upstream
    git checkout main
@@ -60,6 +65,7 @@ This project adheres to a code of conduct. By participating, you are expected to
    ```
 
 2. **Create a feature branch**:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -67,6 +73,7 @@ This project adheres to a code of conduct. By participating, you are expected to
 3. **Make your changes** following the [code style](#code-style) guidelines
 
 4. **Run checks**:
+
    ```bash
    npm run lint
    npm run test
@@ -201,7 +208,7 @@ import type { TeamMember } from '@/lib/types';
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
-```
+```text
 <type>(<scope>): <description>
 
 [optional body]
@@ -257,7 +264,8 @@ chore(deps): update dependencies to latest versions
 ### PR Title Format
 
 Use the same format as commit messages:
-```
+
+```text
 feat(products): add product comparison feature
 ```
 
@@ -266,6 +274,7 @@ feat(products): add product comparison feature
 ### Adding a New Page
 
 1. Create component in `src/components/`:
+
    ```tsx
    export function NewPage({ onNavigate }: { onNavigate: (page: string) => void }) {
      return <div>New Page</div>;
@@ -273,12 +282,14 @@ feat(products): add product comparison feature
    ```
 
 2. Add case in `App.tsx` `renderPage()`:
+
    ```tsx
    case 'newpage':
      return <NewPage onNavigate={handleNavigate} />;
    ```
 
 3. Add nav item in `src/lib/constants.ts`:
+
    ```tsx
    { id: 'newpage', label: 'New Page', icon: IconName }
    ```

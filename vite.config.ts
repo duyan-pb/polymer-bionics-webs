@@ -55,26 +55,44 @@ export default defineConfig({
     minify: 'esbuild',
     // Generate source maps for debugging
     sourcemap: false,
+    // Target modern browsers for smaller bundles
+    target: 'es2020',
     // Optimize chunk splitting
     rollupOptions: {
       // Mark optional dependencies as external - they are loaded dynamically at runtime
       external: ['@microsoft/applicationinsights-web', 'web-vitals'],
       output: {
-        manualChunks: {
+        manualChunks: (id) => {
           // Vendor chunks for better caching
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-motion': ['framer-motion'],
-          'vendor-radix': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-tooltip',
-          ],
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+              return 'vendor-react'
+            }
+            if (id.includes('framer-motion')) {
+              return 'vendor-motion'
+            }
+            if (id.includes('@radix-ui')) {
+              return 'vendor-radix'
+            }
+            if (id.includes('@phosphor-icons')) {
+              return 'vendor-icons'
+            }
+            if (id.includes('sonner') || id.includes('cmdk')) {
+              return 'vendor-ui'
+            }
+          }
+          // Split analytics into separate chunk (lazy loaded)
+          if (id.includes('/lib/analytics/')) {
+            return 'analytics'
+          }
+          return undefined
         },
       },
     },
     // Reduce chunk size warnings threshold
     chunkSizeWarningLimit: 500,
+    // Enable CSS code splitting
+    cssCodeSplit: true,
   },
   // Optimize dependency pre-bundling
   optimizeDeps: {

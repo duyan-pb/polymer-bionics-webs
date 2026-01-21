@@ -21,7 +21,10 @@ This document describes the comprehensive analytics infrastructure implemented f
 13. [Epic 13: SEO Infrastructure](#epic-13-seo-infrastructure)
 14. [Epic 14: Web Vitals](#epic-14-web-vitals)
 15. [Epic 15: Cost Controls](#epic-15-cost-controls)
-16. [Configuration](#configuration)
+16. [Epic 16: Error Reporting](#epic-16-error-reporting)
+17. [Epic 17: Performance Monitoring](#epic-17-performance-monitoring)
+18. [Epic 18: Monitoring Hooks](#epic-18-monitoring-hooks)
+19. [Configuration](#configuration)
 17. [React Hooks](#react-hooks)
 18. [Deployment](#deployment)
 
@@ -52,6 +55,17 @@ This document describes the comprehensive analytics infrastructure implemented f
 │  │ • session   │    │ • A/B tests  │    │  • Budget management        │   │
 │  └─────────────┘    └──────────────┘    │  • Sampling                 │   │
 │                                         └─────────────────────────────┘   │
+│                                                                           │
+│  ┌──────────────────────────────────────────────────────────────────────┐ │
+│  │                    Monitoring Layer (Epic 16-18)                     │ │
+│  │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────────────┐ │ │
+│  │  │Error         │  │Performance        │  │Monitoring Hooks       │ │ │
+│  │  │Reporting     │  │Monitor            │  │• useRenderTracking    │ │ │
+│  │  │• Exceptions  │  │• Resource timing  │  │• useTrackedFetch      │ │ │
+│  │  │• Rejections  │  │• Long tasks       │  │• useVisibilityTracking│ │ │
+│  │  │• React errors│  │• Memory usage     │  │• useErrorHandler      │ │ │
+│  │  └──────────────┘  └───────────────────┘  └───────────────────────┘ │ │
+│  └──────────────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
@@ -93,7 +107,10 @@ src/lib/analytics/
 ├── session-replay.ts  # Clarity integration (Epic 12)
 ├── seo.ts             # SEO helpers (Epic 13)
 ├── data-export.ts     # ADLS export (Epic 9)
-└── cost-control.ts    # Budget management (Epic 15)
+├── cost-control.ts    # Budget management (Epic 15)
+├── error-reporting.ts # Error tracking (Epic 16)
+├── performance-monitor.ts # Performance monitoring (Epic 17)
+└── monitoring-hooks.ts    # React monitoring hooks (Epic 18)
 
 src/lib/
 ├── analytics-config.ts  # Environment configuration
@@ -1639,6 +1656,300 @@ type ThrottleReason =
   | 'monthly_limit'    // Exceeded events/month
   | 'sampled_out'      // Dropped due to sampling
   | 'budget_exceeded'  // Cost limit reached
+```
+
+---
+
+## Epic 16: Error Reporting
+
+### Purpose
+
+Centralized error tracking and reporting to Azure Application Insights. Captures uncaught exceptions, unhandled promise rejections, and manual error reports.
+
+### Key File
+
+- `src/lib/analytics/error-reporting.ts`
+
+### Features
+
+- **Global error handlers** - Automatic capture of window.onerror and unhandledrejection
+- **React error boundary integration** - Capture errors from React error boundaries
+- **Network error tracking** - Track failed API calls with request details
+- **Intelligent filtering** - Ignore patterns for third-party scripts and known issues
+- **Sampling and limits** - Prevent flooding during error storms
+- **App Insights integration** - Errors reported via `trackException()`
+
+### Configuration
+
+```typescript
+interface ErrorReportingConfig {
+  captureUnhandledExceptions: boolean  // Default: true
+  captureUnhandledRejections: boolean  // Default: true
+  ignorePatterns: (string | RegExp)[]  // Patterns to ignore
+  maxErrorsPerSession: number          // Default: 100
+  samplingRate: number                 // Default: 1.0 (100%)
+  debug: boolean                       // Debug logging
+}
+```
+
+### API Functions
+
+```typescript
+// Initialize error reporting (called by AnalyticsProvider)
+initErrorReporting({
+  captureUnhandledExceptions: true,
+  captureUnhandledRejections: true,
+  maxErrorsPerSession: 50,
+})
+
+// Report a custom error
+reportCustomError(new Error('Something went wrong'), {
+  component: 'PaymentForm',
+  action: 'submit',
+  userId: 'anon_12345',
+})
+
+// Report an error from React error boundary
+reportReactError(error, {
+  componentStack: errorInfo.componentStack,
+  errorBoundary: 'AppErrorBoundary',
+})
+
+// Report a network error
+reportNetworkError('/api/products', 500, 'Internal Server Error')
+
+// Cleanup (called on unmount)
+cleanupErrorReporting()
+```
+
+### Error Severity Levels
+
+```typescript
+type ErrorSeverity = 'fatal' | 'error' | 'warning' | 'info'
+```
+
+### Ignore Patterns
+
+Default patterns that won't be reported:
+
+```typescript
+const defaultIgnorePatterns = [
+  /ResizeObserver loop/,           // Common browser noise
+  /Loading chunk/,                 // Code-splitting retries
+  /NetworkError/,                  // Offline users
+  /AbortError/,                    // Intentional cancellations
+  /chrome-extension/,              // Browser extensions
+  /moz-extension/,
+  /Script error/,                  // Cross-origin scripts
+]
+```
+
+---
+
+## Epic 17: Performance Monitoring
+
+### Purpose
+
+Real-time performance monitoring with automatic detection of slow resources, long tasks, memory issues, and frame rate problems.
+
+### Key File
+
+- `src/lib/analytics/performance-monitor.ts`
+
+### Features
+
+- **Resource timing** - Detect slow-loading assets (>500ms)
+- **Long task observer** - Capture tasks blocking main thread (>50ms)
+- **Memory monitoring** - Track JS heap usage (Chrome only)
+- **Frame rate tracking** - Detect UI jank via requestAnimationFrame
+- **Custom performance marks** - Manual performance instrumentation
+- **App Insights integration** - Metrics reported via `trackMetric()`
+
+### Configuration
+
+```typescript
+interface PerformanceMonitorConfig {
+  trackResources: boolean         // Track slow resources
+  trackLongTasks: boolean         // Track long tasks
+  trackMemory: boolean            // Track memory (Chrome)
+  trackFrameRate: boolean         // Track frame rate
+  slowResourceThresholdMs: number // Default: 500ms
+  memoryCheckIntervalMs: number   // Default: 30000ms (30s)
+  frameRateSampleMs: number       // Default: 5000ms (5s)
+  debug: boolean
+}
+```
+
+### API Functions
+
+```typescript
+// Initialize performance monitoring (called by AnalyticsProvider)
+initPerformanceMonitor({
+  trackResources: true,
+  trackLongTasks: true,
+  trackMemory: true,
+  trackFrameRate: false,  // Disable for reduced overhead
+})
+
+// Add a performance mark
+markPerformance('component_mounted', { component: 'ProductList' })
+
+// Measure between two marks
+measurePerformance('render_duration', 'render_start', 'render_end')
+
+// Track a custom performance metric
+trackPerformanceMetric({
+  name: 'api_response_time',
+  value: 245,
+  category: 'custom',
+  metadata: { endpoint: '/api/products' },
+})
+
+// Cleanup
+cleanupPerformanceMonitor()
+```
+
+### Metric Categories
+
+```typescript
+type MetricCategory = 'resource' | 'long-task' | 'memory' | 'frame-rate' | 'custom'
+```
+
+### Automatically Tracked Metrics
+
+| Metric | Category | Description |
+|--------|----------|-------------|
+| `slow_resource` | resource | Resources taking >500ms to load |
+| `long_task` | long-task | Main thread tasks >50ms |
+| `memory_usage` | memory | JS heap size and utilization |
+| `frame_rate` | frame-rate | Average FPS over sample period |
+
+---
+
+## Epic 18: Monitoring Hooks
+
+### Purpose
+
+React hooks for integrating monitoring into components. Provides render tracking, fetch wrapping, interaction tracking, visibility detection, and error handling.
+
+### Key File
+
+- `src/lib/analytics/monitoring-hooks.ts`
+
+### Available Hooks
+
+#### useRenderTracking
+
+Track component render performance and detect slow renders.
+
+```typescript
+function ProductList({ products }: Props) {
+  // Logs warning if render takes >100ms
+  useRenderTracking('ProductList', { productCount: products.length })
+  
+  return <div>...</div>
+}
+```
+
+#### useTrackedFetch
+
+Wrap fetch calls with automatic performance and error tracking.
+
+```typescript
+function ProductPage() {
+  const trackedFetch = useTrackedFetch()
+  
+  const loadProducts = async () => {
+    // Automatically tracks duration, errors, and status codes
+    const response = await trackedFetch('/api/products')
+    return response.json()
+  }
+}
+```
+
+#### useInteractionTracking
+
+Track user interactions with debouncing.
+
+```typescript
+function SearchInput() {
+  const trackInteraction = useInteractionTracking('SearchInput')
+  
+  return (
+    <input
+      onChange={(e) => {
+        trackInteraction('search_typed', { length: e.target.value.length })
+      }}
+    />
+  )
+}
+```
+
+#### useVisibilityTracking
+
+Track when components enter the viewport.
+
+```typescript
+function ProductCard({ product }: Props) {
+  const ref = useVisibilityTracking<HTMLDivElement>('ProductCard', {
+    productId: product.id,
+    threshold: 0.5,  // 50% visible
+  })
+  
+  return <div ref={ref}>...</div>
+}
+```
+
+#### useErrorHandler
+
+Create error handlers for components.
+
+```typescript
+function DataLoader() {
+  const handleError = useErrorHandler('DataLoader')
+  
+  const loadData = async () => {
+    try {
+      const response = await fetch('/api/data')
+      if (!response.ok) throw new Error('Failed to load')
+      return response.json()
+    } catch (error) {
+      handleError(error)
+      return null
+    }
+  }
+}
+```
+
+#### usePageLoadTracking
+
+Track page load performance metrics.
+
+```typescript
+function App() {
+  // Automatically tracks navigation timing on mount
+  usePageLoadTracking()
+  
+  return <Router>...</Router>
+}
+```
+
+### Hook Options
+
+```typescript
+interface RenderTrackingOptions {
+  slowThresholdMs?: number  // Default: 100ms
+  trackEveryRender?: boolean  // Default: false (only slow renders)
+}
+
+interface VisibilityOptions {
+  threshold?: number  // 0-1, default: 0.1 (10% visible)
+  trackOnce?: boolean  // Default: true
+}
+
+interface InteractionOptions {
+  debounceMs?: number  // Default: 500ms
+}
 ```
 
 ---

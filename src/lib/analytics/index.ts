@@ -264,3 +264,43 @@ export {
   withCostControl,
 } from './cost-control'
 export type { CostControlConfig, UsageMetrics, ThrottleDecision } from './cost-control'
+
+// Error Reporting (Epic 16)
+export {
+  initErrorReporting,
+  cleanupErrorReporting,
+  reportCustomError,
+  reportReactError,
+  reportNetworkError,
+  getErrorMetrics,
+  resetErrorCount,
+} from './error-reporting'
+export type { ErrorReport, ErrorReportingConfig } from './error-reporting'
+
+// Performance Monitoring (Epic 17)
+export {
+  initPerformanceMonitor,
+  cleanupPerformanceMonitor,
+  markPerformance,
+  measurePerformance,
+  trackPerformanceMetric,
+  getPerformanceMetrics,
+  resetMetricsCount,
+} from './performance-monitor'
+export type {
+  PerformanceMetric,
+  ResourceTiming,
+  LongTaskTiming,
+  MemoryInfo,
+  PerformanceMonitorConfig,
+} from './performance-monitor'
+
+// Monitoring Hooks (Epic 18)
+export {
+  useRenderTracking,
+  useTrackedFetch,
+  useInteractionTracking,
+  useVisibilityTracking,
+  useErrorHandler,
+  usePageLoadTracking,
+} from './monitoring-hooks'

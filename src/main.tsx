@@ -21,6 +21,13 @@ import "./main.css"
 import "./styles/theme.css"
 import "./index.css"
 
+// Run performance benchmark in development
+if (import.meta.env.DEV) {
+  import('./lib/performance-benchmark').then(({ runBenchmarkOnLoad }) => {
+    runBenchmarkOnLoad()
+  })
+}
+
 /**
  * Mount the React application to the DOM.
  * Uses React 18's createRoot API for concurrent features.

@@ -18,6 +18,7 @@ import { ClickableCard } from '@/components/ClickableCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
+import { submitNewsletterSubscription } from '@/lib/form-service'
 
 /**
  * Props for the HomePage component.
@@ -57,12 +58,27 @@ export const HomePage = memo(function HomePage({ onNavigate }: HomePageProps) {
     }
     
     setIsSubscribing(true)
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    toast.success('Successfully subscribed!', {
-      description: "You'll receive our latest updates soon."
-    })
-    setEmail('')
-    setIsSubscribing(false)
+    
+    try {
+      const result = await submitNewsletterSubscription({ email })
+      
+      if (result.success) {
+        toast.success('Successfully subscribed!', {
+          description: "You'll receive our latest updates soon."
+        })
+        setEmail('')
+      } else {
+        toast.error('Subscription failed', {
+          description: result.error ?? 'Please try again later.'
+        })
+      }
+    } catch {
+      toast.error('Something went wrong', {
+        description: 'Please try again later.'
+      })
+    } finally {
+      setIsSubscribing(false)
+    }
   }, [email])
 
   const handleNavigate = useCallback((page: string) => () => onNavigate(page), [onNavigate])

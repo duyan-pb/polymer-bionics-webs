@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { submitContactForm } from '@/lib/form-service'
 
 /**
  * Form data structure for contact form.
@@ -101,14 +102,34 @@ export function ContactForm() {
     
     setIsSubmitting(true)
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    toast.success('Message sent successfully! We\'ll get back to you soon.')
-    setFormData(INITIAL_FORM_DATA)
-    setErrors({})
-    setIsSubmitting(false)
-  }, [validateForm])
+    try {
+      const result = await submitContactForm({
+        name: formData.name,
+        email: formData.email,
+        company: formData.company || undefined,
+        subject: formData.subject,
+        message: formData.message,
+      })
+      
+      if (result.success) {
+        toast.success('Message sent successfully!', {
+          description: "We'll get back to you within 24 hours."
+        })
+        setFormData(INITIAL_FORM_DATA)
+        setErrors({})
+      } else {
+        toast.error('Failed to send message', {
+          description: result.error ?? 'Please try again later.'
+        })
+      }
+    } catch {
+      toast.error('Something went wrong', {
+        description: 'Please try again later.'
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [validateForm, formData])
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
