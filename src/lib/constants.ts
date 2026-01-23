@@ -102,6 +102,22 @@ export const IDLE_CALLBACK_TIMEOUT_MS = 500
 export const SCROLL_THRESHOLD_PX = 400
 
 // =============================================================================
+// CONTENT LIMITS
+// =============================================================================
+
+/** Default loading skeleton card count */
+export const DEFAULT_LOADING_SKELETON_COUNT = 6
+
+/** Home page feature icon size (px) */
+export const HOME_FEATURE_ICON_SIZE = 40
+
+/** Home page partner placeholder count */
+export const HOME_PARTNER_PLACEHOLDER_COUNT = 4
+
+/** Application benefits preview count */
+export const APPLICATION_BENEFIT_PREVIEW_COUNT = 2
+
+// =============================================================================
 // ANIMATION CONSTANTS
 // =============================================================================
 

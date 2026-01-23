@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { ClickableCard } from '@/components/ClickableCard'
 import { CheckCircle } from '@phosphor-icons/react'
 import type { Application } from '@/lib/types'
+import { APPLICATION_BENEFIT_PREVIEW_COUNT } from '@/lib/constants'
 
 interface ApplicationCardProps {
   application: Application
@@ -43,15 +44,15 @@ export function ApplicationCard({ application, onSelect }: ApplicationCardProps)
               Key Benefits
             </h4>
             <ul className="space-y-2">
-              {application.benefits.slice(0, 2).map((benefit, idx) => (
+              {application.benefits.slice(0, APPLICATION_BENEFIT_PREVIEW_COUNT).map((benefit, idx) => (
                 <li key={idx} className="text-xs text-muted-foreground flex items-start gap-2">
                   <CheckCircle size={16} className="text-primary mt-0.5 flex-shrink-0" weight="fill" />
                   {benefit}
                 </li>
               ))}
             </ul>
-            {application.benefits.length > 2 && (
-              <p className="text-xs text-primary font-semibold mt-3">+{application.benefits.length - 2} more benefits</p>
+            {application.benefits.length > APPLICATION_BENEFIT_PREVIEW_COUNT && (
+              <p className="text-xs text-primary font-semibold mt-3">+{application.benefits.length - APPLICATION_BENEFIT_PREVIEW_COUNT} more benefits</p>
             )}
           </div>
           <Button variant="outline" size="sm" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors font-semibold">

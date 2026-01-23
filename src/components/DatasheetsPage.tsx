@@ -15,10 +15,10 @@ import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { MagnifyingGlass, FileText } from '@phosphor-icons/react'
 import type { Datasheet } from '@/lib/types'
-import { PageHero } from '@/components/PageHero'
+import { PageLayout } from '@/components/layout/PageLayout'
 import { DEBOUNCE_DELAY_MS } from '@/lib/constants'
 import { openExternal } from '@/lib/utils'
-import { ComingSoonCard } from '@/components/ComingSoonCard'
+import { ContentState } from '@/components/ContentState'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { DatasheetTable } from '@/components/datasheets/DatasheetTable'
 import { DatasheetCardList } from '@/components/datasheets/DatasheetCardList'
@@ -93,78 +93,77 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
     }
   }, [])
 
+  const hero = {
+    title: 'Technical Datasheets',
+    description: 'Comprehensive technical documentation including mechanical properties, biocompatibility data, and processing guidelines for our advanced biomaterials platform.',
+    backgroundImage: BackgroundCover,
+    backgroundOpacity: 0.7,
+    breadcrumbs: [
+      { label: 'Home', page: 'home' },
+      { label: 'Datasheets' },
+    ],
+    onNavigate,
+  }
+
+  const emptyState = {
+    icon: <FileText size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />,
+    title: 'Datasheets coming soon',
+    description: 'We are finalizing technical datasheets for our products. Check back soon or contact us and we will notify you when they are available.',
+    emailType: 'sales' as const,
+  }
+
   return (
-    <div className="min-h-screen bg-background">
-      <PageHero
-        title="Technical Datasheets"
-        description="Comprehensive technical documentation including mechanical properties, biocompatibility data, and processing guidelines for our advanced biomaterials platform."
-        backgroundImage={BackgroundCover}
-        backgroundOpacity={0.7}
-        breadcrumbs={[
-          { label: 'Home', page: 'home' },
-          { label: 'Datasheets' }
-        ]}
-        onNavigate={onNavigate}
-      />
-
-      <section className="py-12 md:py-20 px-4 md:px-8">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="flex flex-col md:flex-row gap-3 md:gap-4 mb-8 md:mb-12">
-            <div className="relative flex-1">
-              <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
-              <Input
-                placeholder="Search datasheets..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-11"
-              />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
-                <Badge
-                  key={cat}
-                  variant={selectedCategory === cat ? 'default' : 'outline'}
-                  className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
-                  onClick={() => setSelectedCategory(cat)}
-                  onKeyDown={(event) => handleCategoryKeyDown(event, cat)}
-                  role="button"
-                  tabIndex={0}
-                >
-                  {cat}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          {!hasDatasheets ? (
-            <div className="space-y-4">
-              <ComingSoonCard
-                icon={<FileText size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
-                title="Datasheets coming soon"
-                description="We are finalizing technical datasheets for our products. Check back soon or contact us and we will notify you when they are available."
-                emailType="sales"
-              />
-              <div className="flex justify-center">
-                <Button variant="outline" onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}>
-                  Clear Filters
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <DatasheetTable
-              datasheets={filteredDatasheets}
-              onSelect={setSelectedDatasheet}
-              onDownload={handleDownload}
-            />
-          )}
-
-          <DatasheetCardList
-            datasheets={filteredDatasheets}
-            onSelect={setSelectedDatasheet}
-            onDownload={handleDownload}
+    <PageLayout hero={hero}>
+      <div className="flex flex-col md:flex-row gap-3 md:gap-4 mb-8 md:mb-12">
+        <div className="relative flex-1">
+          <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+          <Input
+            placeholder="Search datasheets..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 h-11"
           />
         </div>
-      </section>
+        <div className="flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <Badge
+              key={cat}
+              variant={selectedCategory === cat ? 'default' : 'outline'}
+              className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
+              onClick={() => setSelectedCategory(cat)}
+              onKeyDown={(event) => handleCategoryKeyDown(event, cat)}
+              role="button"
+              tabIndex={0}
+            >
+              {cat}
+            </Badge>
+          ))}
+        </div>
+      </div>
+
+      <ContentState
+        isEmpty={!hasDatasheets}
+        emptyProps={emptyState}
+        emptyActions={(
+          <div className="flex justify-center">
+            <Button variant="outline" onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}>
+              Clear Filters
+            </Button>
+          </div>
+        )}
+      >
+        <DatasheetTable
+          datasheets={filteredDatasheets}
+          onSelect={setSelectedDatasheet}
+          onDownload={handleDownload}
+        />
+      </ContentState>
+
+      <DatasheetCardList
+        datasheets={filteredDatasheets}
+        onSelect={setSelectedDatasheet}
+        onDownload={handleDownload}
+      />
 
       <Dialog open={!!selectedDatasheet} onOpenChange={() => setSelectedDatasheet(null)}>
         <DialogContent className="max-w-4xl max-h-[90vh]">
@@ -178,6 +177,6 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
           </ScrollArea>
         </DialogContent>
       </Dialog>
-    </div>
+    </PageLayout>
   )
 }

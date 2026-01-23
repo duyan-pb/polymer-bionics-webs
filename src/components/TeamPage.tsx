@@ -11,14 +11,13 @@ import { useState, useMemo, useCallback } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { PageHero } from '@/components/PageHero'
+import { PageLayout } from '@/components/layout/PageLayout'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { TEAM_CATEGORIES, type TeamCategory } from '@/lib/constants'
 import type { TeamMember } from '@/lib/types'
 import { TeamGrid } from '@/components/team/TeamGrid'
 import { TeamMemberDialogContent } from '@/components/team/TeamMemberDialogContent'
-import { TeamLoadingSkeleton } from '@/components/team/TeamLoadingSkeleton'
-import { PageSection } from '@/components/layout/PageSection'
+import { ContentState } from '@/components/ContentState'
 
 /**
  * Props for the TeamPage component.
@@ -67,25 +66,21 @@ export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
     setSelectedMember(member)
   }, [])
 
+  const hero = {
+    title: 'Our Team',
+    description: 'Our multidisciplinary team combines world-class expertise in polymer chemistry, biomedical engineering, and clinical medicine to develop innovative biomaterials solutions.',
+    backgroundImage: BackgroundCover,
+    backgroundOpacity: 0.7,
+    breadcrumbs: [
+      { label: 'Home', page: 'home' },
+      { label: 'Team' },
+    ],
+    onNavigate,
+  }
 
   return (
-    <div className="min-h-screen bg-background">
-      <PageHero
-        title="Our Team"
-        description="Our multidisciplinary team combines world-class expertise in polymer chemistry, biomedical engineering, and clinical medicine to develop innovative biomaterials solutions."
-        backgroundImage={BackgroundCover}
-        backgroundOpacity={0.7}
-        breadcrumbs={[
-          { label: 'Home', page: 'home' },
-          { label: 'Team' }
-        ]}
-        onNavigate={onNavigate}
-      />
-
-      <PageSection>
-        {isLoading && (
-          <TeamLoadingSkeleton />
-        )}
+    <PageLayout hero={hero}>
+      <ContentState isLoading={isLoading}>
         {categoryOrder.map(category => {
           const members = teamByCategory[category]
           if (!members || members.length === 0) {return null}
@@ -98,7 +93,7 @@ export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
             />
           )
         })}
-      </PageSection>
+      </ContentState>
 
       <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh]">
@@ -109,6 +104,6 @@ export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-    </div>
+    </PageLayout>
   )
 }

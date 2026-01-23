@@ -12,10 +12,10 @@ import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { materials } from '@/lib/materials-data'
 import type { Material } from '@/lib/types'
-import { PageHero } from '@/components/PageHero'
 import CESheet from '@/assets/images/CE_sheet.png'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { MaterialDialogContent } from '@/components/materials/MaterialDialogContent'
+import { PageLayout } from '@/components/layout/PageLayout'
 
 /**
  * Props for the MaterialsPage component.
@@ -45,33 +45,29 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
     setSelectedMaterial(material)
   }, [])
 
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHero
-        title="Our Materials"
-        description="Advanced materials for advancements in humankind. Our portfolio of specialized bionic materials includes flexible conductive polymers, biocompatible gels, and innovative bonding solutions—all engineered for superior performance in wearable and implantable bioelectronic devices."
-        backgroundImage={CESheet}
-        backgroundOpacity={0.7}
-        breadcrumbs={[
-          { label: 'Home', page: 'home' },
-          { label: 'Materials' }
-        ]}
-        onNavigate={onNavigate}
-      />
+  const hero = {
+    title: 'Our Materials',
+    description: 'Advanced materials for advancements in humankind. Our portfolio of specialized bionic materials includes flexible conductive polymers, biocompatible gels, and innovative bonding solutions—all engineered for superior performance in wearable and implantable bioelectronic devices.',
+    backgroundImage: CESheet,
+    backgroundOpacity: 0.7,
+    breadcrumbs: [
+      { label: 'Home', page: 'home' },
+      { label: 'Materials' },
+    ],
+    onNavigate,
+  }
 
-      <section className="py-12 md:py-20 px-4 md:px-8">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
-            {materials.map((material) => (
-              <MaterialCard
-                key={material.id}
-                material={material}
-                onSelect={handleMaterialSelect}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+  return (
+    <PageLayout hero={hero}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
+        {materials.map((material) => (
+          <MaterialCard
+            key={material.id}
+            material={material}
+            onSelect={handleMaterialSelect}
+          />
+        ))}
+      </div>
 
 
 
@@ -84,6 +80,6 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-    </div>
+    </PageLayout>
   )
 }

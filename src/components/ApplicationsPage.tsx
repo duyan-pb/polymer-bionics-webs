@@ -12,10 +12,10 @@ import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { applications } from '@/lib/materials-data'
 import type { Application } from '@/lib/types'
-import { PageHero } from '@/components/PageHero'
 import NeuralCells from '@/assets/images/Neural_Cells.png'
 import { ApplicationCard } from '@/components/applications/ApplicationCard'
 import { ApplicationDialogContent } from '@/components/applications/ApplicationDialogContent'
+import { PageLayout } from '@/components/layout/PageLayout'
 
 /**
  * Props for the ApplicationsPage component.
@@ -45,33 +45,29 @@ export function ApplicationsPage({ onNavigate }: ApplicationsPageProps) {
     setSelectedApplication(application)
   }, [])
 
-  return (
-    <div className="min-h-screen bg-background">
-      <PageHero
-        title="Applications"
-        description="Applications for healthcare and diagnostics. Polymer Bionics materials enable breakthrough medical technologies across diverse clinical applications—from peripheral nerve interfaces to continuous infant monitoring, our flexible bioelectronics platform supports innovation that improves patient outcomes."
-        backgroundImage={NeuralCells}
-        backgroundOpacity={0.5}
-        breadcrumbs={[
-          { label: 'Home', page: 'home' },
-          { label: 'Applications' }
-        ]}
-        onNavigate={onNavigate}
-      />
+  const hero = {
+    title: 'Applications',
+    description: 'Applications for healthcare and diagnostics. Polymer Bionics materials enable breakthrough medical technologies across diverse clinical applications—from peripheral nerve interfaces to continuous infant monitoring, our flexible bioelectronics platform supports innovation that improves patient outcomes.',
+    backgroundImage: NeuralCells,
+    backgroundOpacity: 0.5,
+    breadcrumbs: [
+      { label: 'Home', page: 'home' },
+      { label: 'Applications' },
+    ],
+    onNavigate,
+  }
 
-      <section className="py-12 md:py-20 px-4 md:px-8">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-            {applications.map((application) => (
-              <ApplicationCard
-                key={application.id}
-                application={application}
-                onSelect={handleApplicationSelect}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+  return (
+    <PageLayout hero={hero}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+        {applications.map((application) => (
+          <ApplicationCard
+            key={application.id}
+            application={application}
+            onSelect={handleApplicationSelect}
+          />
+        ))}
+      </div>
 
 
 
@@ -84,6 +80,6 @@ export function ApplicationsPage({ onNavigate }: ApplicationsPageProps) {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-    </div>
+    </PageLayout>
   )
 }

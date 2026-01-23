@@ -16,6 +16,7 @@ import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { submitNewsletterSubscription } from '@/lib/form-service'
+import { HOME_FEATURE_ICON_SIZE, HOME_PARTNER_PLACEHOLDER_COUNT } from '@/lib/constants'
 import { HomeFeatureCard } from '@/components/home/HomeFeatureCard'
 import { NewsletterSignup } from '@/components/home/NewsletterSignup'
 
@@ -116,7 +117,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
               title="Our Team"
               description="Expert polymer scientists, biomedical engineers, and materials researchers advancing flexible bioelectronics."
               actionLabel="Learn more"
-              icon={<Users size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              icon={<Users size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
               onSelect={handleNavigate('team')}
               ariaLabel="Navigate to Our Team page"
             />
@@ -124,7 +125,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
               title="Materials"
               description="Advanced polymers including PEDOT:PSS, hydrogels, silicones, and specialty coatings for biomedical use."
               actionLabel="View materials"
-              icon={<Atom size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              icon={<Atom size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
               onSelect={handleNavigate('materials')}
               ariaLabel="Navigate to Materials page"
             />
@@ -132,7 +133,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
               title="Applications"
               description="Neural interfaces, wearable sensors, drug delivery, cardiac devices, and advanced surgical tools."
               actionLabel="Explore uses"
-              icon={<Lightbulb size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              icon={<Lightbulb size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
               onSelect={handleNavigate('applications')}
               ariaLabel="Navigate to Applications page"
             />
@@ -140,7 +141,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
               title="Products"
               description="Flexible bioelectronic devices, conductive polymer systems, and soft tissue-compatible sensors."
               actionLabel="Explore catalog"
-              icon={<Flask size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              icon={<Flask size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
               onSelect={handleNavigate('products')}
               ariaLabel="Navigate to Products page"
             />
@@ -148,7 +149,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
               title="Case Studies"
               description="Real-world applications in wearable diagnostics, implantable devices, and smart wound healing."
               actionLabel="View studies"
-              icon={<Video size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              icon={<Video size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
               onSelect={handleNavigate('media')}
               ariaLabel="Navigate to Case Studies page"
             />
@@ -156,7 +157,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
               title="Technical Data"
               description="Material properties, biocompatibility testing, mechanical flexibility, and performance specifications."
               actionLabel="Access library"
-              icon={<FileText size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              icon={<FileText size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
               onSelect={handleNavigate('datasheets')}
               ariaLabel="Navigate to Technical Data page"
             />
@@ -171,9 +172,9 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
             Collaborating with world-class medical centers and research institutions to advance flexible bioelectronics.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 items-center">
-            {["Partner Placeholder", "Partner Placeholder", "Partner Placeholder", "Partner Placeholder"].map((name, index) => (
+            {Array.from({ length: HOME_PARTNER_PLACEHOLDER_COUNT }).map((_, index) => (
               <Card key={index} className="p-4 md:p-6 text-center border-dashed border-primary/30 hover:border-primary transition-colors">
-                <div className="text-sm md:text-lg font-semibold text-foreground">{name}</div>
+                <div className="text-sm md:text-lg font-semibold text-foreground">Partner Placeholder</div>
                 <p className="text-xs md:text-sm text-muted-foreground">Partner</p>
               </Card>
             ))}
