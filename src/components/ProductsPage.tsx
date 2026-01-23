@@ -5,18 +5,20 @@
  */
 
 import { useState, useMemo, useCallback, type MouseEvent, type KeyboardEvent } from 'react'
+import { useKV } from '@github/spark/hooks'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Package, X } from '@phosphor-icons/react'
-import type { Product } from '@/lib/types'
+import type { Product, PaymentOrderDraft } from '@/lib/types'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { Card } from '@/components/ui/card'
 import ElastomerArray from '@/assets/images/Elastomer_array.png'
 import { ProductDialogContent } from '@/components/products/ProductDialogContent'
 import { ProductCard } from '@/components/products/ProductCard'
+import { ContactLinks } from '@/components/ContactLinks'
 /**
  * Props for the ProductsPage component.
  */
@@ -43,6 +45,16 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [buyProduct, setBuyProduct] = useState<Product | null>(null)
+  const [, setPaymentDraft] = useKV<PaymentOrderDraft>('paymentDraft', {
+    name: '',
+    email: '',
+    company: '',
+    product: '',
+    quantity: '',
+    country: '',
+    notes: '',
+  })
   const FEATURE_PREVIEW_COUNT = 3
   const isLoading = !products
 
@@ -92,6 +104,17 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
     e.stopPropagation()
     onNavigate('contact')
   }, [onNavigate])
+
+  const handleBuy = useCallback((e: MouseEvent, product: Product) => {
+    e.stopPropagation()
+    setSelectedProduct(null)
+    setBuyProduct(product)
+    setPaymentDraft(prev => ({
+      ...prev,
+      product: product.name,
+      quantity: prev.quantity || '1',
+    }))
+  }, [setPaymentDraft])
 
   const hero = {
     title: 'Product Portfolio',
@@ -167,6 +190,7 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
               featurePreviewCount={FEATURE_PREVIEW_COUNT}
               onSelect={handleProductSelect}
               onZoomImage={(imageUrl) => setSelectedImage(imageUrl)}
+              onBuy={handleBuy}
               onContact={navigateToContact}
               onDatasheet={navigateToDatasheet}
               onCaseStudy={navigateToCaseStudy}
@@ -182,12 +206,40 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
               <ProductDialogContent
                 product={selectedProduct}
                 onSelectImage={setSelectedImage}
-                onContact={navigateToContact}
+                onBuy={handleBuy}
                 onDatasheet={navigateToDatasheet}
                 onCaseStudy={navigateToCaseStudy}
               />
             )}
           </ScrollArea>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!buyProduct} onOpenChange={(open) => { if (!open) { setBuyProduct(null) } }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Buy {buyProduct?.name}</DialogTitle>
+            <DialogDescription>
+              Contact our sales team to place an order or request a quote.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-wrap gap-3">
+            <ContactLinks emailType="sales" variant="outline" />
+            <Button
+              variant="default"
+              onClick={() => {
+                setPaymentDraft(prev => ({
+                  ...prev,
+                  product: buyProduct?.name ?? prev.product,
+                  quantity: prev.quantity || '1',
+                }))
+                setBuyProduct(null)
+                onNavigate('payment')
+              }}
+            >
+              Go to payment page
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
 

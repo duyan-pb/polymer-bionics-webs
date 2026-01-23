@@ -18,7 +18,7 @@ import type { Product } from '@/lib/types'
 interface ProductDialogContentProps {
   product: Product
   onSelectImage: (image: string) => void
-  onContact: (e: MouseEvent) => void
+  onBuy: (e: MouseEvent, product: Product) => void
   onDatasheet: (e: MouseEvent, datasheetId?: string) => void
   onCaseStudy: (e: MouseEvent, caseStudyId?: string) => void
 }
@@ -68,7 +68,7 @@ function ProductImageGrid({ product, onSelectImage }: { product: Product; onSele
   )
 }
 
-export function ProductDialogContent({ product, onSelectImage, onContact, onDatasheet, onCaseStudy }: ProductDialogContentProps) {
+export function ProductDialogContent({ product, onSelectImage, onBuy, onDatasheet, onCaseStudy }: ProductDialogContentProps) {
   return (
     <>
       <DialogHeader>
@@ -122,7 +122,7 @@ export function ProductDialogContent({ product, onSelectImage, onContact, onData
         </div>
         <div className="space-y-3 pt-4">
           <div className="flex gap-3">
-            <Button variant="default" onClick={onContact}>
+            <Button variant="default" onClick={(e) => onBuy(e, product)}>
               <ShoppingCart className="mr-2" weight="duotone" /> Buy Now
             </Button>
             {product.datasheetId && (

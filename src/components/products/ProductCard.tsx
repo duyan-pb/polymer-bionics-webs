@@ -18,6 +18,7 @@ interface ProductCardProps {
   featurePreviewCount: number
   onSelect: (product: Product) => void
   onZoomImage: (imageUrl: string) => void
+  onBuy: (e: MouseEvent, product: Product) => void
   onContact: (e: MouseEvent) => void
   onDatasheet: (e: MouseEvent, datasheetId?: string) => void
   onCaseStudy: (e: MouseEvent, caseStudyId?: string) => void
@@ -28,6 +29,7 @@ export function ProductCard({
   featurePreviewCount,
   onSelect,
   onZoomImage,
+  onBuy,
   onContact,
   onDatasheet,
   onCaseStudy,
@@ -99,7 +101,7 @@ export function ProductCard({
               variant="default"
               size="sm"
               className="text-xs md:text-sm"
-              onClick={onContact}
+              onClick={(e) => onBuy(e, product)}
             >
               <ShoppingCart className="mr-1" size={16} weight="duotone" /> Buy
             </Button>

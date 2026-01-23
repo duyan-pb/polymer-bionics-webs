@@ -218,6 +218,31 @@ export interface Publication {
 }
 
 /**
+ * Payment/order draft data for pre-filling the payment page.
+ */
+export interface PaymentOrderDraft {
+  /** Contact name */
+  name: string
+  /** Contact email */
+  email: string
+  /** Company name */
+  company: string
+  /** Product name */
+  product: string
+  /** Quantity requested */
+  quantity: string
+  /** Shipping country */
+  country: string
+  /** Additional notes */
+  notes: string
+}
+
+/**
+ * Biomaterial information.
+ * Represents a material in the materials catalog.
+ */
+
+/**
  * Biomaterial information.
  * Represents a material in the materials catalog.
  */
