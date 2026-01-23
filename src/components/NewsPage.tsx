@@ -16,12 +16,12 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Calendar, Newspaper, BookOpen, ArrowSquareOut, Download } from '@phosphor-icons/react'
 import type { NewsItem, Publication } from '@/lib/types'
-import { ContactCTA } from '@/components/ContactCTA'
+import { ContactLinks } from '@/components/ContactLinks'
+import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import { openExternal } from '@/lib/utils'
-import { ContentState } from '@/components/ContentState'
+import { ComingSoonCard } from '@/components/ComingSoonCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
-import { PageLayout } from '@/components/layout/PageLayout'
 
 /**
  * Props for the NewsPage component.
@@ -91,32 +91,6 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
     'preprint': 'outline',
   }
 
-  const hero = {
-    title: 'News & Publications',
-    description: 'Stay updated on our latest research, partnerships, grant awards, and peer-reviewed publications advancing the field of medical biomaterials.',
-    backgroundImage: BackgroundCover,
-    backgroundOpacity: 0.35,
-    breadcrumbs: [
-      { label: 'Home', page: 'home' },
-      { label: 'News & Publications' },
-    ],
-    onNavigate,
-  }
-
-  const newsEmpty = {
-    icon: <Newspaper size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />,
-    title: 'News coming soon',
-    description: 'Stay tuned for updates on our latest research, partnerships, and company announcements. Contact us to stay informed.',
-    emailType: 'general' as const,
-  }
-
-  const publicationsEmpty = {
-    icon: <BookOpen size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />,
-    title: 'Publications coming soon',
-    description: 'Our peer-reviewed research publications will be listed here. Contact us to discuss our scientific findings and ongoing research.',
-    emailType: 'general' as const,
-  }
-
   const NewsDialogContent = ({ item }: { item: NewsItem }) => (
     <>
       <DialogHeader>
@@ -142,7 +116,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
               </a>
             </Button>
           )}
-          <ContactCTA emailType="general" variant="outline" />
+          <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
         </div>
       </div>
     </>
@@ -197,15 +171,29 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
               <Download className="mr-2" /> Download PDF
             </Button>
           )}
-          <ContactCTA emailType="general" variant="outline" />
+          <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
         </div>
       </div>
     </>
   )
 
   return (
-    <PageLayout hero={hero}>
-      <Tabs defaultValue="news" className="w-full">
+    <div className="min-h-screen bg-background">
+      <PageHero
+        title="News & Publications"
+        description="Stay updated on our latest research, partnerships, grant awards, and peer-reviewed publications advancing the field of medical biomaterials."
+        backgroundImage={BackgroundCover}
+        backgroundOpacity={0.35}
+        breadcrumbs={[
+          { label: 'Home', page: 'home' },
+          { label: 'News & Publications' }
+        ]}
+        onNavigate={onNavigate}
+      />
+
+      <section className="py-12 md:py-20 px-4 md:px-8">
+        <div className="max-w-[1280px] mx-auto">
+          <Tabs defaultValue="news" className="w-full">
             <TabsList className="mb-8 md:mb-12">
               <TabsTrigger value="news" className="text-sm md:text-base px-4 md:px-8 py-2 md:py-3 font-semibold">
                 <Newspaper className="mr-1 md:mr-2" size={18} /> News
@@ -216,7 +204,14 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
             </TabsList>
 
             <TabsContent value="news">
-              <ContentState isEmpty={news.length === 0} emptyProps={newsEmpty}>
+              {news.length === 0 ? (
+                <ComingSoonCard
+                  icon={<Newspaper size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
+                  title="News coming soon"
+                  description="Stay tuned for updates on our latest research, partnerships, and company announcements. Contact us to stay informed."
+                  emailType="general"
+                />
+              ) : (
                 <div className="space-y-4 md:space-y-6">
                   {news.map((item) => (
                     <ClickableCard
@@ -244,89 +239,94 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
                     </ClickableCard>
                   ))}
                 </div>
-              </ContentState>
+              )}
             </TabsContent>
 
             <TabsContent value="publications">
-              <ContentState isEmpty={publications.length === 0} emptyProps={publicationsEmpty}>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {allTags.map((tag) => (
-                    <Badge
-                      key={tag}
-                      variant={selectedTag === tag ? 'default' : 'outline'}
-                      className="cursor-pointer px-4 py-2 text-sm capitalize"
-                      onClick={() => handleTagSelect(tag)}
-                      onKeyDown={(event) => handleTagKeyDown(event, tag)}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
+              {publications.length === 0 ? (
+                <ComingSoonCard
+                  icon={<BookOpen size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
+                  title="Publications coming soon"
+                  description="Our peer-reviewed research publications will be listed here. Contact us to discuss our scientific findings and ongoing research."
+                  emailType="general"
+                />
+              ) : (
+                <>
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {allTags.map((tag) => (
+                      <Badge
+                        key={tag}
+                        variant={selectedTag === tag ? 'default' : 'outline'}
+                        className="cursor-pointer px-4 py-2 text-sm capitalize"
+                        onClick={() => handleTagSelect(tag)}
+                        onKeyDown={(event) => handleTagKeyDown(event, tag)}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
 
-                <div className="space-y-4 md:space-y-6">
-                  {filteredPublications.map((pub) => (
-                    <ClickableCard
-                      key={pub.id}
-                      className="p-4 md:p-6 border-l-4 border-l-primary"
-                      onClick={() => handlePublicationSelect(pub)}
-                      ariaLabel={`View publication: ${pub.title}`}
-                    >
-                      <div className="flex flex-col gap-3">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex flex-wrap items-center gap-2 mb-2">
-                              <Badge variant={publicationTypeColors[pub.type]} className="capitalize">
-                                {pub.type.replace('-', ' ')}
-                              </Badge>
-                              <div className="flex items-center text-sm text-muted-foreground">
-                                <Calendar size={16} className="mr-1" />
-                                {pub.date}
+                  <div className="space-y-4 md:space-y-6">
+                    {filteredPublications.map((pub) => (
+                      <ClickableCard
+                        key={pub.id}
+                        className="p-4 md:p-6 border-l-4 border-l-primary"
+                        onClick={() => handlePublicationSelect(pub)}
+                        ariaLabel={`View publication: ${pub.title}`}
+                      >
+                        <div className="flex flex-col gap-3">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <Badge variant={publicationTypeColors[pub.type]} className="capitalize">
+                                  {pub.type.replace('-', ' ')}
+                                </Badge>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                  <Calendar size={16} className="mr-1" />
+                                  {pub.date}
+                                </div>
                               </div>
+                              <h3 className="text-xl font-semibold mb-2">{pub.title}</h3>
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {pub.authors.join(', ')}
+                              </p>
+                              <p className="text-sm text-accent font-medium italic">{pub.journal}</p>
                             </div>
-                            <h3 className="text-xl font-semibold mb-2">{pub.title}</h3>
-                            <p className="text-sm text-muted-foreground mb-2">
-                              {pub.authors.join(', ')}
-                            </p>
-                            <p className="text-sm text-accent font-medium italic">{pub.journal}</p>
+                          </div>
+                          <p className="text-sm text-muted-foreground line-clamp-2">{pub.abstract}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {pub.tags.map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="flex gap-2 pt-2">
+                            {pub.doi && (
+                              <Button variant="outline" size="sm" asChild>
+                                <a href={pub.doi} target="_blank" rel="noopener noreferrer">
+                                  <ArrowSquareOut className="mr-1" size={16} /> View DOI
+                                </a>
+                              </Button>
+                            )}
+                            {pub.pdfUrl && (
+                              <Button variant="ghost" size="sm" onClick={() => openExternal(pub.pdfUrl)}>
+                                <Download className="mr-1" size={16} /> Download PDF
+                              </Button>
+                            )}
                           </div>
                         </div>
-                        <p className="text-sm text-muted-foreground line-clamp-2">{pub.abstract}</p>
-                        <div className="flex flex-wrap gap-2">
-                          {pub.tags.map((tag) => (
-                            <Badge key={tag} variant="outline" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                        <div className="flex gap-2 pt-2">
-                          {pub.doi && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={(event) => {
-                                event.preventDefault()
-                                openExternal(pub.doi)
-                              }}
-                            >
-                              <ArrowSquareOut className="mr-1" size={16} /> View DOI
-                            </Button>
-                          )}
-                          {pub.pdfUrl && (
-                            <Button variant="ghost" size="sm" onClick={() => openExternal(pub.pdfUrl)}>
-                              <Download className="mr-1" size={16} /> Download PDF
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </ClickableCard>
-                  ))}
-                </div>
-              </ContentState>
+                      </ClickableCard>
+                    ))}
+                  </div>
+                </>
+              )}
             </TabsContent>
           </Tabs>
-      </Tabs>
+        </div>
+      </section>
 
       <Dialog open={!!selectedNews} onOpenChange={() => setSelectedNews(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh]">
@@ -347,6 +347,6 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-    </PageLayout>
+    </div>
   )
 }

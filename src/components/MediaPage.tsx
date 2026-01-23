@@ -16,11 +16,11 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, Quotes, FileText, VideoCamera, Briefcase } from '@phosphor-icons/react'
 import type { Video, CaseStudy } from '@/lib/types'
-import { ContactCTA } from '@/components/ContactCTA'
+import { ContactLinks } from '@/components/ContactLinks'
+import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
-import { ContentState } from '@/components/ContentState'
-import { PageLayout } from '@/components/layout/PageLayout'
+import { ComingSoonCard } from '@/components/ComingSoonCard'
 
 /**
  * Props for the MediaPage component.
@@ -59,32 +59,6 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
   const handleCaseStudySelect = useCallback((study: CaseStudy) => {
     setSelectedCaseStudy(study)
   }, [])
-
-  const hero = {
-    title: 'Videos & Case Studies',
-    description: 'Explore our technology demonstrations, laboratory validations, and real-world application case studies showcasing the performance of our biomaterials.',
-    backgroundImage: BackgroundCover,
-    backgroundOpacity: 0.35,
-    breadcrumbs: [
-      { label: 'Home', page: 'home' },
-      { label: 'Videos & Case Studies' },
-    ],
-    onNavigate,
-  }
-
-  const videosEmpty = {
-    icon: <VideoCamera size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />,
-    title: 'Videos coming soon',
-    description: 'We are producing video content showcasing our technology and applications. Check back soon or contact us to learn more.',
-    emailType: 'general' as const,
-  }
-
-  const caseStudiesEmpty = {
-    icon: <Briefcase size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />,
-    title: 'Case studies coming soon',
-    description: 'We are documenting real-world applications and success stories. Check back soon or contact us to discuss your specific use case.',
-    emailType: 'general' as const,
-  }
 
   const VideoDialogContent = ({ video }: { video: Video }) => (
     <>
@@ -154,12 +128,12 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
             <Button onClick={() => { setSelectedCaseStudy(null); onNavigate('datasheets'); }}>
               <FileText className="mr-2" /> View Related Datasheet
             </Button>
-            <ContactCTA emailType="sales" variant="outline" />
+            <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
           </div>
         )}
         {!study.datasheetId && (
           <div className="pt-4">
-            <ContactCTA emailType="sales" variant="default" />
+            <ContactLinks emailType="sales" variant="default" showWhatsApp={true} showEmail={true} />
           </div>
         )}
       </div>
@@ -167,15 +141,36 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
   )
 
   return (
-    <PageLayout hero={hero}>
-      <Tabs defaultValue="videos" className="w-full">
+    <div className="min-h-screen bg-background">
+      <PageHero
+        title="Videos & Case Studies"
+        description="Explore our technology demonstrations, laboratory validations, and real-world application case studies showcasing the performance of our biomaterials."
+        backgroundImage={BackgroundCover}
+        backgroundOpacity={0.35}
+        breadcrumbs={[
+          { label: 'Home', page: 'home' },
+          { label: 'Videos & Case Studies' }
+        ]}
+        onNavigate={onNavigate}
+      />
+
+      <section className="py-12 md:py-20 px-4 md:px-8">
+        <div className="max-w-[1280px] mx-auto">
+          <Tabs defaultValue="videos" className="w-full">
             <TabsList className="mb-8 md:mb-12">
               <TabsTrigger value="videos" className="text-sm md:text-base px-4 md:px-8 py-2 md:py-3 font-semibold">Videos</TabsTrigger>
               <TabsTrigger value="case-studies" className="text-sm md:text-base px-4 md:px-8 py-2 md:py-3 font-semibold">Case Studies</TabsTrigger>
             </TabsList>
 
             <TabsContent value="videos">
-              <ContentState isEmpty={videos.length === 0} emptyProps={videosEmpty}>
+              {videos.length === 0 ? (
+                <ComingSoonCard
+                  icon={<VideoCamera size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
+                  title="Videos coming soon"
+                  description="We are producing video content showcasing our technology and applications. Check back soon or contact us to learn more."
+                  emailType="general"
+                />
+              ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                   {videos.map((video) => (
                     <ClickableCard
@@ -207,12 +202,19 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
                     </ClickableCard>
                   ))}
                 </div>
-              </ContentState>
+              )}
             </TabsContent>
 
             <TabsContent value="case-studies">
-              <ContentState isEmpty={caseStudies.length === 0} emptyProps={caseStudiesEmpty}>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
+              {caseStudies.length === 0 ? (
+                <ComingSoonCard
+                  icon={<Briefcase size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
+                  title="Case studies coming soon"
+                  description="We are documenting real-world applications and success stories. Check back soon or contact us to discuss your specific use case."
+                  emailType="general"
+                />
+              ) : (
+                <div className="grid grid-cols-1 gap-4 md:gap-8">
                   {caseStudies.map((study) => (
                     <ClickableCard
                       key={study.id}
@@ -248,9 +250,11 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
                     </ClickableCard>
                   ))}
                 </div>
-              </ContentState>
+              )}
             </TabsContent>
           </Tabs>
+        </div>
+      </section>
 
       <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
         <DialogContent className="max-w-5xl">
@@ -269,6 +273,6 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-    </PageLayout>
+    </div>
   )
 }

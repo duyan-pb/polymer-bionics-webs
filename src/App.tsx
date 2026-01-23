@@ -48,7 +48,6 @@ const MediaPage = lazy(() => import('@/components/MediaPage').then(m => ({ defau
 const DatasheetsPage = lazy(() => import('@/components/DatasheetsPage').then(m => ({ default: m.DatasheetsPage })))
 const NewsPage = lazy(() => import('@/components/NewsPage').then(m => ({ default: m.NewsPage })))
 const ContactPage = lazy(() => import('@/components/ContactPage').then(m => ({ default: m.ContactPage })))
-const PaymentPage = lazy(() => import('@/components/PaymentPage').then(m => ({ default: m.PaymentPage })))
 const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({ default: m.GlobalSearch })))
 
 // =============================================================================
@@ -162,7 +161,6 @@ function App() {
     datasheets: () => <DatasheetsPage datasheets={datasheets || []} onNavigate={handleNavigate} />,
     news: () => <NewsPage news={news || []} publications={publications || []} onNavigate={handleNavigate} />,
     contact: () => <ContactPage onNavigate={handleNavigate} />,
-    payment: () => <PaymentPage onNavigate={handleNavigate} />,
   }
 
   const renderPage = () => {
