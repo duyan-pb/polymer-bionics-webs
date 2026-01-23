@@ -7,7 +7,7 @@
  * @module components/TeamInitializer
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { teamMembers } from '@/lib/team-data'
 import type { TeamMember } from '@/lib/types'
@@ -22,16 +22,22 @@ import type { TeamMember } from '@/lib/types'
  */
 export function TeamInitializer() {
   const [team, setTeam] = useKV<TeamMember[]>('team', [])
-  const [isInitialized, setIsInitialized] = useState(false)
+  const hasInitialized = useRef(false)
 
   useEffect(() => {
-    const needsUpdate = (team?.length || 0) !== teamMembers.length
-    
-    if (needsUpdate && !isInitialized) {
-      setTeam(teamMembers)
-      setIsInitialized(true)
+    // Only run once
+    if (hasInitialized.current) {
+      return
     }
-  }, [team, isInitialized, setTeam])
+    
+    // Always update if the team data length differs (ensures updates are applied)
+    if ((team?.length || 0) !== teamMembers.length || (team?.length || 0) === 0) {
+      hasInitialized.current = true
+      setTeam(teamMembers)
+    } else {
+      hasInitialized.current = true
+    }
+  }, [team, setTeam])
 
   return null
 }

@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Calendar, Newspaper, BookOpen, ArrowSquareOut, Download } from '@phosphor-icons/react'
+import { Card } from '@/components/ui/card'
 import type { NewsItem, Publication } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
@@ -109,102 +110,130 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
             </TabsList>
 
             <TabsContent value="news">
-              <div className="space-y-4 md:space-y-6">
-                {news.map((item) => (
-                  <ClickableCard
-                    key={item.id}
-                    className="p-5 md:p-8 border-l-4 border-l-primary"
-                    onClick={() => handleNewsSelect(item)}
-                    ariaLabel={`Read news: ${item.title}`}
-                  >
-                    <div className="flex flex-col md:flex-row md:items-start gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-3">
-                          <Badge variant="secondary" className="capitalize font-semibold">{item.category}</Badge>
-                          <div className="flex items-center text-sm text-muted-foreground">
-                            <Calendar size={16} className="mr-1" />
-                            {item.date}
+              {news.length === 0 ? (
+                <Card className="p-16 text-center space-y-3">
+                  <Newspaper size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
+                  <h3 className="text-2xl font-bold">News coming soon</h3>
+                  <p className="text-muted-foreground max-w-xl mx-auto">
+                    Stay tuned for updates on our latest research, partnerships, and company announcements. Contact us to stay informed.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+                    <ContactLinks emailType="general" variant="default" showWhatsApp={true} showEmail={true} />
+                  </div>
+                </Card>
+              ) : (
+                <div className="space-y-4 md:space-y-6">
+                  {news.map((item) => (
+                    <ClickableCard
+                      key={item.id}
+                      className="p-5 md:p-8 border-l-4 border-l-primary"
+                      onClick={() => handleNewsSelect(item)}
+                      ariaLabel={`Read news: ${item.title}`}
+                    >
+                      <div className="flex flex-col md:flex-row md:items-start gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-3">
+                            <Badge variant="secondary" className="capitalize font-semibold">{item.category}</Badge>
+                            <div className="flex items-center text-sm text-muted-foreground">
+                              <Calendar size={16} className="mr-1" />
+                              {item.date}
+                            </div>
                           </div>
+                          <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                          <p className="text-sm text-muted-foreground">{item.summary}</p>
                         </div>
-                        <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground">{item.summary}</p>
+                        <Button variant="outline" size="sm" className="md:mt-8">
+                          Read More
+                        </Button>
                       </div>
-                      <Button variant="outline" size="sm" className="md:mt-8">
-                        Read More
-                      </Button>
-                    </div>
-                  </ClickableCard>
-                ))}
-              </div>
+                    </ClickableCard>
+                  ))}
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="publications">
-              <div className="flex flex-wrap gap-2 mb-8">
-                {allTags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant={selectedTag === tag ? 'default' : 'outline'}
-                    className="cursor-pointer px-4 py-2 text-sm capitalize"
-                    onClick={() => handleTagSelect(tag)}
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
+              {publications.length === 0 ? (
+                <Card className="p-16 text-center space-y-3">
+                  <BookOpen size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
+                  <h3 className="text-2xl font-bold">Publications coming soon</h3>
+                  <p className="text-muted-foreground max-w-xl mx-auto">
+                    Our peer-reviewed research publications will be listed here. Contact us to discuss our scientific findings and ongoing research.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+                    <ContactLinks emailType="general" variant="default" showWhatsApp={true} showEmail={true} />
+                  </div>
+                </Card>
+              ) : (
+                <>
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {allTags.map((tag) => (
+                      <Badge
+                        key={tag}
+                        variant={selectedTag === tag ? 'default' : 'outline'}
+                        className="cursor-pointer px-4 py-2 text-sm capitalize"
+                        onClick={() => handleTagSelect(tag)}
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
 
-              <div className="space-y-4 md:space-y-6">
-                {filteredPublications.map((pub) => (
-                  <ClickableCard
-                    key={pub.id}
-                    className="p-4 md:p-6 border-l-4 border-l-primary"
-                    onClick={() => handlePublicationSelect(pub)}
-                    ariaLabel={`View publication: ${pub.title}`}
-                  >
-                    <div className="flex flex-col gap-3">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex flex-wrap items-center gap-2 mb-2">
-                            <Badge variant={publicationTypeColors[pub.type]} className="capitalize">
-                              {pub.type.replace('-', ' ')}
-                            </Badge>
-                            <div className="flex items-center text-sm text-muted-foreground">
-                              <Calendar size={16} className="mr-1" />
-                              {pub.date}
+                  <div className="space-y-4 md:space-y-6">
+                    {filteredPublications.map((pub) => (
+                      <ClickableCard
+                        key={pub.id}
+                        className="p-4 md:p-6 border-l-4 border-l-primary"
+                        onClick={() => handlePublicationSelect(pub)}
+                        ariaLabel={`View publication: ${pub.title}`}
+                      >
+                        <div className="flex flex-col gap-3">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1">
+                              <div className="flex flex-wrap items-center gap-2 mb-2">
+                                <Badge variant={publicationTypeColors[pub.type]} className="capitalize">
+                                  {pub.type.replace('-', ' ')}
+                                </Badge>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                  <Calendar size={16} className="mr-1" />
+                                  {pub.date}
+                                </div>
+                              </div>
+                              <h3 className="text-xl font-semibold mb-2">{pub.title}</h3>
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {pub.authors.join(', ')}
+                              </p>
+                              <p className="text-sm text-accent font-medium italic">{pub.journal}</p>
                             </div>
                           </div>
-                          <h3 className="text-xl font-semibold mb-2">{pub.title}</h3>
-                          <p className="text-sm text-muted-foreground mb-2">
-                            {pub.authors.join(', ')}
-                          </p>
-                          <p className="text-sm text-accent font-medium italic">{pub.journal}</p>
+                          <p className="text-sm text-muted-foreground line-clamp-2">{pub.abstract}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {pub.tags.map((tag) => (
+                              <Badge key={tag} variant="outline" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="flex gap-2 pt-2">
+                            {pub.doi && (
+                              <Button variant="outline" size="sm" asChild>
+                                <a href={pub.doi} target="_blank" rel="noopener noreferrer">
+                                  <ArrowSquareOut className="mr-1" size={16} /> View DOI
+                                </a>
+                              </Button>
+                            )}
+                            {pub.pdfUrl && (
+                              <Button variant="ghost" size="sm" onClick={() => window.open(pub.pdfUrl, '_blank', 'noopener')}>
+                                <Download className="mr-1" size={16} /> Download PDF
+                              </Button>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{pub.abstract}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {pub.tags.map((tag) => (
-                          <Badge key={tag} variant="outline" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                      <div className="flex gap-2 pt-2">
-                        {pub.doi && (
-                          <Button variant="outline" size="sm" asChild>
-                            <a href={pub.doi} target="_blank" rel="noopener noreferrer">
-                              <ArrowSquareOut className="mr-1" size={16} /> View DOI
-                            </a>
-                          </Button>
-                        )}
-                        {pub.pdfUrl && (
-                          <Button variant="ghost" size="sm" onClick={() => window.open(pub.pdfUrl, '_blank', 'noopener')}>
-                            <Download className="mr-1" size={16} /> Download PDF
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </ClickableCard>
-                ))}
-              </div>
+                      </ClickableCard>
+                    ))}
+                  </div>
+                </>
+              )}
             </TabsContent>
           </Tabs>
         </div>

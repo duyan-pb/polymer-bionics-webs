@@ -98,7 +98,7 @@ describe('ProductsInitializer', () => {
       render(<ProductsInitializer />)
       
       await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith('Failed to generate products:', expect.any(Error))
+        expect(consoleSpy).toHaveBeenCalledWith('[ProductsInitializer] Failed to generate products:', expect.any(Error))
       })
       
       consoleSpy.mockRestore()

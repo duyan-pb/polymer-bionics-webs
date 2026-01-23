@@ -7,7 +7,7 @@
  * @module components/ProductsInitializer
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { generateBiomaterialsProducts } from '@/lib/seed-data'
 import type { Product } from '@/lib/types'
@@ -22,27 +22,29 @@ import type { Product } from '@/lib/types'
  */
 export function ProductsInitializer() {
   const [products, setProducts] = useKV<Product[]>('products', [])
-  const [isInitialized, setIsInitialized] = useState(false)
-  const [isGenerating, setIsGenerating] = useState(false)
+  const hasInitialized = useRef(false)
 
   useEffect(() => {
-    const initProducts = async () => {
-      if ((products?.length || 0) === 0 && !isInitialized && !isGenerating) {
-        setIsGenerating(true)
-        try {
-          const generatedProducts = await generateBiomaterialsProducts()
-          setProducts(generatedProducts)
-          setIsInitialized(true)
-        } catch (error) {
-          console.error('Failed to generate products:', error)
-        } finally {
-          setIsGenerating(false)
-        }
-      }
+    // Only run once, and only if products are empty
+    if (hasInitialized.current) {
+      return
     }
-
-    initProducts()
-  }, [products?.length, isInitialized, isGenerating, setProducts])
+    
+    if ((products?.length || 0) === 0) {
+      hasInitialized.current = true
+      
+      generateBiomaterialsProducts()
+        .then(generatedProducts => {
+          setProducts(generatedProducts)
+        })
+        .catch(error => {
+          console.error('[ProductsInitializer] Failed to generate products:', error)
+          hasInitialized.current = false // Allow retry on error
+        })
+    } else {
+      hasInitialized.current = true
+    }
+  }, [products, setProducts])
 
   return null
 }

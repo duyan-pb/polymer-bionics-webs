@@ -11,6 +11,7 @@ import { motion } from 'framer-motion'
 import { PageHero } from '@/components/PageHero'
 import { ContactForm } from '@/components/contact/ContactForm'
 import { ContactInfo } from '@/components/contact/ContactInfo'
+import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 /**
  * Props for the ContactPage component.
@@ -40,6 +41,8 @@ export function ContactPage({ onNavigate }: ContactPageProps) {
       <PageHero
         title="Get In Touch"
         description="Have a question about our advanced polymers or want to discuss a custom application? We'd love to hear from you."
+        backgroundImage={BackgroundCover}
+        backgroundOpacity={0.7}
         breadcrumbs={[
           { label: 'Home', page: 'home' },
           { label: 'Contact' }

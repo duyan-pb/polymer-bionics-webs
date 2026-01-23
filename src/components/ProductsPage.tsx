@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, X } from '@phosphor-icons/react'
+import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, X, ShoppingCart } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
@@ -225,6 +225,14 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
 
                   <div className="space-y-2 pt-2">
                     <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant="default"
+                        size="sm"
+                        className="text-xs md:text-sm"
+                        onClick={navigateToContact}
+                      >
+                        <ShoppingCart className="mr-1" size={16} weight="duotone" /> Buy
+                      </Button>
                       {product.datasheetId && (
                         <Button
                           variant="outline"
@@ -249,9 +257,6 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
                     <div className="flex flex-wrap gap-2">
                       <Button variant="ghost" size="sm" onClick={navigateToContact}>
                         Enquire
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={navigateToContact}>
-                        Contact
                       </Button>
                     </div>
                   </div>
@@ -367,6 +372,9 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
 
                   <div className="space-y-3 pt-4">
                     <div className="flex gap-3">
+                      <Button variant="default" onClick={navigateToContact}>
+                        <ShoppingCart className="mr-2" weight="duotone" /> Buy Now
+                      </Button>
                       {selectedProduct.datasheetId && (
                         <Button variant="outline" onClick={(e) => navigateToDatasheet(e, selectedProduct.datasheetId)}>
                           <Download className="mr-2" /> View Datasheet

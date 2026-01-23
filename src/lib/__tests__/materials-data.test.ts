@@ -115,6 +115,20 @@ describe('materials-data', () => {
       expect(uniqueIds.size).toBe(ids.length)
     })
 
+    it('includes Sport EEG application', () => {
+      const sportEEG = applications.find(a => a.id === 'sport-eeg')
+      
+      expect(sportEEG).toBeDefined()
+      expect(sportEEG?.name).toBe('Sport EEG')
+    })
+
+    it('includes InEar EEG application', () => {
+      const inEarEEG = applications.find(a => a.id === 'inear-eeg')
+      
+      expect(inEarEEG).toBeDefined()
+      expect(inEarEEG?.name).toBe('InEar EEG')
+    })
+
     it('all applications have non-empty names', () => {
       applications.forEach(application => {
         expect(application.name.trim().length).toBeGreaterThan(0)

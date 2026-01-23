@@ -126,12 +126,22 @@ describe('team-data', () => {
       expect(rylie?.name).toContain('Rylie Green')
     })
 
-    it('includes Ben Green as founder', () => {
+    it('includes Ben Green as founder with Managing Director title', () => {
       const ben = teamMembers.find(m => m.id === 'ben-green')
       
       expect(ben).toBeDefined()
       expect(ben?.category).toBe('founders')
       expect(ben?.name).toContain('Ben Green')
+      expect(ben?.title).toContain('Managing Director')
+    })
+
+    it('includes Dr Alexey Nonikov in lab management', () => {
+      const alexey = teamMembers.find(m => m.id === 'alexey-nonikov')
+      
+      expect(alexey).toBeDefined()
+      expect(alexey?.category).toBe('lab-management')
+      expect(alexey?.name).toContain('Dr')
+      expect(alexey?.name).toContain('Alexey Nonikov')
     })
   })
 })

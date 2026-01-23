@@ -239,25 +239,32 @@ describe('NewsPage', () => {
   })
 
   describe('empty states', () => {
-    it('handles empty news array', () => {
+    it('shows news coming soon message when news array is empty', () => {
       render(<NewsPage news={[]} publications={mockPublications} onNavigate={mockOnNavigate} />)
       
-      expect(screen.getByTestId('page-hero')).toBeInTheDocument()
+      expect(screen.getByText(/news coming soon/i)).toBeInTheDocument()
+      expect(screen.getByTestId('contact-links')).toBeInTheDocument()
     })
 
-    it('handles empty publications array', async () => {
+    it('shows publications coming soon message when publications array is empty', async () => {
       render(<NewsPage news={mockNews} publications={[]} onNavigate={mockOnNavigate} />)
       
       const publicationsTab = screen.getByRole('tab', { name: /publications/i })
       await userEvent.click(publicationsTab)
       
-      expect(screen.getByTestId('page-hero')).toBeInTheDocument()
+      expect(screen.getByText(/publications coming soon/i)).toBeInTheDocument()
+      expect(screen.getByTestId('contact-links')).toBeInTheDocument()
     })
 
-    it('handles all empty arrays', () => {
+    it('shows both coming soon messages when all arrays are empty', async () => {
       render(<NewsPage news={[]} publications={[]} onNavigate={mockOnNavigate} />)
       
-      expect(screen.getByTestId('page-hero')).toBeInTheDocument()
+      expect(screen.getByText(/news coming soon/i)).toBeInTheDocument()
+      
+      const publicationsTab = screen.getByRole('tab', { name: /publications/i })
+      await userEvent.click(publicationsTab)
+      
+      expect(screen.getByText(/publications coming soon/i)).toBeInTheDocument()
     })
   })
 

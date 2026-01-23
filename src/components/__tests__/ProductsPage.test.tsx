@@ -210,4 +210,22 @@ describe('ProductsPage', () => {
       })
     })
   })
+
+  describe('buy button', () => {
+    it('renders Buy button on product cards', () => {
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      
+      const buyButtons = screen.getAllByRole('button', { name: /buy/i })
+      expect(buyButtons.length).toBeGreaterThan(0)
+    })
+
+    it('Buy button navigates to contact page', async () => {
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      
+      const buyButtons = screen.getAllByRole('button', { name: /buy/i })
+      await userEvent.click(buyButtons[0])
+      
+      expect(mockOnNavigate).toHaveBeenCalledWith('contact')
+    })
+  })
 })

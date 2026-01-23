@@ -173,6 +173,23 @@ export const applications: Application[] = [
     imageClass: 'bg-gradient-to-br from-accent/15 to-primary/15'
   },
   {
+    id: 'sport-eeg',
+    name: 'Sport EEG',
+    description: 'Description placeholder',
+    benefits: [
+      'Benefit placeholder',
+      'Benefit placeholder',
+      'Benefit placeholder'
+    ],
+    useCases: [
+      'Use case placeholder',
+      'Use case placeholder',
+      'Use case placeholder'
+    ],
+    relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiWire'],
+    imageClass: 'bg-gradient-to-br from-primary/15 to-accent/20'
+  },
+  {
     id: 'custom-applications',
     name: 'Customer-Specific Applications',
     description: 'Description placeholder',

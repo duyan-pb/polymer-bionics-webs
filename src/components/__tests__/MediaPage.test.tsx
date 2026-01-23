@@ -206,26 +206,32 @@ describe('MediaPage', () => {
   })
 
   describe('empty states', () => {
-    it('handles empty videos array', () => {
+    it('shows videos coming soon message when videos array is empty', () => {
       render(<MediaPage videos={[]} caseStudies={mockCaseStudies} onNavigate={mockOnNavigate} />)
       
-      expect(screen.getByTestId('page-hero')).toBeInTheDocument()
+      expect(screen.getByText(/videos coming soon/i)).toBeInTheDocument()
+      expect(screen.getByTestId('contact-links')).toBeInTheDocument()
     })
 
-    it('handles empty case studies array', async () => {
+    it('shows case studies coming soon message when case studies array is empty', async () => {
       render(<MediaPage videos={mockVideos} caseStudies={[]} onNavigate={mockOnNavigate} />)
       
       const caseStudiesTab = screen.getByRole('tab', { name: /case studies/i })
       await userEvent.click(caseStudiesTab)
       
-      // Should not crash
-      expect(screen.getByTestId('page-hero')).toBeInTheDocument()
+      expect(screen.getByText(/case studies coming soon/i)).toBeInTheDocument()
+      expect(screen.getByTestId('contact-links')).toBeInTheDocument()
     })
 
-    it('handles all empty arrays', () => {
+    it('shows both coming soon messages when all arrays are empty', async () => {
       render(<MediaPage videos={[]} caseStudies={[]} onNavigate={mockOnNavigate} />)
       
-      expect(screen.getByTestId('page-hero')).toBeInTheDocument()
+      expect(screen.getByText(/videos coming soon/i)).toBeInTheDocument()
+      
+      const caseStudiesTab = screen.getByRole('tab', { name: /case studies/i })
+      await userEvent.click(caseStudiesTab)
+      
+      expect(screen.getByText(/case studies coming soon/i)).toBeInTheDocument()
     })
   })
 

@@ -152,7 +152,10 @@ These are injected during CI builds and accessible via `import.meta.env`:
 
 ## Testing Locally
 ```bash
-npm run dev          # Start dev server at localhost:5000
+# For static deployments (Netlify/Vercel) - recommended
+$env:STATIC_DEPLOY="true"; npm run dev   # PowerShell (Windows)
+STATIC_DEPLOY=true npm run dev           # Bash (Mac/Linux)
+
 npm run build        # Production build (with type check)
 npm run build:static # Build for static hosting (Netlify/Vercel)
 npm run preview      # Preview production build
@@ -169,3 +172,16 @@ npm run validate     # Run all checks (lint, typecheck, test, build)
 - Aliases `@github/spark/hooks` to local KV hook and `@github/spark/spark` to a no-op stub
 - Data persists in browser localStorage with `spark_kv_` prefix
 - Cross-tab synchronization via storage events
+- **Local dev requires STATIC_DEPLOY=true** when not using Spark backend
+
+### Empty State Pattern ("Coming Soon")
+Pages with empty data arrays display a "Coming Soon" card with:
+- A relevant Phosphor icon (weight="light", size=80)
+- Heading: "{Content type} coming soon"
+- Description explaining the content will be available soon
+- ContactLinks component for user engagement
+
+Example pages using this pattern:
+- DatasheetsPage (datasheets)
+- MediaPage (videos, case studies)
+- NewsPage (news, publications)

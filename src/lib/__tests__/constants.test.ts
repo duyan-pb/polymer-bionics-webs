@@ -58,7 +58,7 @@ describe('TEAM_CATEGORIES', () => {
   })
 
   it('contains management category', () => {
-    expect(TEAM_CATEGORIES.management).toBe('Project Management Team')
+    expect(TEAM_CATEGORIES.management).toBe('Project Management')
   })
 
   it('contains advisory category', () => {

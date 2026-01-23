@@ -5,6 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
+        "dev:spark": "vite",
         "kill": "fuser -k 5000/tcp",
         "build": "npm run typecheck && vite build",
         "build:static": "STATIC_DEPLOY=true npm run typecheck && STATIC_DEPLOY=true vite build",

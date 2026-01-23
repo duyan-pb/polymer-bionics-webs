@@ -14,7 +14,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Play, Quotes, FileText } from '@phosphor-icons/react'
+import { Play, Quotes, FileText, VideoCamera, Briefcase } from '@phosphor-icons/react'
+import { Card } from '@/components/ui/card'
 import type { Video, CaseStudy } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
@@ -82,76 +83,102 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
             </TabsList>
 
             <TabsContent value="videos">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-                {videos.map((video) => (
-                  <ClickableCard
-                    key={video.id}
-                    className="overflow-hidden"
-                    onClick={() => handleVideoSelect(video)}
-                    ariaLabel={`View video: ${video.title}`}
-                  >
-                    <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
-                      {video.thumbnailUrl ? (
-                        <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                      ) : (
-                        <Play size={64} className="text-primary/60" weight="fill" />
-                      )}
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                        <Play size={64} className="text-white" weight="fill" />
+              {videos.length === 0 ? (
+                <Card className="p-16 text-center space-y-3">
+                  <VideoCamera size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
+                  <h3 className="text-2xl font-bold">Videos coming soon</h3>
+                  <p className="text-muted-foreground max-w-xl mx-auto">
+                    We are producing video content showcasing our technology and applications. Check back soon or contact us to learn more.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+                    <ContactLinks emailType="general" variant="default" showWhatsApp={true} showEmail={true} />
+                  </div>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+                  {videos.map((video) => (
+                    <ClickableCard
+                      key={video.id}
+                      className="overflow-hidden"
+                      onClick={() => handleVideoSelect(video)}
+                      ariaLabel={`View video: ${video.title}`}
+                    >
+                      <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
+                        {video.thumbnailUrl ? (
+                          <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                        ) : (
+                          <Play size={64} className="text-primary/60" weight="fill" />
+                        )}
+                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                          <Play size={64} className="text-white" weight="fill" />
+                        </div>
+                        {video.duration && (
+                          <Badge className="absolute bottom-3 right-3 bg-black/70 text-white font-semibold">
+                            {video.duration}
+                          </Badge>
+                        )}
                       </div>
-                      {video.duration && (
-                        <Badge className="absolute bottom-3 right-3 bg-black/70 text-white font-semibold">
-                          {video.duration}
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="p-4 md:p-6">
-                      <Badge variant="outline" className="mb-2 md:mb-3 capitalize font-semibold text-xs md:text-sm">{video.category}</Badge>
-                      <h3 className="text-base md:text-lg font-bold mb-1 md:mb-2">{video.title}</h3>
-                      <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">{video.description}</p>
-                    </div>
-                  </ClickableCard>
-                ))}
-              </div>
+                      <div className="p-4 md:p-6">
+                        <Badge variant="outline" className="mb-2 md:mb-3 capitalize font-semibold text-xs md:text-sm">{video.category}</Badge>
+                        <h3 className="text-base md:text-lg font-bold mb-1 md:mb-2">{video.title}</h3>
+                        <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">{video.description}</p>
+                      </div>
+                    </ClickableCard>
+                  ))}
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="case-studies">
-              <div className="grid grid-cols-1 gap-4 md:gap-8">
-                {caseStudies.map((study) => (
-                  <ClickableCard
-                    key={study.id}
-                    className="p-5 md:p-8 border-2"
-                    onClick={() => handleCaseStudySelect(study)}
-                    ariaLabel={`View case study: ${study.title}`}
-                  >
-                    <div className="flex items-start justify-between mb-3 md:mb-4">
-                      <div className="flex-1">
-                        <h3 className="text-xl md:text-2xl font-normal mb-2">{study.title}</h3>
-                        <Badge variant="secondary" className="capitalize">{study.category}</Badge>
+              {caseStudies.length === 0 ? (
+                <Card className="p-16 text-center space-y-3">
+                  <Briefcase size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
+                  <h3 className="text-2xl font-bold">Case studies coming soon</h3>
+                  <p className="text-muted-foreground max-w-xl mx-auto">
+                    We are documenting real-world applications and success stories. Check back soon or contact us to discuss your specific use case.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+                    <ContactLinks emailType="general" variant="default" showWhatsApp={true} showEmail={true} />
+                  </div>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 gap-4 md:gap-8">
+                  {caseStudies.map((study) => (
+                    <ClickableCard
+                      key={study.id}
+                      className="p-5 md:p-8 border-2"
+                      onClick={() => handleCaseStudySelect(study)}
+                      ariaLabel={`View case study: ${study.title}`}
+                    >
+                      <div className="flex items-start justify-between mb-3 md:mb-4">
+                        <div className="flex-1">
+                          <h3 className="text-xl md:text-2xl font-normal mb-2">{study.title}</h3>
+                          <Badge variant="secondary" className="capitalize">{study.category}</Badge>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-6">
-                      <div>
-                        <h4 className="text-sm font-semibold mb-2 text-primary uppercase tracking-wide">Problem</h4>
-                        <p className="text-sm text-muted-foreground line-clamp-3">{study.problem}</p>
+                      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-6">
+                        <div>
+                          <h4 className="text-sm font-semibold mb-2 text-primary uppercase tracking-wide">Problem</h4>
+                          <p className="text-sm text-muted-foreground line-clamp-3">{study.problem}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold mb-2 text-primary uppercase tracking-wide">Solution</h4>
+                          <p className="text-sm text-muted-foreground line-clamp-3">{study.solution}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold mb-2 text-primary uppercase tracking-wide">Results</h4>
+                          <p className="text-sm text-muted-foreground line-clamp-3">{study.results}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-sm font-semibold mb-2 text-primary uppercase tracking-wide">Solution</h4>
-                        <p className="text-sm text-muted-foreground line-clamp-3">{study.solution}</p>
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-semibold mb-2 text-primary uppercase tracking-wide">Results</h4>
-                        <p className="text-sm text-muted-foreground line-clamp-3">{study.results}</p>
-                      </div>
-                    </div>
 
-                    <Button variant="outline" className="mt-6">
-                      Read Full Case Study
-                    </Button>
-                  </ClickableCard>
-                ))}
-              </div>
+                      <Button variant="outline" className="mt-6">
+                        Read Full Case Study
+                      </Button>
+                    </ClickableCard>
+                  ))}
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>
