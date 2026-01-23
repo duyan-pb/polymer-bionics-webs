@@ -213,7 +213,7 @@ export function validateEvent(event: unknown): ValidationResult {
     }
   }
   
-  const errors = result.error.errors.map(err => 
+  const errors = result.error.issues.map((err) => 
     `${err.path.join('.')}: ${err.message}`
   )
   
@@ -251,7 +251,7 @@ export function validateSpecificEvent(
     }
   }
   
-  const errors = result.error.errors.map(err => 
+  const errors = result.error.issues.map((err) => 
     `${err.path.join('.')}: ${err.message}`
   )
   

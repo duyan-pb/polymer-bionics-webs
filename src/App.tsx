@@ -11,7 +11,7 @@
  * @module App
  */
 
-import { useState, useCallback, useEffect, lazy, Suspense, memo } from 'react'
+import { useState, useCallback, useEffect, lazy, Suspense, memo, type ReactElement } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useKV } from '@github/spark/hooks'
 import { Navigation } from '@/components/Navigation'
@@ -151,7 +151,7 @@ function App() {
     }
   }, [])
 
-  const pageRenderers: Record<string, () => JSX.Element> = {
+  const pageRenderers: Record<string, () => ReactElement> = {
     home: () => <HomePage onNavigate={handleNavigate} />,
     team: () => <TeamPage team={team || []} onNavigate={handleNavigate} />,
     materials: () => <MaterialsPage onNavigate={handleNavigate} />,
@@ -164,7 +164,9 @@ function App() {
   }
 
   const renderPage = () => {
-    const pageContent = (pageRenderers[currentPage] ?? pageRenderers.home)()
+    const fallbackRenderer = pageRenderers.home!
+    const pageRenderer = pageRenderers[currentPage] ?? fallbackRenderer
+    const pageContent = pageRenderer()
 
     // HomePage is eagerly loaded, others are lazy
     if (currentPage === 'home') {return pageContent}

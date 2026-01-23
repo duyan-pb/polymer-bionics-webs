@@ -117,20 +117,26 @@ describe('contact-config', () => {
   describe('getEmailUrl function', () => {
     it('returns general email mailto URL by default', () => {
       const url = getEmailUrl()
-      
-      expect(url).toBe(`mailto:${contactConfig.email.general}`)
+
+      expect(url).toBe(
+        `mailto:${contactConfig.email.general}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(contactConfig.email.orderTemplate)}`
+      )
     })
 
     it('returns general email mailto URL when type is general', () => {
       const url = getEmailUrl('general')
-      
-      expect(url).toBe(`mailto:${contactConfig.email.general}`)
+
+      expect(url).toBe(
+        `mailto:${contactConfig.email.general}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(contactConfig.email.orderTemplate)}`
+      )
     })
 
     it('returns sales email mailto URL when type is sales', () => {
       const url = getEmailUrl('sales')
-      
-      expect(url).toBe(`mailto:${contactConfig.email.sales}`)
+
+      expect(url).toBe(
+        `mailto:${contactConfig.email.sales}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(contactConfig.email.orderTemplate)}`
+      )
     })
 
     it('includes subject when provided', () => {
@@ -152,6 +158,16 @@ describe('contact-config', () => {
       const url = getEmailUrl('sales', subject)
       
       expect(url).toBe(`mailto:${contactConfig.email.sales}?subject=${encodeURIComponent(subject)}`)
+    })
+    
+    it('includes body when provided', () => {
+      const subject = 'Custom subject'
+      const body = 'Line 1\nLine 2'
+      const url = getEmailUrl('general', subject, body)
+      
+      expect(url).toBe(
+        `mailto:${contactConfig.email.general}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      )
     })
   })
 })

@@ -86,7 +86,7 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
     openExternal(datasheet.pdfUrl)
   }, [])
 
-  const handleCategoryKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>, cat: string) => {
+  const handleCategoryKeyDown = useCallback((event: KeyboardEvent<HTMLElement>, cat: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
       setSelectedCategory(cat)

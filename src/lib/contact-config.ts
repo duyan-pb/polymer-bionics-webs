@@ -20,6 +20,10 @@ export const contactConfig = {
     general: 'info@polymerbionics.com',
     /** Sales and business development email */
     sales: 'sales@polymerbionics.com',
+    /** Default order enquiry subject */
+    orderSubject: 'Order enquiry',
+    /** Default order enquiry body template */
+    orderTemplate: `Hello Polymer Bionics team,\n\nI would like to place an order or request a quote. Please find the details below:\n\n- Product: \n- Quantity: \n- Company / Organization: \n- Country: \n- Intended application: \n- Preferred delivery timeframe: \n- Additional notes: \n\nThank you,\n[Your name]`,
   },
 
   /**
@@ -83,18 +87,30 @@ export async function copyWhatsAppNumber(): Promise<boolean> {
  * 
  * @param type - Email type ('general' or 'sales')
  * @param subject - Optional email subject line
+ * @param body - Optional email body
  * @returns Formatted mailto URL
  * 
  * @example
  * ```tsx
- * // Open general enquiry with subject
- * window.open(getEmailUrl('general', 'Product Inquiry'), '_blank')
+ * // Open general enquiry with subject and body
+ * window.open(getEmailUrl('general', 'Product Inquiry', 'Details...'), '_blank')
  * ```
  */
-export function getEmailUrl(type: 'general' | 'sales' = 'general', subject?: string): string {
+export function getEmailUrl(type: 'general' | 'sales' = 'general', subject?: string, body?: string): string {
   const email = contactConfig.email[type]
-  if (subject) {
-    return `mailto:${email}?subject=${encodeURIComponent(subject)}`
+  const shouldUseDefaultTemplate = !subject && !body
+  const resolvedSubject = subject ?? (shouldUseDefaultTemplate ? contactConfig.email.orderSubject : undefined)
+  const resolvedBody = body ?? (shouldUseDefaultTemplate ? contactConfig.email.orderTemplate : undefined)
+  const params = new URLSearchParams()
+
+  if (resolvedSubject) {
+    params.set('subject', resolvedSubject)
   }
-  return `mailto:${email}`
+
+  if (resolvedBody) {
+    params.set('body', resolvedBody)
+  }
+
+  const query = params.toString()
+  return query ? `mailto:${email}?${query}` : `mailto:${email}`
 }

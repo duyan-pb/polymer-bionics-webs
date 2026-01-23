@@ -10,7 +10,7 @@
 import { useState, useCallback, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
+import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
 import { HeroImage } from '@/components/HeroImage'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { motion } from 'framer-motion'
