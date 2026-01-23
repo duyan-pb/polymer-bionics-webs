@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { EnvelopeSimple, WhatsappLogo, Copy } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
+import { openExternal } from '@/lib/utils'
 
 /**
  * Props for the ContactLinks component.
@@ -70,7 +71,7 @@ export function ContactLinks({
   const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     // Trigger the mailto link
     e.preventDefault()
-    window.open(getEmailUrl(emailType), '_blank', 'noopener,noreferrer')
+    openExternal(getEmailUrl(emailType))
   }
 
   return (

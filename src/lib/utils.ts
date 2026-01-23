@@ -33,3 +33,17 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+/**
+ * Safely open an external URL in a new tab with security features.
+ *
+ * @param url - The URL to open
+ * @param target - The window target (default: _blank)
+ */
+export function openExternal(url: string, target: '_blank' | string = '_blank') {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.open(url, target, 'noopener,noreferrer')
+}

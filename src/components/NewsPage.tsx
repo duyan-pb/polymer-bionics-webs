@@ -7,7 +7,7 @@
  * @module components/NewsPage
  */
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, type KeyboardEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -15,11 +15,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Calendar, Newspaper, BookOpen, ArrowSquareOut, Download } from '@phosphor-icons/react'
-import { Card } from '@/components/ui/card'
 import type { NewsItem, Publication } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
+import { openExternal } from '@/lib/utils'
+import { ComingSoonCard } from '@/components/ComingSoonCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 /**
@@ -69,6 +70,13 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
     setSelectedTag(tag)
   }, [])
 
+  const handleTagKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>, tag: string) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      handleTagSelect(tag)
+    }
+  }, [handleTagSelect])
+
   const handleNewsSelect = useCallback((item: NewsItem) => {
     setSelectedNews(item)
   }, [])
@@ -82,6 +90,92 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
     'conference': 'secondary',
     'preprint': 'outline',
   }
+
+  const NewsDialogContent = ({ item }: { item: NewsItem }) => (
+    <>
+      <DialogHeader>
+        <div className="flex items-center gap-3 mb-4">
+          <Badge variant="secondary" className="capitalize text-base px-4 py-2">
+            {item.category}
+          </Badge>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Calendar size={16} className="mr-1" />
+            {item.date}
+          </div>
+        </div>
+        <DialogTitle className="text-3xl mb-4">{item.title}</DialogTitle>
+      </DialogHeader>
+
+      <div className="space-y-4">
+        <p className="text-base leading-relaxed whitespace-pre-line">{item.content}</p>
+        <div className="pt-4 flex gap-3">
+          {item.link && (
+            <Button asChild>
+              <a href={item.link} target="_blank" rel="noopener noreferrer">
+                <ArrowSquareOut className="mr-2" /> Read Full Article
+              </a>
+            </Button>
+          )}
+          <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
+        </div>
+      </div>
+    </>
+  )
+
+  const PublicationDialogContent = ({ pub }: { pub: Publication }) => (
+    <>
+      <DialogHeader>
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          <Badge variant={publicationTypeColors[pub.type]} className="capitalize text-base px-4 py-2">
+            {pub.type.replace('-', ' ')}
+          </Badge>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Calendar size={16} className="mr-1" />
+            {pub.date}
+          </div>
+        </div>
+        <DialogTitle className="text-3xl mb-2">{pub.title}</DialogTitle>
+        <p className="text-base text-muted-foreground">{pub.authors.join(', ')}</p>
+        <p className="text-base text-accent font-medium italic">{pub.journal}</p>
+      </DialogHeader>
+
+      <Separator className="my-6" />
+
+      <div className="space-y-6">
+        <div>
+          <h4 className="text-lg font-semibold mb-3">Abstract</h4>
+          <p className="text-sm text-muted-foreground leading-relaxed">{pub.abstract}</p>
+        </div>
+
+        <div>
+          <h4 className="text-lg font-semibold mb-3">Tags</h4>
+          <div className="flex flex-wrap gap-2">
+            {pub.tags.map((tag) => (
+              <Badge key={tag} variant="outline">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex gap-3 pt-4 flex-wrap">
+          {pub.doi && (
+            <Button asChild>
+              <a href={pub.doi} target="_blank" rel="noopener noreferrer">
+                <ArrowSquareOut className="mr-2" /> View on Publisher Site
+              </a>
+            </Button>
+          )}
+          {pub.pdfUrl && (
+            <Button variant="outline" onClick={() => openExternal(pub.pdfUrl)}>
+              <Download className="mr-2" /> Download PDF
+            </Button>
+          )}
+          <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
+        </div>
+      </div>
+    </>
+  )
 
   return (
     <div className="min-h-screen bg-background">
@@ -111,16 +205,12 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
 
             <TabsContent value="news">
               {news.length === 0 ? (
-                <Card className="p-16 text-center space-y-3">
-                  <Newspaper size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
-                  <h3 className="text-2xl font-bold">News coming soon</h3>
-                  <p className="text-muted-foreground max-w-xl mx-auto">
-                    Stay tuned for updates on our latest research, partnerships, and company announcements. Contact us to stay informed.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
-                    <ContactLinks emailType="general" variant="default" showWhatsApp={true} showEmail={true} />
-                  </div>
-                </Card>
+                <ComingSoonCard
+                  icon={<Newspaper size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
+                  title="News coming soon"
+                  description="Stay tuned for updates on our latest research, partnerships, and company announcements. Contact us to stay informed."
+                  emailType="general"
+                />
               ) : (
                 <div className="space-y-4 md:space-y-6">
                   {news.map((item) => (
@@ -154,16 +244,12 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
 
             <TabsContent value="publications">
               {publications.length === 0 ? (
-                <Card className="p-16 text-center space-y-3">
-                  <BookOpen size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
-                  <h3 className="text-2xl font-bold">Publications coming soon</h3>
-                  <p className="text-muted-foreground max-w-xl mx-auto">
-                    Our peer-reviewed research publications will be listed here. Contact us to discuss our scientific findings and ongoing research.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
-                    <ContactLinks emailType="general" variant="default" showWhatsApp={true} showEmail={true} />
-                  </div>
-                </Card>
+                <ComingSoonCard
+                  icon={<BookOpen size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
+                  title="Publications coming soon"
+                  description="Our peer-reviewed research publications will be listed here. Contact us to discuss our scientific findings and ongoing research."
+                  emailType="general"
+                />
               ) : (
                 <>
                   <div className="flex flex-wrap gap-2 mb-8">
@@ -173,6 +259,9 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
                         variant={selectedTag === tag ? 'default' : 'outline'}
                         className="cursor-pointer px-4 py-2 text-sm capitalize"
                         onClick={() => handleTagSelect(tag)}
+                        onKeyDown={(event) => handleTagKeyDown(event, tag)}
+                        role="button"
+                        tabIndex={0}
                       >
                         {tag}
                       </Badge>
@@ -223,7 +312,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
                               </Button>
                             )}
                             {pub.pdfUrl && (
-                              <Button variant="ghost" size="sm" onClick={() => window.open(pub.pdfUrl, '_blank', 'noopener')}>
+                              <Button variant="ghost" size="sm" onClick={() => openExternal(pub.pdfUrl)}>
                                 <Download className="mr-1" size={16} /> Download PDF
                               </Button>
                             )}
@@ -243,34 +332,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
         <DialogContent className="max-w-3xl max-h-[90vh]">
           <ScrollArea className="max-h-[80vh] pr-4">
             {selectedNews && (
-              <>
-                <DialogHeader>
-                  <div className="flex items-center gap-3 mb-4">
-                    <Badge variant="secondary" className="capitalize text-base px-4 py-2">
-                      {selectedNews.category}
-                    </Badge>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Calendar size={16} className="mr-1" />
-                      {selectedNews.date}
-                    </div>
-                  </div>
-                  <DialogTitle className="text-3xl mb-4">{selectedNews.title}</DialogTitle>
-                </DialogHeader>
-
-                <div className="space-y-4">
-                  <p className="text-base leading-relaxed whitespace-pre-line">{selectedNews.content}</p>
-                  <div className="pt-4 flex gap-3">
-                    {selectedNews.link && (
-                      <Button asChild>
-                        <a href={selectedNews.link} target="_blank" rel="noopener noreferrer">
-                          <ArrowSquareOut className="mr-2" /> Read Full Article
-                        </a>
-                      </Button>
-                    )}
-                    <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
-                  </div>
-                </div>
-              </>
+              <NewsDialogContent item={selectedNews} />
             )}
           </ScrollArea>
         </DialogContent>
@@ -280,58 +342,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
         <DialogContent className="max-w-4xl max-h-[90vh]">
           <ScrollArea className="max-h-[80vh] pr-4">
             {selectedPublication && (
-              <>
-                <DialogHeader>
-                  <div className="flex flex-wrap items-center gap-2 mb-4">
-                    <Badge variant={publicationTypeColors[selectedPublication.type]} className="capitalize text-base px-4 py-2">
-                      {selectedPublication.type.replace('-', ' ')}
-                    </Badge>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Calendar size={16} className="mr-1" />
-                      {selectedPublication.date}
-                    </div>
-                  </div>
-                  <DialogTitle className="text-3xl mb-2">{selectedPublication.title}</DialogTitle>
-                  <p className="text-base text-muted-foreground">{selectedPublication.authors.join(', ')}</p>
-                  <p className="text-base text-accent font-medium italic">{selectedPublication.journal}</p>
-                </DialogHeader>
-
-                <Separator className="my-6" />
-
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3">Abstract</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedPublication.abstract}</p>
-                  </div>
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3">Tags</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedPublication.tags.map((tag) => (
-                        <Badge key={tag} variant="outline">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3 pt-4 flex-wrap">
-                    {selectedPublication.doi && (
-                      <Button asChild>
-                        <a href={selectedPublication.doi} target="_blank" rel="noopener noreferrer">
-                          <ArrowSquareOut className="mr-2" /> View on Publisher Site
-                        </a>
-                      </Button>
-                    )}
-                    {selectedPublication.pdfUrl && (
-                      <Button variant="outline" onClick={() => window.open(selectedPublication.pdfUrl, '_blank', 'noopener')}>
-                        <Download className="mr-2" /> Download PDF
-                      </Button>
-                    )}
-                    <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
-                  </div>
-                </div>
-              </>
+              <PublicationDialogContent pub={selectedPublication} />
             )}
           </ScrollArea>
         </DialogContent>

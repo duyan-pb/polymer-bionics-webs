@@ -55,6 +55,7 @@ interface NavigationProps {
  */
 export const Navigation = memo(({ currentPage, onNavigate, onOpenSearch, isDark, onToggleTheme }: NavigationProps) => {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const LOGO_WOBBLE_DEGREES = 2
 
   const handleNavigate = useCallback((page: string) => {
     onNavigate(page)
@@ -74,7 +75,7 @@ export const Navigation = memo(({ currentPage, onNavigate, onOpenSearch, isDark,
           >
             <motion.div
               whileHover={{ 
-                rotate: [0, -2, 2, -2, 0],
+                rotate: [0, -LOGO_WOBBLE_DEGREES, LOGO_WOBBLE_DEGREES, -LOGO_WOBBLE_DEGREES, 0],
                 transition: { 
                   duration: 0.4,
                   ease: "easeInOut"

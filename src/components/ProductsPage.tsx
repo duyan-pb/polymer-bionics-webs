@@ -1,27 +1,22 @@
 /**
  * Products Page Component
- * 
  * Displays the product catalog with filtering and detail modals.
- * Products are categorized and can include images, specifications, and datasheets.
- * 
  * @module components/ProductsPage
  */
 
-import { useState, useMemo, useCallback, type MouseEvent } from 'react'
+import { useState, useMemo, useCallback, type MouseEvent, type KeyboardEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, X, ShoppingCart } from '@phosphor-icons/react'
+import { X } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
-import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
-import { ClickableCard } from '@/components/ClickableCard'
 import { Card } from '@/components/ui/card'
 import ElastomerArray from '@/assets/images/Elastomer_array.png'
-
+import { ProductDialogContent } from '@/components/products/ProductDialogContent'
+import { ProductCard } from '@/components/products/ProductCard'
 /**
  * Props for the ProductsPage component.
  */
@@ -41,18 +36,15 @@ interface ProductsPageProps {
  * - Modal with full specifications and image gallery
  * - Links to related datasheets and case studies
  * - Contact CTA for inquiries
- * 
  * @example
- * ```tsx
  * <ProductsPage products={productList} onNavigate={handleNavigate} />
- * ```
  */
 export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
-
-  const isLoading = !products || products.length === 0
+  const FEATURE_PREVIEW_COUNT = 3
+  const isLoading = !products
 
   const categories = useMemo(
     () => ['all', ...Array.from(new Set(products.map(p => p.category)))],
@@ -70,10 +62,16 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
     setSelectedCategory(cat)
   }, [])
 
+  const handleCategoryKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>, cat: string) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      handleCategorySelect(cat)
+    }
+  }, [handleCategorySelect])
+
   const handleProductSelect = useCallback((product: Product) => {
     setSelectedProduct(product)
   }, [])
-
   const navigateToDatasheet = useCallback((e: MouseEvent, datasheetId?: string) => {
     e.stopPropagation()
     if (!datasheetId) {
@@ -94,7 +92,6 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
     e.stopPropagation()
     onNavigate('contact')
   }, [onNavigate])
-
   return (
     <div className="min-h-screen bg-background">
       <PageHero
@@ -118,6 +115,9 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
                 variant={selectedCategory === cat ? 'default' : 'outline'}
                 className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
                 onClick={() => handleCategorySelect(cat)}
+                onKeyDown={(event) => handleCategoryKeyDown(event, cat)}
+                role="button"
+                tabIndex={0}
               >
                 {cat}
               </Badge>
@@ -150,7 +150,7 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
               <h3 className="text-xl font-semibold mb-2">No products found</h3>
               <p className="text-muted-foreground mb-4">
                 {selectedCategory === 'all' 
-                  ? 'Products are loading...' 
+                  ? 'Products coming soon.' 
                   : `No products in the "${selectedCategory}" category`}
               </p>
               {selectedCategory !== 'all' && (
@@ -162,236 +162,32 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
           ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
             {filteredProducts.map((product) => (
-              <ClickableCard
+              <ProductCard
                 key={product.id}
-                className="p-5 md:p-8"
-                onClick={() => handleProductSelect(product)}
-                ariaLabel={`View details for ${product.name}`}
-              >
-                {product.imageUrl && (
-                  <div 
-                    className="mb-4 md:mb-6 rounded-lg overflow-hidden relative group cursor-zoom-in"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setSelectedImage(product.imageUrl ?? null)
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        setSelectedImage(product.imageUrl ?? null)
-                      }
-                    }}
-                    tabIndex={0}
-                    role="button"
-                    aria-label={`Enlarge image of ${product.name}`}
-                  >
-                    <img 
-                      src={product.imageUrl} 
-                      alt={product.name}
-                      className="w-full h-40 md:h-56 object-cover transition-transform duration-300 group-hover:scale-105"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
-                      <MagnifyingGlassPlus 
-                        size={40} 
-                        className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" 
-                        weight="bold"
-                      />
-                    </div>
-                  </div>
-                )}
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 md:mb-4 gap-2">
-                  <div>
-                    <h3 className="text-xl md:text-2xl font-bold mb-1 md:mb-2">{product.name}</h3>
-                    <p className="text-sm md:text-base text-muted-foreground italic">{product.tagline}</p>
-                  </div>
-                  <Badge variant="secondary" className="capitalize font-semibold self-start">{product.category}</Badge>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="text-sm font-semibold mb-2 text-primary">Key Features</h4>
-                    <ul className="space-y-1">
-                      {product.features.slice(0, 3).map((feature, idx) => (
-                        <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
-                          <CheckCircle size={16} className="text-accent mt-0.5 flex-shrink-0" weight="fill" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="space-y-2 pt-2">
-                    <div className="flex flex-wrap gap-2">
-                      <Button
-                        variant="default"
-                        size="sm"
-                        className="text-xs md:text-sm"
-                        onClick={navigateToContact}
-                      >
-                        <ShoppingCart className="mr-1" size={16} weight="duotone" /> Buy
-                      </Button>
-                      {product.datasheetId && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-xs md:text-sm"
-                          onClick={(e) => navigateToDatasheet(e, product.datasheetId)}
-                        >
-                          <Download className="mr-1" size={16} /> Datasheet
-                        </Button>
-                      )}
-                      {product.caseStudyId && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-xs md:text-sm"
-                          onClick={(e) => navigateToCaseStudy(e, product.caseStudyId)}
-                        >
-                          Case Study
-                        </Button>
-                      )}
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <Button variant="ghost" size="sm" onClick={navigateToContact}>
-                        Enquire
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </ClickableCard>
+                product={product}
+                featurePreviewCount={FEATURE_PREVIEW_COUNT}
+                onSelect={handleProductSelect}
+                onZoomImage={(imageUrl) => setSelectedImage(imageUrl)}
+                onContact={navigateToContact}
+                onDatasheet={navigateToDatasheet}
+                onCaseStudy={navigateToCaseStudy}
+              />
             ))}
           </div>
           )}
         </div>
       </section>
-
-
-
       <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
         <DialogContent className="max-w-4xl max-h-[90vh]">
           <ScrollArea className="max-h-[80vh] pr-4">
             {selectedProduct && (
-              <>
-                <DialogHeader>
-                  <DialogTitle className="text-3xl mb-2">{selectedProduct.name}</DialogTitle>
-                  <div className="flex items-center gap-3 mb-4">
-                    <p className="text-lg text-muted-foreground italic">{selectedProduct.tagline}</p>
-                    <Badge variant="secondary" className="capitalize">
-                      {selectedProduct.category}
-                    </Badge>
-                  </div>
-                </DialogHeader>
-
-                <div className="space-y-6">
-                  {selectedProduct.images && selectedProduct.images.length > 0 && (
-                    <>
-                      <div>
-                        <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                          <ImageIcon size={20} className="text-primary" /> Product Images
-                        </h4>
-                        <div className="grid grid-cols-3 gap-3">
-                          {selectedProduct.images.map((img, idx) => (
-                            <div 
-                              key={idx}
-                              className="cursor-zoom-in rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary relative group"
-                              onClick={() => setSelectedImage(img)}
-                              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedImage(img); } }}
-                              tabIndex={0}
-                              role="button"
-                              aria-label={`View ${selectedProduct.name} image ${idx + 1} in full size`}
-                            >
-                              <img 
-                                src={img} 
-                                alt={`${selectedProduct.name} - Image ${idx + 1}`}
-                                className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105"
-                                loading="lazy"
-                                decoding="async"
-                              />
-                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
-                                <MagnifyingGlassPlus 
-                                  size={28} 
-                                  className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" 
-                                  weight="bold"
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <Separator />
-                    </>
-                  )}
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <TestTube size={20} className="text-primary" /> Technical Description
-                    </h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {selectedProduct.technicalDescription}
-                    </p>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <CheckCircle size={20} className="text-primary" /> Key Features & Benefits
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {selectedProduct.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-start gap-2">
-                          <CheckCircle size={16} className="text-accent mt-1 flex-shrink-0" weight="fill" />
-                          <span className="text-sm text-muted-foreground">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <Package size={20} className="text-primary" /> Intended Applications
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProduct.applications.map((app, idx) => (
-                        <Badge key={idx} variant="outline">{app}</Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3">Regulatory & Safety Status</h4>
-                    <p className="text-sm text-muted-foreground">{selectedProduct.regulatoryStatus}</p>
-                  </div>
-
-                  <div className="space-y-3 pt-4">
-                    <div className="flex gap-3">
-                      <Button variant="default" onClick={navigateToContact}>
-                        <ShoppingCart className="mr-2" weight="duotone" /> Buy Now
-                      </Button>
-                      {selectedProduct.datasheetId && (
-                        <Button variant="outline" onClick={(e) => navigateToDatasheet(e, selectedProduct.datasheetId)}>
-                          <Download className="mr-2" /> View Datasheet
-                        </Button>
-                      )}
-                      {selectedProduct.caseStudyId && (
-                        <Button variant="outline" onClick={(e) => navigateToCaseStudy(e, selectedProduct.caseStudyId)}>
-                          View Case Study
-                        </Button>
-                      )}
-                    </div>
-                    <div className="flex gap-3">
-                      <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
-                    </div>
-                  </div>
-                </div>
-              </>
+              <ProductDialogContent
+                product={selectedProduct}
+                onSelectImage={setSelectedImage}
+                onContact={navigateToContact}
+                onDatasheet={navigateToDatasheet}
+                onCaseStudy={navigateToCaseStudy}
+              />
             )}
           </ScrollArea>
         </DialogContent>

@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
+import { openExternal } from '@/lib/utils'
 
 /**
  * Floating contact button with expandable menu.
@@ -36,7 +37,7 @@ export function FloatingContactButton() {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleEmailClick = (type: 'general' | 'sales') => {
-    window.open(getEmailUrl(type), '_blank', 'noopener,noreferrer')
+    openExternal(getEmailUrl(type))
     setIsOpen(false)
   }
 
@@ -57,7 +58,7 @@ export function FloatingContactButton() {
   const handleLocationClick = () => {
     const { street, city, postcode, country } = contactConfig.address
     const query = encodeURIComponent(`${street}, ${city} ${postcode}, ${country}`)
-    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank')
+    openExternal(`https://www.google.com/maps/search/?api=1&query=${query}`)
     setIsOpen(false)
   }
 

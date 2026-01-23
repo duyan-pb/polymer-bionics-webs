@@ -150,7 +150,8 @@ describe('FloatingContactButton', () => {
       
       expect(window.open).toHaveBeenCalledWith(
         expect.stringContaining('google.com/maps'),
-        '_blank'
+        '_blank',
+        'noopener,noreferrer'
       )
     })
   })

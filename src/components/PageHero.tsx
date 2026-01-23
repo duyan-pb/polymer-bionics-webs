@@ -69,11 +69,13 @@ export function PageHero({
   className,
   children,
 }: PageHeroProps) {
+  const BACKGROUND_OPACITY_BOOST = 0.2
+
   return (
     <section className={cn(HERO_SECTION_CLASSES, 'py-20 md:py-28 lg:py-36 px-4 md:px-8', className)}>
       {backgroundImage && (
         <>
-          <HeroImage src={backgroundImage} alt="" opacity={Math.min(backgroundOpacity + 0.2, 1)} />
+          <HeroImage src={backgroundImage} alt="" opacity={Math.min(backgroundOpacity + BACKGROUND_OPACITY_BOOST, 1)} />
           <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-transparent" />
         </>
       )}

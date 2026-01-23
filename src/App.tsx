@@ -151,30 +151,21 @@ function App() {
     }
   }, [])
 
+  const pageRenderers: Record<string, () => JSX.Element> = {
+    home: () => <HomePage onNavigate={handleNavigate} />,
+    team: () => <TeamPage team={team || []} onNavigate={handleNavigate} />,
+    materials: () => <MaterialsPage onNavigate={handleNavigate} />,
+    applications: () => <ApplicationsPage onNavigate={handleNavigate} />,
+    products: () => <ProductsPage products={products || []} onNavigate={handleNavigate} />,
+    media: () => <MediaPage videos={videos || []} caseStudies={caseStudies || []} onNavigate={handleNavigate} />,
+    datasheets: () => <DatasheetsPage datasheets={datasheets || []} onNavigate={handleNavigate} />,
+    news: () => <NewsPage news={news || []} publications={publications || []} onNavigate={handleNavigate} />,
+    contact: () => <ContactPage onNavigate={handleNavigate} />,
+  }
+
   const renderPage = () => {
-    const pageContent = (() => {
-      switch (currentPage) {
-        case 'team':
-          return <TeamPage team={team || []} onNavigate={handleNavigate} />
-        case 'materials':
-          return <MaterialsPage onNavigate={handleNavigate} />
-        case 'applications':
-          return <ApplicationsPage onNavigate={handleNavigate} />
-        case 'products':
-          return <ProductsPage products={products || []} onNavigate={handleNavigate} />
-        case 'media':
-          return <MediaPage videos={videos || []} caseStudies={caseStudies || []} onNavigate={handleNavigate} />
-        case 'datasheets':
-          return <DatasheetsPage datasheets={datasheets || []} onNavigate={handleNavigate} />
-        case 'news':
-          return <NewsPage news={news || []} publications={publications || []} onNavigate={handleNavigate} />
-        case 'contact':
-          return <ContactPage onNavigate={handleNavigate} />
-        default:
-          return <HomePage onNavigate={handleNavigate} />
-      }
-    })()
-    
+    const pageContent = (pageRenderers[currentPage] ?? pageRenderers.home)()
+
     // HomePage is eagerly loaded, others are lazy
     if (currentPage === 'home') {return pageContent}
     return <Suspense fallback={<PageLoader />}>{pageContent}</Suspense>

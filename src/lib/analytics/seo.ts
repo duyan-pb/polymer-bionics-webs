@@ -385,9 +385,9 @@ export function executeRedirect(rule: RedirectRule): void {
   // Note: In a SPA, this would be handled by the router
   // This is for server-side or full page redirects
   if (rule.to.startsWith('http')) {
-    window.location.href = rule.to
+    window.location.assign(rule.to)
   } else {
-    window.location.pathname = rule.to
+    window.location.assign(rule.to)
   }
 }
 

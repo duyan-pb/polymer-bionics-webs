@@ -15,12 +15,12 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, Quotes, FileText, VideoCamera, Briefcase } from '@phosphor-icons/react'
-import { Card } from '@/components/ui/card'
 import type { Video, CaseStudy } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
+import { ComingSoonCard } from '@/components/ComingSoonCard'
 
 /**
  * Props for the MediaPage component.
@@ -60,6 +60,86 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
     setSelectedCaseStudy(study)
   }, [])
 
+  const VideoDialogContent = ({ video }: { video: Video }) => (
+    <>
+      <DialogHeader>
+        <DialogTitle className="text-2xl mb-2">{video.title}</DialogTitle>
+        <Badge variant="outline" className="w-fit capitalize">{video.category}</Badge>
+      </DialogHeader>
+      <div className="aspect-video bg-black rounded-lg overflow-hidden my-4">
+        {video.videoUrl ? (
+          <video controls className="w-full h-full" src={video.videoUrl}>
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+            <p>Video player placeholder - {video.title}</p>
+          </div>
+        )}
+      </div>
+      <p className="text-sm text-muted-foreground leading-relaxed">{video.description}</p>
+    </>
+  )
+
+  const CaseStudyDialogContent = ({ study }: { study: CaseStudy }) => (
+    <>
+      <DialogHeader>
+        <DialogTitle className="text-3xl mb-2">{study.title}</DialogTitle>
+        <Badge variant="secondary" className="w-fit capitalize text-base px-4 py-2">
+          {study.category}
+        </Badge>
+      </DialogHeader>
+
+      <div className="space-y-6 mt-6">
+        <div>
+          <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">The Problem</h4>
+          <p className="text-sm text-muted-foreground leading-relaxed">{study.problem}</p>
+        </div>
+
+        <Separator />
+
+        <div>
+          <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">Our Solution</h4>
+          <p className="text-sm text-muted-foreground leading-relaxed">{study.solution}</p>
+        </div>
+
+        <Separator />
+
+        <div>
+          <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">Demonstrated Results</h4>
+          <p className="text-sm text-muted-foreground leading-relaxed">{study.results}</p>
+        </div>
+
+        {study.quote && (
+          <>
+            <Separator />
+            <div className="bg-muted/50 p-6 rounded-lg border-l-4 border-accent">
+              <Quotes size={32} className="text-accent mb-3" weight="fill" />
+              <p className="text-base italic mb-3">"{study.quote.text}"</p>
+              <div className="text-sm text-muted-foreground">
+                <p className="font-semibold">{study.quote.author}</p>
+              </div>
+            </div>
+          </>
+        )}
+
+        {study.datasheetId && (
+          <div className="pt-4 flex gap-3">
+            <Button onClick={() => { setSelectedCaseStudy(null); onNavigate('datasheets'); }}>
+              <FileText className="mr-2" /> View Related Datasheet
+            </Button>
+            <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
+          </div>
+        )}
+        {!study.datasheetId && (
+          <div className="pt-4">
+            <ContactLinks emailType="sales" variant="default" showWhatsApp={true} showEmail={true} />
+          </div>
+        )}
+      </div>
+    </>
+  )
+
   return (
     <div className="min-h-screen bg-background">
       <PageHero
@@ -84,16 +164,12 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
 
             <TabsContent value="videos">
               {videos.length === 0 ? (
-                <Card className="p-16 text-center space-y-3">
-                  <VideoCamera size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
-                  <h3 className="text-2xl font-bold">Videos coming soon</h3>
-                  <p className="text-muted-foreground max-w-xl mx-auto">
-                    We are producing video content showcasing our technology and applications. Check back soon or contact us to learn more.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
-                    <ContactLinks emailType="general" variant="default" showWhatsApp={true} showEmail={true} />
-                  </div>
-                </Card>
+                <ComingSoonCard
+                  icon={<VideoCamera size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
+                  title="Videos coming soon"
+                  description="We are producing video content showcasing our technology and applications. Check back soon or contact us to learn more."
+                  emailType="general"
+                />
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                   {videos.map((video) => (
@@ -131,16 +207,12 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
 
             <TabsContent value="case-studies">
               {caseStudies.length === 0 ? (
-                <Card className="p-16 text-center space-y-3">
-                  <Briefcase size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
-                  <h3 className="text-2xl font-bold">Case studies coming soon</h3>
-                  <p className="text-muted-foreground max-w-xl mx-auto">
-                    We are documenting real-world applications and success stories. Check back soon or contact us to discuss your specific use case.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
-                    <ContactLinks emailType="general" variant="default" showWhatsApp={true} showEmail={true} />
-                  </div>
-                </Card>
+                <ComingSoonCard
+                  icon={<Briefcase size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
+                  title="Case studies coming soon"
+                  description="We are documenting real-world applications and success stories. Check back soon or contact us to discuss your specific use case."
+                  emailType="general"
+                />
               ) : (
                 <div className="grid grid-cols-1 gap-4 md:gap-8">
                   {caseStudies.map((study) => (
@@ -187,24 +259,7 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
       <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
         <DialogContent className="max-w-5xl">
           {selectedVideo && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl mb-2">{selectedVideo.title}</DialogTitle>
-                <Badge variant="outline" className="w-fit capitalize">{selectedVideo.category}</Badge>
-              </DialogHeader>
-              <div className="aspect-video bg-black rounded-lg overflow-hidden my-4">
-                {selectedVideo.videoUrl ? (
-                  <video controls className="w-full h-full" src={selectedVideo.videoUrl}>
-                    Your browser does not support the video tag.
-                  </video>
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                    <p>Video player placeholder - {selectedVideo.title}</p>
-                  </div>
-                )}
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">{selectedVideo.description}</p>
-            </>
+            <VideoDialogContent video={selectedVideo} />
           )}
         </DialogContent>
       </Dialog>
@@ -213,62 +268,7 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
         <DialogContent className="max-w-4xl max-h-[90vh]">
           <ScrollArea className="max-h-[80vh] pr-4">
             {selectedCaseStudy && (
-              <>
-                <DialogHeader>
-                  <DialogTitle className="text-3xl mb-2">{selectedCaseStudy.title}</DialogTitle>
-                  <Badge variant="secondary" className="w-fit capitalize text-base px-4 py-2">
-                    {selectedCaseStudy.category}
-                  </Badge>
-                </DialogHeader>
-
-                <div className="space-y-6 mt-6">
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">The Problem</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedCaseStudy.problem}</p>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">Our Solution</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedCaseStudy.solution}</p>
-                  </div>
-
-                  <Separator />
-
-                  <div>
-                    <h4 className="text-lg font-semibold mb-3 text-primary uppercase tracking-wide">Demonstrated Results</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedCaseStudy.results}</p>
-                  </div>
-
-                  {selectedCaseStudy.quote && (
-                    <>
-                      <Separator />
-                      <div className="bg-muted/50 p-6 rounded-lg border-l-4 border-accent">
-                        <Quotes size={32} className="text-accent mb-3" weight="fill" />
-                        <p className="text-base italic mb-3">"{selectedCaseStudy.quote.text}"</p>
-                        <div className="text-sm text-muted-foreground">
-                          <p className="font-semibold">{selectedCaseStudy.quote.author}</p>
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  {selectedCaseStudy.datasheetId && (
-                    <div className="pt-4 flex gap-3">
-                      <Button onClick={() => { setSelectedCaseStudy(null); onNavigate('datasheets'); }}>
-                        <FileText className="mr-2" /> View Related Datasheet
-                      </Button>
-                      <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
-                    </div>
-                  )}
-                  {!selectedCaseStudy.datasheetId && (
-                    <div className="pt-4">
-                      <ContactLinks emailType="sales" variant="default" showWhatsApp={true} showEmail={true} />
-                    </div>
-                  )}
-                </div>
-              </>
+              <CaseStudyDialogContent study={selectedCaseStudy} />
             )}
           </ScrollArea>
         </DialogContent>

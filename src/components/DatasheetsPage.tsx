@@ -7,8 +7,7 @@
  * @module components/DatasheetsPage
  */
 
-import { useState, useMemo, useCallback, useEffect, type MouseEvent } from 'react'
-import { Card } from '@/components/ui/card'
+import { useState, useMemo, useCallback, useEffect, type MouseEvent, type KeyboardEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -21,6 +20,8 @@ import type { Datasheet } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { DEBOUNCE_DELAY_MS } from '@/lib/constants'
+import { openExternal } from '@/lib/utils'
+import { ComingSoonCard } from '@/components/ComingSoonCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 
 /**
@@ -83,7 +84,14 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
     if (!url) {
       return
     }
-    window.open(url, '_blank', 'noopener')
+    openExternal(url)
+  }, [])
+
+  const handleCategoryKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>, cat: string) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      setSelectedCategory(cat)
+    }
   }, [])
 
   return (
@@ -119,6 +127,9 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
                   variant={selectedCategory === cat ? 'default' : 'outline'}
                   className="cursor-pointer px-5 py-2.5 text-sm capitalize font-semibold"
                   onClick={() => setSelectedCategory(cat)}
+                  onKeyDown={(event) => handleCategoryKeyDown(event, cat)}
+                  role="button"
+                  tabIndex={0}
                 >
                   {cat}
                 </Badge>
@@ -127,19 +138,19 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
           </div>
 
           {!hasDatasheets ? (
-            <Card className="p-16 text-center space-y-3">
-              <FileText size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />
-              <h3 className="text-2xl font-bold">Datasheets coming soon</h3>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                We are finalizing technical datasheets for our products. Check back soon or contact us and we will notify you when they are available.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+            <div className="space-y-4">
+              <ComingSoonCard
+                icon={<FileText size={80} className="text-muted-foreground/40 mx-auto mb-4" weight="light" />}
+                title="Datasheets coming soon"
+                description="We are finalizing technical datasheets for our products. Check back soon or contact us and we will notify you when they are available."
+                emailType="sales"
+              />
+              <div className="flex justify-center">
                 <Button variant="outline" onClick={() => { setSearchTerm(''); setSelectedCategory('all'); }}>
                   Clear Filters
                 </Button>
-                <ContactLinks emailType="sales" variant="default" showWhatsApp={true} showEmail={true} />
               </div>
-            </Card>
+            </div>
           ) : (
             <div className="hidden md:block border rounded-lg overflow-hidden shadow-sm">
               <Table>

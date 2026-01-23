@@ -10,6 +10,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { EnvelopeSimple, MapPin, LinkedinLogo } from '@phosphor-icons/react'
 import { contactConfig, getEmailUrl } from '@/lib/contact-config'
+import { openExternal } from '@/lib/utils'
 
 /**
  * Contact information display component.
@@ -127,7 +128,7 @@ function ContactInfoItem({ icon, title, href, linkText }: ContactInfoItemProps) 
           href={href}
           onClick={(e) => {
             e.preventDefault()
-            window.open(href, '_blank', 'noopener,noreferrer')
+            openExternal(href)
           }}
           className="text-muted-foreground hover:text-primary transition-colors cursor-pointer font-medium"
         >

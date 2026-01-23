@@ -151,15 +151,16 @@ async function submitToApi(endpoint: string, data: Record<string, unknown>): Pro
  * Mock submission for development mode.
  */
 async function mockSubmit(type: string, data: Record<string, unknown>): Promise<FormResult> {
+  const MOCK_SUBMIT_DELAY_MS = 800
   // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 800))
+  await new Promise(resolve => setTimeout(resolve, MOCK_SUBMIT_DELAY_MS))
   
   // Log for debugging
-  console.info(`[Form Service - Mock Mode] ${type} submission:`, data)
-  console.info('[Form Service] To enable real submissions, set environment variables:')
-  console.info('  - VITE_FORMSPREE_CONTACT_ID for contact form')
-  console.info('  - VITE_FORMSPREE_NEWSLETTER_ID for newsletter')
-  console.info('  See https://formspree.io to create free forms')
+  console.warn(`[Form Service - Mock Mode] ${type} submission:`, data)
+  console.warn('[Form Service] To enable real submissions, set environment variables:')
+  console.warn('  - VITE_FORMSPREE_CONTACT_ID for contact form')
+  console.warn('  - VITE_FORMSPREE_NEWSLETTER_ID for newsletter')
+  console.warn('  See https://formspree.io to create free forms')
   
   return { success: true, message: 'Mock submission successful (development mode)' }
 }

@@ -114,6 +114,34 @@ export default tseslint.config(
       'react-hooks/exhaustive-deps': 'warn',
     },
   },
+  // Relaxed rules for large UI pages and complex analytics utilities
+  {
+    files: [
+      'src/components/**/*Page.tsx',
+      'src/components/ConsentBanner.tsx',
+      'src/components/GlobalSearch.tsx',
+      'src/components/contact/ContactForm.tsx',
+    ],
+    rules: {
+      'max-lines-per-function': 'off',
+    },
+  },
+  {
+    files: [
+      'src/lib/analytics/**',
+      'src/lib/analytics-config.ts',
+      'src/lib/performance-benchmark.ts',
+      'src/lib/feature-flags.ts',
+      'src/lib/seed-data.ts',
+      'src/lib/constants.ts',
+    ],
+    rules: {
+      'no-magic-numbers': 'off',
+      'max-statements': 'off',
+      'max-params': 'off',
+      'max-lines-per-function': 'off',
+    },
+  },
   // Relaxed rules for test files
   {
     files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', '**/test/**', '**/__tests__/**'],

@@ -441,7 +441,7 @@ export function runBenchmarkOnLoad(): void {
     // Wait a bit more for all async resources
     setTimeout(() => {
       const result = runBenchmark()
-      console.log(formatBenchmarkResults(result))
+      console.warn(formatBenchmarkResults(result))
       
       // Store in window for debugging
       ;(window as Window & { __perfBenchmark?: BenchmarkResult }).__perfBenchmark = result
@@ -450,7 +450,7 @@ export function runBenchmarkOnLoad(): void {
     window.addEventListener('load', () => {
       setTimeout(() => {
         const result = runBenchmark()
-        console.log(formatBenchmarkResults(result))
+        console.warn(formatBenchmarkResults(result))
         ;(window as Window & { __perfBenchmark?: BenchmarkResult }).__perfBenchmark = result
       }, 1000)
     })

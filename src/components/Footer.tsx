@@ -12,6 +12,7 @@ import { EnvelopeSimple, WhatsappLogo, Copy } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
+import { openExternal } from '@/lib/utils'
 import { ManageCookiesLink, ConsentStatusIndicator } from '@/components/ConsentBanner'
 
 /**
@@ -44,7 +45,7 @@ export const Footer = memo(() => {
 
   const handleEmailClick = (type: 'general' | 'sales') => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
-    window.open(getEmailUrl(type), '_blank', 'noopener,noreferrer')
+    openExternal(getEmailUrl(type))
   }
 
   return (
