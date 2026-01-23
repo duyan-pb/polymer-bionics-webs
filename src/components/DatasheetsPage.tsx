@@ -7,22 +7,22 @@
  * @module components/DatasheetsPage
  */
 
-import { useState, useMemo, useCallback, useEffect, type MouseEvent, type KeyboardEvent } from 'react'
+import { useState, useMemo, useCallback, useEffect, type KeyboardEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import { Download, MagnifyingGlass, FileText, Calendar } from '@phosphor-icons/react'
+import { MagnifyingGlass, FileText } from '@phosphor-icons/react'
 import type { Datasheet } from '@/lib/types'
-import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { DEBOUNCE_DELAY_MS } from '@/lib/constants'
 import { openExternal } from '@/lib/utils'
 import { ComingSoonCard } from '@/components/ComingSoonCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
+import { DatasheetTable } from '@/components/datasheets/DatasheetTable'
+import { DatasheetCardList } from '@/components/datasheets/DatasheetCardList'
+import { DatasheetDialogContent } from '@/components/datasheets/DatasheetDialogContent'
 
 /**
  * Props for the DatasheetsPage component.
@@ -79,12 +79,11 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
 
   const hasDatasheets = filteredDatasheets.length > 0
 
-  const handleDownload = useCallback((e: MouseEvent, url?: string) => {
-    e.stopPropagation()
-    if (!url) {
+  const handleDownload = useCallback((datasheet: Datasheet) => {
+    if (!datasheet.pdfUrl) {
       return
     }
-    openExternal(url)
+    openExternal(datasheet.pdfUrl)
   }, [])
 
   const handleCategoryKeyDown = useCallback((event: KeyboardEvent<HTMLDivElement>, cat: string) => {
@@ -152,75 +151,18 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
               </div>
             </div>
           ) : (
-            <div className="hidden md:block border rounded-lg overflow-hidden shadow-sm">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-secondary/50">
-                    <TableHead className="font-bold text-base">Product Name</TableHead>
-                    <TableHead className="font-bold text-base">Category</TableHead>
-                    <TableHead className="font-bold text-base">Version</TableHead>
-                    <TableHead className="font-bold text-base">Last Updated</TableHead>
-                    <TableHead className="font-semibold">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredDatasheets.map((datasheet) => (
-                    <TableRow
-                      key={datasheet.id}
-                      className="cursor-pointer hover:bg-muted/30"
-                      onClick={() => setSelectedDatasheet(datasheet)}
-                    >
-                      <TableCell className="font-medium">{datasheet.name}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="capitalize">{datasheet.category}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">{datasheet.version}</Badge>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-sm">
-                        {datasheet.lastUpdated}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          disabled={!datasheet.pdfUrl}
-                          onClick={(e) => handleDownload(e, datasheet.pdfUrl)}
-                        >
-                          <Download size={16} className="mr-2" /> Download
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+            <DatasheetTable
+              datasheets={filteredDatasheets}
+              onSelect={setSelectedDatasheet}
+              onDownload={handleDownload}
+            />
           )}
 
-          <div className="md:hidden grid grid-cols-1 gap-3">
-            {filteredDatasheets.map((datasheet) => (
-              <Card
-                key={datasheet.id}
-                className="p-4 md:p-6 hover:shadow-lg transition-all cursor-pointer border-2 hover:border-accent"
-                onClick={() => setSelectedDatasheet(datasheet)}
-              >
-                <div className="flex items-start justify-between mb-2 md:mb-3">
-                  <h3 className="text-base md:text-lg font-semibold flex-1 pr-2">{datasheet.name}</h3>
-                  <Badge variant="secondary">{datasheet.version}</Badge>
-                </div>
-                <div className="flex flex-wrap gap-2 mb-3">
-                  <Badge variant="outline" className="capitalize">{datasheet.category}</Badge>
-                </div>
-                <div className="flex items-center text-sm text-muted-foreground mb-4">
-                  <Calendar size={16} className="mr-1" />
-                  Updated: {datasheet.lastUpdated}
-                </div>
-                <Button size="sm" disabled={!datasheet.pdfUrl} onClick={(e) => handleDownload(e, datasheet.pdfUrl)}>
-                  <Download size={16} className="mr-2" /> Download PDF
-                </Button>
-              </Card>
-            ))}
-          </div>
+          <DatasheetCardList
+            datasheets={filteredDatasheets}
+            onSelect={setSelectedDatasheet}
+            onDownload={handleDownload}
+          />
         </div>
       </section>
 
@@ -228,49 +170,10 @@ export function DatasheetsPage({ datasheets, onNavigate }: DatasheetsPageProps) 
         <DialogContent className="max-w-4xl max-h-[90vh]">
           <ScrollArea className="max-h-[80vh] pr-4">
             {selectedDatasheet && (
-              <>
-                <DialogHeader>
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <DialogTitle className="text-3xl mb-2">{selectedDatasheet.name}</DialogTitle>
-                      <p className="text-muted-foreground">{selectedDatasheet.description}</p>
-                    </div>
-                    <div className="flex flex-col gap-2 items-end">
-                      <Badge variant="secondary" className="text-base px-4 py-2">{selectedDatasheet.version}</Badge>
-                      <Badge variant="outline" className="capitalize">{selectedDatasheet.category}</Badge>
-                    </div>
-                  </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Calendar size={16} className="mr-2" />
-                    Last updated: {selectedDatasheet.lastUpdated}
-                  </div>
-                </DialogHeader>
-
-                <Separator className="my-6" />
-
-                <div className="space-y-6">
-                  {selectedDatasheet.technicalSpecs && (
-                    <div>
-                      <h4 className="text-lg font-semibold mb-4">Technical Specifications</h4>
-                      <div className="grid grid-cols-1 gap-3">
-                        {Object.entries(selectedDatasheet.technicalSpecs).map(([key, value], idx) => (
-                          <div key={idx} className="flex border-b pb-3">
-                            <div className="w-1/2 font-medium text-sm">{key}</div>
-                            <div className="w-1/2 text-sm text-muted-foreground">{value}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="pt-4 flex gap-3">
-                    <Button disabled={!selectedDatasheet.pdfUrl} onClick={(e) => handleDownload(e, selectedDatasheet.pdfUrl)}>
-                      <Download className="mr-2" /> Download Complete Datasheet (PDF)
-                    </Button>
-                    <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
-                  </div>
-                </div>
-              </>
+              <DatasheetDialogContent
+                datasheet={selectedDatasheet}
+                onDownload={handleDownload}
+              />
             )}
           </ScrollArea>
         </DialogContent>

@@ -10,15 +10,14 @@
 import { useState, useCallback, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
+import { Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
 import { HeroImage } from '@/components/HeroImage'
-import { ClickableCard } from '@/components/ClickableCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { submitNewsletterSubscription } from '@/lib/form-service'
+import { HomeFeatureCard } from '@/components/home/HomeFeatureCard'
+import { NewsletterSignup } from '@/components/home/NewsletterSignup'
 
 /**
  * Props for the HomePage component.
@@ -113,95 +112,54 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
       <section className="py-12 md:py-20 px-4 md:px-8 bg-background">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            <ClickableCard 
-              className="p-5 md:p-8 bg-card/60 backdrop-blur hover:shadow-primary/40" 
-              onClick={handleNavigate('team')}
+            <HomeFeatureCard
+              title="Our Team"
+              description="Expert polymer scientists, biomedical engineers, and materials researchers advancing flexible bioelectronics."
+              actionLabel="Learn more"
+              icon={<Users size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              onSelect={handleNavigate('team')}
               ariaLabel="Navigate to Our Team page"
-            >
-              <Users size={40} className="text-primary mb-3 md:mb-4 md:w-12 md:h-12" weight="duotone" />
-              <h3 className="text-xl md:text-2xl mb-2 md:mb-3">Our Team</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4 leading-relaxed">
-                Expert polymer scientists, biomedical engineers, and materials researchers advancing flexible bioelectronics.
-              </p>
-              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
-                Learn more <ArrowRight size={20} />
-              </div>
-            </ClickableCard>
-
-            <ClickableCard 
-              className="p-5 md:p-8 bg-card/60 backdrop-blur hover:shadow-primary/40" 
-              onClick={handleNavigate('materials')}
+            />
+            <HomeFeatureCard
+              title="Materials"
+              description="Advanced polymers including PEDOT:PSS, hydrogels, silicones, and specialty coatings for biomedical use."
+              actionLabel="View materials"
+              icon={<Atom size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              onSelect={handleNavigate('materials')}
               ariaLabel="Navigate to Materials page"
-            >
-              <Atom size={40} className="text-primary mb-3 md:mb-4 md:w-12 md:h-12" weight="duotone" />
-              <h3 className="text-xl md:text-2xl mb-2 md:mb-3">Materials</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4 leading-relaxed">
-                Advanced polymers including PEDOT:PSS, hydrogels, silicones, and specialty coatings for biomedical use.
-              </p>
-              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
-                View materials <ArrowRight size={20} />
-              </div>
-            </ClickableCard>
-
-            <ClickableCard 
-              className="p-5 md:p-8 bg-card/60 backdrop-blur hover:shadow-primary/40" 
-              onClick={handleNavigate('applications')}
+            />
+            <HomeFeatureCard
+              title="Applications"
+              description="Neural interfaces, wearable sensors, drug delivery, cardiac devices, and advanced surgical tools."
+              actionLabel="Explore uses"
+              icon={<Lightbulb size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              onSelect={handleNavigate('applications')}
               ariaLabel="Navigate to Applications page"
-            >
-              <Lightbulb size={40} className="text-primary mb-3 md:mb-4 md:w-12 md:h-12" weight="duotone" />
-              <h3 className="text-xl md:text-2xl mb-2 md:mb-3">Applications</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4 leading-relaxed">
-                Neural interfaces, wearable sensors, drug delivery, cardiac devices, and advanced surgical tools.
-              </p>
-              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
-                Explore uses <ArrowRight size={20} />
-              </div>
-            </ClickableCard>
-
-            <ClickableCard 
-              className="p-5 md:p-8 bg-card/60 backdrop-blur hover:shadow-primary/40" 
-              onClick={handleNavigate('products')}
+            />
+            <HomeFeatureCard
+              title="Products"
+              description="Flexible bioelectronic devices, conductive polymer systems, and soft tissue-compatible sensors."
+              actionLabel="Explore catalog"
+              icon={<Flask size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              onSelect={handleNavigate('products')}
               ariaLabel="Navigate to Products page"
-            >
-              <Flask size={40} className="text-primary mb-3 md:mb-4 md:w-12 md:h-12" weight="duotone" />
-              <h3 className="text-xl md:text-2xl mb-2 md:mb-3">Products</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4 leading-relaxed">
-                Flexible bioelectronic devices, conductive polymer systems, and soft tissue-compatible sensors.
-              </p>
-              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
-                Explore catalog <ArrowRight size={20} />
-              </div>
-            </ClickableCard>
-
-            <ClickableCard 
-              className="p-5 md:p-8 bg-card/60 backdrop-blur hover:shadow-primary/40" 
-              onClick={handleNavigate('media')}
+            />
+            <HomeFeatureCard
+              title="Case Studies"
+              description="Real-world applications in wearable diagnostics, implantable devices, and smart wound healing."
+              actionLabel="View studies"
+              icon={<Video size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              onSelect={handleNavigate('media')}
               ariaLabel="Navigate to Case Studies page"
-            >
-              <Video size={40} className="text-primary mb-3 md:mb-4 md:w-12 md:h-12" weight="duotone" />
-              <h3 className="text-xl md:text-2xl mb-2 md:mb-3">Case Studies</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4 leading-relaxed">
-                Real-world applications in wearable diagnostics, implantable devices, and smart wound healing.
-              </p>
-              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
-                View studies <ArrowRight size={20} />
-              </div>
-            </ClickableCard>
-
-            <ClickableCard 
-              className="p-5 md:p-8 bg-card/60 backdrop-blur hover:shadow-primary/40" 
-              onClick={handleNavigate('datasheets')}
+            />
+            <HomeFeatureCard
+              title="Technical Data"
+              description="Material properties, biocompatibility testing, mechanical flexibility, and performance specifications."
+              actionLabel="Access library"
+              icon={<FileText size={40} className="md:w-12 md:h-12" weight="duotone" />}
+              onSelect={handleNavigate('datasheets')}
               ariaLabel="Navigate to Technical Data page"
-            >
-              <FileText size={40} className="text-primary mb-3 md:mb-4 md:w-12 md:h-12" weight="duotone" />
-              <h3 className="text-xl md:text-2xl mb-2 md:mb-3">Technical Data</h3>
-              <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4 leading-relaxed">
-                Material properties, biocompatibility testing, mechanical flexibility, and performance specifications.
-              </p>
-              <div className="flex items-center text-primary hover:gap-3 gap-2 transition-all">
-                Access library <ArrowRight size={20} />
-              </div>
-            </ClickableCard>
+            />
           </div>
         </div>
       </section>
@@ -225,34 +183,12 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
 
       <section className="py-10 md:py-16 px-4 md:px-8 bg-background">
         <div className="max-w-[1280px] mx-auto max-w-2xl">
-          <div className="text-center px-4">
-            <h2 className="text-2xl md:text-4xl mb-3 md:mb-4">Stay ahead with Polymer Bionics</h2>
-            <p className="text-base md:text-lg text-muted-foreground mb-4 md:mb-6">Join our newsletter for the latest breakthroughs, case studies, and clinical data drops.</p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <div className="flex-1 max-w-sm">
-                <Label htmlFor="newsletter-email" className="sr-only">Email address</Label>
-                <Input 
-                  id="newsletter-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email address" 
-                  aria-label="Email address for newsletter subscription"
-                  className="h-12 text-base" 
-                  disabled={isSubscribing}
-                />
-              </div>
-              <Button 
-                className="h-12 px-6" 
-                onClick={handleSubscribe}
-                disabled={isSubscribing}
-                aria-label="Subscribe to newsletter"
-              >
-                {isSubscribing ? 'Subscribing...' : 'Subscribe'}
-              </Button>
-            </div>
-            <p className="text-sm text-muted-foreground mt-2">We send 1-2 updates per month. No spam.</p>
-          </div>
+          <NewsletterSignup
+            email={email}
+            isSubmitting={isSubscribing}
+            onEmailChange={setEmail}
+            onSubmit={handleSubscribe}
+          />
         </div>
       </section>
     </div>

@@ -9,7 +9,7 @@
 import { Badge } from '@/components/ui/badge'
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { ContactLinks } from '@/components/ContactLinks'
+import { ContactCTA } from '@/components/ContactCTA'
 import { CheckCircle } from '@phosphor-icons/react'
 import type { Application } from '@/lib/types'
 
@@ -77,7 +77,7 @@ export function ApplicationDialogContent({ application }: ApplicationDialogConte
         </div>
 
         <div className="flex gap-3 pt-4">
-          <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
+          <ContactCTA emailType="sales" />
         </div>
       </div>
     </>

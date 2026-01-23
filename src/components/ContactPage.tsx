@@ -7,11 +7,12 @@
  * @module components/ContactPage
  */
 
-import { motion } from 'framer-motion'
 import { PageHero } from '@/components/PageHero'
 import { ContactForm } from '@/components/contact/ContactForm'
 import { ContactInfo } from '@/components/contact/ContactInfo'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
+import { AnimatedSplitSection } from '@/components/layout/AnimatedSplitSection'
+import { PageSection } from '@/components/layout/PageSection'
 
 /**
  * Props for the ContactPage component.
@@ -50,27 +51,9 @@ export function ContactPage({ onNavigate }: ContactPageProps) {
         onNavigate={onNavigate}
       />
 
-      <section className="py-12 md:py-20 px-4 md:px-8">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <ContactForm />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <ContactInfo />
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <PageSection>
+        <AnimatedSplitSection left={<ContactForm />} right={<ContactInfo />} />
+      </PageSection>
     </div>
   )
 }

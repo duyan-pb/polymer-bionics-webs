@@ -8,11 +8,13 @@
  */
 
 import { useEffect, useMemo, useState } from 'react'
-import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
+import { CommandDialog, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command'
 import { Users, Package, FileText, Newspaper, ArrowRight } from '@phosphor-icons/react'
 import Fuse from 'fuse.js'
 import { NAV_ITEMS } from '@/lib/constants'
 import type { TeamMember, Product, Datasheet, NewsItem } from '@/lib/types'
+import { SearchResultsGroup } from '@/components/search/SearchResultsGroup'
+import { SearchBrowseGroup } from '@/components/search/SearchBrowseGroup'
 
 // =============================================================================
 // CONSTANTS
@@ -180,6 +182,49 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
     }
   }
 
+  const resultsGroupItems = fuseResults.map((item) => ({
+    id: item.id,
+    label: item.label,
+    subtitle: item.subtitle,
+    onSelect: () => handleSelect(item.page),
+    icon: renderIcon(item.type),
+  }))
+
+  const browseNavItems = NAV_ITEMS.map((item) => ({
+    id: item.id,
+    label: item.label,
+    onSelect: () => handleSelect(item.id),
+    icon: <ArrowRight className="mr-2" size={16} weight="bold" />,
+  }))
+
+  const browseProductItems = (products || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((p) => ({
+    id: p.id,
+    label: `${p.name} – ${p.category}`,
+    onSelect: () => handleSelect('products'),
+    icon: <Package className="mr-2" size={16} weight="duotone" />,
+  }))
+
+  const browseTeamItems = (team || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((m) => ({
+    id: m.id,
+    label: `${m.name} – ${m.role}`,
+    onSelect: () => handleSelect('team'),
+    icon: <Users className="mr-2" size={16} weight="duotone" />,
+  }))
+
+  const browseDatasheetItems = (datasheets || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((d) => ({
+    id: d.id,
+    label: d.title,
+    onSelect: () => handleSelect('datasheets'),
+    icon: <FileText className="mr-2" size={16} weight="duotone" />,
+  }))
+
+  const browseNewsItems = (news || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((n) => ({
+    id: n.id,
+    label: n.title,
+    onSelect: () => handleSelect('news'),
+    icon: <Newspaper className="mr-2" size={16} weight="duotone" />,
+  }))
+
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange} title="Search" description="Search content">
       <CommandInput
@@ -191,69 +236,14 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         {hasQuery ? (
-          <CommandGroup heading="Results">
-            {fuseResults.map((item) => (
-              <CommandItem
-                key={item.id}
-                value={item.label}
-                onSelect={() => handleSelect(item.page)}
-              >
-                {renderIcon(item.type)}
-                <div className="flex flex-col">
-                  <span className="font-medium">{item.label}</span>
-                  {item.subtitle && (
-                    <span className="text-xs text-muted-foreground line-clamp-1">{item.subtitle}</span>
-                  )}
-                </div>
-              </CommandItem>
-            ))}
-          </CommandGroup>
+          <SearchResultsGroup heading="Results" items={resultsGroupItems} />
         ) : (
           <>
-            <CommandGroup heading="Navigate">
-              {NAV_ITEMS.map((item) => (
-                <CommandItem key={item.id} value={item.label} onSelect={() => handleSelect(item.id)}>
-                  <ArrowRight className="mr-2" size={16} weight="bold" />
-                  {item.label}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-
-            <CommandGroup heading="Products">
-              {(products || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((p) => (
-                <CommandItem key={p.id} value={p.name} onSelect={() => handleSelect('products')}>
-                  <Package className="mr-2" size={16} weight="duotone" />
-                  {p.name} – {p.category}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-
-            <CommandGroup heading="Team">
-              {(team || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((m) => (
-                <CommandItem key={m.id} value={m.name} onSelect={() => handleSelect('team')}>
-                  <Users className="mr-2" size={16} weight="duotone" />
-                  {m.name} – {m.role}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-
-            <CommandGroup heading="Datasheets">
-              {(datasheets || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((d) => (
-                <CommandItem key={d.id} value={d.title} onSelect={() => handleSelect('datasheets')}>
-                  <FileText className="mr-2" size={16} weight="duotone" />
-                  {d.title}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-
-            <CommandGroup heading="News & Publications">
-              {(news || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((n) => (
-                <CommandItem key={n.id} value={n.title} onSelect={() => handleSelect('news')}>
-                  <Newspaper className="mr-2" size={16} weight="duotone" />
-                  {n.title}
-                </CommandItem>
-              ))}
-            </CommandGroup>
+            <SearchBrowseGroup heading="Navigate" items={browseNavItems} />
+            <SearchBrowseGroup heading="Products" items={browseProductItems} />
+            <SearchBrowseGroup heading="Team" items={browseTeamItems} />
+            <SearchBrowseGroup heading="Datasheets" items={browseDatasheetItems} />
+            <SearchBrowseGroup heading="News & Publications" items={browseNewsItems} />
           </>
         )}
       </CommandList>

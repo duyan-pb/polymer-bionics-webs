@@ -8,7 +8,7 @@
 
 import type { ReactNode } from 'react'
 import { Card } from '@/components/ui/card'
-import { ContactLinks } from '@/components/ContactLinks'
+import { ContactCTA } from '@/components/ContactCTA'
 
 interface ComingSoonCardProps {
   /** Icon to display (already styled) */
@@ -38,7 +38,7 @@ export function ComingSoonCard({
         {description}
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
-        <ContactLinks emailType={emailType} variant="default" showWhatsApp={true} showEmail={true} />
+        <ContactCTA emailType={emailType} />
       </div>
     </Card>
   )

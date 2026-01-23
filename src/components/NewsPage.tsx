@@ -16,7 +16,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Calendar, Newspaper, BookOpen, ArrowSquareOut, Download } from '@phosphor-icons/react'
 import type { NewsItem, Publication } from '@/lib/types'
-import { ContactLinks } from '@/components/ContactLinks'
+import { ContactCTA } from '@/components/ContactCTA'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import { openExternal } from '@/lib/utils'
@@ -116,7 +116,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
               </a>
             </Button>
           )}
-          <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
+          <ContactCTA emailType="general" variant="outline" />
         </div>
       </div>
     </>
@@ -171,7 +171,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
               <Download className="mr-2" /> Download PDF
             </Button>
           )}
-          <ContactLinks emailType="general" variant="outline" showWhatsApp={true} showEmail={true} />
+          <ContactCTA emailType="general" variant="outline" />
         </div>
       </div>
     </>

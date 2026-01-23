@@ -16,7 +16,7 @@ import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Play, Quotes, FileText, VideoCamera, Briefcase } from '@phosphor-icons/react'
 import type { Video, CaseStudy } from '@/lib/types'
-import { ContactLinks } from '@/components/ContactLinks'
+import { ContactCTA } from '@/components/ContactCTA'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
@@ -128,12 +128,12 @@ export function MediaPage({ videos, caseStudies, onNavigate }: MediaPageProps) {
             <Button onClick={() => { setSelectedCaseStudy(null); onNavigate('datasheets'); }}>
               <FileText className="mr-2" /> View Related Datasheet
             </Button>
-            <ContactLinks emailType="sales" variant="outline" showWhatsApp={true} showEmail={true} />
+            <ContactCTA emailType="sales" variant="outline" />
           </div>
         )}
         {!study.datasheetId && (
           <div className="pt-4">
-            <ContactLinks emailType="sales" variant="default" showWhatsApp={true} showEmail={true} />
+            <ContactCTA emailType="sales" variant="default" />
           </div>
         )}
       </div>

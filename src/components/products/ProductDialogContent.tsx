@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { ContactLinks } from '@/components/ContactLinks'
+import { ContactCTA } from '@/components/ContactCTA'
 import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, ShoppingCart } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
 
@@ -137,7 +137,7 @@ export function ProductDialogContent({ product, onSelectImage, onContact, onData
             )}
           </div>
           <div className="flex gap-3">
-            <ContactLinks emailType="sales" variant="default" size="default" showWhatsApp={true} showEmail={true} />
+            <ContactCTA emailType="sales" />
           </div>
         </div>
       </div>
