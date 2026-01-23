@@ -57,7 +57,7 @@ const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({
 /**
  * Loading fallback component displayed while lazy-loaded pages are fetched.
  */
-const PageLoader = memo(function PageLoader() {
+const PageLoader = memo(() => {
   return (
     <div className="min-h-[50vh] flex items-center justify-center">
       <div className="animate-pulse flex flex-col items-center gap-4">
@@ -183,6 +183,13 @@ function App() {
   return (
     <AnalyticsProvider>
       <div className="min-h-screen bg-background flex flex-col">
+        {/* Skip to main content link for keyboard users */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          Skip to main content
+        </a>
         <ProductsInitializer />
         <TeamInitializer />
         <NewsInitializer />
@@ -195,7 +202,7 @@ function App() {
           isDark={isDark} 
           onToggleTheme={toggleTheme} 
         />
-        <div className="flex-1">
+        <main id="main-content" className="flex-1" role="main">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPage}
@@ -207,7 +214,7 @@ function App() {
               {renderPage()}
             </motion.div>
           </AnimatePresence>
-        </div>
+        </main>
         <Footer />
         <FloatingContactButton />
         {isSearchOpen && (

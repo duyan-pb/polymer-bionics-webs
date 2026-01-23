@@ -219,7 +219,7 @@ function handleUnhandledRejection(event: PromiseRejectionEvent): void {
  * Wrap console.error to capture errors
  */
 function wrapConsoleError(): void {
-  if (originalConsoleError) return
+  if (originalConsoleError) {return}
   
   originalConsoleError = console.error
   
@@ -305,7 +305,7 @@ export function reportCustomError(
   error: Error | string,
   context?: Record<string, unknown>
 ): void {
-  if (!config.enabled) return
+  if (!config.enabled) {return}
   
   const report = createErrorReport(error, 'custom', context)
   reportError(report)
@@ -319,7 +319,7 @@ export function reportReactError(
   componentStack: string,
   context?: Record<string, unknown>
 ): void {
-  if (!config.enabled) return
+  if (!config.enabled) {return}
   
   const report = createErrorReport(error, 'react', context)
   report.componentStack = componentStack
@@ -335,7 +335,7 @@ export function reportNetworkError(
   statusText: string,
   context?: Record<string, unknown>
 ): void {
-  if (!config.enabled) return
+  if (!config.enabled) {return}
   
   const error = new Error(`Network error: ${status} ${statusText} for ${url}`)
   error.name = 'NetworkError'

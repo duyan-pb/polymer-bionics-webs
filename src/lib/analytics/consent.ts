@@ -46,6 +46,13 @@ function areCookiesAvailable(): boolean {
 // In-memory fallback for when storage is unavailable
 let inMemoryConsentState: ConsentState | null = null
 
+/**
+ * Reset in-memory consent state (for testing only)
+ */
+export function resetConsentState(): void {
+  inMemoryConsentState = null
+}
+
 // =============================================================================
 // STORAGE
 // =============================================================================

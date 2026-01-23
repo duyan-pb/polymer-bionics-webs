@@ -19,6 +19,7 @@ import type { Material } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
+import { MATERIAL_CARD } from '@/lib/constants'
 import CESheet from '@/assets/images/CE_sheet.png'
 
 /**
@@ -95,14 +96,14 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
                         Key Properties
                       </h4>
                       <div className="flex flex-wrap gap-2">
-                        {material.properties.slice(0, 3).map((prop, idx) => (
+                        {material.properties.slice(0, MATERIAL_CARD.MAX_PROPERTIES).map((prop, idx) => (
                           <Badge key={idx} variant="secondary" className="text-xs">
-                            {prop.length > 30 ? `${prop.substring(0, 30)  }...` : prop}
+                            {prop.length > MATERIAL_CARD.MAX_PROPERTY_LENGTH ? `${prop.substring(0, MATERIAL_CARD.MAX_PROPERTY_LENGTH)  }...` : prop}
                           </Badge>
                         ))}
-                        {material.properties.length > 3 && (
+                        {material.properties.length > MATERIAL_CARD.MAX_PROPERTIES && (
                           <Badge variant="outline" className="text-xs">
-                            +{material.properties.length - 3} more
+                            +{material.properties.length - MATERIAL_CARD.MAX_PROPERTIES} more
                           </Badge>
                         )}
                       </div>

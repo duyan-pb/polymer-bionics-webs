@@ -45,7 +45,7 @@ vi.mock('@/components/ui/command', () => ({
 vi.mock('fuse.js', () => {
   return {
     default: class MockFuse {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       constructor(_items: unknown[], _options?: unknown) {}
       search() {
         return []

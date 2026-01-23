@@ -8,7 +8,6 @@
     "src/test/mocks/**",
     "src/vite-end.d.ts",
     "src/types/**",
-    "packages/**",
     "reports/**",
     "coverage/**"
   ],
@@ -34,7 +33,6 @@
   ],
   "ignoreBinaries": ["fuser"],
   "ignoreExportsUsedInFile": true,
-  "ignoreWorkspaces": ["packages/*"],
   "rules": {
     "files": "error",
     "dependencies": "error",

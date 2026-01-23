@@ -285,13 +285,13 @@ export function useVisibilityTracking<T extends HTMLElement>(options: {
     observerRef.current = new IntersectionObserver(
       (entries) => {
         const entry = entries[0]
-        if (!entry) return
+        if (!entry) {return}
         
         const wasVisible = isVisibleRef.current
         isVisibleRef.current = entry.isIntersecting
         
         if (entry.isIntersecting && !wasVisible) {
-          if (once && hasTriggeredRef.current) return
+          if (once && hasTriggeredRef.current) {return}
           hasTriggeredRef.current = true
           
           onVisible?.()
@@ -380,7 +380,7 @@ export function usePageLoadTracking(pageName: string): void {
   const hasTracked = useRef(false)
   
   useEffect(() => {
-    if (hasTracked.current) return
+    if (hasTracked.current) {return}
     hasTracked.current = true
     
     // Wait for page to be fully loaded

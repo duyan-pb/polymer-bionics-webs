@@ -172,7 +172,7 @@ function reportMetric(metric: PerformanceMetric): void {
  * Start observing resource timing
  */
 function startResourceObserver(): void {
-  if (!('PerformanceObserver' in window)) return
+  if (!('PerformanceObserver' in window)) {return}
   
   try {
     resourceObserver = new PerformanceObserver((list) => {
@@ -180,7 +180,7 @@ function startResourceObserver(): void {
       
       for (const entry of entries) {
         // Only report slow resources
-        if (entry.duration < config.resourceThresholdMs) continue
+        if (entry.duration < config.resourceThresholdMs) {continue}
         
         // Skip data URLs and extensions
         if (entry.name.startsWith('data:') || entry.name.includes('chrome-extension')) {
@@ -222,7 +222,7 @@ function startResourceObserver(): void {
  * Start observing long tasks
  */
 function startLongTaskObserver(): void {
-  if (!('PerformanceObserver' in window)) return
+  if (!('PerformanceObserver' in window)) {return}
   
   try {
     longTaskObserver = new PerformanceObserver((list) => {
@@ -269,7 +269,7 @@ function getMemoryInfo(): MemoryInfo | null {
     jsHeapSizeLimit: number
   } | undefined
   
-  if (!memory) return null
+  if (!memory) {return null}
   
   return {
     usedJSHeapSize: memory.usedJSHeapSize,
@@ -284,7 +284,7 @@ function getMemoryInfo(): MemoryInfo | null {
  */
 function checkMemory(): void {
   const info = getMemoryInfo()
-  if (!info) return
+  if (!info) {return}
   
   // Only report if above threshold
   if (info.usagePercent >= config.memoryThresholdPercent) {
@@ -306,11 +306,11 @@ function checkMemory(): void {
  * Start memory monitoring
  */
 function startMemoryMonitor(): void {
-  if (memoryCheckInterval) return
+  if (memoryCheckInterval) {return}
   
   // Check if memory API is available
   // @ts-expect-error - memory is not in the standard type
-  if (!performance.memory) return
+  if (!performance.memory) {return}
   
   memoryCheckInterval = setInterval(checkMemory, config.memoryCheckIntervalMs)
 }
@@ -369,7 +369,7 @@ function measureFrameRate(timestamp: number): void {
  * Start frame rate monitoring
  */
 function startFrameRateMonitor(): void {
-  if (frameRateCheckInterval) return
+  if (frameRateCheckInterval) {return}
   
   // Use requestAnimationFrame for accurate FPS measurement
   requestAnimationFrame(measureFrameRate)
@@ -445,7 +445,7 @@ export function cleanupPerformanceMonitor(): void {
  * Create a custom performance mark
  */
 export function markPerformance(name: string): void {
-  if (typeof performance === 'undefined') return
+  if (typeof performance === 'undefined') {return}
   
   performance.mark(`pb_${name}`)
 }
@@ -454,7 +454,7 @@ export function markPerformance(name: string): void {
  * Measure time between two marks
  */
 export function measurePerformance(name: string, startMark: string, endMark?: string): number | null {
-  if (typeof performance === 'undefined') return null
+  if (typeof performance === 'undefined') {return null}
   
   try {
     const start = `pb_${startMark}`
@@ -500,7 +500,7 @@ export function trackPerformanceMetric(
   value: number,
   metadata?: Record<string, unknown>
 ): void {
-  if (!config.enabled) return
+  if (!config.enabled) {return}
   
   reportMetric({
     name,

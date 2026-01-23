@@ -10,6 +10,7 @@
 import { useState, memo } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { HERO_IMAGE_ANIMATION } from '@/lib/constants'
 
 /**
  * Props for the HeroImage component.
@@ -45,25 +46,25 @@ interface HeroImageProps {
  * />
  * ```
  */
-export const HeroImage = memo(function HeroImage({
+export const HeroImage = memo(({
   src, 
   alt = '', 
   opacity = 0.15, 
   className = '',
   priority = false 
-}: HeroImageProps) {
+}: HeroImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 1.05 }}
+      initial={{ opacity: 0, scale: HERO_IMAGE_ANIMATION.INITIAL_SCALE }}
       animate={{ 
         opacity: isLoaded ? opacity : 0,
-        scale: isLoaded ? 1 : 1.05
+        scale: isLoaded ? 1 : HERO_IMAGE_ANIMATION.INITIAL_SCALE
       }}
       transition={{ 
-        duration: 0.8,
-        ease: [0.25, 0.1, 0.25, 1]
+        duration: HERO_IMAGE_ANIMATION.DURATION,
+        ease: HERO_IMAGE_ANIMATION.EASE_CURVE
       }}
       className={cn('absolute inset-0 w-full h-full', className)}
       style={{ willChange: 'opacity, transform' }}

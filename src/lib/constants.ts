@@ -100,3 +100,33 @@ export const IDLE_CALLBACK_TIMEOUT_MS = 500
  * Scroll threshold for showing back-to-top button (px)
  */
 export const SCROLL_THRESHOLD_PX = 400
+
+// =============================================================================
+// ANIMATION CONSTANTS
+// =============================================================================
+
+/**
+ * Hero image animation configuration
+ */
+export const HERO_IMAGE_ANIMATION = {
+  /** Initial scale for zoom-in effect */
+  INITIAL_SCALE: 1.05,
+  /** Bezier curve for smooth easing [x1, y1, x2, y2] */
+  EASE_CURVE: [0.25, 0.1, 0.25, 1] as readonly [number, number, number, number],
+  /** Animation duration in seconds */
+  DURATION: 0.8,
+} as const
+
+// =============================================================================
+// UI CONSTANTS
+// =============================================================================
+
+/**
+ * Material card display limits
+ */
+export const MATERIAL_CARD = {
+  /** Max properties to show before truncating */
+  MAX_PROPERTIES: 3,
+  /** Max characters for property text before truncating */
+  MAX_PROPERTY_LENGTH: 30,
+} as const

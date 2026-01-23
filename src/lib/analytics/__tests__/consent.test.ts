@@ -15,13 +15,39 @@ import {
   clearNonEssentialCookies,
   getConsentVersion,
   getConsentAuditLog,
+  resetConsentState,
 } from '../consent'
 import { DEFAULT_CONSENT_STATE } from '../types'
 
+/**
+ * Helper to clear all cookies
+ */
+function clearAllCookies(): void {
+  document.cookie.split(';').forEach(c => {
+    const name = c.split('=')[0]?.trim() ?? ''
+    if (name) {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+    }
+  })
+}
+
 describe('Consent Management', () => {
   beforeEach(() => {
+    // Clear all storage
     localStorage.clear()
-    // Reset cookies
+    sessionStorage.clear()
+    clearAllCookies()
+    // Reset in-memory state
+    resetConsentState()
+  })
+
+  afterEach(() => {
+    // Ensure cleanup after each test
+    localStorage.clear()
+    sessionStorage.clear()
+    clearAllCookies()
+    resetConsentState()
+    vi.restoreAllMocks()
   })
 
   describe('getConsentState', () => {
@@ -463,10 +489,15 @@ describe('Consent Management', () => {
     it('handles localStorage write failure gracefully', () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       
-      // Mock localStorage.setItem to throw
+      // Store the original setItem
       const originalSetItem = localStorage.setItem.bind(localStorage)
-      localStorage.setItem = vi.fn().mockImplementation(() => {
-        throw new Error('Storage quota exceeded')
+      
+      // Mock localStorage.setItem to throw only for pb_consent key
+      localStorage.setItem = vi.fn().mockImplementation((key: string, value: string) => {
+        if (key === 'pb_consent') {
+          throw new Error('Storage quota exceeded')
+        }
+        return originalSetItem(key, value)
       })
       
       // Should not throw even when storage fails

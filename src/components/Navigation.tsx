@@ -53,7 +53,7 @@ interface NavigationProps {
  * />
  * ```
  */
-export const Navigation = memo(function Navigation({ currentPage, onNavigate, onOpenSearch, isDark, onToggleTheme }: NavigationProps) {
+export const Navigation = memo(({ currentPage, onNavigate, onOpenSearch, isDark, onToggleTheme }: NavigationProps) => {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const handleNavigate = useCallback((page: string) => {

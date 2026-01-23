@@ -180,11 +180,11 @@ export function getResourceMetrics(): ResourceMetrics {
  * Get resource type from initiator and URL
  */
 function getResourceType(initiator: string, url: string): string {
-  if (initiator === 'script' || url.endsWith('.js')) return 'js'
-  if (initiator === 'css' || url.endsWith('.css')) return 'css'
-  if (initiator === 'img' || /\.(png|jpg|jpeg|gif|webp|svg|avif)$/i.test(url)) return 'image'
-  if (initiator === 'font' || /\.(woff2?|ttf|otf|eot)$/i.test(url)) return 'font'
-  if (initiator === 'fetch' || initiator === 'xmlhttprequest') return 'api'
+  if (initiator === 'script' || url.endsWith('.js')) {return 'js'}
+  if (initiator === 'css' || url.endsWith('.css')) {return 'css'}
+  if (initiator === 'img' || /\.(png|jpg|jpeg|gif|webp|svg|avif)$/i.test(url)) {return 'image'}
+  if (initiator === 'font' || /\.(woff2?|ttf|otf|eot)$/i.test(url)) {return 'font'}
+  if (initiator === 'fetch' || initiator === 'xmlhttprequest') {return 'api'}
   return 'other'
 }
 
@@ -216,7 +216,7 @@ export function getMemoryMetrics(): MemoryMetrics | undefined {
     jsHeapSizeLimit: number
   } }).memory
   
-  if (!memory) return undefined
+  if (!memory) {return undefined}
   
   const usedMB = memory.usedJSHeapSize / (1024 * 1024)
   const totalMB = memory.totalJSHeapSize / (1024 * 1024)
@@ -373,10 +373,10 @@ export function formatBenchmarkResults(result: BenchmarkResult): string {
   
   lines.push('')
   lines.push('🎯 Core Web Vitals:')
-  if (result.webVitals.fcp) lines.push(`   FCP:  ${result.webVitals.fcp}ms ${getRating(result.webVitals.fcp, 1800, 3000)}`)
-  if (result.webVitals.lcp) lines.push(`   LCP:  ${result.webVitals.lcp}ms ${getRating(result.webVitals.lcp, 2500, 4000)}`)
-  if (result.webVitals.ttfb) lines.push(`   TTFB: ${result.webVitals.ttfb}ms ${getRating(result.webVitals.ttfb, 800, 1800)}`)
-  if (result.webVitals.cls !== undefined) lines.push(`   CLS:  ${result.webVitals.cls} ${getRating(result.webVitals.cls, 0.1, 0.25)}`)
+  if (result.webVitals.fcp) {lines.push(`   FCP:  ${result.webVitals.fcp}ms ${getRating(result.webVitals.fcp, 1800, 3000)}`)}
+  if (result.webVitals.lcp) {lines.push(`   LCP:  ${result.webVitals.lcp}ms ${getRating(result.webVitals.lcp, 2500, 4000)}`)}
+  if (result.webVitals.ttfb) {lines.push(`   TTFB: ${result.webVitals.ttfb}ms ${getRating(result.webVitals.ttfb, 800, 1800)}`)}
+  if (result.webVitals.cls !== undefined) {lines.push(`   CLS:  ${result.webVitals.cls} ${getRating(result.webVitals.cls, 0.1, 0.25)}`)}
   
   if (result.memory) {
     lines.push('')
@@ -403,8 +403,8 @@ export function formatBenchmarkResults(result: BenchmarkResult): string {
  * Format bytes to human readable string
  */
 function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  if (bytes < 1024) {return `${bytes} B`}
+  if (bytes < 1024 * 1024) {return `${(bytes / 1024).toFixed(1)} KB`}
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
 }
 
@@ -412,8 +412,8 @@ function formatBytes(bytes: number): string {
  * Get rating emoji based on thresholds
  */
 function getRating(value: number, good: number, poor: number): string {
-  if (value <= good) return '✅ Good'
-  if (value <= poor) return '⚠️ Needs Improvement'
+  if (value <= good) {return '✅ Good'}
+  if (value <= poor) {return '⚠️ Needs Improvement'}
   return '❌ Poor'
 }
 
@@ -421,8 +421,8 @@ function getRating(value: number, good: number, poor: number): string {
  * Get score emoji
  */
 function getScoreEmoji(score: number): string {
-  if (score >= 90) return '🟢'
-  if (score >= 50) return '🟡'
+  if (score >= 90) {return '🟢'}
+  if (score >= 50) {return '🟡'}
   return '🔴'
 }
 
@@ -434,7 +434,7 @@ function getScoreEmoji(score: number): string {
  * Run benchmark after page load and log results
  */
 export function runBenchmarkOnLoad(): void {
-  if (typeof window === 'undefined') return
+  if (typeof window === 'undefined') {return}
   
   // Wait for page to fully load
   if (document.readyState === 'complete') {
@@ -474,14 +474,14 @@ export function compareBenchmarks(
   return [
     {
       metric: 'Page Load',
-      before: before.navigation.pageLoad + 'ms',
-      after: after.navigation.pageLoad + 'ms',
+      before: `${before.navigation.pageLoad  }ms`,
+      after: `${after.navigation.pageLoad  }ms`,
       change: formatChange(before.navigation.pageLoad, after.navigation.pageLoad),
     },
     {
       metric: 'TTFB',
-      before: before.navigation.ttfb + 'ms',
-      after: after.navigation.ttfb + 'ms',
+      before: `${before.navigation.ttfb  }ms`,
+      after: `${after.navigation.ttfb  }ms`,
       change: formatChange(before.navigation.ttfb, after.navigation.ttfb),
     },
     {
@@ -492,8 +492,8 @@ export function compareBenchmarks(
     },
     {
       metric: 'FCP',
-      before: (before.webVitals.fcp || 0) + 'ms',
-      after: (after.webVitals.fcp || 0) + 'ms',
+      before: `${before.webVitals.fcp || 0  }ms`,
+      after: `${after.webVitals.fcp || 0  }ms`,
       change: formatChange(before.webVitals.fcp || 0, after.webVitals.fcp || 0),
     },
     {
@@ -509,7 +509,7 @@ function formatChange(before: number, after: number, higherIsBetter = false): st
   const diff = after - before
   const pct = before === 0 ? 0 : Math.round((diff / before) * 100)
   
-  if (diff === 0) return '→ No change'
+  if (diff === 0) {return '→ No change'}
   
   const improved = higherIsBetter ? diff > 0 : diff < 0
   const arrow = improved ? '↓' : '↑'
