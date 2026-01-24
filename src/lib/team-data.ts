@@ -31,7 +31,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'rylie-green',
     name: 'Prof Rylie Green',
-    title: 'Chief Scientific Officer',
+    title: 'Co-Founder & Chief Scientific Officer',
     role: 'CSO',
     category: 'founders',
     shortBio: '[Short bio placeholder]', // TODO: Add real bio - CSO background and expertise
@@ -45,7 +45,7 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'ben-green',
     name: 'Ben Green',
-    title: 'Managing Director',
+    title: 'Co-Founder & Managing Director',
     role: 'Managing Director',
     category: 'founders',
     shortBio: '[Short bio placeholder]',
@@ -56,8 +56,8 @@ export const teamMembers: TeamMember[] = [
     linkedin: 'https://linkedin.com'
   },
   {
-    id: 'alexey-nonikov',
-    name: 'Dr Alexey Nonikov',
+    id: 'alexey-novikov',
+    name: 'Dr Alexey Novikov',
     title: 'Design Engineer',
     role: 'Design Engineer',
     category: 'design-engineering',
