@@ -41,44 +41,6 @@ export default defineConfig({
     rollupOptions: {
       // Mark optional dependencies as external - they are loaded dynamically at runtime
       external: ['@microsoft/applicationinsights-web', 'web-vitals'],
-      output: {
-        manualChunks: (id) => {
-          // Vendor chunks for better caching
-          if (id.includes('node_modules')) {
-            // Core React - always needed
-            if (id.includes('react-dom')) {
-              return 'vendor-react'
-            }
-            if (id.includes('react') && !id.includes('react-dom')) {
-              return 'vendor-react'
-            }
-            if (id.includes('scheduler')) {
-              return 'vendor-react'
-            }
-            // Framer Motion - lazy load for animations
-            if (id.includes('framer-motion')) {
-              return 'vendor-motion'
-            }
-            // Radix UI primitives - needed for UI components
-            if (id.includes('@radix-ui')) {
-              return 'vendor-ui'
-            }
-            // Icons - commonly used
-            if (id.includes('@phosphor-icons')) {
-              return 'vendor-icons'
-            }
-            // Other UI libs
-            if (id.includes('sonner') || id.includes('cmdk')) {
-              return 'vendor-ui'
-            }
-          }
-          // Split analytics into separate chunk (lazy loaded)
-          if (id.includes('/lib/analytics/')) {
-            return 'analytics'
-          }
-          return undefined
-        },
-      },
     },
     // Reduce chunk size warnings threshold
     chunkSizeWarningLimit: 500,
