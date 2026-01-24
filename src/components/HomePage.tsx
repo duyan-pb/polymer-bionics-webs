@@ -100,7 +100,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4 md:mb-6 tracking-tight leading-[1.1]">
-                Flexible Bioelectronics & Polymer Medical Devices
+                Flexible Bioelectronics & Medical Devices
               </h1>
               <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 mb-8 md:mb-10 leading-relaxed max-w-2xl">
                 Polymer Bionics develops advanced flexible polymer-based bioelectronics and medical devices for next-generation healthcare solutions, combining material science innovation with clinical precision.
