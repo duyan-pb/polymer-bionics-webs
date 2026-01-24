@@ -144,7 +144,7 @@ function App() {
       })
       
       // Also preload the logo
-      import('@/assets/images/unnamed.png').then((module) => {
+      import('@/assets/images/logo-nav.webp').then((module) => {
         const img = new Image()
         img.src = module.default
       }).catch(() => {})

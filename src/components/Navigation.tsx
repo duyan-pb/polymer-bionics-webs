@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { List, MagnifyingGlass, MoonStars, SunDim } from '@phosphor-icons/react'
 import { NAV_ITEMS } from '@/lib/constants'
-import logoPng from '@/assets/images/unnamed.png'
+import logoWebp from '@/assets/images/logo-nav.webp'
 
 /**
  * Props for the Navigation component.
@@ -83,8 +83,10 @@ export const Navigation = memo(({ currentPage, onNavigate, onOpenSearch, isDark,
               }}
             >
               <img 
-                src={logoPng} 
+                src={logoWebp} 
                 alt="Polymer Bionics" 
+                width={45}
+                height={44}
                 className="h-11 w-auto transition-all duration-300 group-hover:brightness-110"
               />
             </motion.div>
@@ -117,7 +119,7 @@ export const Navigation = memo(({ currentPage, onNavigate, onOpenSearch, isDark,
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" aria-label="Open navigation menu">
                 <List size={24} />
               </Button>
             </SheetTrigger>
