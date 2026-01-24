@@ -6,7 +6,6 @@
  * Features:
  * - React with SWC for fast compilation
  * - Tailwind CSS v4 integration
- * - GitHub Spark plugin integration
  * - Phosphor Icons proxy plugin
  * - Optimized chunk splitting for better caching
  * - Path alias (@/) for clean imports
@@ -15,39 +14,20 @@
  */
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
-import { defineConfig, type PluginOption } from "vite";
-
-import sparkPlugin from "@github/spark/spark-vite-plugin";
-import createIconImportProxy from "@github/spark/vitePhosphorIconProxyPlugin";
+import { defineConfig } from "vite";
 import { resolve } from 'path'
 
 const projectRoot = process.env.PROJECT_ROOT || import.meta.dirname
-
-/**
- * Check if we're building for a static deployment (e.g., Netlify, Azure Static Web Apps)
- * When STATIC_DEPLOY is set, we use a local localStorage-based KV implementation
- * instead of the GitHub Spark KV backend.
- */
-const isStaticDeploy = process.env.STATIC_DEPLOY === 'true'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    // DO NOT REMOVE
-    createIconImportProxy() as PluginOption,
-    // Only include Spark plugin when not doing static deploy
-    ...(isStaticDeploy ? [] : [sparkPlugin() as PluginOption]),
   ],
   resolve: {
     alias: {
       '@': resolve(projectRoot, 'src'),
-      // When doing static deploy, use localStorage-based KV hook and stub Spark runtime
-      ...(isStaticDeploy ? {
-        '@github/spark/hooks': resolve(projectRoot, 'src/hooks/use-kv.ts'),
-        '@github/spark/spark': resolve(projectRoot, 'src/lib/spark-stub.ts'),
-      } : {}),
     }
   },
   build: {

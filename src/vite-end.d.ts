@@ -1,8 +1,7 @@
 /**
  * Vite Environment Type Declarations
  * 
- * TypeScript type definitions for Vite build-time environment variables
- * and GitHub Spark runtime constants.
+ * TypeScript type definitions for Vite build-time environment variables.
  * 
  * Build Metadata (from GitHub Actions):
  * - VITE_BUILD_TIME: Commit timestamp
@@ -18,8 +17,6 @@
  * @see docs/ANALYTICS.md for analytics setup
  */
 /// <reference types="vite/client" />
-declare const GITHUB_RUNTIME_PERMANENT_NAME: string
-declare const BASE_KV_SERVICE_URL: string
 
 // Build metadata injected by GitHub Actions
 interface ImportMetaEnv {

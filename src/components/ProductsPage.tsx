@@ -5,29 +5,19 @@
  */
 
 import { useState, useMemo, useCallback, type MouseEvent, type KeyboardEvent } from 'react'
-import { useKV } from '@github/spark/hooks'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Package, X } from '@phosphor-icons/react'
-import type { PaymentOrderDraft, Product } from '@/lib/types'
+import type { Product } from '@/lib/types'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { Card } from '@/components/ui/card'
 import ElastomerArray from '@/assets/images/optimized/Elastomer_array.webp'
 import { ProductDialogContent } from '@/components/products/ProductDialogContent'
 import { ProductCard } from '@/components/products/ProductCard'
 
-const INITIAL_PAYMENT_DRAFT: PaymentOrderDraft = {
-  name: '',
-  email: '',
-  company: '',
-  product: '',
-  quantity: '',
-  country: '',
-  notes: '',
-}
 /**
  * Props for the ProductsPage component.
  */
@@ -36,6 +26,8 @@ interface ProductsPageProps {
   products: Product[]
   /** Navigation handler */
   onNavigate: (page: string) => void
+  /** Callback to set payment draft for order flow */
+  onSetPaymentDraft: (draft: { product: string; quantity: string } | null) => void
 }
 
 /**
@@ -50,11 +42,10 @@ interface ProductsPageProps {
  * @example
  * <ProductsPage products={productList} onNavigate={handleNavigate} />
  */
-export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
+export function ProductsPage({ products, onNavigate, onSetPaymentDraft }: ProductsPageProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [, setPaymentDraft] = useKV<PaymentOrderDraft>('paymentDraft', INITIAL_PAYMENT_DRAFT)
   const FEATURE_PREVIEW_COUNT = 3
   const isLoading = !products
 
@@ -108,16 +99,12 @@ export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
   const handleBuy = useCallback((e: MouseEvent, product: Product) => {
     e.stopPropagation()
     setSelectedProduct(null)
-    setPaymentDraft(prev => {
-      const safeDraft = prev ?? INITIAL_PAYMENT_DRAFT
-      return {
-        ...safeDraft,
-        product: product.name,
-        quantity: safeDraft.quantity || '1',
-      }
+    onSetPaymentDraft({
+      product: product.name,
+      quantity: '1',
     })
     onNavigate('payment')
-  }, [onNavigate, setPaymentDraft])
+  }, [onNavigate, onSetPaymentDraft])
 
   const hero = {
     title: 'Product Portfolio',

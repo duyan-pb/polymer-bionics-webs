@@ -92,11 +92,6 @@ vi.mock('../components/DatasheetsInitializer', () => ({
   DatasheetsInitializer: () => null,
 }))
 
-// Mock Spark KV hook
-vi.mock('@github/spark/hooks', () => ({
-  useKV: vi.fn((key: string, defaultValue: unknown) => [defaultValue, vi.fn()]),
-}))
-
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {

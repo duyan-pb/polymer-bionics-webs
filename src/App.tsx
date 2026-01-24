@@ -3,25 +3,20 @@
  * 
  * Root component that handles:
  * - Page routing and navigation
- * - KV store data subscriptions
  * - Theme management
  * - Analytics and consent integration
- * - Data initializers for KV store
+ * 
+ * Static data (team, products, etc.) is imported directly from source files.
+ * No localStorage caching - data is always fresh from the build.
  * 
  * @module App
  */
 
 import { useState, useCallback, useEffect, lazy, Suspense, type ReactElement } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useKV } from '@github/spark/hooks'
 import { Navigation } from '@/components/Navigation'
 import { Footer } from '@/components/Footer'
 import { HomePage } from '@/components/HomePage'
-import { ProductsInitializer } from '@/components/ProductsInitializer'
-import { TeamInitializer } from '@/components/TeamInitializer'
-import { NewsInitializer } from '@/components/NewsInitializer'
-import { MediaInitializer } from '@/components/MediaInitializer'
-import { DatasheetsInitializer } from '@/components/DatasheetsInitializer'
 import { FloatingContactButton } from '@/components/FloatingContactButton'
 import { BackToTopButton } from '@/components/BackToTopButton'
 import { AnalyticsProvider } from '@/components/AnalyticsProvider'
@@ -29,7 +24,11 @@ import { ConsentBanner } from '@/components/ConsentBanner'
 import { useTheme } from '@/hooks/use-theme'
 import { usePageTracking } from '@/lib/analytics/hooks'
 import { PAGE_TRANSITION } from '@/lib/constants'
-import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
+
+// Import static data directly - no caching, always fresh from build
+import { teamMembers } from '@/lib/team-data'
+import { initialProducts } from '@/lib/seed-data'
+import { placeholderVideos, placeholderCaseStudies, placeholderDatasheets } from '@/lib/media-data'
 import { placeholderPublications, placeholderNews } from '@/lib/publications-data'
 
 // =============================================================================
@@ -68,18 +67,20 @@ const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [paymentDraft, setPaymentDraft] = useState<{ product: string; quantity: string } | null>(null)
   const { isDark, toggleTheme } = useTheme()
   
   // Track page views when currentPage changes
   usePageTracking(currentPage)
   
-  const [team] = useKV<TeamMember[]>('team', [])
-  const [products] = useKV<Product[]>('products', [])
-  const [videos] = useKV<Video[]>('videos', [])
-  const [caseStudies] = useKV<CaseStudy[]>('caseStudies', [])
-  const [datasheets] = useKV<Datasheet[]>('datasheets', [])
-  const [news] = useKV<NewsItem[]>('news', placeholderNews)
-  const [publications] = useKV<Publication[]>('publications', placeholderPublications)
+  // Static data - imported directly, no caching needed
+  const team = teamMembers
+  const products = initialProducts
+  const videos = placeholderVideos
+  const caseStudies = placeholderCaseStudies
+  const datasheets = placeholderDatasheets
+  const news = placeholderNews
+  const publications = placeholderPublications
 
   // Global error handler
   useEffect(() => {
@@ -159,15 +160,15 @@ function App() {
 
   const pageRenderers: Record<string, () => ReactElement> = {
     home: () => <HomePage onNavigate={handleNavigate} />,
-    team: () => <TeamPage team={team || []} onNavigate={handleNavigate} />,
+    team: () => <TeamPage team={team} onNavigate={handleNavigate} />,
     materials: () => <MaterialsPage onNavigate={handleNavigate} />,
     applications: () => <ApplicationsPage onNavigate={handleNavigate} />,
-    products: () => <ProductsPage products={products || []} onNavigate={handleNavigate} />,
-    media: () => <MediaPage videos={videos || []} caseStudies={caseStudies || []} onNavigate={handleNavigate} />,
-    datasheets: () => <DatasheetsPage datasheets={datasheets || []} onNavigate={handleNavigate} />,
-    news: () => <NewsPage news={news || []} publications={publications || []} onNavigate={handleNavigate} />,
+    products: () => <ProductsPage products={products} onNavigate={handleNavigate} onSetPaymentDraft={setPaymentDraft} />,
+    media: () => <MediaPage videos={videos} caseStudies={caseStudies} onNavigate={handleNavigate} />,
+    datasheets: () => <DatasheetsPage datasheets={[]} onNavigate={handleNavigate} />,
+    news: () => <NewsPage news={news} publications={publications} onNavigate={handleNavigate} />,
     contact: () => <ContactPage onNavigate={handleNavigate} />,
-    payment: () => <PaymentPage onNavigate={handleNavigate} products={products || []} />,
+    payment: () => <PaymentPage onNavigate={handleNavigate} products={products} paymentDraft={paymentDraft} />,
   }
 
   const renderPage = () => {
@@ -192,11 +193,6 @@ function App() {
         >
           Skip to main content
         </a>
-        <ProductsInitializer />
-        <TeamInitializer />
-        <NewsInitializer />
-        <MediaInitializer />
-        <DatasheetsInitializer />
         <Navigation 
           currentPage={currentPage} 
           onNavigate={handleNavigate} 
@@ -225,10 +221,10 @@ function App() {
               open={isSearchOpen}
               onOpenChange={setIsSearchOpen}
               onNavigate={handleNavigate}
-              products={products || []}
-              team={team || []}
-              datasheets={datasheets || []}
-              news={news || []}
+              products={products}
+              team={team}
+              datasheets={datasheets}
+              news={news}
             />
           </Suspense>
         )}

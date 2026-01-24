@@ -84,6 +84,7 @@ describe('ProductsPage', () => {
   ]
 
   const mockOnNavigate = vi.fn()
+  const mockOnSetPaymentDraft = vi.fn()
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -91,14 +92,14 @@ describe('ProductsPage', () => {
 
   describe('rendering', () => {
     it('renders page hero with title', () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       expect(screen.getByTestId('page-hero')).toBeInTheDocument()
       expect(screen.getByRole('heading', { level: 1, name: 'Product Portfolio' })).toBeInTheDocument()
     })
 
     it('renders all product cards', () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       expect(screen.getByText('BioFlex Electrode Array')).toBeInTheDocument()
       expect(screen.getByText('HydroGel Coating')).toBeInTheDocument()
@@ -106,14 +107,14 @@ describe('ProductsPage', () => {
     })
 
     it('displays product taglines', () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       expect(screen.getByText('Advanced neural interface')).toBeInTheDocument()
       expect(screen.getByText('Biocompatible surface treatment')).toBeInTheDocument()
     })
 
     it('shows regulatory status in cards', () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       // Check that cards are rendered with product info
       expect(screen.getByText('BioFlex Electrode Array')).toBeInTheDocument()
@@ -122,21 +123,21 @@ describe('ProductsPage', () => {
 
   describe('category filtering', () => {
     it('displays category badges', () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       // All badge should exist
       expect(screen.getByText('all')).toBeInTheDocument()
     })
 
     it('displays products when filter is applied', async () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       // Products should be visible
       expect(screen.getByText('BioFlex Electrode Array')).toBeInTheDocument()
     })
 
     it('maintains product visibility when filters change', async () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       // Products should be visible initially
       expect(screen.getByText('BioFlex Electrode Array')).toBeInTheDocument()
@@ -146,7 +147,7 @@ describe('ProductsPage', () => {
 
   describe('product selection', () => {
     it('opens product dialog on card click', async () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       const cards = screen.getAllByTestId('product-card')
       await userEvent.click(cards[0])
@@ -157,7 +158,7 @@ describe('ProductsPage', () => {
     })
 
     it('displays selected product name in dialog', async () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       const cards = screen.getAllByTestId('product-card')
       await userEvent.click(cards[0])
@@ -170,7 +171,7 @@ describe('ProductsPage', () => {
 
   describe('loading state', () => {
     it('handles empty products array as loading state', () => {
-      render(<ProductsPage products={[]} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={[]} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       // Should show page hero even with empty data
       expect(screen.getByTestId('page-hero')).toBeInTheDocument()
@@ -179,7 +180,7 @@ describe('ProductsPage', () => {
 
   describe('navigation', () => {
     it('opens product dialog with product details', async () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       // Open product dialog first
       const cards = screen.getAllByTestId('product-card')
@@ -193,7 +194,7 @@ describe('ProductsPage', () => {
 
   describe('empty state', () => {
     it('handles empty products array gracefully', () => {
-      render(<ProductsPage products={[]} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={[]} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       // Should not crash and should show page hero
       expect(screen.getByTestId('page-hero')).toBeInTheDocument()
@@ -202,7 +203,7 @@ describe('ProductsPage', () => {
 
   describe('accessibility', () => {
     it('product cards are keyboard accessible', () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       const cards = screen.getAllByTestId('product-card')
       cards.forEach(card => {
@@ -213,19 +214,23 @@ describe('ProductsPage', () => {
 
   describe('buy button', () => {
     it('renders Buy button on product cards', () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       const buyButtons = screen.getAllByRole('button', { name: /buy/i })
       expect(buyButtons.length).toBeGreaterThan(0)
     })
 
-    it('Buy button navigates to contact page', async () => {
-      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} />)
+    it('Buy button navigates to payment page and sets draft', async () => {
+      render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       const buyButtons = screen.getAllByRole('button', { name: /buy/i })
       await userEvent.click(buyButtons[0])
       
-      expect(mockOnNavigate).toHaveBeenCalledWith('contact')
+      expect(mockOnSetPaymentDraft).toHaveBeenCalledWith({
+        product: 'BioFlex Electrode Array',
+        quantity: '1',
+      })
+      expect(mockOnNavigate).toHaveBeenCalledWith('payment')
     })
   })
 })

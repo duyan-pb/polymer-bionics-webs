@@ -1,15 +1,14 @@
 # Copilot Instructions for Polymer Bionics Website
 
 ## Project Overview
-A **GitHub Spark** React application for a biotech company website showcasing medical device innovations. Built with Vite, React 19, Tailwind CSS v4, and shadcn/ui components.
+A React application for a biotech company website showcasing medical device innovations. Built with Vite, React 19, Tailwind CSS v4, and shadcn/ui components.
 
 ## Architecture
 
-### State Management with Spark KV Store
-- Data persistence uses `useKV` hook from `@github/spark/hooks` (not React state or localStorage)
-- Pattern: `const [data, setData] = useKV<Type[]>('key', defaultValue)`
-- All entities (team, products, videos, etc.) stored in KV with typed interfaces from [src/lib/types.ts](src/lib/types.ts)
-- **Static Deployments**: When deployed to Netlify/Vercel, uses localStorage fallback via [src/hooks/use-kv.ts](src/hooks/use-kv.ts)
+### State Management
+- Static data is imported directly from source files in `lib/*.ts`
+- Page components receive data as props from App.tsx
+- No localStorage caching - data is always fresh from source files
 
 ### Centralized Constants
 - Navigation items, team categories, and page transitions are defined in [src/lib/constants.ts](src/lib/constants.ts)
@@ -22,14 +21,13 @@ A **GitHub Spark** React application for a biotech company website showcasing me
 // Page components receive data from App.tsx via props
 // All page components should accept onNavigate prop for navigation
 export function TeamPage({ team, onNavigate }: { team: TeamMember[], onNavigate: (page: string) => void }) {
-  const [team, setTeam] = useKV<TeamMember[]>('team', initialTeam) // re-subscribe to enable updates
+  // Use team prop directly - no hooks needed
 }
 ```
 
 ### Custom Hooks
 - `useTheme()` - Theme management with localStorage persistence ([src/hooks/use-theme.ts](src/hooks/use-theme.ts))
 - `useMobile()` - Responsive breakpoint detection ([src/hooks/use-mobile.ts](src/hooks/use-mobile.ts))
-- `useLocalKV()` - localStorage KV store for static deployments ([src/hooks/use-kv.ts](src/hooks/use-kv.ts))
 
 ### Reusable Components
 - `PageHero` - Standardized hero section for all pages ([src/components/PageHero.tsx](src/components/PageHero.tsx))
@@ -41,9 +39,9 @@ export function TeamPage({ team, onNavigate }: { team: TeamMember[], onNavigate:
 - `FloatingContactButton` - Floating contact CTA ([src/components/FloatingContactButton.tsx](src/components/FloatingContactButton.tsx))
 
 ### Data Flow
-1. **Initializers** seed KV store on first load
-2. **Seed data** defined in lib/*.ts files
-3. **App.tsx** subscribes to all KV stores and passes to page components
+1. **Static data** defined in lib/*.ts files (team-data.ts, seed-data.ts, etc.)
+2. **App.tsx** imports data directly and passes to page components as props
+3. Every deployment gets fresh data from source files
 
 ### Navigation
 - Single-page app with state-based routing in App.tsx
@@ -66,11 +64,6 @@ export function TeamPage({ team, onNavigate }: { team: TeamMember[], onNavigate:
 ### Path Aliases
 - `@/` maps to `src/` - always use for imports
 
-### Spark-Specific Features
-- LLM: `await window.spark.llm(prompt, "gpt-4o", true)`
-- User: `await window.spark.user()` returns `{ isOwner: boolean }`
-- **WhatsApp/mailto links are blocked** - use copyWhatsAppNumber()
-
 ## File Organization
 ```
 src/
@@ -87,7 +80,6 @@ src/
 ├── hooks/
 │   ├── use-theme.ts     # Theme management hook
 │   ├── use-mobile.ts    # Responsive detection hook
-│   ├── use-kv.ts        # localStorage KV for static deploys
 │   └── __tests__/       # Hook tests
 ├── lib/
 │   ├── analytics/       # Analytics infrastructure
@@ -96,7 +88,6 @@ src/
 │   ├── utils.ts         # cn() helper and utilities
 │   ├── feature-flags.ts # Feature flag system
 │   ├── analytics-config.ts # Analytics configuration
-│   ├── spark-stub.ts    # No-op Spark runtime (static deploys)
 │   ├── seed-data.ts     # Product generation
 │   ├── team-data.ts     # Team definitions
 │   ├── materials-data.ts # Materials & applications
@@ -116,14 +107,13 @@ src/
 2. Add case in App.tsx renderPage()
 3. Add nav item in constants.ts NAV_ITEMS
 
-### Adding New Data Types
+### Adding New Data
 1. Define interface in types.ts
-2. Add KV subscription in App.tsx
-3. Create initializer if needed
+2. Add data to appropriate lib/*.ts file
+3. Import in App.tsx and pass to page component
 
 ## Anti-Patterns to Avoid
 - Don't define navigation items inline - use NAV_ITEMS
-- Don't use window.location.href for mailto - blocked in Spark
 - Don't duplicate interface definitions - use types.ts
 - Don't use 'image' field - use 'imageUrl' consistently
 - Don't omit onNavigate prop from page components
@@ -152,12 +142,8 @@ These are injected during CI builds and accessible via `import.meta.env`:
 
 ## Testing Locally
 ```bash
-# For static deployments (Netlify/Vercel) - recommended
-$env:STATIC_DEPLOY="true"; npm run dev   # PowerShell (Windows)
-STATIC_DEPLOY=true npm run dev           # Bash (Mac/Linux)
-
+npm run dev          # Development server
 npm run build        # Production build (with type check)
-npm run build:static # Build for static hosting (Netlify/Vercel)
 npm run preview      # Preview production build
 npm run lint         # Run ESLint
 npm run test         # Run tests
@@ -165,14 +151,6 @@ npm run test:watch   # Run tests in watch mode
 npm run test:coverage # Run tests with coverage
 npm run validate     # Run all checks (lint, typecheck, test, build)
 ```
-
-### Static Deployment Notes
-- `build:static` uses localStorage-based KV instead of Spark backend
-- Set `STATIC_DEPLOY=true` to enable the fallback (automatic via netlify.toml)
-- Aliases `@github/spark/hooks` to local KV hook and `@github/spark/spark` to a no-op stub
-- Data persists in browser localStorage with `spark_kv_` prefix
-- Cross-tab synchronization via storage events
-- **Local dev requires STATIC_DEPLOY=true** when not using Spark backend
 
 ### Empty State Pattern ("Coming Soon")
 Pages with empty data arrays display a "Coming Soon" card with:

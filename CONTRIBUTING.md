@@ -298,19 +298,25 @@ feat(products): add product comparison feature
 
 1. Define interface in `src/lib/types.ts`
 2. Create seed data in `src/lib/[name]-data.ts`
-3. Add KV subscription in `App.tsx`
-4. Create initializer component if needed
+3. Import data directly in `App.tsx` and pass to page components as props
+4. Create page component if needed
 
-### Using the KV Store
+### Using Static Data
 
 ```tsx
-import { useKV } from '@github/spark/hooks';
+// In lib/my-data.ts
+export const myData: MyType[] = [...]
 
-// In component
-const [data, setData] = useKV<DataType[]>('key', defaultValue);
+// In App.tsx
+import { myData } from '@/lib/my-data'
+// Pass to page component via props
+<MyPage data={myData} onNavigate={handleNavigate} />
+
+// In MyPage.tsx
+export function MyPage({ data, onNavigate }: MyPageProps) {
+  // Use data directly - no hooks needed
+}
 ```
-
-> **Note**: For static deployments (Netlify, Vercel), the build process automatically aliases `useKV` to use a localStorage-based implementation. See [src/hooks/use-kv.ts](src/hooks/use-kv.ts) for details.
 
 ### Reusable Components
 

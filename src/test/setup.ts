@@ -10,7 +10,6 @@
  * - matchMedia: Media query mocking for responsive tests
  * - ResizeObserver: For components using resize detection
  * - IntersectionObserver: For lazy-loading components
- * - window.spark: GitHub Spark API mock
  * 
  * Lifecycle:
  * - beforeEach: Resets all storage mocks

@@ -4,7 +4,6 @@
  * Initializes the React application with:
  * - React 18 createRoot for concurrent rendering
  * - Error boundary for graceful error handling
- * - GitHub Spark integration
  * - Global styles and theming
  * 
  * @module main
@@ -12,7 +11,6 @@
 
 import { createRoot } from 'react-dom/client'
 import { ErrorBoundary } from "react-error-boundary";
-import "@github/spark/spark"
 
 import App from './App.tsx'
 import { ErrorFallback } from './ErrorFallback.tsx'

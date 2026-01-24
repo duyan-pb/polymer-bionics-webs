@@ -12,7 +12,6 @@
     "coverage/**"
   ],
   "ignoreDependencies": [
-    "@github/spark",
     "@tailwindcss/postcss",
     "@tailwindcss/container-queries",
     "tw-animate-css",

@@ -19,7 +19,6 @@
 // =============================================================================
 
 import { useCallback, useEffect, useState } from 'react'
-import { useKV } from '@github/spark/hooks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -33,12 +32,14 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { submitContactForm } from '@/lib/form-service'
-import type { PaymentOrderDraft, Product } from '@/lib/types'
+import type { Product } from '@/lib/types'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface PaymentPageProps {
   onNavigate: (page: string) => void
   products: Product[]
+  /** Payment draft passed from ProductsPage when user clicks "Request Order" */
+  paymentDraft: { product: string; quantity: string } | null
 }
 
 interface OrderFormData {
@@ -71,8 +72,7 @@ const INITIAL_ORDER_FORM: OrderFormData = {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-export function PaymentPage({ onNavigate, products }: PaymentPageProps) {
-  const [paymentDraft, setPaymentDraft] = useKV<PaymentOrderDraft>('paymentDraft', INITIAL_ORDER_FORM)
+export function PaymentPage({ onNavigate, products, paymentDraft }: PaymentPageProps) {
   const [formData, setFormData] = useState<OrderFormData>(INITIAL_ORDER_FORM)
   const [errors, setErrors] = useState<OrderFormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -164,7 +164,6 @@ export function PaymentPage({ onNavigate, products }: PaymentPageProps) {
         })
         setFormData(INITIAL_ORDER_FORM)
         setErrors({})
-        setPaymentDraft(INITIAL_ORDER_FORM)
       } else {
         toast.error('Failed to send order request', {
           description: result.error ?? 'Please try again later.',
@@ -177,7 +176,7 @@ export function PaymentPage({ onNavigate, products }: PaymentPageProps) {
     } finally {
       setIsSubmitting(false)
     }
-  }, [formData, validateForm, setPaymentDraft])
+  }, [formData, validateForm])
 
   return (
     <PageLayout hero={hero}>

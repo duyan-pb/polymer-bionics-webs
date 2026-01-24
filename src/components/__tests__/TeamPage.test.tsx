@@ -8,11 +8,6 @@ import userEvent from '@testing-library/user-event'
 import { TeamPage } from '../TeamPage'
 import type { TeamMember } from '@/lib/types'
 
-// Mock useKV hook
-vi.mock('@github/spark/hooks', () => ({
-  useKV: <T,>(key: string, initialValue: T): [T, (v: T) => void] => [initialValue, vi.fn()],
-}))
-
 // Mock PageHero
 vi.mock('@/components/PageHero', () => ({
   PageHero: ({ title, description }: { title: string; description: string }) => (

@@ -28,7 +28,6 @@ A professional biotech company website showcasing Polymer Bionics' medical innov
 | [shadcn/ui](https://ui.shadcn.com) | Component Library |
 | [Framer Motion](https://framer.com/motion) | Animations |
 | [Phosphor Icons](https://phosphoricons.com) | Icons |
-| [GitHub Spark](https://githubnext.com/projects/github-spark) | KV Store & Hosting |
 
 ## Getting Started
 
@@ -174,7 +173,6 @@ src/
 │   ├── feature-flags.ts     # Feature flag system
 │   ├── analytics-config.ts  # Analytics configuration
 │   ├── utils.ts             # Utility functions (cn, etc.)
-│   ├── spark-stub.ts        # No-op Spark runtime (static deployments)
 │   ├── seed-data.ts         # Product seed data
 │   ├── team-data.ts         # Team member data
 │   ├── materials-data.ts    # Materials & applications
@@ -183,9 +181,8 @@ src/
 │   └── contact-config.ts    # Contact information
 ├── test/                    # Test configuration
 │   ├── setup.ts             # Vitest setup
-│   └── mocks/               # Test mocks (Spark, window, etc.)
+│   └── mocks/               # Test mocks (window, etc.)
 ├── types/                   # Additional type definitions
-│   ├── spark.d.ts           # GitHub Spark types
 │   └── lucide-react.d.ts    # Lucide icon types
 └── styles/
     └── theme.css            # CSS custom properties
@@ -221,21 +218,17 @@ The site automatically deploys to Azure Web App when changes are pushed to `main
 
 ### Static Hosting (Netlify/Vercel)
 
-The app can also be deployed to static hosting platforms like Netlify or Vercel:
+The app can be deployed to static hosting platforms like Netlify or Vercel:
 
 ```bash
-# Build for static deployment
-npm run build:static
+# Build for deployment
+npm run build
 ```
 
-This uses a localStorage-based KV store instead of GitHub Spark's backend. The build process:
-- Aliases `@github/spark/hooks` to a localStorage-based `useKV` hook
-- Aliases `@github/spark/spark` to a no-op stub (prevents `/_spark/` API calls)
-- Data persists in browser localStorage with `spark_kv_` prefix
-- Supports cross-tab synchronization via storage events
+The application uses direct static imports for all data - no external backend required.
 
 **Netlify Configuration** (already included in `netlify.toml`):
-- Build command: `npm run build:static`
+- Build command: `npm run build`
 - Publish directory: `dist`
 - SPA routing: All routes redirect to `index.html`
 
@@ -270,6 +263,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Built with [GitHub Spark](https://githubnext.com/projects/github-spark)
 - UI components from [shadcn/ui](https://ui.shadcn.com)
 - Icons from [Phosphor Icons](https://phosphoricons.com)

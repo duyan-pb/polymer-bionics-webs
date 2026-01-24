@@ -93,3 +93,57 @@ export async function generateBiomaterialsProducts(): Promise<Product[]> {
   
   return products
 }
+
+/**
+ * Pre-generated products from materials and applications data.
+ * This is a static array that doesn't require async/await.
+ * Used directly in App.tsx to avoid localStorage caching issues.
+ */
+function createInitialProducts(): Product[] {
+  const products: Product[] = []
+  
+  materials.forEach((material, index) => {
+    products.push({
+      id: `material-${material.id}`,
+      name: material.name,
+      tagline: 'Tagline placeholder',
+      description: 'Description placeholder',
+      technicalDescription: 'Technical description placeholder',
+      category: 'advanced-materials',
+      specifications: 'Specifications placeholder',
+      features: ['Feature placeholder', 'Feature placeholder', 'Feature placeholder'],
+      applications: ['Application placeholder', 'Application placeholder'],
+      regulatoryStatus: 'Regulatory status placeholder',
+      datasheetId: `datasheet-${material.id}`,
+      caseStudyId: index % 2 === 0 ? `case-study-${material.id}` : undefined
+    })
+  })
+  
+  applications.forEach((application, index) => {
+    const product: Product = {
+      id: `application-${application.id}`,
+      name: application.name,
+      tagline: 'Tagline placeholder',
+      description: 'Description placeholder',
+      technicalDescription: 'Technical description placeholder',
+      category: 'clinical-applications',
+      specifications: 'Specifications placeholder',
+      features: ['Feature placeholder', 'Feature placeholder', 'Feature placeholder'],
+      applications: ['Application placeholder', 'Application placeholder'],
+      regulatoryStatus: 'Regulatory status placeholder',
+      datasheetId: `datasheet-${application.id}`,
+      caseStudyId: index % 3 === 0 ? `case-study-${application.id}` : undefined
+    }
+    
+    if (application.id === 'inear-eeg') {
+      product.images = inEarDeviceImages
+      product.imageUrl = pxl9
+    }
+    
+    products.push(product)
+  })
+  
+  return products
+}
+
+export const initialProducts: Product[] = createInitialProducts()

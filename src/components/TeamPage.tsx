@@ -12,7 +12,6 @@
 // TODO: Add Google Scholar and LinkedIn URLs for each member
 
 import { useState, useMemo, useCallback } from 'react'
-import { useKV } from '@github/spark/hooks'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { PageLayout } from '@/components/layout/PageLayout'
@@ -47,9 +46,8 @@ interface TeamPageProps {
  * <TeamPage team={teamMembers} onNavigate={handleNavigate} />
  * ```
  */
-export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
+export function TeamPage({ team, onNavigate }: TeamPageProps) {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null)
-  const [team] = useKV<TeamMember[]>('team', initialTeam)
   const isLoading = !team || team.length === 0
 
   // Group team members by category using the centralized TEAM_CATEGORIES
@@ -64,7 +62,7 @@ export function TeamPage({ team: initialTeam, onNavigate }: TeamPageProps) {
   }, [team])
 
   // Order categories for display
-  const categoryOrder: TeamCategory[] = ['founders', 'management', 'lab-management', 'research-engineering', 'research', 'engineering', 'advisory']
+  const categoryOrder: TeamCategory[] = ['founders', 'management', 'design-engineering', 'advisory']
 
   const handleMemberSelect = useCallback((member: TeamMember) => {
     setSelectedMember(member)

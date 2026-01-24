@@ -1,11 +1,7 @@
 # Netlify Configuration for Polymer Bionics Website
-# 
-# This config enables the static deployment mode which uses localStorage
-# instead of the GitHub Spark KV backend.
 
 [build]
-  # Build command that enables static deploy mode
-  command = "npm run build:static"
+  command = "npm run build"
   publish = "dist"
 
 [build.environment]
