@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { ClickableCard } from '@/components/ClickableCard'
 import { MATERIAL_CARD } from '@/lib/constants'
 import type { Material } from '@/lib/types'
+import { MaterialPlaceholderImage } from '@/components/materials/MaterialPlaceholderImage'
 
 interface MaterialCardProps {
   material: Material
@@ -28,7 +29,7 @@ export function MaterialCard({ material, onSelect }: MaterialCardProps) {
         {material.imageUrl ? (
           <img src={material.imageUrl} alt={material.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
         ) : (
-          <div className={`w-full h-full ${material.imageClass || 'bg-gradient-to-br from-primary/20 to-secondary/10'}`}></div>
+          <MaterialPlaceholderImage materialName={material.name} imageClass={material.imageClass} />
         )}
       </div>
       <div className="p-5 md:p-8">

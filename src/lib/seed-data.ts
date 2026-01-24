@@ -84,7 +84,7 @@ export async function generateBiomaterialsProducts(): Promise<Product[]> {
     
     if (application.id === 'inear-eeg') {
       product.images = inEarDeviceImages
-      product.imageUrl = pxl1
+      product.imageUrl = pxl9  // PXL_20251216_115854143.jpg
     }
     
     products.push(product)

@@ -25,6 +25,8 @@ export function ProductsInitializer() {
   const hasInitialized = useRef(false)
 
   useEffect(() => {
+    console.log('[ProductsInitializer] Current products:', products?.length || 0, 'hasInitialized:', hasInitialized.current)
+    
     // Only run once, and only if products are empty
     if (hasInitialized.current) {
       return
@@ -32,9 +34,11 @@ export function ProductsInitializer() {
     
     if ((products?.length || 0) === 0) {
       hasInitialized.current = true
+      console.log('[ProductsInitializer] Generating products...')
       
       generateBiomaterialsProducts()
         .then(generatedProducts => {
+          console.log('[ProductsInitializer] Generated', generatedProducts.length, 'products')
           setProducts(generatedProducts)
         })
         .catch(error => {

@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { ClickableCard } from '@/components/ClickableCard'
 import { Download, CheckCircle, MagnifyingGlassPlus, ShoppingCart } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
+import { ProductPlaceholderImage } from '@/components/products/ProductPlaceholderImage'
 
 interface ProductCardProps {
   product: Product
@@ -40,7 +41,8 @@ export function ProductCard({
       onClick={() => onSelect(product)}
       ariaLabel={`View details for ${product.name}`}
     >
-      {product.imageUrl && (
+      {/* Always render image area for consistent card heights */}
+      {product.imageUrl ? (
         <div 
           className="mb-4 md:mb-6 rounded-lg overflow-hidden relative group cursor-zoom-in"
           onClick={(e) => {
@@ -72,6 +74,13 @@ export function ProductCard({
               weight="bold"
             />
           </div>
+        </div>
+      ) : (
+        <div className="mb-4 md:mb-6 rounded-lg overflow-hidden">
+          <ProductPlaceholderImage 
+            productName={product.name} 
+            category={product.category} 
+          />
         </div>
       )}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 md:mb-4 gap-2">

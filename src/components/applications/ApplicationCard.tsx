@@ -11,6 +11,7 @@ import { ClickableCard } from '@/components/ClickableCard'
 import { CheckCircle } from '@phosphor-icons/react'
 import type { Application } from '@/lib/types'
 import { APPLICATION_BENEFIT_PREVIEW_COUNT } from '@/lib/constants'
+import { ApplicationPlaceholderImage } from '@/components/applications/ApplicationPlaceholderImage'
 
 interface ApplicationCardProps {
   application: Application
@@ -28,7 +29,7 @@ export function ApplicationCard({ application, onSelect }: ApplicationCardProps)
         {application.imageUrl ? (
           <img src={application.imageUrl} alt={application.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
         ) : (
-          <div className={`w-full h-full ${application.imageClass || 'bg-gradient-to-br from-primary/20 to-secondary/10'}`}></div>
+          <ApplicationPlaceholderImage applicationName={application.name} imageClass={application.imageClass} />
         )}
       </div>
       <div className="p-5 md:p-8">
