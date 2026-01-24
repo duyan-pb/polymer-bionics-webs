@@ -25,7 +25,7 @@ import type { TeamMember } from './types'
  * Initial team members data.
  * 
  * Note: Placeholder content should be replaced with actual team information.
- * Team members are organized by category (founders, lab-management, etc.)
+ * Team members are organized by category (founders, research-innovation, product-engineering, etc.)
  */
 export const teamMembers: TeamMember[] = [
   {

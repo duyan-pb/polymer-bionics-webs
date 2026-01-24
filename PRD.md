@@ -3,6 +3,7 @@
 A professional biotech company website showcasing Polymer Bionics' medical innovations, team expertise, and research publications in polymer-based bioelectronics and flexible medical device technology.
 
 **Experience Qualities**:
+
 1. **Pioneering** - Conveys innovation in flexible bioelectronics and polymer science through dynamic, organic design elements
 2. **Approachable** - Balances scientific credibility with warmth and accessibility through softer color palettes and inviting layouts
 3. **Precise** - Demonstrates technical excellence and medical-grade engineering through clean, well-organized information architecture
@@ -13,6 +14,7 @@ This is primarily an informational website presenting company details, team memb
 ## Essential Features
 
 ### Hero Section with Company Overview
+
 - **Functionality**: Displays company tagline, mission statement, and key value propositions
 - **Purpose**: Immediately communicates Polymer Bionics' focus and expertise in flexible bioelectronics and polymer-based medical devices
 - **Trigger**: Page load on homepage
@@ -20,6 +22,7 @@ This is primarily an informational website presenting company details, team memb
 - **Success criteria**: Clear understanding of company mission within 5 seconds
 
 ### Team Member Profiles
+
 - **Functionality**: Grid display of team members with photos, names, roles, and credentials
 - **Purpose**: Establishes credibility and expertise through showcasing qualified personnel
 - **Trigger**: Navigate to Team section
@@ -27,6 +30,7 @@ This is primarily an informational website presenting company details, team memb
 - **Success criteria**: All team members visible with key credentials immediately apparent
 
 ### Product Showcase
+
 - **Functionality**: Displays medical products/technologies with descriptions, applications, and specifications
 - **Purpose**: Demonstrates commercial applications and innovation pipeline
 - **Trigger**: Navigate to Products section
@@ -34,6 +38,7 @@ This is primarily an informational website presenting company details, team memb
 - **Success criteria**: Clear product differentiation with visual appeal and technical depth
 
 ### Materials Catalog
+
 - **Functionality**: Comprehensive display of biomaterial offerings with properties, advantages, and technical specifications
 - **Purpose**: Showcases the company's core materials science capabilities and polymer platform
 - **Trigger**: Navigate to Materials section
@@ -41,6 +46,7 @@ This is primarily an informational website presenting company details, team memb
 - **Success criteria**: Clear differentiation between material types with accessible technical information
 
 ### Applications Gallery
+
 - **Functionality**: Display of medical applications enabled by PolymerBionics materials with benefits and use cases
 - **Purpose**: Demonstrates real-world clinical applications and market opportunities for the technology
 - **Trigger**: Navigate to Applications section
@@ -48,6 +54,7 @@ This is primarily an informational website presenting company details, team memb
 - **Success criteria**: Clear connection between materials capabilities and clinical applications
 
 ### Media Gallery (Videos & Case Studies)
+
 - **Functionality**: Embedded videos and downloadable case study documents
 - **Purpose**: Provides in-depth demonstrations and clinical evidence
 - **Trigger**: Navigate to Media section
@@ -55,6 +62,7 @@ This is primarily an informational website presenting company details, team memb
 - **Success criteria**: Smooth video playback and clear case study previews
 
 ### Technical Datasheets Library
+
 - **Functionality**: Organized library of downloadable technical documents
 - **Purpose**: Provides detailed specifications for researchers and medical professionals
 - **Trigger**: Navigate to Datasheets section
@@ -62,6 +70,7 @@ This is primarily an informational website presenting company details, team memb
 - **Success criteria**: Quick access to relevant technical documentation
 
 ### News & Publications Feed
+
 - **Functionality**: Chronological display of company news and scientific publications
 - **Purpose**: Demonstrates ongoing research activity and industry presence
 - **Trigger**: Navigate to News section
@@ -85,11 +94,11 @@ The design should evoke innovation, flexibility, and biocompatibility - reflecti
 A fresh, modern scientific palette centered on teal/turquoise tones (#00A9AD) representing biocompatibility and innovation, matching the Polymer Bionics brand identity from polymerbionics.com. The color scheme evokes trust, clarity, and medical precision.
 
 - **Primary Color**: Teal/Turquoise (oklch(0.58 0.14 194) / #00A9AD) - Represents innovation, biocompatibility, and modern medical technology with a fresh, approachable feel
-- **Secondary Colors**: 
+- **Secondary Colors**:
   - Light Gray (oklch(0.95 0.005 240)) - Soft backgrounds that create clean, professional layouts
   - Clean White (oklch(1.00 0 0)) - Clean white backgrounds for maximum clarity
 - **Accent Color**: Teal/Turquoise (oklch(0.58 0.14 194) / #00A9AD) - Draws attention to key actions and interactive elements
-- **Foreground/Background Pairings**: 
+- **Foreground/Background Pairings**:
   - Primary (Teal oklch(0.58 0.14 194)): White text (oklch(1.00 0 0)) - Ratio 4.8:1 ✓
   - Accent (Teal oklch(0.58 0.14 194)): White text (oklch(1.00 0 0)) - Ratio 4.8:1 ✓
   - Background (White oklch(1.00 0 0)): Foreground text (oklch(0.20 0.01 240)) - Ratio 15.2:1 ✓
@@ -167,7 +176,7 @@ All tracking respects user consent preferences and implements privacy-first desi
 ## Tech Stack
 
 | Technology | Purpose |
-|------------|---------|
+| ---------- | ------- |
 | React 19 | UI Framework |
 | Vite 7 | Build Tool |
 | TypeScript 5.9 | Type Safety |

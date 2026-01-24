@@ -5,6 +5,7 @@ This folder contains profile images for team members displayed on the Team page.
 ## Naming Convention
 
 Use the following format for team member images:
+
 - `firstname-lastname.jpg` (or `.png`, `.webp`)
 - Example: `john-doe.jpg`
 
@@ -25,6 +26,7 @@ imageUrl: new URL('@/assets/images/team/firstname-lastname.jpg', import.meta.url
 ```
 
 Or use the public folder path:
+
 ```typescript
 imageUrl: '/assets/images/team/firstname-lastname.jpg'
 ```

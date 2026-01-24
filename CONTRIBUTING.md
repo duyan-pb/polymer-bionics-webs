@@ -115,7 +115,7 @@ npm run test -- path/to/test.ts
 All PRs must maintain these minimum coverage thresholds:
 
 | Metric | Threshold |
-|--------|-----------|
+| ------ | --------- |
 | Statements | 75% |
 | Branches | 65% |
 | Functions | 80% |
@@ -147,7 +147,7 @@ describe('useTheme', () => {
 ### Test Categories
 
 | Category | Location | Description |
-|----------|----------|-------------|
+| -------- | -------- | ----------- |
 | Unit Tests | `src/lib/__tests__/` | Test utility functions |
 | Component Tests | `src/components/__tests__/` | Test React component behavior |
 | Hook Tests | `src/hooks/__tests__/` | Test custom React hooks |
@@ -219,7 +219,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 ### Types
 
 | Type | Description |
-|------|-------------|
+| ---- | ----------- |
 | `feat` | New feature |
 | `fix` | Bug fix |
 | `docs` | Documentation changes |
@@ -232,7 +232,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Examples
 
-```
+```text
 feat(team): add team member filtering by category
 fix(navigation): resolve mobile menu not closing on page change
 docs: update README with deployment instructions
@@ -321,7 +321,7 @@ export function MyPage({ data, onNavigate }: MyPageProps) {
 ### Reusable Components
 
 | Component | Purpose |
-|-----------|---------|
+| --------- | ------- |
 | `PageHero` | Standardized page headers |
 | `ClickableCard` | Accessible clickable cards with keyboard navigation |
 | `Breadcrumbs` | Navigation breadcrumbs |
