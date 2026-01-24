@@ -85,8 +85,8 @@ export const Navigation = memo(({ currentPage, onNavigate, onOpenSearch, isDark,
               <img 
                 src={logoWebp} 
                 alt="Polymer Bionics" 
-                width={45}
-                height={44}
+                width={92}
+                height={88}
                 className="h-11 w-auto transition-all duration-300 group-hover:brightness-110"
               />
             </motion.div>
