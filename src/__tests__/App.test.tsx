@@ -76,10 +76,6 @@ vi.mock('../components/ProductsInitializer', () => ({
   ProductsInitializer: () => null,
 }))
 
-vi.mock('../components/TeamInitializer', () => ({
-  TeamInitializer: () => null,
-}))
-
 vi.mock('../components/MediaInitializer', () => ({
   MediaInitializer: () => null,
 }))

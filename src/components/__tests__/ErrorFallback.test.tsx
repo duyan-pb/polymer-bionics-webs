@@ -104,7 +104,7 @@ describe('ErrorFallback', () => {
         />
       )
       
-      expect(screen.getByText(/contact the spark author/i)).toBeInTheDocument()
+      expect(screen.getByText(/please try refreshing the page/i)).toBeInTheDocument()
     })
   })
 

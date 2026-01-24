@@ -38,9 +38,6 @@ export const contactConfig = {
 
   /**
    * WhatsApp Business configuration.
-   * 
-   * Note: In GitHub Spark, direct WhatsApp links are blocked.
-   * Use copyWhatsAppNumber() to copy to clipboard instead.
    */
   whatsapp: {
     /** WhatsApp number in international format (e.g., +447123456789) */
@@ -69,9 +66,6 @@ export const contactConfig = {
 
 /**
  * Copies the WhatsApp number to the clipboard.
- * 
- * Use this instead of direct WhatsApp links in GitHub Spark environment
- * where tel: and whatsapp: links are blocked.
  * 
  * @returns Promise resolving to `true` if copy succeeded, `false` otherwise
  * 

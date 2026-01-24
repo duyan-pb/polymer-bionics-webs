@@ -2,8 +2,7 @@
  * Contact Links Component
  * 
  * Reusable contact action buttons for WhatsApp and Email.
- * Handles clipboard copying for WhatsApp (since direct links are blocked in Spark)
- * and opens email client for email contacts.
+ * Handles clipboard copying for WhatsApp and opens email client for email contacts.
  * 
  * @module components/ContactLinks
  */
@@ -35,8 +34,7 @@ interface ContactLinksProps {
 /**
  * Contact action buttons component.
  * 
- * Provides WhatsApp and Email contact options with appropriate
- * handling for GitHub Spark environment (where mailto links are blocked).
+ * Provides WhatsApp and Email contact options.
  * 
  * @example
  * ```tsx
