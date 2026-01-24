@@ -20,7 +20,7 @@ A professional biotech company website showcasing Polymer Bionics' medical innov
 ## Tech Stack
 
 | Technology | Purpose |
-|------------|---------|
+| ---------- | ------- |
 | [React 19](https://react.dev) | UI Framework |
 | [Vite](https://vitejs.dev) | Build Tool |
 | [TypeScript](https://typescriptlang.org) | Type Safety |
@@ -53,7 +53,7 @@ npm run dev
 ### Available Scripts
 
 | Command | Description |
-|---------|-------------|
+| ------- | ----------- |
 | `npm run dev` | Start development server on port 5000 |
 | `npm run build` | Build for production (includes type check) |
 | `npm run build:static` | Build for static hosting (Netlify, Vercel) |
@@ -78,7 +78,7 @@ The project uses [Vitest](https://vitest.dev/) with [React Testing Library](http
 ### Coverage Thresholds
 
 | Metric | Global | Analytics Core | Schemas |
-|--------|--------|----------------|----------|
+| ------ | ------ | -------------- | ------- |
 | Statements | 75% | 85-90% | 95% |
 | Branches | 65% | 70-75% | 85% |
 | Functions | 80% | 90-95% | 100% |
@@ -108,7 +108,7 @@ npm run test -- src/lib/analytics/__tests__/consent.test.ts
 
 ### Test Structure
 
-```
+```text
 src/
 ├── components/__tests__/     # Component tests
 │   ├── ConsentBanner.test.tsx
@@ -126,7 +126,7 @@ src/
 
 ## Project Structure
 
-```
+```text
 src/
 ├── components/              # Feature pages + shared components
 │   ├── ui/                  # shadcn/ui primitives (DO NOT edit)
@@ -200,11 +200,13 @@ docs/                        # Documentation
 ### Automated Workflows
 
 | Workflow | Trigger | Purpose |
-|----------|---------|---------|
+| -------- | ------- | ------- |
 | **Build & Deploy** | Push to `main` | Deploys to Azure Web App |
 | **PR Validation** | Pull requests | Lint, type check, test, build verification |
 | **Dependency Review** | Pull requests | Security vulnerability scanning |
-| **CodeQL Analysis** | Push/PR/Weekly | Static code security analysis || **Code Quality** | Push/PR | Code quality metrics and analysis || **Dependabot** | Weekly | Automated dependency updates |
+| **CodeQL Analysis** | Push/PR/Weekly | Static code security analysis |
+| **Code Quality** | Push/PR | Code quality metrics and analysis |
+| **Dependabot** | Weekly | Automated dependency updates |
 
 ### Deployment
 
@@ -228,6 +230,7 @@ npm run build
 The application uses direct static imports for all data - no external backend required.
 
 **Netlify Configuration** (already included in `netlify.toml`):
+
 - Build command: `npm run build`
 - Publish directory: `dist`
 - SPA routing: All routes redirect to `index.html`
@@ -237,7 +240,7 @@ The application uses direct static imports for all data - no external backend re
 The project includes a comprehensive analytics infrastructure with privacy-first design:
 
 | Feature | Description |
-|---------|-------------|
+| ------- | ----------- |
 | **Consent Management** | GDPR-compliant consent banner with granular controls |
 | **Azure App Insights** | Application performance monitoring |
 | **Google Analytics 4** | User behavior analytics |

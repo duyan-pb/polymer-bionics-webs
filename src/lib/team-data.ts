@@ -25,7 +25,7 @@ import type { TeamMember } from './types'
  * Initial team members data.
  * 
  * Note: Placeholder content should be replaced with actual team information.
- * Team members are organized by category (founders, lab-management, etc.)
+ * Team members are organized by category (founders, research-innovation, product-engineering, etc.)
  */
 export const teamMembers: TeamMember[] = [
   {
@@ -60,7 +60,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Dr Alexey Novikov',
     title: 'Design Engineer',
     role: 'Design Engineer',
-    category: 'design-engineering',
+    category: 'research-innovation',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -73,7 +73,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Dr Estelle Cuttaz',
     title: 'Design Engineer',
     role: 'Design Engineer',
-    category: 'design-engineering',
+    category: 'product-engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -87,7 +87,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Dr Joe Goding',
     title: 'Head of R&D',
     role: 'Head of R&D',
-    category: 'design-engineering',
+    category: 'research-innovation',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -114,7 +114,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Dr Robert Toth',
     title: 'Senior Electrical Engineer',
     role: 'Senior Electrical Engineer',
-    category: 'design-engineering',
+    category: 'product-engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -128,7 +128,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Efe Sen',
     title: 'Research Engineer',
     role: 'Research Engineer',
-    category: 'design-engineering',
+    category: 'product-engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -141,7 +141,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Duy An Tran',
     title: 'Software Engineer',
     role: 'Software Engineer',
-    category: 'design-engineering',
+    category: 'product-engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],

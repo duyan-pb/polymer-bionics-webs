@@ -18,8 +18,8 @@ vi.mock('framer-motion', () => ({
 }))
 
 // Mock the logo import
-vi.mock('@/assets/images/unnamed.png', () => ({
-  default: '/mock-logo.png',
+vi.mock('@/assets/images/logo-nav.webp', () => ({
+  default: '/mock-logo.webp',
 }))
 
 describe('Navigation', () => {

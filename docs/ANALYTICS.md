@@ -25,14 +25,14 @@ This document describes the comprehensive analytics infrastructure implemented f
 17. [Epic 17: Performance Monitoring](#epic-17-performance-monitoring)
 18. [Epic 18: Monitoring Hooks](#epic-18-monitoring-hooks)
 19. [Configuration](#configuration)
-17. [React Hooks](#react-hooks)
-18. [Deployment](#deployment)
+20. [React Hooks](#react-hooks)
+21. [Deployment](#deployment)
 
 ---
 
 ## Architecture Overview
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                              Client Browser                                  │
 ├─────────────────────────────────────────────────────────────────────────────┤
@@ -92,7 +92,7 @@ This document describes the comprehensive analytics infrastructure implemented f
 
 ### File Structure
 
-```
+```text
 src/lib/analytics/
 ├── index.ts           # Barrel exports
 ├── types.ts           # TypeScript type definitions
@@ -141,7 +141,7 @@ GDPR-compliant consent management with hard gating. No tracking fires without ex
 ### Consent Categories
 
 | Category | Description | Required |
-|----------|-------------|----------|
+| -------- | ----------- | -------- |
 | `necessary` | Essential cookies for site function | Yes |
 | `analytics` | Performance and usage tracking | No |
 | `marketing` | Advertising and remarketing | No |
@@ -179,6 +179,7 @@ interface ConsentState {
 ### Storage
 
 Consent is stored in:
+
 1. **Cookie** (`pb_consent`) - Works across subdomains, 365-day expiry
 2. **localStorage** - Backup for cookie issues
 
@@ -234,6 +235,7 @@ function MyComponent() {
 ### Consent Banner Component
 
 The `ConsentBanner` component provides:
+
 - Main banner with Accept All / Necessary Only / Manage buttons
 - Preferences modal with toggles for each category
 - `ManageCookiesLink` for footer/settings
@@ -311,6 +313,7 @@ flushAppInsights(): void
 ### Error Tracking
 
 Global error handler automatically captures:
+
 - Unhandled exceptions
 - Unhandled promise rejections
 
@@ -591,7 +594,7 @@ Azure Function for server-authoritative conversion tracking with idempotency gua
 
 ### Endpoint
 
-```
+```text
 POST /api/events/collect
 ```
 
@@ -716,6 +719,7 @@ Identity data is stored with fallbacks:
 ### Session Management
 
 Sessions rotate based on:
+
 - **30 minutes of inactivity** (configurable)
 - **Daily reset** (optional, enabled by default)
 
@@ -890,7 +894,7 @@ Capture and persist UTM parameters for marketing attribution.
 ### UTM Parameters
 
 | Parameter | Example | Purpose |
-|-----------|---------|---------|
+| --------- | ------- | ------- |
 | `utm_source` | `google` | Traffic source |
 | `utm_medium` | `cpc` | Marketing medium |
 | `utm_campaign` | `spring_sale` | Campaign name |
@@ -904,7 +908,7 @@ type AttributionPolicy = 'first-touch' | 'last-touch' | 'session'
 ```
 
 | Policy | Behavior |
-|--------|----------|
+| ------ | -------- |
 | `first-touch` | Keep original UTM, ignore new ones (default) |
 | `last-touch` | Always overwrite with latest UTM |
 | `session` | Reset per session, don't persist long-term |
@@ -1006,7 +1010,7 @@ interface ExportBatch {
 
 ### ADLS Folder Structure
 
-```
+```text
 analytics/
 ├── events/
 │   ├── date_partition=2024-01-01/
@@ -1232,6 +1236,7 @@ interface SessionReplayConfig {
 ### Default Masking
 
 Automatically masks:
+
 - Password fields
 - Email/phone inputs
 - Credit card fields
@@ -1445,7 +1450,7 @@ Core Web Vitals tracking for performance monitoring.
 ### Metrics Tracked
 
 | Metric | Full Name | Good | Needs Improvement | Poor |
-|--------|-----------|------|-------------------|------|
+| ------ | --------- | ---- | ----------------- | ---- |
 | **LCP** | Largest Contentful Paint | ≤2.5s | ≤4.0s | >4.0s |
 | **INP** | Interaction to Next Paint | ≤200ms | ≤500ms | >500ms |
 | **CLS** | Cumulative Layout Shift | ≤0.1 | ≤0.25 | >0.25 |
@@ -1818,7 +1823,7 @@ type MetricCategory = 'resource' | 'long-task' | 'memory' | 'frame-rate' | 'cust
 ### Automatically Tracked Metrics
 
 | Metric | Category | Description |
-|--------|----------|-------------|
+| ------ | -------- | ----------- |
 | `slow_resource` | resource | Resources taking >500ms to load |
 | `long_task` | long-task | Main thread tasks >50ms |
 | `memory_usage` | memory | JS heap size and utilization |

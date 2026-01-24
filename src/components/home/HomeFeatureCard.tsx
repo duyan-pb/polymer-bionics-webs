@@ -27,7 +27,7 @@ export function HomeFeatureCard({ title, description, actionLabel, icon, onSelec
       ariaLabel={ariaLabel}
     >
       <div className="text-primary mb-3 md:mb-4 md:w-12 md:h-12">{icon}</div>
-      <h3 className="text-xl md:text-2xl mb-2 md:mb-3">{title}</h3>
+      <h2 className="text-xl md:text-2xl mb-2 md:mb-3">{title}</h2>
       <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4 leading-relaxed">
         {description}
       </p>

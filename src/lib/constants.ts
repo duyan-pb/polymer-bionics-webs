@@ -41,7 +41,8 @@ export const NAV_ITEMS: NavItem[] = [
 export const TEAM_CATEGORIES = {
   founders: 'Founders',
   management: 'Project Management',
-  'design-engineering': 'Design & Engineering',
+  'research-innovation': 'Research, Design & Innovation',
+  'product-engineering': 'Product Development & Engineering',
   advisory: 'Scientific Advisory Board',
 } as const
 

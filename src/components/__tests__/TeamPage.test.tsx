@@ -65,7 +65,7 @@ describe('TeamPage', () => {
       title: 'Lead Scientist',
       bio: 'Alice specializes in polymer chemistry.',
       shortBio: 'Polymer chemistry specialist',
-      category: 'research',
+      category: 'research-innovation',
     },
     {
       id: 'member-4',
@@ -74,7 +74,7 @@ describe('TeamPage', () => {
       title: 'Senior Engineer',
       bio: 'Bob designs manufacturing processes.',
       shortBio: 'Manufacturing process designer',
-      category: 'engineering',
+      category: 'product-engineering',
     },
   ]
 

@@ -137,6 +137,8 @@ export function FloatingContactButton() {
           size="lg"
           className="rounded-full h-14 w-14 shadow-lg"
           onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? 'Close contact menu' : 'Open contact menu'}
+          aria-expanded={isOpen}
         >
           <AnimatePresence mode="wait">
             {isOpen ? (
