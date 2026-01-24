@@ -28,7 +28,7 @@ import { AnalyticsProvider } from '@/components/AnalyticsProvider'
 import { ConsentBanner } from '@/components/ConsentBanner'
 import { useTheme } from '@/hooks/use-theme'
 import { usePageTracking } from '@/lib/analytics/hooks'
-import { PAGE_TRANSITION, IDLE_CALLBACK_TIMEOUT_MS } from '@/lib/constants'
+import { PAGE_TRANSITION } from '@/lib/constants'
 import type { TeamMember, Product, Video, CaseStudy, Datasheet, NewsItem, Publication } from '@/lib/types'
 import { placeholderPublications, placeholderNews } from '@/lib/publications-data'
 
@@ -111,36 +111,50 @@ function App() {
     document.body.dataset.page = currentPage
   }, [currentPage])
 
+  // Preload ALL pages and images immediately after first render for instant navigation
   useEffect(() => {
-    const preload = () => {
-      import('@/components/ProductsPage')
-      import('@/components/MediaPage')
-      import('@/components/DatasheetsPage')
-      import('@/components/ContactPage')
-      import('@/components/TeamPage')
-      import('@/components/PaymentPage')
+    const preloadAllPages = () => {
+      // Preload all page chunks in parallel
+      Promise.all([
+        import('@/components/TeamPage'),
+        import('@/components/MaterialsPage'),
+        import('@/components/ApplicationsPage'),
+        import('@/components/ProductsPage'),
+        import('@/components/MediaPage'),
+        import('@/components/DatasheetsPage'),
+        import('@/components/NewsPage'),
+        import('@/components/ContactPage'),
+        import('@/components/PaymentPage'),
+        import('@/components/GlobalSearch'),
+      ]).catch(() => {
+        // Silently ignore preload failures - pages will load on demand
+      })
     }
 
-    type IdleCallback = (cb: IdleRequestCallback) => number
-    type IdleCancelCallback = (id: number) => void
-    const win = window as Window & { requestIdleCallback?: IdleCallback; cancelIdleCallback?: IdleCancelCallback }
-    let timeoutId: number | undefined
-    let idleId: number | undefined
-
-    if (win.requestIdleCallback) {
-      idleId = win.requestIdleCallback(preload)
-    } else {
-      timeoutId = window.setTimeout(preload, IDLE_CALLBACK_TIMEOUT_MS)
+    const preloadAllImages = () => {
+      // Import all optimized images and preload them into browser cache
+      const imageImports = import.meta.glob('@/assets/images/optimized/*.webp', { eager: true, query: '?url', import: 'default' })
+      
+      Object.values(imageImports).forEach((src) => {
+        if (typeof src === 'string') {
+          const img = new Image()
+          img.src = src
+        }
+      })
+      
+      // Also preload the logo
+      import('@/assets/images/unnamed.png').then((module) => {
+        const img = new Image()
+        img.src = module.default
+      }).catch(() => {})
     }
 
-    return () => {
-      if (idleId && win.cancelIdleCallback) {
-        win.cancelIdleCallback(idleId)
-      }
-      if (timeoutId) {
-        window.clearTimeout(timeoutId)
-      }
-    }
+    // Start preloading immediately after first paint
+    // Using requestAnimationFrame ensures we don't block initial render
+    requestAnimationFrame(() => {
+      preloadAllPages()
+      preloadAllImages()
+    })
   }, [])
 
   const pageRenderers: Record<string, () => ReactElement> = {
