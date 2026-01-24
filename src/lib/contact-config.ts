@@ -21,9 +21,9 @@ export const contactConfig = {
     /** Sales and business development email */
     sales: 'sales@polymerbionics.com',
     /** Default order enquiry subject */
-    orderSubject: 'Order enquiry',
+    orderSubject: 'Product Enquiry - Request for Quotation',
     /** Default order enquiry body template */
-    orderTemplate: `Hello Polymer Bionics team,\n\nI would like to place an order or request a quote. Please find the details below:\n\n- Product: \n- Quantity: \n- Company / Organization: \n- Country: \n- Intended application: \n- Preferred delivery timeframe: \n- Additional notes: \n\nThank you,\n[Your name]`,
+    orderTemplate: `Dear Polymer Bionics Sales Team,\n\nI am writing to enquire about placing an order or requesting a quotation for your products.\n\nPlease find my requirements below:\n\nProduct of interest: [Please specify]\nQuantity required: [Please specify]\nOrganisation: [Company/Institution name]\nCountry: [Your country]\nIntended application: [Brief description]\nPreferred delivery timeframe: [e.g., Within 2 weeks]\n\nAdditional information or special requirements:\n[Any other details]\n\nKind regards,\n[Your full name]\n[Your position/title]\n[Contact telephone number]`,
   },
 
   /**
@@ -82,6 +82,69 @@ export async function copyWhatsAppNumber(): Promise<boolean> {
   }
 }
 
+export interface EmailContext {
+  sourcePage?: string
+  sourcePath?: string
+  sourceProduct?: string
+}
+
+const formatPageLabel = (page?: string) => {
+  if (!page) {
+    return undefined
+  }
+  return page
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+}
+
+const getDefaultEmailContext = (): EmailContext => {
+  if (typeof document === 'undefined') {
+    return {}
+  }
+
+  const page = formatPageLabel(document.body?.dataset?.page)
+  const path = window?.location?.pathname
+  return {
+    sourcePage: page,
+    sourcePath: path && path !== '/' ? path : undefined,
+  }
+}
+
+export const getOrderEmailBody = (context?: EmailContext) => {
+  const resolvedContext = { ...getDefaultEmailContext(), ...context }
+  const lines = [
+    'Dear Polymer Bionics Sales Team,',
+    '',
+    'I am writing to enquire about placing an order or requesting a quotation for your products.',
+    '',
+    'Please find my requirements below:',
+    '',
+    `Product of interest: ${resolvedContext.sourceProduct ?? '[Please specify]'}`,
+    'Quantity required: [Please specify]',
+    'Organisation: [Company/Institution name]',
+    'Country: [Your country]',
+    'Intended application: [Brief description]',
+    'Preferred delivery timeframe: [e.g., Within 2 weeks]',
+    '',
+    'Additional information or special requirements:',
+    '[Any other details]',
+  ]
+
+  if (resolvedContext.sourcePage || resolvedContext.sourcePath) {
+    lines.push('', '---')
+    if (resolvedContext.sourcePage) {
+      lines.push(`Enquiry source: ${resolvedContext.sourcePage}`)
+    }
+    if (resolvedContext.sourcePath) {
+      lines.push(`Page: ${resolvedContext.sourcePath}`)
+    }
+  }
+
+  lines.push('', 'Kind regards,', '[Your full name]', '[Your position/title]', '[Contact telephone number]')
+
+  return lines.join('\n')
+}
+
 /**
  * Generates a mailto URL for opening the email client.
  * 
@@ -96,11 +159,16 @@ export async function copyWhatsAppNumber(): Promise<boolean> {
  * window.open(getEmailUrl('general', 'Product Inquiry', 'Details...'), '_blank')
  * ```
  */
-export function getEmailUrl(type: 'general' | 'sales' = 'general', subject?: string, body?: string): string {
+export function getEmailUrl(
+  type: 'general' | 'sales' = 'general',
+  subject?: string,
+  body?: string,
+  context?: EmailContext
+): string {
   const email = contactConfig.email[type]
   const shouldUseDefaultTemplate = !subject && !body
   const resolvedSubject = subject ?? (shouldUseDefaultTemplate ? contactConfig.email.orderSubject : undefined)
-  const resolvedBody = body ?? (shouldUseDefaultTemplate ? contactConfig.email.orderTemplate : undefined)
+  const resolvedBody = body ?? (shouldUseDefaultTemplate ? getOrderEmailBody(context) : undefined)
   const params = new URLSearchParams()
 
   if (resolvedSubject) {

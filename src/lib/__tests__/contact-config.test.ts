@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '../contact-config'
+import { contactConfig, copyWhatsAppNumber, getEmailUrl, getOrderEmailBody } from '../contact-config'
 
 describe('contact-config', () => {
   describe('contactConfig object', () => {
@@ -119,7 +119,7 @@ describe('contact-config', () => {
       const url = getEmailUrl()
 
       expect(url).toBe(
-        `mailto:${contactConfig.email.general}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(contactConfig.email.orderTemplate)}`
+        `mailto:${contactConfig.email.general}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(getOrderEmailBody())}`
       )
     })
 
@@ -127,7 +127,7 @@ describe('contact-config', () => {
       const url = getEmailUrl('general')
 
       expect(url).toBe(
-        `mailto:${contactConfig.email.general}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(contactConfig.email.orderTemplate)}`
+        `mailto:${contactConfig.email.general}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(getOrderEmailBody())}`
       )
     })
 
@@ -135,7 +135,7 @@ describe('contact-config', () => {
       const url = getEmailUrl('sales')
 
       expect(url).toBe(
-        `mailto:${contactConfig.email.sales}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(contactConfig.email.orderTemplate)}`
+        `mailto:${contactConfig.email.sales}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(getOrderEmailBody())}`
       )
     })
 
@@ -167,6 +167,17 @@ describe('contact-config', () => {
       
       expect(url).toBe(
         `mailto:${contactConfig.email.general}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      )
+    })
+    
+    it('includes context when no subject/body provided', () => {
+      const url = getEmailUrl('general', undefined, undefined, {
+        sourcePage: 'Products',
+        sourceProduct: 'BioFlex 300',
+      })
+
+      expect(url).toBe(
+        `mailto:${contactConfig.email.general}?subject=${encodeURIComponent(contactConfig.email.orderSubject)}&body=${encodeURIComponent(getOrderEmailBody({ sourcePage: 'Products', sourceProduct: 'BioFlex 300' }))}`
       )
     })
   })
