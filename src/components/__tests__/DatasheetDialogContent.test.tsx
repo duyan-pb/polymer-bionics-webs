@@ -6,6 +6,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { DatasheetDialogContent } from '../datasheets/DatasheetDialogContent'
+import { Dialog } from '../ui/dialog'
 import type { Datasheet } from '../../lib/types'
 
 describe('DatasheetDialogContent', () => {
@@ -23,8 +24,17 @@ describe('DatasheetDialogContent', () => {
     },
   }
 
+  // Helper to render with Dialog wrapper
+  const renderWithDialog = (ui: React.ReactElement) => {
+    return render(
+      <Dialog open={true}>
+        {ui}
+      </Dialog>
+    )
+  }
+
   it('renders datasheet details', () => {
-    render(
+    renderWithDialog(
       <DatasheetDialogContent
         datasheet={datasheet}
         onDownload={vi.fn()}
@@ -40,7 +50,7 @@ describe('DatasheetDialogContent', () => {
   it('calls onDownload when button is clicked', async () => {
     const handleDownload = vi.fn()
 
-    render(
+    renderWithDialog(
       <DatasheetDialogContent
         datasheet={datasheet}
         onDownload={handleDownload}

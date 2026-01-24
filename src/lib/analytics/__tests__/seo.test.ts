@@ -342,16 +342,16 @@ describe('SEO Infrastructure', () => {
   })
 
   describe('executeRedirect', () => {
-    it('changes pathname for relative paths', () => {
+    it('calls location.assign for relative paths', () => {
       executeRedirect({ from: '/old', to: '/new', status: 301 })
       
-      expect(mockLocation.pathname).toBe('/new')
+      expect(mockLocation.assign).toHaveBeenCalledWith('/new')
     })
 
-    it('changes href for absolute URLs', () => {
+    it('calls location.assign for absolute URLs', () => {
       executeRedirect({ from: '/old', to: 'https://example.com/new', status: 301 })
       
-      expect(mockLocation.href).toBe('https://example.com/new')
+      expect(mockLocation.assign).toHaveBeenCalledWith('https://example.com/new')
     })
   })
 

@@ -65,7 +65,7 @@ describe('form-service', () => {
     }
 
     it('returns success in mock mode', async () => {
-      const consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       
       const result = await submitContactForm(validContactData)
       
@@ -77,7 +77,7 @@ describe('form-service', () => {
     })
 
     it('handles form data without optional company field', async () => {
-      const consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       
       const dataWithoutCompany: ContactFormData = {
         name: 'Jane Doe',
@@ -116,7 +116,7 @@ describe('form-service', () => {
     }
 
     it('returns success in mock mode', async () => {
-      const consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       
       const result = await submitNewsletterSubscription(validNewsletterData)
       
@@ -127,7 +127,7 @@ describe('form-service', () => {
     })
 
     it('logs helpful setup instructions in mock mode', async () => {
-      const consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
       
       await submitNewsletterSubscription(validNewsletterData)
       

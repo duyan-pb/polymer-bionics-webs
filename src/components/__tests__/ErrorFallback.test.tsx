@@ -35,7 +35,7 @@ describe('ErrorFallback', () => {
         />
       )
       
-      expect(screen.getByText(/encountered a runtime error/i)).toBeInTheDocument()
+      expect(screen.getByText(/an unexpected error occurred/i)).toBeInTheDocument()
     })
 
     it('displays error message', () => {
