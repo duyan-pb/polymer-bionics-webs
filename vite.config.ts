@@ -93,9 +93,16 @@ export default defineConfig({
     chunkSizeWarningLimit: 500,
     // Enable CSS code splitting
     cssCodeSplit: true,
+    // Enable asset inlining for small assets
+    assetsInlineLimit: 4096, // Inline assets < 4KB as base64
   },
   // Optimize dependency pre-bundling
   optimizeDeps: {
     include: ['react', 'react-dom', 'framer-motion'],
+  },
+  // Esbuild optimizations for faster builds
+  esbuild: {
+    // Remove console.log in production
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
   },
 });

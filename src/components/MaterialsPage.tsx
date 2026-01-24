@@ -13,7 +13,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { materials } from '@/lib/materials-data'
 import type { Material } from '@/lib/types'
 import { PageHero } from '@/components/PageHero'
-import CESheet from '@/assets/images/CE_sheet.png'
+import CESheet from '@/assets/images/optimized/CE_sheet.webp'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { MaterialDialogContent } from '@/components/materials/MaterialDialogContent'
 

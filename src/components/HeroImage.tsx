@@ -1,16 +1,14 @@
 /**
  * Hero Image Component
  * 
- * Animated background image for hero sections.
- * Features fade-in animation and optimized loading.
+ * Background image for hero sections with instant display.
+ * Uses CSS background-image for immediate rendering without loading flash.
  * 
  * @module components/HeroImage
  */
 
-import { useState, memo } from 'react'
-import { motion } from 'framer-motion'
+import { memo } from 'react'
 import { cn } from '@/lib/utils'
-import { HERO_IMAGE_ANIMATION } from '@/lib/constants'
 
 /**
  * Props for the HeroImage component.
@@ -18,24 +16,23 @@ import { HERO_IMAGE_ANIMATION } from '@/lib/constants'
 interface HeroImageProps {
   /** Image source URL */
   src: string
-  /** Alt text for accessibility */
+  /** Alt text for accessibility (used as aria-label) */
   alt?: string
   /** Image opacity (0-1, default: 0.15) */
   opacity?: number
   /** Additional CSS classes */
   className?: string
-  /** Whether to load eagerly (for above-the-fold images) */
+  /** Whether to load eagerly - not used, kept for API compatibility */
   priority?: boolean
 }
 
 /**
- * Animated hero background image.
+ * Hero background image with instant display.
  * 
- * Features:
- * - Fade-in animation on load
- * - Scale animation for visual interest
- * - Lazy loading by default
- * - Configurable opacity overlay
+ * Uses CSS background-image instead of img element for:
+ * - Instant rendering (no loading state needed)
+ * - Better performance with pre-optimized images
+ * - Simpler DOM structure
  * 
  * @example
  * ```tsx
@@ -51,34 +48,16 @@ export const HeroImage = memo(({
   alt = '', 
   opacity = 0.15, 
   className = '',
-  priority = false 
 }: HeroImageProps) => {
-  const [isLoaded, setIsLoaded] = useState(false)
-
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: HERO_IMAGE_ANIMATION.INITIAL_SCALE }}
-      animate={{ 
-        opacity: isLoaded ? opacity : 0,
-        scale: isLoaded ? 1 : HERO_IMAGE_ANIMATION.INITIAL_SCALE
+    <div 
+      className={cn('absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat', className)}
+      style={{ 
+        backgroundImage: `url(${src})`,
+        opacity,
       }}
-      transition={{ 
-        duration: HERO_IMAGE_ANIMATION.DURATION,
-        ease: HERO_IMAGE_ANIMATION.EASE_CURVE
-      }}
-      className={cn('absolute inset-0 w-full h-full', className)}
-      style={{ willChange: 'opacity, transform' }}
-    >
-      <img 
-        src={src} 
-        alt={alt}
-        className="w-full h-full object-cover"
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        fetchPriority={priority ? "high" : "auto"}
-        aria-hidden={!alt}
-        onLoad={() => setIsLoaded(true)}
-      />
-    </motion.div>
+      role="img"
+      aria-label={alt || undefined}
+    />
   )
 })

@@ -24,7 +24,7 @@ import { ContactLinks } from '@/components/ContactLinks'
 import { ClickableCard } from '@/components/ClickableCard'
 import { openExternal } from '@/lib/utils'
 import { ContentState } from '@/components/ContentState'
-import BackgroundCover from '@/assets/images/Background_Cover.png'
+import BackgroundCover from '@/assets/images/optimized/Background_Cover.webp'
 import { PageLayout } from '@/components/layout/PageLayout'
 
 /**

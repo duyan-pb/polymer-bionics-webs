@@ -11,7 +11,7 @@
  * @module App
  */
 
-import { useState, useCallback, useEffect, lazy, Suspense, memo, type ReactElement } from 'react'
+import { useState, useCallback, useEffect, lazy, Suspense, type ReactElement } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useKV } from '@github/spark/hooks'
 import { Navigation } from '@/components/Navigation'
@@ -54,20 +54,6 @@ const GlobalSearch = lazy(() => import('@/components/GlobalSearch').then(m => ({
 // =============================================================================
 // COMPONENTS
 // =============================================================================
-
-/**
- * Loading fallback component displayed while lazy-loaded pages are fetched.
- */
-const PageLoader = memo(() => {
-  return (
-    <div className="min-h-[50vh] flex items-center justify-center">
-      <div className="animate-pulse flex flex-col items-center gap-4">
-        <div className="w-12 h-12 rounded-full bg-primary/20" />
-        <div className="h-4 w-32 bg-muted rounded" />
-      </div>
-    </div>
-  )
-})
 
 /**
  * Main application component.
@@ -178,7 +164,8 @@ function App() {
 
     // HomePage is eagerly loaded, others are lazy
     if (currentPage === 'home') {return pageContent}
-    return <Suspense fallback={<PageLoader />}>{pageContent}</Suspense>
+    // Use null fallback for instant page switch (pages are preloaded on idle)
+    return <Suspense fallback={null}>{pageContent}</Suspense>
   }
 
   return (

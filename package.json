@@ -95,7 +95,6 @@
         "zod": "^3.25.76"
     },
     "devDependencies": {
-        "cross-env": "^7.0.3",
         "@eslint/js": "^9.39.2",
         "@stryker-mutator/core": "^9.4.0",
         "@stryker-mutator/typescript-checker": "^9.4.0",
@@ -108,6 +107,7 @@
         "@types/react-dom": "^19.0.4",
         "@vitejs/plugin-react-swc": "^4.2.2",
         "@vitest/coverage-v8": "^4.0.16",
+        "cross-env": "^7.0.3",
         "eslint": "^9.39.2",
         "eslint-plugin-react-hooks": "^5.2.0",
         "eslint-plugin-react-refresh": "^0.4.26",
@@ -115,6 +115,7 @@
         "happy-dom": "^20.0.11",
         "jsdom": "^27.3.0",
         "knip": "^5.75.2",
+        "sharp": "^0.34.5",
         "tailwindcss": "^4.1.18",
         "type-coverage": "^2.29.7",
         "typescript": "~5.9.3",

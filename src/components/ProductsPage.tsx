@@ -15,7 +15,7 @@ import { Package, X } from '@phosphor-icons/react'
 import type { PaymentOrderDraft, Product } from '@/lib/types'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { Card } from '@/components/ui/card'
-import ElastomerArray from '@/assets/images/Elastomer_array.png'
+import ElastomerArray from '@/assets/images/optimized/Elastomer_array.webp'
 import { ProductDialogContent } from '@/components/products/ProductDialogContent'
 import { ProductCard } from '@/components/products/ProductCard'
 

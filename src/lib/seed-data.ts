@@ -23,14 +23,15 @@
 import type { Product } from './types'
 import { materials, applications } from './materials-data'
 
-import pxl1 from '@/assets/images/PXL_20251216_115711682.PORTRAIT.jpg'
-import pxl2 from '@/assets/images/PXL_20251216_115728419.PORTRAIT.ORIGINAL.jpg'
-import pxl5 from '@/assets/images/PXL_20251216_115810661.jpg'
-import pxl9 from '@/assets/images/PXL_20251216_115854143.jpg'
-import pxl10 from '@/assets/images/PXL_20251216_115905670.jpg'
-import pxl11 from '@/assets/images/PXL_20251216_115937300.jpg'
-import pxl13 from '@/assets/images/PXL_20251216_115958662.jpg'
-import pxl15 from '@/assets/images/PXL_20251216_120056575.jpg'
+// Optimized WebP images (98% smaller than originals)
+import pxl1 from '@/assets/images/optimized/PXL_20251216_115711682.PORTRAIT.webp'
+import pxl2 from '@/assets/images/optimized/PXL_20251216_115728419.PORTRAIT.ORIGINAL.webp'
+import pxl5 from '@/assets/images/optimized/PXL_20251216_115810661.webp'
+import pxl9 from '@/assets/images/optimized/PXL_20251216_115854143.webp'
+import pxl10 from '@/assets/images/optimized/PXL_20251216_115905670.webp'
+import pxl11 from '@/assets/images/optimized/PXL_20251216_115937300.webp'
+import pxl13 from '@/assets/images/optimized/PXL_20251216_115958662.webp'
+import pxl15 from '@/assets/images/optimized/PXL_20251216_120056575.webp'
 
 /** Product images for the in-ear EEG device */
 const inEarDeviceImages = [

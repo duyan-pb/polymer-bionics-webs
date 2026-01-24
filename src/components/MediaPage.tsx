@@ -23,7 +23,7 @@ import type { Video, CaseStudy } from '@/lib/types'
 import { ContactLinks } from '@/components/ContactLinks'
 import { PageHero } from '@/components/PageHero'
 import { ClickableCard } from '@/components/ClickableCard'
-import BackgroundCover from '@/assets/images/Background_Cover.png'
+import BackgroundCover from '@/assets/images/optimized/Background_Cover.webp'
 import { ComingSoonCard } from '@/components/ComingSoonCard'
 
 /**

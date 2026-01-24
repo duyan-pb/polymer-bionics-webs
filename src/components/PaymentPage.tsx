@@ -26,7 +26,7 @@ import { Badge } from '@/components/ui/badge'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { ContactCTA } from '@/components/ContactCTA'
 import { CreditCard, ShoppingCart } from '@phosphor-icons/react'
-import BackgroundCover from '@/assets/images/Background_Cover.png'
+import BackgroundCover from '@/assets/images/optimized/Background_Cover.webp'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
@@ -348,7 +348,7 @@ export function PaymentPage({ onNavigate, products }: PaymentPageProps) {
           <CardContent>
             <ContactCTA emailType="sales" variant="outline" />
             <div className="mt-4 space-y-2 text-xs text-muted-foreground">
-              <p>Typical lead time: 1–3 weeks (product dependent).</p>
+              <p>Typical lead time: X–Y weeks (product dependent).</p>
               <p>Payment options: invoice, bank transfer, or card via Stripe.</p>
               <p>Shipping: global, with VAT/tax handled by region.</p>
             </div>

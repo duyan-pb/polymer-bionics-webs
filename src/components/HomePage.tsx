@@ -12,13 +12,17 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
 import { HeroImage } from '@/components/HeroImage'
-import BackgroundCover from '@/assets/images/Background_Cover.png'
+import BackgroundCover from '@/assets/images/optimized/Background_Cover.webp'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { submitNewsletterSubscription } from '@/lib/form-service'
 import { HOME_FEATURE_ICON_SIZE, HOME_PARTNER_PLACEHOLDER_COUNT } from '@/lib/constants'
 import { HomeFeatureCard } from '@/components/home/HomeFeatureCard'
 import { NewsletterSignup } from '@/components/home/NewsletterSignup'
+
+// Preload hero image immediately for faster LCP
+const preloadImage = new Image()
+preloadImage.src = BackgroundCover
 
 // TODO: Replace partner placeholders with real partner/collaborator logos
 // TODO: Add real customer testimonials section

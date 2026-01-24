@@ -14,7 +14,7 @@
 import { PageLayout } from '@/components/layout/PageLayout'
 import { ContactForm } from '@/components/contact/ContactForm'
 import { ContactInfo } from '@/components/contact/ContactInfo'
-import BackgroundCover from '@/assets/images/Background_Cover.png'
+import BackgroundCover from '@/assets/images/optimized/Background_Cover.webp'
 import { AnimatedSplitSection } from '@/components/layout/AnimatedSplitSection'
 
 /**
