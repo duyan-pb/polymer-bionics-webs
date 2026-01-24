@@ -7,6 +7,19 @@
  * @module lib/seed-data
  */
 
+// =============================================================================
+// TODO: REPLACE ALL PLACEHOLDER PRODUCT DATA
+// =============================================================================
+// Each product needs real content for:
+// - tagline: Short marketing tagline (10-15 words)
+// - description: Product overview paragraph (50-100 words)
+// - technicalDescription: Detailed technical specs
+// - specifications: Key specifications list
+// - features: Array of 3-5 key features with real details
+// - applications: Array of 2-4 real-world applications
+// - regulatoryStatus: Current certification status (CE, FDA, etc.)
+// =============================================================================
+
 import type { Product } from './types'
 import { materials, applications } from './materials-data'
 
@@ -40,14 +53,14 @@ export async function generateBiomaterialsProducts(): Promise<Product[]> {
     products.push({
       id: `material-${material.id}`,
       name: material.name,
-      tagline: 'Tagline placeholder',
-      description: 'Description placeholder',
-      technicalDescription: 'Technical description placeholder',
+      tagline: 'Tagline placeholder', // TODO: Add real marketing tagline
+      description: 'Description placeholder', // TODO: Add product description
+      technicalDescription: 'Technical description placeholder', // TODO: Add technical details
       category: 'advanced-materials',
-      specifications: 'Specifications placeholder',
-      features: ['Feature placeholder', 'Feature placeholder', 'Feature placeholder'],
-      applications: ['Application placeholder', 'Application placeholder'],
-      regulatoryStatus: 'Regulatory status placeholder',
+      specifications: 'Specifications placeholder', // TODO: Add real specifications
+      features: ['Feature placeholder', 'Feature placeholder', 'Feature placeholder'], // TODO: Add real features
+      applications: ['Application placeholder', 'Application placeholder'], // TODO: Add real applications
+      regulatoryStatus: 'Regulatory status placeholder', // TODO: Add regulatory status (CE/FDA)
       datasheetId: `datasheet-${material.id}`,
       caseStudyId: index % 2 === 0 ? `case-study-${material.id}` : undefined
     })
@@ -57,14 +70,14 @@ export async function generateBiomaterialsProducts(): Promise<Product[]> {
     const product: Product = {
       id: `application-${application.id}`,
       name: application.name,
-      tagline: 'Tagline placeholder',
-      description: 'Description placeholder',
-      technicalDescription: 'Technical description placeholder',
+      tagline: 'Tagline placeholder', // TODO: Add real marketing tagline
+      description: 'Description placeholder', // TODO: Add product description
+      technicalDescription: 'Technical description placeholder', // TODO: Add technical details
       category: 'clinical-applications',
-      specifications: 'Specifications placeholder',
-      features: ['Feature placeholder', 'Feature placeholder', 'Feature placeholder'],
-      applications: ['Application placeholder', 'Application placeholder'],
-      regulatoryStatus: 'Regulatory status placeholder',
+      specifications: 'Specifications placeholder', // TODO: Add real specifications
+      features: ['Feature placeholder', 'Feature placeholder', 'Feature placeholder'], // TODO: Add real features
+      applications: ['Application placeholder', 'Application placeholder'], // TODO: Add real applications
+      regulatoryStatus: 'Regulatory status placeholder', // TODO: Add regulatory status (CE/FDA)
       datasheetId: `datasheet-${application.id}`,
       caseStudyId: index % 3 === 0 ? `case-study-${application.id}` : undefined
     }

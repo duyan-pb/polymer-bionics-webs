@@ -20,6 +20,10 @@ import { HOME_FEATURE_ICON_SIZE, HOME_PARTNER_PLACEHOLDER_COUNT } from '@/lib/co
 import { HomeFeatureCard } from '@/components/home/HomeFeatureCard'
 import { NewsletterSignup } from '@/components/home/NewsletterSignup'
 
+// TODO: Replace partner placeholders with real partner/collaborator logos
+// TODO: Add real customer testimonials section
+// TODO: Add recent news/announcements section
+
 /**
  * Props for the HomePage component.
  */

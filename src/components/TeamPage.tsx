@@ -7,6 +7,10 @@
  * @module components/TeamPage
  */
 
+// TODO: Add real team member photos (upload to assets/images/team/)
+// TODO: Update all team bios in team-data.ts
+// TODO: Add Google Scholar and LinkedIn URLs for each member
+
 import { useState, useMemo, useCallback } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Dialog, DialogContent } from '@/components/ui/dialog'

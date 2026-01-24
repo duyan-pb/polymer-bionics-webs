@@ -9,6 +9,22 @@
 
 import type { Material, Application } from './types'
 
+// =============================================================================
+// TODO: REPLACE ALL PLACEHOLDER MATERIAL AND APPLICATION DATA
+// =============================================================================
+// Materials need:
+// - description: Technical description of the material (50-100 words)
+// - properties: Array of key physical/chemical properties with values
+// - keyAdvantages: Array of 3-5 competitive advantages
+// - technicalDetails: Detailed specs paragraph
+//
+// Applications need:
+// - description: Clinical application description (50-100 words)
+// - benefits: Array of 3-5 clinical benefits
+// - useCases: Array of specific use cases
+// - relevantMaterials: Which materials are used
+// =============================================================================
+
 /**
  * Biomaterials catalog.
  * 
@@ -16,21 +32,22 @@ import type { Material, Application } from './types'
  * by Polymer Bionics for medical device applications.
  */
 export const materials: Material[] = [
+  // TODO: Add real content for all materials below
   {
     id: 'biongel',
     name: 'BionGel',
-    description: 'Description placeholder',
+    description: 'Description placeholder', // TODO: Add technical description
     properties: [
-      'Property placeholder',
+      'Property placeholder', // TODO: Add real properties with values
       'Property placeholder',
       'Property placeholder'
     ],
     keyAdvantages: [
-      'Advantage placeholder',
+      'Advantage placeholder', // TODO: Add competitive advantages
       'Advantage placeholder',
       'Advantage placeholder'
     ],
-    technicalDetails: 'Technical details placeholder',
+    technicalDetails: 'Technical details placeholder', // TODO: Add detailed specs
     imageClass: 'bg-gradient-to-br from-primary/20 to-accent/10'
   },
   {
@@ -70,17 +87,18 @@ export const materials: Material[] = [
 ]
 
 export const applications: Application[] = [
+  // TODO: Add real content for all applications below
   {
     id: 'elasticuff',
     name: 'ElastiCuff',
-    description: 'Description placeholder',
+    description: 'Description placeholder', // TODO: Add clinical description
     benefits: [
-      'Benefit placeholder',
+      'Benefit placeholder', // TODO: Add clinical benefits
       'Benefit placeholder',
       'Benefit placeholder'
     ],
     useCases: [
-      'Use case placeholder',
+      'Use case placeholder', // TODO: Add specific use cases
       'Use case placeholder',
       'Use case placeholder'
     ],

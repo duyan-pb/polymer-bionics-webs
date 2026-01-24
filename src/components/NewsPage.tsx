@@ -7,6 +7,10 @@
  * @module components/NewsPage
  */
 
+// TODO: Add pagination for news when list grows
+// TODO: Add search/filter for publications by year/author
+// TODO: Consider RSS feed generation for news
+
 import { useState, useMemo, useCallback, type KeyboardEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

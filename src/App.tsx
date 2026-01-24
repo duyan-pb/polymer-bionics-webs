@@ -171,9 +171,10 @@ function App() {
   }
 
   const renderPage = () => {
-    const fallbackRenderer = pageRenderers.home!
-    const pageRenderer = pageRenderers[currentPage] ?? fallbackRenderer
-    const pageContent = pageRenderer()
+    // Home is guaranteed to exist as fallback for unknown routes
+    const pageRenderer = pageRenderers[currentPage] ?? pageRenderers['home']
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- home always exists in pageRenderers
+    const pageContent = pageRenderer!()
 
     // HomePage is eagerly loaded, others are lazy
     if (currentPage === 'home') {return pageContent}

@@ -5,6 +5,15 @@
  * Tracks experiment assignment and exposure events for analytics.
  */
 
+// =============================================================================
+// TODO: CONFIGURE AZURE APP CONFIGURATION FOR PRODUCTION
+// =============================================================================
+// Set environment variable:
+// - VITE_AZURE_APP_CONFIG_ENDPOINT: Azure App Configuration endpoint URL
+//
+// Review default flags below and update as needed for feature rollouts.
+// =============================================================================
+
 import type { FeatureFlag, ExperimentAssignment } from './analytics/types'
 import { track } from './analytics/tracker'
 import { getSessionId, getAnonymousId } from './analytics/identity'

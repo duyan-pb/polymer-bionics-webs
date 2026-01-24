@@ -7,6 +7,10 @@
  * @module components/MediaPage
  */
 
+// TODO: Add actual video content - upload to YouTube/Vimeo
+// TODO: Implement video player with proper controls
+// TODO: Add case study PDF downloads
+
 import { useState, useCallback } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

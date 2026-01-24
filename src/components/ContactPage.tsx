@@ -7,6 +7,10 @@
  * @module components/ContactPage
  */
 
+// TODO: Configure Formspree or custom API for form submissions
+// TODO: Add Google Maps embed for office location
+// TODO: Consider adding live chat integration
+
 import { PageLayout } from '@/components/layout/PageLayout'
 import { ContactForm } from '@/components/contact/ContactForm'
 import { ContactInfo } from '@/components/contact/ContactInfo'

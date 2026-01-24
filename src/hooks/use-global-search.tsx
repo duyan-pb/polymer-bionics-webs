@@ -6,12 +6,11 @@
  * @module hooks/use-global-search
  */
 
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import Fuse from 'fuse.js'
 import { ArrowRight, FileText, Newspaper, Package, Users } from '@phosphor-icons/react'
 import { NAV_ITEMS } from '@/lib/constants'
 import type { Datasheet, NewsItem, Product, TeamMember } from '@/lib/types'
-import type { ReactNode } from 'react'
 
 // =============================================================================
 // CONSTANTS

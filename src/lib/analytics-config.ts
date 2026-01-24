@@ -10,6 +10,15 @@
  * 3. Default values
  */
 
+// =============================================================================
+// TODO: CONFIGURE ANALYTICS SERVICES FOR PRODUCTION
+// =============================================================================
+// Set these environment variables in production:
+// - VITE_GA4_MEASUREMENT_ID: Google Analytics 4 measurement ID (G-XXXXXXXXXX)
+// - VITE_APPINSIGHTS_CONNECTION_STRING: Azure Application Insights connection string
+// - VITE_CLARITY_PROJECT_ID: Microsoft Clarity project ID
+// =============================================================================
+
 import type { AnalyticsConfig } from './analytics/types'
 
 // =============================================================================

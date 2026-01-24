@@ -9,6 +9,18 @@
 
 import type { TeamMember } from './types'
 
+// =============================================================================
+// TODO: REPLACE ALL PLACEHOLDER CONTENT WITH REAL TEAM DATA
+// =============================================================================
+// Each team member needs:
+// - shortBio: 1-2 sentence professional summary
+// - fullBio: Detailed biography (2-3 paragraphs)
+// - education: Array of degrees/certifications (e.g., "PhD Biomedical Engineering, Imperial College London, 2018")
+// - achievements: Array of notable accomplishments (3-5 items)
+// - publications: Array of key publications (for research staff)
+// - scholar/linkedin: Update with real profile URLs
+// =============================================================================
+
 /**
  * Initial team members data.
  * 
@@ -22,13 +34,13 @@ export const teamMembers: TeamMember[] = [
     title: 'Chief Scientific Officer',
     role: 'CSO',
     category: 'founders',
-    shortBio: '[Short bio placeholder]',
-    fullBio: '[Full bio placeholder]',
-    education: ['[Education placeholder]'],
-    achievements: ['[Achievement placeholder]'],
-    publications: ['[Publication placeholder]'],
-    scholar: 'https://scholar.google.com',
-    linkedin: 'https://linkedin.com'
+    shortBio: '[Short bio placeholder]', // TODO: Add real bio - CSO background and expertise
+    fullBio: '[Full bio placeholder]', // TODO: Add detailed biography
+    education: ['[Education placeholder]'], // TODO: Add education history
+    achievements: ['[Achievement placeholder]'], // TODO: Add key achievements
+    publications: ['[Publication placeholder]'], // TODO: Add publication list
+    scholar: 'https://scholar.google.com', // TODO: Update with real Google Scholar URL
+    linkedin: 'https://linkedin.com' // TODO: Update with real LinkedIn URL
   },
   {
     id: 'ben-green',

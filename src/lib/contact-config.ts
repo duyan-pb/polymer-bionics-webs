@@ -7,6 +7,16 @@
  * @module lib/contact-config
  */
 
+// =============================================================================
+// TODO: UPDATE ALL CONTACT INFORMATION WITH REAL VALUES
+// =============================================================================
+// - email.general: Company info email
+// - email.sales: Sales team email
+// - whatsapp.number: Real WhatsApp Business number
+// - address: Real office address
+// - social.linkedin: Real LinkedIn company page URL
+// =============================================================================
+
 /**
  * Contact configuration object.
  * Contains all contact details used throughout the application.
@@ -34,7 +44,7 @@ export const contactConfig = {
    */
   whatsapp: {
     /** WhatsApp number in international format (e.g., +447123456789) */
-    number: '+447123456789',
+    number: '+447123456789', // TODO: Replace with real WhatsApp Business number
     /** Default message template for enquiries */
     defaultMessage: 'Hello, I would like to enquire about Polymer Bionics products and services.',
   },
@@ -53,7 +63,7 @@ export const contactConfig = {
    * Social media profile URLs.
    */
   social: {
-    linkedin: 'https://www.linkedin.com/company/polymer-bionics',
+    linkedin: 'https://www.linkedin.com/company/polymer-bionics', // TODO: Verify correct LinkedIn URL
   },
 }
 

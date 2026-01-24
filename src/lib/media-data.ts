@@ -9,6 +9,23 @@
 
 import type { Video, CaseStudy, Datasheet } from './types'
 
+// =============================================================================
+// TODO: REPLACE ALL PLACEHOLDER MEDIA CONTENT
+// =============================================================================
+// Videos need:
+// - videoUrl: Real YouTube/Vimeo embed URL or hosted video URL
+// - thumbnailUrl: Video thumbnail image URL
+// - title/description: Real video metadata
+//
+// Case Studies need:
+// - All fields with real clinical case data
+// - pdfUrl: Link to downloadable PDF
+//
+// Datasheets need:
+// - pdfUrl: Link to downloadable PDF datasheet
+// - technicalSpecs: Real specifications object
+// =============================================================================
+
 /**
  * Placeholder video content.
  * 
@@ -16,13 +33,14 @@ import type { Video, CaseStudy, Datasheet } from './types'
  * (e.g., YouTube embeds, Vimeo, or self-hosted video files).
  */
 export const placeholderVideos: Video[] = [
+  // TODO: Replace with real video content - upload to YouTube/Vimeo or self-host
   {
     id: 'vid-1',
     title: 'Polymer Bionics Platform Overview',
     description: 'High-level walkthrough of our flexible bioelectronics platform, material stack, and core clinical applications.',
-    videoUrl: 'https://example.com/video/platform-overview.mp4',
+    videoUrl: 'https://example.com/video/platform-overview.mp4', // TODO: Replace with real video URL
     category: 'overview',
-    thumbnailUrl: 'https://images.unsplash.com/photo-1581091215367-59ab6b68d1d5',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1581091215367-59ab6b68d1d5', // TODO: Replace with real thumbnail
     duration: '3:12',
   },
   {
@@ -37,6 +55,7 @@ export const placeholderVideos: Video[] = [
 ]
 
 export const placeholderCaseStudies: CaseStudy[] = [
+  // TODO: Replace with real case studies from clinical collaborations
   {
     id: 'case-1',
     title: 'Wearable Cardiac Monitor Patch',
@@ -44,7 +63,7 @@ export const placeholderCaseStudies: CaseStudy[] = [
     problem: 'Traditional rigid electrodes degrade signal quality during movement and cause skin irritation over multi-day wear.',
     solution: 'Conductive hydrogel electrodes on stretchable substrates with breathable encapsulation.',
     results: 'Reduced motion artefact by 38% and improved patient comfort scores by 2.1x versus rigid patches.',
-    pdfUrl: 'https://example.com/case-studies/cardiac-monitor.pdf',
+    pdfUrl: 'https://example.com/case-studies/cardiac-monitor.pdf', // TODO: Replace with real PDF URL
     category: 'cardiology',
     publishedDate: 'November 2024',
     datasheetId: 'datasheet-biongel',
@@ -64,6 +83,7 @@ export const placeholderCaseStudies: CaseStudy[] = [
 ]
 
 export const placeholderDatasheets: Datasheet[] = [
+  // TODO: Replace with real datasheets - upload PDFs to hosting service
   {
     id: 'datasheet-biongel',
     name: 'BionGel Conductive Hydrogel',
@@ -72,7 +92,7 @@ export const placeholderDatasheets: Datasheet[] = [
     category: 'Advanced Materials',
     version: 'v1.1',
     lastUpdated: 'December 2024',
-    pdfUrl: 'https://example.com/datasheets/biongel.pdf',
+    pdfUrl: 'https://example.com/datasheets/biongel.pdf', // TODO: Replace with real PDF URL
     technicalSpecs: {
       'Base Polymer': 'PEDOT:PSS hydrogel composite',
       'Sheet Resistance': '< 50 Ω/sq',

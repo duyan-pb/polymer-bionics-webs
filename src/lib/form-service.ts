@@ -11,6 +11,18 @@
  */
 
 // =============================================================================
+// TODO: CONFIGURE FORM SUBMISSION BACKEND
+// =============================================================================
+// For production, set one of these environment variables:
+// - VITE_FORMSPREE_CONTACT_ID: Formspree form ID (free tier: https://formspree.io)
+// - VITE_FORMSPREE_NEWSLETTER_ID: Formspree newsletter form ID
+// - VITE_CONTACT_API_ENDPOINT: Custom API (e.g., Azure Functions)
+// - VITE_NEWSLETTER_API_ENDPOINT: Custom newsletter API
+//
+// Without these, forms run in mock mode (console.log only).
+// =============================================================================
+
+// =============================================================================
 // CONFIGURATION
 // =============================================================================
 

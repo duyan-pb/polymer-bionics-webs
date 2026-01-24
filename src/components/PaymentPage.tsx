@@ -6,6 +6,18 @@
  * @module components/PaymentPage
  */
 
+// =============================================================================
+// TODO: IMPLEMENT REAL PAYMENT FLOW
+// =============================================================================
+// Current state: Order request form only (sends email enquiry)
+// Future implementation:
+// - Integrate Stripe/PayPal for payment processing
+// - Add shopping cart functionality
+// - Implement inventory checking
+// - Add order confirmation emails
+// - Add order tracking/history
+// =============================================================================
+
 import { useCallback, useEffect, useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Button } from '@/components/ui/button'
@@ -165,7 +177,7 @@ export function PaymentPage({ onNavigate, products }: PaymentPageProps) {
     } finally {
       setIsSubmitting(false)
     }
-  }, [formData, validateForm])
+  }, [formData, validateForm, setPaymentDraft])
 
   return (
     <PageLayout hero={hero}>

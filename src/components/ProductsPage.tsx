@@ -18,6 +18,16 @@ import { Card } from '@/components/ui/card'
 import ElastomerArray from '@/assets/images/Elastomer_array.png'
 import { ProductDialogContent } from '@/components/products/ProductDialogContent'
 import { ProductCard } from '@/components/products/ProductCard'
+
+const INITIAL_PAYMENT_DRAFT: PaymentOrderDraft = {
+  name: '',
+  email: '',
+  company: '',
+  product: '',
+  quantity: '',
+  country: '',
+  notes: '',
+}
 /**
  * Props for the ProductsPage component.
  */
@@ -41,15 +51,6 @@ interface ProductsPageProps {
  * <ProductsPage products={productList} onNavigate={handleNavigate} />
  */
 export function ProductsPage({ products, onNavigate }: ProductsPageProps) {
-  const INITIAL_PAYMENT_DRAFT: PaymentOrderDraft = {
-    name: '',
-    email: '',
-    company: '',
-    product: '',
-    quantity: '',
-    country: '',
-    notes: '',
-  }
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedImage, setSelectedImage] = useState<string | null>(null)

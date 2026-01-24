@@ -47,7 +47,7 @@ export function TeamPage({ team, onNavigate }: { team: TeamMember[], onNavigate:
 
 ### Navigation
 - Single-page app with state-based routing in App.tsx
-- Pages: home | team | materials | applications | products | media | datasheets | news | contact
+- Pages: home | team | materials | applications | products | media | datasheets | news | contact | payment
 - Navigation items centralized in constants.ts
 
 ## Key Conventions
@@ -185,3 +185,11 @@ Example pages using this pattern:
 - DatasheetsPage (datasheets)
 - MediaPage (videos, case studies)
 - NewsPage (news, publications)
+
+### Placeholder Content
+Many data files contain placeholder content marked with `// TODO:` comments. See [TODO.md](../TODO.md) for a complete list of:
+- Team member bios needing real content
+- Product descriptions and specifications
+- Materials and applications data
+- Media URLs (videos, PDFs)
+- Configuration values (analytics, contact info)

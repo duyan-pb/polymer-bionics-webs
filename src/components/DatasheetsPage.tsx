@@ -7,6 +7,10 @@
  * @module components/DatasheetsPage
  */
 
+// TODO: Upload real datasheet PDFs to hosting service
+// TODO: Add version history tracking for datasheets
+// TODO: Consider adding preview thumbnails
+
 import { useState, useMemo, useCallback, useEffect, type KeyboardEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

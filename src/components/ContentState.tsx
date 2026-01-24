@@ -6,11 +6,10 @@
  * @module components/ContentState
  */
 
-import type { ReactNode } from 'react'
+import type { ReactNode, ComponentProps } from 'react'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ComingSoonCard } from '@/components/ComingSoonCard'
-import type { ComponentProps } from 'react'
 import { DEFAULT_LOADING_SKELETON_COUNT } from '@/lib/constants'
 
 interface ContentStateProps {

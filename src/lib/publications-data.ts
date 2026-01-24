@@ -9,6 +9,25 @@
 
 import type { Publication, NewsItem } from './types'
 
+// =============================================================================
+// TODO: REPLACE ALL PLACEHOLDER NEWS AND PUBLICATIONS
+// =============================================================================
+// News items need:
+// - title: Actual news headline
+// - summary: 1-2 sentence summary for cards
+// - content: Full article text (can be HTML/markdown)
+// - date: Actual publication date
+// - category: announcement | partnership | research | grant | product
+//
+// Publications need:
+// - title: Full paper title
+// - authors: Real author names in order
+// - journal: Journal/conference name
+// - year/date: Publication date
+// - abstract: Real abstract text
+// - doi: DOI link (e.g., "https://doi.org/10.1234/...")
+// =============================================================================
+
 /**
  * Placeholder news items.
  * 
@@ -16,9 +35,10 @@ import type { Publication, NewsItem } from './types'
  * and press releases.
  */
 export const placeholderNews: NewsItem[] = [
+  // TODO: Replace with actual company news - announcements, partnerships, grants, etc.
   {
     id: 'news-1',
-    title: '[News Title Placeholder]',
+    title: '[News Title Placeholder]', // TODO: Add real news headline
     summary: '[Summary placeholder - Brief description of the news item and its significance.]',
     content: '[Content placeholder - Full article content would appear here with detailed information about the announcement, partnership, or development.]',
     date: 'December 2024',
@@ -51,9 +71,10 @@ export const placeholderNews: NewsItem[] = [
 ]
 
 export const placeholderPublications: Publication[] = [
+  // TODO: Replace with actual academic publications and papers
   {
     id: 'pub-1',
-    title: '[Publication Title Placeholder]',
+    title: '[Publication Title Placeholder]', // TODO: Add real paper title
     authors: ['[Author Placeholder]', '[Author Placeholder]', '[Author Placeholder]'],
     journal: '[Journal Name Placeholder]',
     year: 2024,
