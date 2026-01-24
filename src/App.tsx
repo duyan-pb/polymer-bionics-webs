@@ -167,7 +167,7 @@ function App() {
     datasheets: () => <DatasheetsPage datasheets={datasheets || []} onNavigate={handleNavigate} />,
     news: () => <NewsPage news={news || []} publications={publications || []} onNavigate={handleNavigate} />,
     contact: () => <ContactPage onNavigate={handleNavigate} />,
-    payment: () => <PaymentPage onNavigate={handleNavigate} />,
+    payment: () => <PaymentPage onNavigate={handleNavigate} products={products || []} />,
   }
 
   const renderPage = () => {

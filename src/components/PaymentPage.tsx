@@ -13,7 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { ContactCTA } from '@/components/ContactCTA'
-import { CreditCard, ShieldCheck, Clock, ShoppingCart } from '@phosphor-icons/react'
+import { CreditCard, ShoppingCart } from '@phosphor-icons/react'
 import BackgroundCover from '@/assets/images/Background_Cover.png'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -21,10 +21,12 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { submitContactForm } from '@/lib/form-service'
-import type { PaymentOrderDraft } from '@/lib/types'
+import type { PaymentOrderDraft, Product } from '@/lib/types'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface PaymentPageProps {
   onNavigate: (page: string) => void
+  products: Product[]
 }
 
 interface OrderFormData {
@@ -57,7 +59,7 @@ const INITIAL_ORDER_FORM: OrderFormData = {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-export function PaymentPage({ onNavigate }: PaymentPageProps) {
+export function PaymentPage({ onNavigate, products }: PaymentPageProps) {
   const [paymentDraft, setPaymentDraft] = useKV<PaymentOrderDraft>('paymentDraft', INITIAL_ORDER_FORM)
   const [formData, setFormData] = useState<OrderFormData>(INITIAL_ORDER_FORM)
   const [errors, setErrors] = useState<OrderFormErrors>({})
@@ -180,22 +182,6 @@ export function PaymentPage({ onNavigate }: PaymentPageProps) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="flex items-start gap-3">
-                <ShieldCheck size={20} className="text-accent" weight="duotone" />
-                <div>
-                  <h3 className="text-sm font-semibold">Secure payments</h3>
-                  <p className="text-xs text-muted-foreground">Stripe checkout with invoice support.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Clock size={20} className="text-accent" weight="duotone" />
-                <div>
-                  <h3 className="text-sm font-semibold">Fast turnaround</h3>
-                  <p className="text-xs text-muted-foreground">Quotes delivered within 1–2 business days.</p>
-                </div>
-              </div>
-            </div>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -265,16 +251,30 @@ export function PaymentPage({ onNavigate }: PaymentPageProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="product" className="text-sm font-semibold">Product *</Label>
-                  <Input
-                    id="product"
-                    name="product"
+                  <Select
                     value={formData.product}
-                    onChange={handleChange}
-                    placeholder="BioFlex Elastomer"
-                    aria-invalid={!!errors.product}
-                    aria-describedby={errors.product ? 'order-product-error' : undefined}
-                    className={cn(errors.product && 'border-destructive')}
-                  />
+                    onValueChange={(value) => {
+                      setFormData(prev => ({ ...prev, product: value }))
+                      setErrors(prev => (prev.product ? { ...prev, product: undefined } : prev))
+                    }}
+                  >
+                    <SelectTrigger
+                      id="product"
+                      aria-invalid={!!errors.product}
+                      aria-describedby={errors.product ? 'order-product-error' : undefined}
+                      className={cn(errors.product && 'border-destructive')}
+                    >
+                      <SelectValue placeholder="Select a product" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {products.map((product) => (
+                        <SelectItem key={product.id} value={product.name}>
+                          {product.name}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="Other">Other (specify in notes)</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {errors.product && (
                     <p id="order-product-error" className="text-xs text-destructive">{errors.product}</p>
                   )}
