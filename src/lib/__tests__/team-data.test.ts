@@ -42,10 +42,8 @@ describe('team-data', () => {
       const validCategories: TeamCategory[] = [
         'founders',
         'management',
-        'lab-management',
-        'research-engineering',
-        'research',
-        'engineering',
+        'research-innovation',
+        'product-engineering',
         'advisory',
       ]
       
@@ -135,13 +133,13 @@ describe('team-data', () => {
       expect(ben?.title).toContain('Managing Director')
     })
 
-    it('includes Dr Alexey Nonikov in lab management', () => {
-      const alexey = teamMembers.find(m => m.id === 'alexey-nonikov')
+    it('includes Dr Alexey Novikov in research & innovation', () => {
+      const alexey = teamMembers.find(m => m.id === 'alexey-novikov')
       
       expect(alexey).toBeDefined()
-      expect(alexey?.category).toBe('lab-management')
+      expect(alexey?.category).toBe('research-innovation')
       expect(alexey?.name).toContain('Dr')
-      expect(alexey?.name).toContain('Alexey Nonikov')
+      expect(alexey?.name).toContain('Alexey Novikov')
     })
   })
 })

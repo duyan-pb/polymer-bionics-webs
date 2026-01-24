@@ -62,7 +62,7 @@ export function TeamPage({ team, onNavigate }: TeamPageProps) {
   }, [team])
 
   // Order categories for display
-  const categoryOrder: TeamCategory[] = ['founders', 'management', 'design-engineering', 'advisory']
+  const categoryOrder: TeamCategory[] = ['founders', 'management', 'research-innovation', 'product-engineering', 'advisory']
 
   const handleMemberSelect = useCallback((member: TeamMember) => {
     setSelectedMember(member)
