@@ -19,17 +19,31 @@ const SESSION_KEY = 'pb_session'
 // =============================================================================
 
 /**
+ * Get a (preferably) cryptographically secure 32-bit unsigned integer.
+ * Falls back to Math.random() only if crypto APIs are unavailable.
+ */
+function getSecureRandomUint32(): number {
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    const array = new Uint32Array(1)
+    crypto.getRandomValues(array)
+    return array[0]
+  }
+  // Best-effort fallback; not cryptographically secure
+  return (Math.random() * 0xffffffff) >>> 0
+}
+
+/**
  * Generate a random anonymous ID (UUID v4 format)
  * Uses crypto.randomUUID when available, falls back to manual generation
  */
 function generateAnonymousId(): string {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID()
   }
-  
+
   // Fallback for older browsers
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0
+    const r = getSecureRandomUint32() & 0xf
     const v = c === 'x' ? r : (r & 0x3) | 0x8
     return v.toString(16)
   })
@@ -40,7 +54,21 @@ function generateAnonymousId(): string {
  */
 function generateSessionId(): string {
   const timestamp = Date.now().toString(36)
-  const random = Math.random().toString(36).substring(2, 10)
+
+  // Generate 8 random bytes and encode as base-36 for a short, opaque string
+  let randomValue = ''
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(8)
+    crypto.getRandomValues(bytes)
+    for (let i = 0; i < bytes.length; i++) {
+      randomValue += bytes[i].toString(36)
+    }
+  } else {
+    // Best-effort fallback; not cryptographically secure
+    randomValue = getSecureRandomUint32().toString(36) + getSecureRandomUint32().toString(36)
+  }
+
+  const random = randomValue.substring(0, 8)
   return `${timestamp}-${random}`
 }
 
