@@ -1,29 +1,13 @@
 /**
- * Materials and Applications Data
+ * Materials Data
  * 
- * Seed data for the materials catalog and clinical applications.
- * Contains biomaterial specifications and medical application use cases.
+ * Seed data for the materials catalog.
+ * Contains biomaterial specifications.
  * 
  * @module lib/materials-data
  */
 
-import type { Material, Application } from './types'
-
-// =============================================================================
-// TODO: REPLACE ALL PLACEHOLDER MATERIAL AND APPLICATION DATA
-// =============================================================================
-// Materials need:
-// - description: Technical description of the material (50-100 words)
-// - properties: Array of key physical/chemical properties with values
-// - keyAdvantages: Array of 3-5 competitive advantages
-// - technicalDetails: Detailed specs paragraph
-//
-// Applications need:
-// - description: Clinical application description (50-100 words)
-// - benefits: Array of 3-5 clinical benefits
-// - useCases: Array of specific use cases
-// - relevantMaterials: Which materials are used
-// =============================================================================
+import type { Material } from './types'
 
 /**
  * Biomaterials catalog.
@@ -32,196 +16,55 @@ import type { Material, Application } from './types'
  * by Polymer Bionics for medical device applications.
  */
 export const materials: Material[] = [
-  // TODO: Add real content for all materials below
+  {
+    id: 'flexelec',
+    name: 'FlexElec',
+    description: 'FlexElec is a conductive elastomer designed to function as a standalone soft, flexible electrode, while also offering the flexibility to be applied as a conformal coating where required. It enables adaptive bioelectronic interfaces that conform to the body while maintaining reliable electrical performance. FlexElec is suitable for both dry wearable technologies and implantable devices.',
+    properties: [
+      'Adaptive mechanical compliance',
+      'Stretchable elastomeric structure',
+      'Stable electrical conductivity'
+    ],
+    keyAdvantages: [
+      'Standalone or coating-compatible – can act as the electrode itself or be applied to existing structures',
+      'Format-flexible – supports single electrodes, arrays, and complex device geometries',
+      'Cross-platform compatible – suitable for dry wearables and implantable bioelectronic systems'
+    ],
+    technicalDetails: 'FlexElec is a conductive elastomer engineered to balance electrical performance with soft mechanical behaviour. Its elastomeric matrix supports deformation and stretch without loss of conductivity, enabling intimate contact with tissue or skin. The material can be processed into a range of electrode formats and integrated into devices without relying on stiff metallic layers or high-temperature processing.',
+    imageClass: 'bg-gradient-to-br from-accent/20 to-primary/10'
+  },
   {
     id: 'biongel',
     name: 'BionGel',
-    description: 'Description placeholder', // TODO: Add technical description
+    description: 'BionGel is a biocompatible hydrogel coating designed to improve the interface between electrodes and biological tissue. It can be applied to existing metal or polymer electrodes, enabling retrofit of established device designs. BionGel reduces effective stiffness at the tissue interface while supporting long-term surface stability.',
     properties: [
-      'Property placeholder', // TODO: Add real properties with values
-      'Property placeholder',
-      'Property placeholder'
+      'Biocompatible hydrogel composition',
+      'Conformal surface coating',
+      'Anti-fouling behaviour'
     ],
     keyAdvantages: [
-      'Advantage placeholder', // TODO: Add competitive advantages
-      'Advantage placeholder',
-      'Advantage placeholder'
+      'Retrofit capability – enhances existing devices without redesign',
+      'Mechanical decoupling – reduces stiffness mismatch at the tissue interface',
+      'Surface stability – limits fouling to support consistent electrical performance'
     ],
-    technicalDetails: 'Technical details placeholder', // TODO: Add detailed specs
+    technicalDetails: 'BionGel is formulated to form a compliant, hydrated interface layer between electrodes and tissue. By damping mechanical mismatch, it improves conformity and comfort without altering the underlying device structure. Its surface properties are designed to reduce fouling and degradation, supporting stable performance in both implantable and wearable bioelectronic systems.',
     imageClass: 'bg-gradient-to-br from-primary/20 to-accent/10'
-  },
-  {
-    id: 'elastibion',
-    name: 'ElastiBion',
-    description: 'Description placeholder',
-    properties: [
-      'Property placeholder',
-      'Property placeholder',
-      'Property placeholder'
-    ],
-    keyAdvantages: [
-      'Advantage placeholder',
-      'Advantage placeholder',
-      'Advantage placeholder'
-    ],
-    technicalDetails: 'Technical details placeholder',
-    imageClass: 'bg-gradient-to-br from-accent/20 to-primary/10'
   },
   {
     id: 'elastisolder',
     name: 'ElastiSolder',
-    description: 'Description placeholder',
+    description: 'ElastiSolder is a conductive interconnect paste designed to electrically and mechanically connect soft elastomeric components with metallic elements in bioelectronic devices. It enables hybrid device architectures without the need for high-temperature curing or sintering. ElastiSolder is compatible with a wide range of medical-grade metals commonly used in implantable systems.',
     properties: [
-      'Property placeholder',
-      'Property placeholder',
-      'Property placeholder'
+      'Low-temperature curing',
+      'Electrical conductivity',
+      'Mechanical flexibility'
     ],
     keyAdvantages: [
-      'Advantage placeholder',
-      'Advantage placeholder',
-      'Advantage placeholder'
+      'Electronics-compatible processing – avoids high-temperature curing and sintering',
+      'Mechanically robust connections – maintains conductivity under flexing and deformation',
+      'Metal-compatible – forms reliable connections with common medical-grade implant metals'
     ],
-    technicalDetails: 'Technical details placeholder',
+    technicalDetails: 'ElastiSolder is engineered to address a common limitation in bioelectronic assembly, where rigid metallic interconnects compromise flexibility and reliability. The material cures at low temperature, preserving compatibility with sensitive electronics and soft materials. Its conductive and compliant formulation supports durable electrical connections in hybrid elastomer–metal devices for wearable and implantable applications.',
     imageClass: 'bg-gradient-to-br from-primary/10 to-accent/20'
-  }
-]
-
-export const applications: Application[] = [
-  // TODO: Add real content for all applications below
-  {
-    id: 'elasticuff',
-    name: 'ElastiCuff',
-    description: 'Description placeholder', // TODO: Add clinical description
-    benefits: [
-      'Benefit placeholder', // TODO: Add clinical benefits
-      'Benefit placeholder',
-      'Benefit placeholder'
-    ],
-    useCases: [
-      'Use case placeholder', // TODO: Add specific use cases
-      'Use case placeholder',
-      'Use case placeholder'
-    ],
-    relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiSolder'],
-    imageClass: 'bg-gradient-to-br from-primary/20 to-accent/10'
-  },
-  {
-    id: 'elastarray',
-    name: 'ElastArray',
-    description: 'Description placeholder',
-    benefits: [
-      'Benefit placeholder',
-      'Benefit placeholder',
-      'Benefit placeholder'
-    ],
-    useCases: [
-      'Use case placeholder',
-      'Use case placeholder',
-      'Use case placeholder'
-    ],
-    relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiSolder'],
-    imageClass: 'bg-gradient-to-br from-accent/20 to-primary/10'
-  },
-  {
-    id: 'elastiwire',
-    name: 'ElastiWire',
-    description: 'Description placeholder',
-    benefits: [
-      'Benefit placeholder',
-      'Benefit placeholder',
-      'Benefit placeholder'
-    ],
-    useCases: [
-      'Use case placeholder',
-      'Use case placeholder',
-      'Use case placeholder'
-    ],
-    relevantMaterials: ['ElastiBion', 'ElastiSolder'],
-    imageClass: 'bg-gradient-to-br from-primary/10 to-accent/20'
-  },
-  {
-    id: 'simpleeg',
-    name: 'SimplEEG',
-    description: 'Description placeholder',
-    benefits: [
-      'Benefit placeholder',
-      'Benefit placeholder',
-      'Benefit placeholder'
-    ],
-    useCases: [
-      'Use case placeholder',
-      'Use case placeholder',
-      'Use case placeholder'
-    ],
-    relevantMaterials: ['ElastiBion', 'BionGel'],
-    imageClass: 'bg-gradient-to-br from-accent/10 to-primary/20'
-  },
-  {
-    id: 'babeeg',
-    name: 'BabEEG',
-    description: 'Description placeholder',
-    benefits: [
-      'Benefit placeholder',
-      'Benefit placeholder',
-      'Benefit placeholder'
-    ],
-    useCases: [
-      'Use case placeholder',
-      'Use case placeholder',
-      'Use case placeholder'
-    ],
-    relevantMaterials: ['ElastiBion', 'BionGel'],
-    imageClass: 'bg-gradient-to-br from-primary/15 to-accent/15'
-  },
-  {
-    id: 'inear-eeg',
-    name: 'InEar EEG',
-    description: 'Description placeholder',
-    benefits: [
-      'Benefit placeholder',
-      'Benefit placeholder',
-      'Benefit placeholder'
-    ],
-    useCases: [
-      'Use case placeholder',
-      'Use case placeholder',
-      'Use case placeholder'
-    ],
-    relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiWire'],
-    imageClass: 'bg-gradient-to-br from-accent/15 to-primary/15'
-  },
-  {
-    id: 'sport-eeg',
-    name: 'Sport EEG',
-    description: 'Description placeholder',
-    benefits: [
-      'Benefit placeholder',
-      'Benefit placeholder',
-      'Benefit placeholder'
-    ],
-    useCases: [
-      'Use case placeholder',
-      'Use case placeholder',
-      'Use case placeholder'
-    ],
-    relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiWire'],
-    imageClass: 'bg-gradient-to-br from-primary/15 to-accent/20'
-  },
-  {
-    id: 'custom-applications',
-    name: 'Customer-Specific Applications',
-    description: 'Description placeholder',
-    benefits: [
-      'Benefit placeholder',
-      'Benefit placeholder',
-      'Benefit placeholder'
-    ],
-    useCases: [
-      'Use case placeholder',
-      'Use case placeholder',
-      'Use case placeholder'
-    ],
-    relevantMaterials: ['ElastiBion', 'BionGel', 'ElastiSolder'],
-    imageClass: 'bg-gradient-to-br from-primary/20 to-accent/20'
   }
 ]

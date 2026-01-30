@@ -9,7 +9,7 @@
 
 import { useEffect } from 'react'
 import { CommandDialog, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command'
-import type { TeamMember, Product, Datasheet, NewsItem } from '@/lib/types'
+import type { TeamMember, Product, NewsItem } from '@/lib/types'
 import { SearchResultsGroup } from '@/components/search/SearchResultsGroup'
 import { SearchBrowseGroup } from '@/components/search/SearchBrowseGroup'
 import { useGlobalSearchData } from '@/hooks/use-global-search'
@@ -28,8 +28,12 @@ interface GlobalSearchProps {
   products: Product[]
   /** Team members to include in search */
   team: TeamMember[]
-  /** Datasheets to include in search */
-  datasheets: Datasheet[]
+  /** Devices to include in search */
+  devices: Product[]
+  /** Custom solutions to include in search */
+  customSolutions: Product[]
+  /** Innovations to include in search */
+  innovations: Product[]
   /** News items to include in search */
   news: NewsItem[]
 }
@@ -42,21 +46,18 @@ interface GlobalSearchProps {
  * - Fuzzy search across all content types
  * - Grouped results by type (navigation, products, team, etc.)
  * - Keyboard navigation with arrow keys
- * 
- * @example
- * ```tsx
- * <GlobalSearch
- *   open={searchOpen}
- *   onOpenChange={setSearchOpen}
- *   onNavigate={handleNavigate}
- *   products={products}
- *   team={team}
- *   datasheets={datasheets}
- *   news={news}
- * />
- * ```
  */
-export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, datasheets, news }: GlobalSearchProps) {
+export function GlobalSearch({ 
+  open, 
+  onOpenChange, 
+  onNavigate, 
+  products, 
+  team, 
+  devices, 
+  customSolutions, 
+  innovations,
+  news 
+}: GlobalSearchProps) {
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
@@ -83,14 +84,16 @@ export function GlobalSearch({ open, onOpenChange, onNavigate, products, team, d
     onSelect: handleSelect,
     products,
     team,
-    datasheets,
+    devices,
+    customSolutions,
+    innovations,
     news,
   })
 
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange} title="Search" description="Search content">
       <CommandInput
-        placeholder="Search pages, products, team, datasheets"
+        placeholder="Search pages, products, devices, team..."
         autoFocus
         value={searchQuery}
         onValueChange={setSearchQuery}

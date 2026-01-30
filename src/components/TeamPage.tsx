@@ -61,8 +61,8 @@ export function TeamPage({ team, onNavigate }: TeamPageProps) {
     }, {} as Record<TeamCategory, TeamMember[]>)
   }, [team])
 
-  // Order categories for display
-  const categoryOrder: TeamCategory[] = ['founders', 'management', 'research-innovation', 'product-engineering', 'advisory']
+  // Order categories for display (management moved to bottom)
+  const categoryOrder: TeamCategory[] = ['founders', 'research-innovation', 'product-engineering', 'advisory', 'management']
 
   const handleMemberSelect = useCallback((member: TeamMember) => {
     setSelectedMember(member)
@@ -70,7 +70,7 @@ export function TeamPage({ team, onNavigate }: TeamPageProps) {
 
   const hero = {
     title: 'Our Team',
-    description: 'Our multidisciplinary team combines world-class expertise in polymer chemistry, biomedical engineering, and clinical medicine to develop innovative biomaterials solutions.',
+    description: 'Our multidisciplinary team are experts in translating advanced materials into real-world bioelectronic devices',
     backgroundImage: BackgroundCover,
     backgroundOpacity: 0.7,
     breadcrumbs: [

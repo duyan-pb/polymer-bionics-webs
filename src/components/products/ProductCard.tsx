@@ -14,15 +14,15 @@ import { Download, CheckCircle, MagnifyingGlassPlus, ShoppingCart } from '@phosp
 import type { Product } from '@/lib/types'
 import { ProductPlaceholderImage } from '@/components/products/ProductPlaceholderImage'
 
-interface ProductCardProps {
+export interface ProductCardProps {
   product: Product
   featurePreviewCount: number
   onSelect: (product: Product) => void
   onZoomImage: (imageUrl: string) => void
-  onBuy: (e: MouseEvent, product: Product) => void
+  onBuy?: (e: MouseEvent, product: Product) => void
   onContact: (e: MouseEvent) => void
-  onDatasheet: (e: MouseEvent, datasheetId?: string) => void
-  onCaseStudy: (e: MouseEvent, caseStudyId?: string) => void
+  onDatasheet?: (e: MouseEvent, datasheetId?: string) => void
+  onCaseStudy?: (e: MouseEvent, caseStudyId?: string) => void
 }
 
 export function ProductCard({
@@ -106,15 +106,17 @@ export function ProductCard({
 
         <div className="space-y-2 pt-2">
           <div className="flex flex-wrap gap-2">
-            <Button
-              variant="default"
-              size="sm"
-              className="text-xs md:text-sm"
-              onClick={(e) => onBuy(e, product)}
-            >
-              <ShoppingCart className="mr-1" size={16} weight="duotone" /> Buy
-            </Button>
-            {product.datasheetId && (
+            {onBuy && (
+              <Button
+                variant="default"
+                size="sm"
+                className="text-xs md:text-sm"
+                onClick={(e) => onBuy(e, product)}
+              >
+                <ShoppingCart className="mr-1" size={16} weight="duotone" /> Buy
+              </Button>
+            )}
+            {product.datasheetId && onDatasheet && (
               <Button
                 variant="outline"
                 size="sm"
@@ -124,7 +126,7 @@ export function ProductCard({
                 <Download className="mr-1" size={16} /> Datasheet
               </Button>
             )}
-            {product.caseStudyId && (
+            {product.caseStudyId && onCaseStudy && (
               <Button
                 variant="outline"
                 size="sm"

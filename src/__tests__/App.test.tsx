@@ -22,20 +22,20 @@ vi.mock('../components/MaterialsPage', () => ({
   MaterialsPage: () => <div data-testid="materials-page">Materials Page</div>,
 }))
 
-vi.mock('../components/ApplicationsPage', () => ({
-  ApplicationsPage: () => <div data-testid="applications-page">Applications Page</div>,
+vi.mock('../components/DevicesPage', () => ({
+  DevicesPage: () => <div data-testid="devices-page">Devices Page</div>,
 }))
 
-vi.mock('../components/MediaPage', () => ({
-  MediaPage: () => <div data-testid="media-page">Media Page</div>,
+vi.mock('../components/CustomPage', () => ({
+  CustomPage: () => <div data-testid="custom-page">Custom Page</div>,
+}))
+
+vi.mock('../components/InnovationPage', () => ({
+  InnovationPage: () => <div data-testid="innovation-page">Innovation Page</div>,
 }))
 
 vi.mock('../components/NewsPage', () => ({
   NewsPage: () => <div data-testid="news-page">News Page</div>,
-}))
-
-vi.mock('../components/DatasheetsPage', () => ({
-  DatasheetsPage: () => <div data-testid="datasheets-page">Datasheets Page</div>,
 }))
 
 vi.mock('../components/ContactPage', () => ({

@@ -15,12 +15,12 @@ import { ContactCTA } from '@/components/ContactCTA'
 import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, ShoppingCart } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
 
-interface ProductDialogContentProps {
+export interface ProductDialogContentProps {
   product: Product
   onSelectImage: (image: string) => void
-  onBuy: (e: MouseEvent, product: Product) => void
-  onDatasheet: (e: MouseEvent, datasheetId?: string) => void
-  onCaseStudy: (e: MouseEvent, caseStudyId?: string) => void
+  onBuy?: (e: MouseEvent, product: Product) => void
+  onDatasheet?: (e: MouseEvent, datasheetId?: string) => void
+  onCaseStudy?: (e: MouseEvent, caseStudyId?: string) => void
 }
 
 function ProductImageGrid({ product, onSelectImage }: { product: Product; onSelectImage: (image: string) => void }) {
@@ -122,15 +122,17 @@ export function ProductDialogContent({ product, onSelectImage, onBuy, onDatashee
         </div>
         <div className="space-y-3 pt-4">
           <div className="flex gap-3">
-            <Button variant="default" onClick={(e) => onBuy(e, product)}>
-              <ShoppingCart className="mr-2" weight="duotone" /> Buy Now
-            </Button>
-            {product.datasheetId && (
+            {onBuy && (
+              <Button variant="default" onClick={(e) => onBuy(e, product)}>
+                <ShoppingCart className="mr-2" weight="duotone" /> Buy Now
+              </Button>
+            )}
+            {product.datasheetId && onDatasheet && (
               <Button variant="outline" onClick={(e) => onDatasheet(e, product.datasheetId)}>
                 <Download className="mr-2" /> View Datasheet
               </Button>
             )}
-            {product.caseStudyId && (
+            {product.caseStudyId && onCaseStudy && (
               <Button variant="outline" onClick={(e) => onCaseStudy(e, product.caseStudyId)}>
                 View Case Study
               </Button>

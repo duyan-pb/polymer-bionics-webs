@@ -23,18 +23,11 @@ describe('generateBiomaterialsProducts', () => {
     expect(products.length).toBeGreaterThan(0)
   })
 
-  it('generates products from materials', async () => {
+  it('generates FlexElec products', async () => {
     const products = await generateBiomaterialsProducts()
     
-    const materialProducts = products.filter(p => p.id.startsWith('material-'))
-    expect(materialProducts.length).toBeGreaterThan(0)
-  })
-
-  it('generates products from applications', async () => {
-    const products = await generateBiomaterialsProducts()
-    
-    const applicationProducts = products.filter(p => p.id.startsWith('application-'))
-    expect(applicationProducts.length).toBeGreaterThan(0)
+    const flexElecProducts = products.filter(p => p.id.startsWith('flexelec-'))
+    expect(flexElecProducts.length).toBeGreaterThan(0)
   })
 
   it('each product has required fields', async () => {
@@ -51,49 +44,53 @@ describe('generateBiomaterialsProducts', () => {
     })
   })
 
-  it('material products have advanced-materials category', async () => {
+  it('FlexElec products have electrodes category', async () => {
     const products = await generateBiomaterialsProducts()
     
-    const materialProducts = products.filter(p => p.id.startsWith('material-'))
-    materialProducts.forEach(product => {
-      expect(product.category).toBe('advanced-materials')
+    const flexElecProducts = products.filter(p => p.id.startsWith('flexelec-'))
+    flexElecProducts.forEach(product => {
+      expect(product.category).toBe('electrodes')
     })
   })
 
-  it('application products have clinical-applications category', async () => {
+  it('includes FlexElec Foam Electrode', async () => {
     const products = await generateBiomaterialsProducts()
     
-    const applicationProducts = products.filter(p => p.id.startsWith('application-'))
-    applicationProducts.forEach(product => {
-      expect(product.category).toBe('clinical-applications')
-    })
+    const foamProduct = products.find(p => p.id === 'flexelec-foam')
+    expect(foamProduct).toBeDefined()
+    expect(foamProduct?.name).toBe('FlexElec Foam Electrode')
   })
 
-  it('products have datasheetId', async () => {
+  it('includes FlexElec Sheet Electrode', async () => {
     const products = await generateBiomaterialsProducts()
     
-    products.forEach(product => {
-      expect(product.datasheetId).toBeDefined()
-      expect(typeof product.datasheetId).toBe('string')
-    })
+    const sheetProduct = products.find(p => p.id === 'flexelec-sheet')
+    expect(sheetProduct).toBeDefined()
+    expect(sheetProduct?.name).toBe('FlexElec Sheet Electrode')
   })
 
-  it('some products have caseStudyId', async () => {
+  it('includes FlexElec Probe Electrode', async () => {
     const products = await generateBiomaterialsProducts()
     
-    const productsWithCaseStudy = products.filter(p => p.caseStudyId)
-    expect(productsWithCaseStudy.length).toBeGreaterThan(0)
+    const probeProduct = products.find(p => p.id === 'flexelec-probe')
+    expect(probeProduct).toBeDefined()
+    expect(probeProduct?.name).toBe('FlexElec Probe Electrode')
   })
 
-  it('in-ear EEG product has images', async () => {
+  it('includes FlexElec Cuff', async () => {
     const products = await generateBiomaterialsProducts()
     
-    const inEarProduct = products.find(p => p.id === 'application-inear-eeg')
-    if (inEarProduct) {
-      expect(inEarProduct.images).toBeDefined()
-      expect(Array.isArray(inEarProduct.images)).toBe(true)
-      expect(inEarProduct.imageUrl).toBeDefined()
-    }
+    const cuffProduct = products.find(p => p.id === 'flexelec-cuff')
+    expect(cuffProduct).toBeDefined()
+    expect(cuffProduct?.name).toBe('FlexElec Cuff')
+  })
+
+  it('includes FlexElec MEA', async () => {
+    const products = await generateBiomaterialsProducts()
+    
+    const meaProduct = products.find(p => p.id === 'flexelec-mea')
+    expect(meaProduct).toBeDefined()
+    expect(meaProduct?.name).toBe('FlexElec MEA')
   })
 
   it('product names are non-empty strings', async () => {

@@ -27,10 +27,10 @@ export const NAV_ITEMS: NavItem[] = [
   { id: 'home', label: 'Home', description: 'Return to home page' },
   { id: 'team', label: 'Team', description: 'Meet our team' },
   { id: 'materials', label: 'Materials', description: 'Our advanced materials' },
-  { id: 'products', label: 'Products', description: 'Product portfolio' },
-  // { id: 'applications', label: 'Applications', description: 'Application areas' },
-  { id: 'media', label: 'Videos & Case Studies', description: 'Media and case studies' },
-  { id: 'datasheets', label: 'Datasheets', description: 'Technical datasheets' },
+  { id: 'products', label: 'Products', description: 'Electrodes, integrated systems, and bioelectronic devices' },
+  { id: 'devices', label: 'Devices', description: 'Proprietary bioelectronic devices' },
+  { id: 'custom', label: 'Custom', description: 'Custom electrode and system solutions' },
+  { id: 'innovation', label: 'Innovation', description: 'Advanced bioelectronic innovations' },
   { id: 'news', label: 'News & Publications', description: 'Latest news and publications' },
   { id: 'contact', label: 'Contact', description: 'Get in touch' },
 ] as const
@@ -40,10 +40,10 @@ export const NAV_ITEMS: NavItem[] = [
  */
 export const TEAM_CATEGORIES = {
   founders: 'Founders',
-  management: 'Project Management',
   'research-innovation': 'Research, Design & Innovation',
   'product-engineering': 'Product Development & Engineering',
   advisory: 'Scientific Advisory Board',
+  management: 'Project Management',
 } as const
 
 export type TeamCategory = keyof typeof TEAM_CATEGORIES

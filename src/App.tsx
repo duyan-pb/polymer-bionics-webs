@@ -28,7 +28,9 @@ import { PAGE_TRANSITION } from '@/lib/constants'
 // Import static data directly - no caching, always fresh from build
 import { teamMembers } from '@/lib/team-data'
 import { initialProducts } from '@/lib/seed-data'
-import { placeholderVideos, placeholderCaseStudies, placeholderDatasheets } from '@/lib/media-data'
+import { devices } from '@/lib/devices-data'
+import { customSolutions } from '@/lib/custom-data'
+import { innovations } from '@/lib/innovation-data'
 import { placeholderPublications, placeholderNews } from '@/lib/publications-data'
 
 // =============================================================================
@@ -41,10 +43,10 @@ import { placeholderPublications, placeholderNews } from '@/lib/publications-dat
  */
 const TeamPage = lazy(() => import('@/components/TeamPage').then(m => ({ default: m.TeamPage })))
 const MaterialsPage = lazy(() => import('@/components/MaterialsPage').then(m => ({ default: m.MaterialsPage })))
-const ApplicationsPage = lazy(() => import('@/components/ApplicationsPage').then(m => ({ default: m.ApplicationsPage })))
 const ProductsPage = lazy(() => import('@/components/ProductsPage').then(m => ({ default: m.ProductsPage })))
-const MediaPage = lazy(() => import('@/components/MediaPage').then(m => ({ default: m.MediaPage })))
-const DatasheetsPage = lazy(() => import('@/components/DatasheetsPage').then(m => ({ default: m.DatasheetsPage })))
+const DevicesPage = lazy(() => import('@/components/DevicesPage').then(m => ({ default: m.DevicesPage })))
+const CustomPage = lazy(() => import('@/components/CustomPage').then(m => ({ default: m.CustomPage })))
+const InnovationPage = lazy(() => import('@/components/InnovationPage').then(m => ({ default: m.InnovationPage })))
 const NewsPage = lazy(() => import('@/components/NewsPage').then(m => ({ default: m.NewsPage })))
 const ContactPage = lazy(() => import('@/components/ContactPage').then(m => ({ default: m.ContactPage })))
 const PaymentPage = lazy(() => import('@/components/PaymentPage').then(m => ({ default: m.PaymentPage })))
@@ -76,9 +78,6 @@ function App() {
   // Static data - imported directly, no caching needed
   const team = teamMembers
   const products = initialProducts
-  const videos = placeholderVideos
-  const caseStudies = placeholderCaseStudies
-  const datasheets = placeholderDatasheets
   const news = placeholderNews
   const publications = placeholderPublications
 
@@ -119,10 +118,10 @@ function App() {
       Promise.all([
         import('@/components/TeamPage'),
         import('@/components/MaterialsPage'),
-        import('@/components/ApplicationsPage'),
         import('@/components/ProductsPage'),
-        import('@/components/MediaPage'),
-        import('@/components/DatasheetsPage'),
+        import('@/components/DevicesPage'),
+        import('@/components/CustomPage'),
+        import('@/components/InnovationPage'),
         import('@/components/NewsPage'),
         import('@/components/ContactPage'),
         import('@/components/PaymentPage'),
@@ -162,10 +161,10 @@ function App() {
     home: () => <HomePage onNavigate={handleNavigate} />,
     team: () => <TeamPage team={team} onNavigate={handleNavigate} />,
     materials: () => <MaterialsPage onNavigate={handleNavigate} />,
-    applications: () => <ApplicationsPage onNavigate={handleNavigate} />,
     products: () => <ProductsPage products={products} onNavigate={handleNavigate} onSetPaymentDraft={setPaymentDraft} />,
-    media: () => <MediaPage videos={videos} caseStudies={caseStudies} onNavigate={handleNavigate} />,
-    datasheets: () => <DatasheetsPage datasheets={[]} onNavigate={handleNavigate} />,
+    devices: () => <DevicesPage onNavigate={handleNavigate} />,
+    custom: () => <CustomPage onNavigate={handleNavigate} />,
+    innovation: () => <InnovationPage onNavigate={handleNavigate} />,
     news: () => <NewsPage news={news} publications={publications} onNavigate={handleNavigate} />,
     contact: () => <ContactPage onNavigate={handleNavigate} />,
     payment: () => <PaymentPage onNavigate={handleNavigate} products={products} paymentDraft={paymentDraft} />,
@@ -223,7 +222,9 @@ function App() {
               onNavigate={handleNavigate}
               products={products}
               team={team}
-              datasheets={datasheets}
+              devices={devices}
+              customSolutions={customSolutions}
+              innovations={innovations}
               news={news}
             />
           </Suspense>

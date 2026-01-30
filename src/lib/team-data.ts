@@ -71,8 +71,8 @@ export const teamMembers: TeamMember[] = [
   {
     id: 'estelle-cuttaz',
     name: 'Dr Estelle Cuttaz',
-    title: 'Design Engineer',
-    role: 'Design Engineer',
+    title: 'Senior Design Engineer',
+    role: 'Senior Design Engineer',
     category: 'product-engineering',
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',

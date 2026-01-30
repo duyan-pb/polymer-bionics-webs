@@ -22,6 +22,8 @@ export interface PageHeroProps {
   title: string
   /** Page description text */
   description: string
+  /** Optional sub-description text displayed below description */
+  subDescription?: string
   /** Optional background image URL */
   backgroundImage?: string
   /** Background image opacity (0-1, default: 0.7) */
@@ -61,6 +63,7 @@ export interface PageHeroProps {
 export function PageHero({
   title,
   description,
+  subDescription,
   backgroundImage,
   backgroundOpacity = 0.7,
   breadcrumbs,
@@ -94,6 +97,11 @@ export function PageHero({
               <p className="text-lg md:text-xl text-foreground/90 max-w-3xl leading-relaxed">
                 {description}
               </p>
+              {subDescription && (
+                <p className="text-base md:text-lg text-foreground/75 max-w-3xl leading-relaxed mt-3">
+                  {subDescription}
+                </p>
+              )}
               {children}
             </div>
             {actions && <div className="flex-shrink-0 mt-4 md:mt-0">{actions}</div>}

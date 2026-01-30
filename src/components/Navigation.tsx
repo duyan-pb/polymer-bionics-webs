@@ -11,7 +11,7 @@ import { useState, memo, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { List, MagnifyingGlass, MoonStars, SunDim } from '@phosphor-icons/react'
+import { List, MagnifyingGlass, MoonStars, SunDim, House } from '@phosphor-icons/react'
 import { NAV_ITEMS } from '@/lib/constants'
 import logoWebp from '@/assets/images/logo-nav.webp'
 
@@ -93,6 +93,7 @@ export const Navigation = memo(({ currentPage, onNavigate, onOpenSearch, isDark,
             <span className="text-xl font-semibold text-foreground tracking-tight">
               polymerbionics
             </span>
+            <House size={20} weight="duotone" className="text-primary ml-1" />
           </motion.button>
 
           <div className="hidden md:flex items-center gap-0">

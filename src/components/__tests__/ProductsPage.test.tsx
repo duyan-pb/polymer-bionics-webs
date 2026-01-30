@@ -95,7 +95,7 @@ describe('ProductsPage', () => {
       render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
       expect(screen.getByTestId('page-hero')).toBeInTheDocument()
-      expect(screen.getByRole('heading', { level: 1, name: 'Product Portfolio' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 1, name: 'Products' })).toBeInTheDocument()
     })
 
     it('renders all product cards', () => {

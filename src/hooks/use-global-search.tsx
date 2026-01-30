@@ -8,9 +8,9 @@
 
 import { useMemo, useState, type ReactNode } from 'react'
 import Fuse from 'fuse.js'
-import { ArrowRight, FileText, Newspaper, Package, Users } from '@phosphor-icons/react'
+import { ArrowRight, Newspaper, Package, Users, Cpu, Wrench, Lightbulb } from '@phosphor-icons/react'
 import { NAV_ITEMS } from '@/lib/constants'
-import type { Datasheet, NewsItem, Product, TeamMember } from '@/lib/types'
+import type { NewsItem, Product, TeamMember } from '@/lib/types'
 
 // =============================================================================
 // CONSTANTS
@@ -25,7 +25,7 @@ const MAX_SEARCH_RESULTS = 12
 /** Fuse.js search threshold (lower = stricter matching) */
 const SEARCH_THRESHOLD = 0.38
 
-type SearchType = 'nav' | 'product' | 'team' | 'datasheet' | 'news'
+type SearchType = 'nav' | 'product' | 'team' | 'device' | 'custom' | 'innovation' | 'news'
 
 interface SearchItem {
   id: string
@@ -59,11 +59,21 @@ interface UseGlobalSearchDataProps {
   onSelect: (page: string) => void
   products: Product[]
   team: TeamMember[]
-  datasheets: Datasheet[]
+  devices: Product[]
+  customSolutions: Product[]
+  innovations: Product[]
   news: NewsItem[]
 }
 
-export function useGlobalSearchData({ onSelect, products, team, datasheets, news }: UseGlobalSearchDataProps) {
+export function useGlobalSearchData({ 
+  onSelect, 
+  products, 
+  team, 
+  devices, 
+  customSolutions, 
+  innovations,
+  news 
+}: UseGlobalSearchDataProps) {
   const [searchQuery, setSearchQuery] = useState('')
 
   const searchItems = useMemo((): SearchItem[] => {
@@ -91,12 +101,28 @@ export function useGlobalSearchData({ onSelect, products, team, datasheets, news
       type: 'team',
     }))
 
-    const datasheetItems: SearchItem[] = (datasheets || []).map((d) => ({
-      id: `datasheet-${d.id}`,
-      label: d.title,
+    const deviceItems: SearchItem[] = (devices || []).map((d) => ({
+      id: `device-${d.id}`,
+      label: d.name,
       subtitle: d.category,
-      page: 'datasheets',
-      type: 'datasheet',
+      page: 'devices',
+      type: 'device',
+    }))
+
+    const customItems: SearchItem[] = (customSolutions || []).map((c) => ({
+      id: `custom-${c.id}`,
+      label: c.name,
+      subtitle: c.category,
+      page: 'custom',
+      type: 'custom',
+    }))
+
+    const innovationItems: SearchItem[] = (innovations || []).map((i) => ({
+      id: `innovation-${i.id}`,
+      label: i.name,
+      subtitle: i.category,
+      page: 'innovation',
+      type: 'innovation',
     }))
 
     const newsItems: SearchItem[] = (news || []).map((n) => ({
@@ -107,8 +133,8 @@ export function useGlobalSearchData({ onSelect, products, team, datasheets, news
       type: 'news',
     }))
 
-    return [...navItems, ...productItems, ...teamItems, ...datasheetItems, ...newsItems]
-  }, [datasheets, news, products, team])
+    return [...navItems, ...productItems, ...teamItems, ...deviceItems, ...customItems, ...innovationItems, ...newsItems]
+  }, [products, team, devices, customSolutions, innovations, news])
 
   const fuse = useMemo(() => new Fuse(searchItems, {
     keys: [
@@ -136,8 +162,12 @@ export function useGlobalSearchData({ onSelect, products, team, datasheets, news
         return <Package className="mr-2" size={16} weight="duotone" />
       case 'team':
         return <Users className="mr-2" size={16} weight="duotone" />
-      case 'datasheet':
-        return <FileText className="mr-2" size={16} weight="duotone" />
+      case 'device':
+        return <Cpu className="mr-2" size={16} weight="duotone" />
+      case 'custom':
+        return <Wrench className="mr-2" size={16} weight="duotone" />
+      case 'innovation':
+        return <Lightbulb className="mr-2" size={16} weight="duotone" />
       case 'news':
         return <Newspaper className="mr-2" size={16} weight="duotone" />
       default:
@@ -173,21 +203,39 @@ export function useGlobalSearchData({ onSelect, products, team, datasheets, news
       })),
     },
     {
+      heading: 'Devices',
+      items: (devices || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((d) => ({
+        id: d.id,
+        label: `${d.name} – ${d.category}`,
+        onSelect: () => onSelect('devices'),
+        icon: <Cpu className="mr-2" size={16} weight="duotone" />,
+      })),
+    },
+    {
+      heading: 'Custom',
+      items: (customSolutions || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((c) => ({
+        id: c.id,
+        label: `${c.name} – ${c.category}`,
+        onSelect: () => onSelect('custom'),
+        icon: <Wrench className="mr-2" size={16} weight="duotone" />,
+      })),
+    },
+    {
+      heading: 'Innovation',
+      items: (innovations || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((i) => ({
+        id: i.id,
+        label: `${i.name} – ${i.category}`,
+        onSelect: () => onSelect('innovation'),
+        icon: <Lightbulb className="mr-2" size={16} weight="duotone" />,
+      })),
+    },
+    {
       heading: 'Team',
       items: (team || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((m) => ({
         id: m.id,
         label: `${m.name} – ${m.role}`,
         onSelect: () => onSelect('team'),
         icon: <Users className="mr-2" size={16} weight="duotone" />,
-      })),
-    },
-    {
-      heading: 'Datasheets',
-      items: (datasheets || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((d) => ({
-        id: d.id,
-        label: d.title,
-        onSelect: () => onSelect('datasheets'),
-        icon: <FileText className="mr-2" size={16} weight="duotone" />,
       })),
     },
     {

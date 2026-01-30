@@ -49,7 +49,8 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
     <div className="min-h-screen bg-background">
       <PageHero
         title="Our Materials"
-        description="Advanced materials for advancements in humankind. Our portfolio of specialized bionic materials includes flexible conductive polymers, biocompatible gels, and innovative bonding solutions—all engineered for superior performance in wearable and implantable bioelectronic devices."
+        description="Advanced polymer systems enabling next-generation bioelectronic devices"
+        subDescription="PEDOT-based conductors, medical-grade elastomers, and biocompatible hydrogels engineered for implantable and wearable use"
         backgroundImage={CESheet}
         backgroundOpacity={0.7}
         breadcrumbs={[

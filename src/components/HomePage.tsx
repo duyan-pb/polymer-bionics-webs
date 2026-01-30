@@ -10,7 +10,7 @@
 import { useState, useCallback, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { ArrowRight, Flask, Users, FileText, Video, Atom, Lightbulb } from '@phosphor-icons/react'
+import { ArrowRight, Flask, Users, Atom, Lightbulb, Cpu, Wrench } from '@phosphor-icons/react'
 import { HeroImage } from '@/components/HeroImage'
 import BackgroundCover from '@/assets/images/optimized/Background_Cover.webp'
 import { motion } from 'framer-motion'
@@ -123,7 +123,7 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             <HomeFeatureCard
               title="Our Team"
-              description="Expert polymer scientists, biomedical engineers, and materials researchers advancing flexible bioelectronics."
+              description="Expert polymer scientists, biomedical engineers, and materials researchers advancing flexible bioelectronics and devices."
               actionLabel="Learn more"
               icon={<Users size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
               onSelect={handleNavigate('team')}
@@ -131,43 +131,43 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
             />
             <HomeFeatureCard
               title="Materials"
-              description="Advanced polymers including PEDOT:PSS, hydrogels, silicones, and specialty coatings for biomedical use."
+              description="Advanced polymer systems enabling next-generation bioelectronic devices."
               actionLabel="View materials"
               icon={<Atom size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
               onSelect={handleNavigate('materials')}
               ariaLabel="Navigate to Materials page"
             />
             <HomeFeatureCard
-              title="Applications"
-              description="Neural interfaces, wearable sensors, drug delivery, cardiac devices, and advanced surgical tools."
-              actionLabel="Explore uses"
-              icon={<Lightbulb size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
-              onSelect={handleNavigate('applications')}
-              ariaLabel="Navigate to Applications page"
-            />
-            <HomeFeatureCard
               title="Products"
-              description="Flexible bioelectronic devices, conductive polymer systems, and soft tissue-compatible sensors."
+              description="Electrodes, integrated systems, and bioelectronic devices."
               actionLabel="Explore catalog"
               icon={<Flask size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
               onSelect={handleNavigate('products')}
               ariaLabel="Navigate to Products page"
             />
             <HomeFeatureCard
-              title="Case Studies"
-              description="Real-world applications in wearable diagnostics, implantable devices, and smart wound healing."
-              actionLabel="View studies"
-              icon={<Video size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
-              onSelect={handleNavigate('media')}
-              ariaLabel="Navigate to Case Studies page"
+              title="Devices"
+              description="Proprietary bioelectronic devices developed in-house for clinical translation."
+              actionLabel="View devices"
+              icon={<Cpu size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
+              onSelect={handleNavigate('devices')}
+              ariaLabel="Navigate to Devices page"
             />
             <HomeFeatureCard
-              title="Technical Data"
-              description="Material properties, biocompatibility testing, mechanical flexibility, and performance specifications."
-              actionLabel="Access library"
-              icon={<FileText size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
-              onSelect={handleNavigate('datasheets')}
-              ariaLabel="Navigate to Technical Data page"
+              title="Custom"
+              description="Custom electrode and system solutions for partner-specific applications."
+              actionLabel="Learn more"
+              icon={<Wrench size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
+              onSelect={handleNavigate('custom')}
+              ariaLabel="Navigate to Custom page"
+            />
+            <HomeFeatureCard
+              title="Innovation"
+              description="Advanced bioelectronic innovations in development pushing the boundaries."
+              actionLabel="Explore"
+              icon={<Lightbulb size={HOME_FEATURE_ICON_SIZE} className="md:w-12 md:h-12" weight="duotone" />}
+              onSelect={handleNavigate('innovation')}
+              ariaLabel="Navigate to Innovation page"
             />
           </div>
         </div>

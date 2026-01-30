@@ -107,8 +107,9 @@ export function ProductsPage({ products, onNavigate, onSetPaymentDraft }: Produc
   }, [onNavigate, onSetPaymentDraft])
 
   const hero = {
-    title: 'Product Portfolio',
-    description: 'Our proprietary biomaterials platform delivers high-performance solutions for surgical applications, wearable medical devices, and advanced drug delivery systems.',
+    title: 'Products',
+    description: 'High-performance soft electrodes for bioelectronic interfaces',
+    subDescription: 'Single and multi-channel electrodes. Flexible, stretchable, and implantable designs. Optimised for sensing and stimulation.',
     backgroundImage: ElastomerArray,
     backgroundOpacity: 0.7,
     breadcrumbs: [
