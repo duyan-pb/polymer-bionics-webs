@@ -9,6 +9,15 @@
 
 import type { TeamMember } from './types'
 
+// Team member images (web-optimized)
+import rylieGreenImg from '@/assets/images/team/optimized/rylie_green.webp'
+import benGreenImg from '@/assets/images/team/optimized/ben_green.webp'
+import estelleCuttazImg from '@/assets/images/team/optimized/estelle_cuttaz.webp'
+import joeGodingImg from '@/assets/images/team/optimized/josef_goding.webp'
+import oliviaCauviImg from '@/assets/images/team/optimized/olivia_cauvi.webp'
+import duyAnTranImg from '@/assets/images/team/optimized/duy_an_tran.webp'
+import efeSenImg from '@/assets/images/team/optimized/efe_sen.webp'
+
 // =============================================================================
 // TODO: REPLACE ALL PLACEHOLDER CONTENT WITH REAL TEAM DATA
 // =============================================================================
@@ -34,6 +43,7 @@ export const teamMembers: TeamMember[] = [
     title: 'Co-Founder & Chief Scientific Officer',
     role: 'CSO',
     category: 'founders',
+    imageUrl: rylieGreenImg,
     shortBio: '[Short bio placeholder]', // TODO: Add real bio - CSO background and expertise
     fullBio: '[Full bio placeholder]', // TODO: Add detailed biography
     education: ['[Education placeholder]'], // TODO: Add education history
@@ -48,6 +58,7 @@ export const teamMembers: TeamMember[] = [
     title: 'Co-Founder & Managing Director',
     role: 'Managing Director',
     category: 'founders',
+    imageUrl: benGreenImg,
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -74,6 +85,7 @@ export const teamMembers: TeamMember[] = [
     title: 'Senior Design Engineer',
     role: 'Senior Design Engineer',
     category: 'product-engineering',
+    imageUrl: estelleCuttazImg,
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -88,6 +100,7 @@ export const teamMembers: TeamMember[] = [
     title: 'Head of R&D',
     role: 'Head of R&D',
     category: 'research-innovation',
+    imageUrl: joeGodingImg,
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -102,6 +115,7 @@ export const teamMembers: TeamMember[] = [
     title: 'Project Manager',
     role: 'Project Manager',
     category: 'management',
+    imageUrl: oliviaCauviImg,
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -129,6 +143,7 @@ export const teamMembers: TeamMember[] = [
     title: 'Research Engineer',
     role: 'Research Engineer',
     category: 'product-engineering',
+    imageUrl: efeSenImg,
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
@@ -142,6 +157,7 @@ export const teamMembers: TeamMember[] = [
     title: 'Software Engineer',
     role: 'Software Engineer',
     category: 'product-engineering',
+    imageUrl: duyAnTranImg,
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],

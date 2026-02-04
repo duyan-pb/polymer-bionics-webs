@@ -50,47 +50,12 @@ export function TeamMemberDialogContent({ member }: TeamMemberDialogContentProps
         </div>
       </DialogHeader>
 
-      <div className="space-y-6">
-        {member.shortBio && (
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Biography</h3>
-            <p className="text-base leading-relaxed text-muted-foreground">{member.shortBio}</p>
-          </div>
-        )}
-
-        {member.education && member.education.length > 0 && (
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Education</h3>
-            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-              {member.education.map((edu, idx) => (
-                <li key={idx}>{edu}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {member.achievements && member.achievements.length > 0 && (
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Achievements</h3>
-            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-              {member.achievements.map((achievement, idx) => (
-                <li key={idx}>{achievement}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {member.publications && member.publications.length > 0 && (
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Publications</h3>
-            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-              {member.publications.map((publication, idx) => (
-                <li key={idx}>{publication}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
+      {member.shortBio && (
+        <div>
+          <h3 className="text-lg font-semibold mb-2">Biography</h3>
+          <p className="text-base leading-relaxed text-muted-foreground">{member.shortBio}</p>
+        </div>
+      )}
     </>
   )
 }
