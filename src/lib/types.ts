@@ -39,8 +39,6 @@ export interface TeamMember {
   imageUrl?: string
   /** CSS object-position for image cropping */
   imagePosition?: string
-  /** CSS scale for image sizing (e.g. 0.9 = 90%) */
-  imageScale?: number
   /** LinkedIn profile URL */
   linkedin?: string
   /** Google Scholar profile URL */

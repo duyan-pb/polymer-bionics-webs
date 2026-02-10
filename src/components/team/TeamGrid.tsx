@@ -34,10 +34,7 @@ export function TeamGrid({ members, title, onSelect }: TeamGridProps) {
                   src={member.imageUrl} 
                   alt={member.name} 
                   className="w-full h-full object-cover" 
-                  style={{
-                    ...(member.imagePosition ? { objectPosition: member.imagePosition } : {}),
-                    ...(member.imageScale ? { transform: `scale(${member.imageScale})` } : {}),
-                  }}
+                  style={member.imagePosition ? { objectPosition: member.imagePosition } : undefined}
                   loading="lazy"
                   decoding="async"
                 />

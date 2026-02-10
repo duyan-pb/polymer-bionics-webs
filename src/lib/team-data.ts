@@ -134,7 +134,6 @@ export const teamMembers: TeamMember[] = [
     category: 'product-engineering',
     imageUrl: robertTothImg,
     imagePosition: 'center 65%',
-    imageScale: 0.9,
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],

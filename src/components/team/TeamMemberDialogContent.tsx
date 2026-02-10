@@ -22,7 +22,7 @@ export function TeamMemberDialogContent({ member }: TeamMemberDialogContentProps
         <div className="flex items-start gap-6 mb-6">
           <div className="w-32 h-32 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center flex-shrink-0">
             {member.imageUrl ? (
-              <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover rounded-lg" style={{ ...(member.imagePosition ? { objectPosition: member.imagePosition } : {}), ...(member.imageScale ? { transform: `scale(${member.imageScale})` } : {}) }} loading="lazy" decoding="async" />
+              <img src={member.imageUrl} alt={member.name} className="w-full h-full object-cover rounded-lg" style={member.imagePosition ? { objectPosition: member.imagePosition } : undefined} loading="lazy" decoding="async" />
             ) : (
               <User size={60} className="text-muted-foreground" weight="light" />
             )}
