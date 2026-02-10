@@ -235,7 +235,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
                     <ClickableCard
                       key={item.id}
                       className="p-5 md:p-8 border-l-4 border-l-primary"
-                      onClick={() => handleNewsSelect(item)}
+                      onClick={() => item.link ? openExternal(item.link) : handleNewsSelect(item)}
                       ariaLabel={`Read news: ${item.title}`}
                     >
                       <div className="flex flex-col md:flex-row md:items-start gap-4">
@@ -283,7 +283,7 @@ export function NewsPage({ news, publications, onNavigate }: NewsPageProps) {
                     <ClickableCard
                       key={pub.id}
                       className="p-4 md:p-6 border-l-4 border-l-primary"
-                      onClick={() => handlePublicationSelect(pub)}
+                      onClick={() => pub.doi ? openExternal(pub.doi) : handlePublicationSelect(pub)}
                       ariaLabel={`View publication: ${pub.title}`}
                     >
                       <div className="flex flex-col gap-3">
