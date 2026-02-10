@@ -18,6 +18,7 @@ import oliviaCauviImg from '@/assets/images/team/optimized/olivia_cauvi.webp'
 import duyAnTranImg from '@/assets/images/team/optimized/duy_an_tran.webp'
 import alexeyNovikovImg from '@/assets/images/team/optimized/alexey_novikov.webp'
 import efeSenImg from '@/assets/images/team/optimized/efe_sen.webp'
+import robertTothImg from '@/assets/images/team/optimized/robert_toth.webp'
 
 // =============================================================================
 // TODO: REPLACE ALL PLACEHOLDER CONTENT WITH REAL TEAM DATA
@@ -131,6 +132,7 @@ export const teamMembers: TeamMember[] = [
     title: 'Senior Electrical Engineer',
     role: 'Senior Electrical Engineer',
     category: 'product-engineering',
+    imageUrl: robertTothImg,
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],
