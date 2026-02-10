@@ -9,7 +9,7 @@
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ContactCTA } from '@/components/ContactCTA'
-import { CheckCircle, FilePdf } from '@phosphor-icons/react'
+import { CheckCircle, FilePdf, Download } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import type { Material } from '@/lib/types'
 
@@ -88,6 +88,7 @@ export function MaterialDialogContent({ material }: MaterialDialogContentProps) 
                     <a href={ds.pdfUrl} target="_blank" rel="noopener noreferrer">
                       <FilePdf size={20} weight="duotone" className="text-red-500 flex-shrink-0" />
                       <span className="text-sm font-medium">{ds.name}</span>
+                      <Download size={16} className="ml-auto text-muted-foreground" />
                     </a>
                   </Button>
                 ))}

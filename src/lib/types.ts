@@ -84,6 +84,8 @@ export interface Product {
   datasheetId?: string
   /** Related case study ID */
   caseStudyId?: string
+  /** Associated datasheets for direct download */
+  datasheets?: { name: string; pdfUrl: string }[]
 }
 
 /**

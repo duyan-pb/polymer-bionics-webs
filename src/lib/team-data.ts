@@ -16,6 +16,7 @@ import estelleCuttazImg from '@/assets/images/team/optimized/estelle_cuttaz.webp
 import joeGodingImg from '@/assets/images/team/optimized/josef_goding.webp'
 import oliviaCauviImg from '@/assets/images/team/optimized/olivia_cauvi.webp'
 import duyAnTranImg from '@/assets/images/team/optimized/duy_an_tran.webp'
+import alexeyNovikovImg from '@/assets/images/team/optimized/alexey_novikov.webp'
 import efeSenImg from '@/assets/images/team/optimized/efe_sen.webp'
 
 // =============================================================================
@@ -72,6 +73,7 @@ export const teamMembers: TeamMember[] = [
     title: 'Design Engineer',
     role: 'Design Engineer',
     category: 'research-innovation',
+    imageUrl: alexeyNovikovImg,
     shortBio: '[Short bio placeholder]',
     fullBio: '[Full bio placeholder]',
     education: ['[Education placeholder]'],

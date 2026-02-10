@@ -104,7 +104,7 @@ export function ProductCard({
           </ul>
         </div>
 
-        <div className="space-y-2 pt-2">
+        <div className="pt-2">
           <div className="flex flex-wrap gap-2">
             {onBuy && (
               <Button
@@ -136,9 +136,7 @@ export function ProductCard({
                 Case Study
               </Button>
             )}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Button variant="ghost" size="sm" onClick={onContact}>
+            <Button variant="default" size="sm" className="text-xs md:text-sm" onClick={onContact}>
               Enquire
             </Button>
           </div>

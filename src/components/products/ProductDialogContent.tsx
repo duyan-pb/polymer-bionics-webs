@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ContactCTA } from '@/components/ContactCTA'
-import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, ShoppingCart } from '@phosphor-icons/react'
+import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, ShoppingCart, FilePdf } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
 
 export interface ProductDialogContentProps {
@@ -120,6 +120,32 @@ export function ProductDialogContent({ product, onSelectImage, onBuy, onDatashee
           <h4 className="text-lg font-semibold mb-3">Regulatory & Safety Status</h4>
           <p className="text-sm text-muted-foreground">{product.regulatoryStatus}</p>
         </div>
+        {product.datasheets && product.datasheets.length > 0 && (
+          <>
+            <Separator />
+            <div>
+              <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                <FilePdf size={20} className="text-primary" /> Datasheets
+              </h4>
+              <div className="flex flex-col gap-2">
+                {product.datasheets.map((ds, idx) => (
+                  <Button
+                    key={idx}
+                    variant="outline"
+                    className="w-full justify-start gap-3 h-auto py-3"
+                    asChild
+                  >
+                    <a href={ds.pdfUrl} target="_blank" rel="noopener noreferrer">
+                      <FilePdf size={20} weight="duotone" className="text-red-500 flex-shrink-0" />
+                      <span className="text-sm font-medium">{ds.name}</span>
+                      <Download size={16} className="ml-auto text-muted-foreground" />
+                    </a>
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
         <div className="space-y-3 pt-4">
           <div className="flex gap-3">
             {onBuy && (

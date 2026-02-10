@@ -41,7 +41,10 @@ export const devices: Product[] = [
       'EEG research and screening',
       'Neurophysiology studies'
     ],
-    regulatoryStatus: 'Research system. Regulatory pathway in progress.'
+    regulatoryStatus: 'Research system. Regulatory pathway in progress.',
+    datasheets: [
+      { name: 'SimplEEG Headband Datasheet', pdfUrl: '/datasheets/SimplEEGheadband_PB_datasheet.pdf' },
+    ],
   },
   {
     id: 'babeeg',

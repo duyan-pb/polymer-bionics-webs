@@ -47,7 +47,10 @@ export const initialProducts: Product[] = [
       'Wearable electrophysiology (EEG, EMG, ECG)',
       'Human–machine interaction research including stimulation'
     ],
-    regulatoryStatus: 'Research-use product. Not certified for clinical diagnosis.'
+    regulatoryStatus: 'Research-use product. Not certified for clinical diagnosis.',
+    datasheets: [
+      { name: 'SimplEEG Datasheet', pdfUrl: '/datasheets/SimplEEG_PB_datasheet.pdf' },
+    ],
   },
   {
     id: 'flexelec-sheet',
@@ -88,7 +91,10 @@ export const initialProducts: Product[] = [
       'Neural stimulation and recording studies',
       'Peripheral nerve and muscle research'
     ],
-    regulatoryStatus: 'Research-use product only.'
+    regulatoryStatus: 'Research-use product only.',
+    datasheets: [
+      { name: 'FlexElec Probe Datasheet', pdfUrl: '/datasheets/FlexElecProbe_PB_datasheet.pdf' },
+    ],
   },
   {
     id: 'flexelec-cuff',

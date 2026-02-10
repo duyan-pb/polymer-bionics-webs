@@ -37,12 +37,7 @@ export const materials: Material[] = [
       'Cross-platform compatible – suitable for dry wearables and implantable bioelectronic systems'
     ],
     technicalDetails: 'FlexElec is a conductive elastomer engineered to balance electrical performance with soft mechanical behaviour. Its elastomeric matrix supports deformation and stretch without loss of conductivity, enabling intimate contact with tissue or skin. The material can be processed into a range of electrode formats and integrated into devices without relying on stiff metallic layers or high-temperature processing.',
-    imageClass: 'bg-gradient-to-br from-accent/20 to-primary/10',
-    datasheets: [
-      { name: 'SimplEEG Datasheet', pdfUrl: '/datasheets/SimplEEG_PB_datasheet.pdf' },
-      { name: 'FlexElec Probe Datasheet', pdfUrl: '/datasheets/FlexElecProbe_PB_datasheet.pdf' },
-      { name: 'SimplEEG Headband Datasheet', pdfUrl: '/datasheets/SimplEEGheadband_PB_datasheet.pdf' },
-    ],
+    imageClass: 'bg-gradient-to-br from-accent/20 to-primary/10'
   },
   {
     id: 'biongel',
