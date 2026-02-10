@@ -8,10 +8,9 @@
  */
 
 import { memo, useCallback } from 'react'
-import { EnvelopeSimple, WhatsappLogo, Copy } from '@phosphor-icons/react'
+import { EnvelopeSimple, WhatsappLogo } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
-import { toast } from 'sonner'
-import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
+import { contactConfig, getEmailUrl, getWhatsAppUrl } from '@/lib/contact-config'
 import { openExternal } from '@/lib/utils'
 import { ManageCookiesLink, ConsentStatusIndicator } from '@/components/ConsentBanner'
 
@@ -30,17 +29,8 @@ import { ManageCookiesLink, ConsentStatusIndicator } from '@/components/ConsentB
  * ```
  */
 export const Footer = memo(() => {
-  const handleWhatsAppClick = useCallback(async () => {
-    const success = await copyWhatsAppNumber()
-    if (success) {
-      toast.success('WhatsApp number copied!', {
-        description: `${contactConfig.whatsapp.number} - Open WhatsApp and start a chat`,
-      })
-    } else {
-      toast.error('Could not copy number', {
-        description: `WhatsApp: ${contactConfig.whatsapp.number}`,
-      })
-    }
+  const handleWhatsAppClick = useCallback(() => {
+    openExternal(getWhatsAppUrl())
   }, [])
 
   const handleEmailClick = (type: 'general' | 'sales') => (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -56,7 +46,6 @@ export const Footer = memo(() => {
             <Button variant="outline" size="default" className="font-semibold text-sm md:text-base" onClick={handleWhatsAppClick}>
               <WhatsappLogo className="mr-2" size={18} weight="fill" />
               WhatsApp
-              <Copy className="ml-2" size={14} />
             </Button>
             <Button variant="outline" size="default" className="font-semibold text-sm md:text-base" asChild>
               <a 

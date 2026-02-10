@@ -9,11 +9,10 @@
  */
 
 import { useState } from 'react'
-import { EnvelopeSimple, WhatsappLogo, X, ChatCircleDots, MapPin, Copy } from '@phosphor-icons/react'
+import { EnvelopeSimple, WhatsappLogo, X, ChatCircleDots, MapPin } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
-import { toast } from 'sonner'
-import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
+import { contactConfig, getEmailUrl, getWhatsAppUrl } from '@/lib/contact-config'
 import { openExternal } from '@/lib/utils'
 
 /**
@@ -41,17 +40,8 @@ export function FloatingContactButton() {
     setIsOpen(false)
   }
 
-  const handleWhatsAppClick = async () => {
-    const success = await copyWhatsAppNumber()
-    if (success) {
-      toast.success('WhatsApp number copied!', {
-        description: `${contactConfig.whatsapp.number} - Open WhatsApp and start a chat`,
-      })
-    } else {
-      toast.error('Could not copy number', {
-        description: `WhatsApp: ${contactConfig.whatsapp.number}`,
-      })
-    }
+  const handleWhatsAppClick = () => {
+    openExternal(getWhatsAppUrl())
     setIsOpen(false)
   }
 
@@ -111,7 +101,6 @@ export function FloatingContactButton() {
                 <span className="text-sm font-medium">WhatsApp</span>
                 <span className="text-xs text-muted-foreground">{contactConfig.whatsapp.number}</span>
               </div>
-              <Copy className="flex-shrink-0 text-muted-foreground" size={14} />
             </Button>
 
             <Button

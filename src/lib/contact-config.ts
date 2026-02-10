@@ -86,6 +86,18 @@ export async function copyWhatsAppNumber(): Promise<boolean> {
   }
 }
 
+/**
+ * Generates a WhatsApp chat URL using wa.me.
+ * 
+ * @param message - Optional pre-filled message
+ * @returns WhatsApp URL that opens the chat directly
+ */
+export function getWhatsAppUrl(message?: string): string {
+  const number = contactConfig.whatsapp.number.replace(/[^\d]/g, '')
+  const msg = message ?? contactConfig.whatsapp.defaultMessage
+  return `https://wa.me/${number}?text=${encodeURIComponent(msg)}`
+}
+
 export interface EmailContext {
   sourcePage?: string
   sourcePath?: string
@@ -173,16 +185,16 @@ export function getEmailUrl(
   const shouldUseDefaultTemplate = !subject && !body
   const resolvedSubject = subject ?? (shouldUseDefaultTemplate ? contactConfig.email.orderSubject : undefined)
   const resolvedBody = body ?? (shouldUseDefaultTemplate ? getOrderEmailBody(context) : undefined)
-  const params = new URLSearchParams()
+  const parts: string[] = []
 
   if (resolvedSubject) {
-    params.set('subject', resolvedSubject)
+    parts.push(`subject=${encodeURIComponent(resolvedSubject)}`)
   }
 
   if (resolvedBody) {
-    params.set('body', resolvedBody)
+    parts.push(`body=${encodeURIComponent(resolvedBody)}`)
   }
 
-  const query = params.toString()
+  const query = parts.join('&')
   return query ? `mailto:${email}?${query}` : `mailto:${email}`
 }

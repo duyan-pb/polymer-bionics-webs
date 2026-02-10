@@ -9,6 +9,15 @@
 
 import type { Product } from './types'
 
+// Custom solution images (web-optimized)
+import wearableSystemsImg from '@/assets/images/custom/optimized/wearable_systems.webp'
+import wearableGarmentsImg from '@/assets/images/custom/optimized/wearable_garments.webp'
+import adhesiveMonitoringImg from '@/assets/images/custom/optimized/adhesive_monitoring.webp'
+import adhesiveMonitoringImg1 from '@/assets/images/custom/optimized/adhesive_monitoring_1.webp'
+import customImplantableImg from '@/assets/images/custom/optimized/custom_implantable_arrays.webp'
+import customImplantableImg1 from '@/assets/images/custom/optimized/custom_implantable_arrays_1.webp'
+import customImplantableImg2 from '@/assets/images/custom/optimized/custom_implantable_arrays_2.webp'
+
 /**
  * Custom solutions catalog.
  * Electrodes embedded within customer-specific device architectures.
@@ -36,6 +45,7 @@ export const customSolutions: Product[] = [
   {
     id: 'wearable-systems',
     name: 'Wearable Systems',
+    imageUrl: wearableSystemsImg,
     tagline: 'Customer-integrated bioelectronic devices for wearable sensing and stimulation',
     description: 'Polymer Bionics integrates its soft electrodes, adaptive materials, and electronics into customer-specific devices for comfortable, human-scale form factors. These systems are designed to maintain stable signal quality across extended wear and movement.',
     technicalDescription: 'Polymer Bionics integrates its soft electrodes, adaptive materials, and electronics into customer-specific devices for comfortable, human-scale form factors. These systems are designed to maintain stable signal quality across extended wear and movement.',
@@ -55,6 +65,7 @@ export const customSolutions: Product[] = [
   {
     id: 'wearable-garments',
     name: 'Wearable Garment Systems',
+    imageUrl: wearableGarmentsImg,
     tagline: 'Bioelectronic garments with integrated soft electrodes',
     description: 'Wearable garment systems integrate soft electrodes directly into textiles and flexible substrates, enabling distributed sensing across the body. Designs prioritise comfort, washability, and repeatable electrode placement.',
     technicalDescription: 'Wearable garment systems integrate soft electrodes directly into textiles and flexible substrates, enabling distributed sensing across the body. Designs prioritise comfort, washability, and repeatable electrode placement.',
@@ -74,6 +85,8 @@ export const customSolutions: Product[] = [
   {
     id: 'adhesive-monitoring',
     name: 'Adhesive Monitoring Systems',
+    imageUrl: adhesiveMonitoringImg,
+    images: [adhesiveMonitoringImg, adhesiveMonitoringImg1],
     tagline: 'Skin-adherent wearable systems with integrated electronics',
     description: 'These systems combine conformal adhesive electrodes with embedded electronics for compact, body-worn monitoring. Designed for motion tolerance and rapid deployment without external hardware.',
     technicalDescription: 'These systems combine conformal adhesive electrodes with embedded electronics for compact, body-worn monitoring. Designed for motion tolerance and rapid deployment without external hardware.',
@@ -93,6 +106,8 @@ export const customSolutions: Product[] = [
   {
     id: 'custom-implantable-arrays',
     name: 'Custom Implantable Electrode Arrays',
+    imageUrl: customImplantableImg,
+    images: [customImplantableImg, customImplantableImg1, customImplantableImg2],
     tagline: 'Bespoke soft electrode arrays for implantable bioelectronics',
     description: 'Polymer Bionics designs custom implantable electrode arrays tailored to partner-specific anatomical, electrical, and mechanical requirements. Arrays are based on soft elastomeric materials and can be configured for recording, stimulation, or both.',
     technicalDescription: 'Polymer Bionics designs custom implantable electrode arrays tailored to partner-specific anatomical, electrical, and mechanical requirements. Arrays are based on soft elastomeric materials and can be configured for recording, stimulation, or both.',

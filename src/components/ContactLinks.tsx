@@ -8,9 +8,8 @@
  */
 
 import { Button } from '@/components/ui/button'
-import { EnvelopeSimple, WhatsappLogo, Copy } from '@phosphor-icons/react'
-import { toast } from 'sonner'
-import { contactConfig, copyWhatsAppNumber, getEmailUrl } from '@/lib/contact-config'
+import { EnvelopeSimple, WhatsappLogo } from '@phosphor-icons/react'
+import { getEmailUrl, getWhatsAppUrl } from '@/lib/contact-config'
 import { openExternal } from '@/lib/utils'
 
 /**
@@ -53,17 +52,8 @@ export function ContactLinks({
   showEmail = true,
   emailType = 'general'
 }: ContactLinksProps) {
-  const handleWhatsAppClick = async () => {
-    const success = await copyWhatsAppNumber()
-    if (success) {
-      toast.success('WhatsApp number copied!', {
-        description: `${contactConfig.whatsapp.number} - Open WhatsApp and start a chat`,
-      })
-    } else {
-      toast.error('Could not copy number', {
-        description: `WhatsApp: ${contactConfig.whatsapp.number}`,
-      })
-    }
+  const handleWhatsAppClick = () => {
+    openExternal(getWhatsAppUrl())
   }
 
   const handleEmailClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -82,7 +72,6 @@ export function ContactLinks({
         >
           <WhatsappLogo className="mr-2" size={18} weight="fill" />
           WhatsApp
-          <Copy className="ml-2" size={14} />
         </Button>
       )}
       {showEmail && (

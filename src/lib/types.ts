@@ -263,6 +263,8 @@ export interface Material {
   imageClass?: string
   /** Material image URL */
   imageUrl?: string
+  /** Associated datasheets */
+  datasheets?: { name: string; pdfUrl: string }[]
 }
 
 /**

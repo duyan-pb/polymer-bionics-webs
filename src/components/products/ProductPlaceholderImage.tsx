@@ -22,7 +22,7 @@ export function ProductPlaceholderImage({ productName, category, className = '' 
 
   return (
     <div 
-      className={`w-full h-40 md:h-56 bg-gradient-to-br ${gradientClass} flex flex-col items-center justify-center gap-3 ${className}`}
+      className={`w-full h-56 md:h-72 bg-gradient-to-br ${gradientClass} flex flex-col items-center justify-center gap-3 ${className}`}
       role="img"
       aria-label={`Placeholder image for ${productName}`}
     >

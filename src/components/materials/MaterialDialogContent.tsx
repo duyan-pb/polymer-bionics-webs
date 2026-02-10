@@ -9,7 +9,8 @@
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ContactCTA } from '@/components/ContactCTA'
-import { CheckCircle } from '@phosphor-icons/react'
+import { CheckCircle, FilePdf } from '@phosphor-icons/react'
+import { Button } from '@/components/ui/button'
 import type { Material } from '@/lib/types'
 
 interface MaterialDialogContentProps {
@@ -20,7 +21,7 @@ export function MaterialDialogContent({ material }: MaterialDialogContentProps) 
   return (
     <>
       <DialogHeader>
-        <div className="h-40 -mx-6 -mt-6 mb-6 overflow-hidden bg-muted">
+        <div className="h-56 md:h-72 -mx-6 -mt-6 mb-6 overflow-hidden bg-muted">
           {material.imageUrl ? (
             <img src={material.imageUrl} alt={material.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
           ) : (
@@ -70,6 +71,30 @@ export function MaterialDialogContent({ material }: MaterialDialogContentProps) 
             {material.technicalDetails}
           </p>
         </div>
+
+        {material.datasheets && material.datasheets.length > 0 && (
+          <>
+            <Separator />
+            <div>
+              <h4 className="text-lg font-semibold mb-3">Datasheets</h4>
+              <div className="flex flex-col gap-2">
+                {material.datasheets.map((ds, idx) => (
+                  <Button
+                    key={idx}
+                    variant="outline"
+                    className="w-full justify-start gap-3 h-auto py-3"
+                    asChild
+                  >
+                    <a href={ds.pdfUrl} target="_blank" rel="noopener noreferrer">
+                      <FilePdf size={20} weight="duotone" className="text-red-500 flex-shrink-0" />
+                      <span className="text-sm font-medium">{ds.name}</span>
+                    </a>
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="flex gap-3 pt-4">
           <ContactCTA emailType="sales" />

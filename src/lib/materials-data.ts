@@ -9,6 +9,11 @@
 
 import type { Material } from './types'
 
+// Material images (web-optimized)
+import flexelecMatImg from '@/assets/images/materials/optimized/flexelec.webp'
+import biongelImg from '@/assets/images/materials/optimized/biongel.webp'
+import elastisolderImg from '@/assets/images/materials/optimized/elastisolder.webp'
+
 /**
  * Biomaterials catalog.
  * 
@@ -19,6 +24,7 @@ export const materials: Material[] = [
   {
     id: 'flexelec',
     name: 'FlexElec',
+    imageUrl: flexelecMatImg,
     description: 'FlexElec is a conductive elastomer designed to function as a standalone soft, flexible electrode, while also offering the flexibility to be applied as a conformal coating where required. It enables adaptive bioelectronic interfaces that conform to the body while maintaining reliable electrical performance. FlexElec is suitable for both dry wearable technologies and implantable devices.',
     properties: [
       'Adaptive mechanical compliance',
@@ -31,11 +37,17 @@ export const materials: Material[] = [
       'Cross-platform compatible – suitable for dry wearables and implantable bioelectronic systems'
     ],
     technicalDetails: 'FlexElec is a conductive elastomer engineered to balance electrical performance with soft mechanical behaviour. Its elastomeric matrix supports deformation and stretch without loss of conductivity, enabling intimate contact with tissue or skin. The material can be processed into a range of electrode formats and integrated into devices without relying on stiff metallic layers or high-temperature processing.',
-    imageClass: 'bg-gradient-to-br from-accent/20 to-primary/10'
+    imageClass: 'bg-gradient-to-br from-accent/20 to-primary/10',
+    datasheets: [
+      { name: 'SimplEEG Datasheet', pdfUrl: '/datasheets/SimplEEG_PB_datasheet.pdf' },
+      { name: 'FlexElec Probe Datasheet', pdfUrl: '/datasheets/FlexElecProbe_PB_datasheet.pdf' },
+      { name: 'SimplEEG Headband Datasheet', pdfUrl: '/datasheets/SimplEEGheadband_PB_datasheet.pdf' },
+    ],
   },
   {
     id: 'biongel',
     name: 'BionGel',
+    imageUrl: biongelImg,
     description: 'BionGel is a biocompatible hydrogel coating designed to improve the interface between electrodes and biological tissue. It can be applied to existing metal or polymer electrodes, enabling retrofit of established device designs. BionGel reduces effective stiffness at the tissue interface while supporting long-term surface stability.',
     properties: [
       'Biocompatible hydrogel composition',
@@ -53,6 +65,7 @@ export const materials: Material[] = [
   {
     id: 'elastisolder',
     name: 'ElastiSolder',
+    imageUrl: elastisolderImg,
     description: 'ElastiSolder is a conductive interconnect paste designed to electrically and mechanically connect soft elastomeric components with metallic elements in bioelectronic devices. It enables hybrid device architectures without the need for high-temperature curing or sintering. ElastiSolder is compatible with a wide range of medical-grade metals commonly used in implantable systems.',
     properties: [
       'Low-temperature curing',

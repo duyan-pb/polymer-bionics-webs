@@ -12,6 +12,7 @@ import { ClickableCard } from '@/components/ClickableCard'
 import { MATERIAL_CARD } from '@/lib/constants'
 import type { Material } from '@/lib/types'
 import { MaterialPlaceholderImage } from '@/components/materials/MaterialPlaceholderImage'
+import { FilePdf } from '@phosphor-icons/react'
 
 interface MaterialCardProps {
   material: Material
@@ -25,7 +26,7 @@ export function MaterialCard({ material, onSelect }: MaterialCardProps) {
       onClick={() => onSelect(material)}
       ariaLabel={`View details for ${material.name}`}
     >
-      <div className="h-40 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
+      <div className="h-56 md:h-72 overflow-hidden bg-muted transition-all duration-300 group-hover:scale-105">
         {material.imageUrl ? (
           <img src={material.imageUrl} alt={material.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
         ) : (
@@ -60,6 +61,25 @@ export function MaterialCard({ material, onSelect }: MaterialCardProps) {
           <Button variant="outline" size="sm" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors font-semibold">
             View Full Details
           </Button>
+          {material.datasheets && material.datasheets.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {material.datasheets.map((ds, idx) => (
+                <Button
+                  key={idx}
+                  variant="ghost"
+                  size="sm"
+                  className="gap-2 text-muted-foreground hover:text-red-500"
+                  asChild
+                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                >
+                  <a href={ds.pdfUrl} target="_blank" rel="noopener noreferrer">
+                    <FilePdf size={16} weight="duotone" className="text-red-500" />
+                    <span className="text-xs">{ds.name}</span>
+                  </a>
+                </Button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </ClickableCard>

@@ -9,6 +9,14 @@
 
 import type { Product } from './types'
 
+// Device images (web-optimized)
+import simpleegImg from '@/assets/images/devices/optimized/simpleeg.webp'
+import simpleegImg1 from '@/assets/images/devices/optimized/simpleeg_1.webp'
+import simpleegImg2 from '@/assets/images/devices/optimized/simpleeg_2.webp'
+import simpleegImg3 from '@/assets/images/devices/optimized/simpleeg_3.webp'
+import babeegImg from '@/assets/images/devices/optimized/babeeg.webp'
+import babeegImg1 from '@/assets/images/devices/optimized/babeeg_1.webp'
+
 /**
  * Proprietary bioelectronic devices.
  * Complete wearable or implantable systems designed for clinical translation and commercial deployment.
@@ -17,6 +25,8 @@ export const devices: Product[] = [
   {
     id: 'simpleeg',
     name: 'SimplEEG',
+    imageUrl: simpleegImg,
+    images: [simpleegImg, simpleegImg1, simpleegImg2, simpleegImg3],
     tagline: 'Silicone 5-electrode headband for accessible EEG monitoring',
     description: 'SimplEEG is a comfortable silicone headband featuring 5 soft electrodes for simplified EEG acquisition. Designed for ease of use in research and clinical screening applications.',
     technicalDescription: 'SimplEEG is a comfortable silicone headband featuring 5 soft electrodes for simplified EEG acquisition. The system is designed for rapid deployment and consistent electrode placement without specialised training.',
@@ -36,6 +46,8 @@ export const devices: Product[] = [
   {
     id: 'babeeg',
     name: 'BabEEG',
+    imageUrl: babeegImg,
+    images: [babeegImg, babeegImg1],
     tagline: 'Adaptive EEG cap for neonatal and infant monitoring',
     description: 'BabEEG is a soft, adaptive EEG cap designed specifically for neonatal and infant use. It uses auxetic structures and soft electrodes to accommodate rapid changes in head size while maintaining reliable signal quality.',
     technicalDescription: 'BabEEG is a soft, adaptive EEG cap designed specifically for neonatal and infant use. It uses auxetic structures and soft electrodes to accommodate rapid changes in head size while maintaining reliable signal quality.',
