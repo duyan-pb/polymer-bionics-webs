@@ -47,6 +47,8 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
   const containerRef = useRef<HTMLDivElement>(null)
   const previousOverflowRef = useRef<string>('')
   const previousActiveRef = useRef<Element | null>(null)
+  /** Track whether we already captured the opener state for this "session" */
+  const didCaptureRef = useRef(false)
 
   const goNext = useCallback(() => {
     if (currentIndex === null) { return }
@@ -58,19 +60,49 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
     onNavigate((currentIndex - 1 + images.length) % images.length)
   }, [currentIndex, images.length, onNavigate])
 
-  // Keyboard navigation + focus trap
+  // Open/close lifecycle — only runs when isOpen truly changes
+  // Handles scroll-lock preservation and focus restoration
   useEffect(() => {
-    if (!isOpen) { return }
+    if (!isOpen) {
+      // Only restore if we previously captured state
+      if (didCaptureRef.current) {
+        document.body.style.overflow = previousOverflowRef.current
+        if (previousActiveRef.current instanceof HTMLElement) {
+          previousActiveRef.current.focus()
+        }
+        didCaptureRef.current = false
+      }
+      return
+    }
 
-    // Save previous state
+    // Capture state once per open session
     previousOverflowRef.current = document.body.style.overflow
     previousActiveRef.current = document.activeElement
+    didCaptureRef.current = true
     document.body.style.overflow = 'hidden'
 
     // Move focus into lightbox
     requestAnimationFrame(() => {
       containerRef.current?.focus()
     })
+
+    return () => {
+      // Cleanup on unmount while still open
+      if (didCaptureRef.current) {
+        document.body.style.overflow = previousOverflowRef.current
+        if (previousActiveRef.current instanceof HTMLElement) {
+          previousActiveRef.current.focus()
+        }
+        didCaptureRef.current = false
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-run when open state truly changes
+  }, [isOpen])
+
+  // Keyboard navigation + focus trap — separate effect so it rebinds
+  // on goNext/goPrev changes without triggering open/close side-effects
+  useEffect(() => {
+    if (!isOpen) { return }
 
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { onClose(); return }
@@ -84,11 +116,21 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
 
         const first = focusable[0] as HTMLElement
         const last = focusable[focusable.length - 1] as HTMLElement
+        const active = document.activeElement
 
-        if (e.shiftKey && document.activeElement === first) {
+        // If focus is on the container itself (or outside focusable children),
+        // redirect to first/last depending on direction
+        const isInsideTrap = containerRef.current.contains(active) && active !== containerRef.current
+        if (!isInsideTrap) {
+          e.preventDefault()
+          ;(e.shiftKey ? last : first).focus()
+          return
+        }
+
+        if (e.shiftKey && active === first) {
           e.preventDefault()
           last.focus()
-        } else if (!e.shiftKey && document.activeElement === last) {
+        } else if (!e.shiftKey && active === last) {
           e.preventDefault()
           first.focus()
         }
@@ -96,17 +138,7 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
     }
 
     window.addEventListener('keydown', handleKey)
-
-    return () => {
-      // Restore previous overflow (preserves scroll-lock from underlying modals)
-      document.body.style.overflow = previousOverflowRef.current
-      window.removeEventListener('keydown', handleKey)
-
-      // Restore focus to the element that opened the lightbox
-      if (previousActiveRef.current instanceof HTMLElement) {
-        previousActiveRef.current.focus()
-      }
-    }
+    return () => { window.removeEventListener('keydown', handleKey) }
   }, [isOpen, goNext, goPrev, onClose])
 
   if (!isOpen || currentIndex === null) { return null }
