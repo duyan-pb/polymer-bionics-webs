@@ -110,7 +110,10 @@ async function submitToFormspree(formId: string, data: Record<string, string>): 
       return { success: true, message: 'Submission successful' }
     }
 
-    const errorData = await response.json().catch(() => ({}))
+    const errorData = await response.json().catch((parseError) => {
+      console.warn('[Form Service] Failed to parse Formspree error response:', parseError)
+      return { error: response.statusText || `HTTP ${response.status}` }
+    })
     return {
       success: false,
       message: 'Submission failed',
@@ -143,7 +146,10 @@ async function submitToApi(endpoint: string, data: Record<string, unknown>): Pro
       return { success: true, message: 'Submission successful' }
     }
 
-    const errorData = await response.json().catch(() => ({}))
+    const errorData = await response.json().catch((parseError) => {
+      console.warn('[Form Service] Failed to parse API error response:', parseError)
+      return { error: response.statusText || `HTTP ${response.status}` }
+    })
     return {
       success: false,
       message: 'Submission failed',
