@@ -65,6 +65,29 @@
 </head>
 
 <body>
+    <!-- Hidden Netlify Forms declarations (Netlify detects these at deploy time) -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="email" />
+      <input name="company" />
+      <input name="subject" />
+      <textarea name="message"></textarea>
+    </form>
+    <form name="newsletter" netlify netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="email" />
+    </form>
+    <form name="order" netlify netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="email" />
+      <input name="phone" />
+      <input name="item" />
+      <input name="item_type" />
+      <input name="quantity" />
+      <textarea name="comments"></textarea>
+    </form>
+
     <div id="root">
       <!-- Initial loading state to improve perceived performance -->
       <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;">

@@ -165,6 +165,9 @@ beforeEach(() => {
   cookieStore = {}
   mockLocation.search = ''
   mockLocation.pathname = '/products'
+  mockLocation.hostname = 'polymerbionics.com'
+  mockLocation.host = 'polymerbionics.com'
+  mockLocation.origin = 'https://polymerbionics.com'
   mockLocation.href = 'https://polymerbionics.com/products'
 })
 

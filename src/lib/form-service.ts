@@ -6,8 +6,9 @@
  * Backends (in priority order):
  * 1. Custom API endpoint — set VITE_CONTACT_API_ENDPOINT etc.
  * 2. Formspree — set VITE_FORMSPREE_CONTACT_ID etc.
- * 3. Development only: mock mode (console.log, returns success)
- * 4. Production with no config: returns explicit failure
+ * 3. Netlify Forms — auto-detected on Netlify hosts (hidden forms in index.html)
+ * 4. Development only: mock mode (console.log, returns success)
+ * 5. Production with no config: returns explicit failure
  * 
  * @module lib/form-service
  */
@@ -165,6 +166,51 @@ async function submitToApi(endpoint: string, data: Record<string, unknown>): Pro
 }
 
 /**
+ * Submits data to a Netlify Form using the POST-to-self pattern.
+ * Netlify intercepts POSTs with a `form-name` field that matches
+ * a form declared in the static HTML (index.html).
+ *
+ * @see https://docs.netlify.com/forms/setup/#javascript-forms
+ */
+async function submitToNetlify(formName: string, data: Record<string, string>): Promise<FormResult> {
+  try {
+    const body = new URLSearchParams({ 'form-name': formName, ...data })
+
+    const response = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+    })
+
+    if (response.ok) {
+      return { success: true, message: 'Submission successful' }
+    }
+
+    return {
+      success: false,
+      message: 'Submission failed',
+      error: `HTTP ${response.status}`,
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: 'Network error',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+/**
+ * Checks if running on Netlify (production/deploy-preview).
+ * Detects Netlify at runtime by checking the hostname.
+ */
+export function isNetlifyEnvironment(): boolean {
+  if (typeof window === 'undefined') { return false }
+  const host = window.location.hostname
+  return host.endsWith('.netlify.app') || host === 'polymerbionics.com' || host.endsWith('.polymerbionics.com')
+}
+
+/**
  * Checks if Formspree is configured for a given form type.
  */
 function hasFormspreeId(formId: string): boolean {
@@ -218,7 +264,8 @@ async function unconfiguredFallback(type: string, data: Record<string, unknown>)
  * Routes to:
  * 1. Custom API endpoint if VITE_CONTACT_API_ENDPOINT is set
  * 2. Formspree if VITE_FORMSPREE_CONTACT_ID is set
- * 3. Dev: mock success / Prod: explicit failure
+ * 3. Netlify Forms if running on Netlify
+ * 4. Dev: mock success / Prod: explicit failure
  */
 export async function submitContactForm(data: ContactFormData): Promise<FormResult> {
   const { contactApiEndpoint } = formServiceConfig
@@ -238,6 +285,16 @@ export async function submitContactForm(data: ContactFormData): Promise<FormResu
     })
   }
 
+  if (isNetlifyEnvironment()) {
+    return submitToNetlify('contact', {
+      name: data.name,
+      email: data.email,
+      company: data.company ?? '',
+      subject: data.subject,
+      message: data.message,
+    })
+  }
+
   return unconfiguredFallback('Contact Form', { ...data })
 }
 
@@ -247,7 +304,8 @@ export async function submitContactForm(data: ContactFormData): Promise<FormResu
  * Routes to:
  * 1. Custom API endpoint if VITE_NEWSLETTER_API_ENDPOINT is set
  * 2. Formspree if VITE_FORMSPREE_NEWSLETTER_ID is set
- * 3. Dev: mock success / Prod: explicit failure
+ * 3. Netlify Forms if running on Netlify
+ * 4. Dev: mock success / Prod: explicit failure
  */
 export async function submitNewsletterSubscription(data: NewsletterData): Promise<FormResult> {
   const { newsletterApiEndpoint } = formServiceConfig
@@ -263,6 +321,12 @@ export async function submitNewsletterSubscription(data: NewsletterData): Promis
     })
   }
 
+  if (isNetlifyEnvironment()) {
+    return submitToNetlify('newsletter', {
+      email: data.email,
+    })
+  }
+
   return unconfiguredFallback('Newsletter', { ...data })
 }
 
@@ -272,7 +336,8 @@ export async function submitNewsletterSubscription(data: NewsletterData): Promis
  * Routes to:
  * 1. Custom API endpoint if VITE_ORDER_API_ENDPOINT is set
  * 2. Formspree if VITE_FORMSPREE_ORDER_ID is set
- * 3. Dev: mock success / Prod: explicit failure
+ * 3. Netlify Forms if running on Netlify
+ * 4. Dev: mock success / Prod: explicit failure
  */
 export async function submitOrderForm(data: OrderFormData): Promise<FormResult> {
   const { orderApiEndpoint } = formServiceConfig
@@ -293,6 +358,17 @@ export async function submitOrderForm(data: OrderFormData): Promise<FormResult> 
     })
   }
 
+  if (isNetlifyEnvironment()) {
+    return submitToNetlify('order', {
+      email: data.email,
+      phone: data.phone,
+      item: data.item,
+      item_type: data.itemType,
+      quantity: data.quantity,
+      comments: data.comments ?? '',
+    })
+  }
+
   return unconfiguredFallback('Order Enquiry', { ...data })
 }
 
@@ -304,4 +380,5 @@ export function isFormServiceConfigured(): boolean {
   const { contactFormId, newsletterFormId, orderFormId } = formspreeConfig
   return !!contactFormId || !!newsletterFormId || !!orderFormId
     || !!contactApiEndpoint || !!newsletterApiEndpoint || !!orderApiEndpoint
+    || isNetlifyEnvironment()
 }
