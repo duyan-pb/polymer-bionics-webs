@@ -11,13 +11,15 @@
  */
 
 // =============================================================================
-// TODO: CONFIGURE FORM SUBMISSION BACKEND
+// FORM SUBMISSION BACKEND CONFIGURATION
 // =============================================================================
-// For production, set one of these environment variables:
-// - VITE_FORMSPREE_CONTACT_ID: Formspree form ID (free tier: https://formspree.io)
-// - VITE_FORMSPREE_NEWSLETTER_ID: Formspree newsletter form ID
+// Set environment variables in .env:
+// - VITE_FORMSPREE_CONTACT_ID: Formspree form ID for contact form
+// - VITE_FORMSPREE_NEWSLETTER_ID: Formspree form ID for newsletter
+// - VITE_FORMSPREE_ORDER_ID: Formspree form ID for order enquiries
 // - VITE_CONTACT_API_ENDPOINT: Custom API (e.g., Azure Functions)
 // - VITE_NEWSLETTER_API_ENDPOINT: Custom newsletter API
+// - VITE_ORDER_API_ENDPOINT: Custom order API
 //
 // Without these, forms run in mock mode (console.log only).
 // =============================================================================
@@ -30,10 +32,12 @@
  * Form service configuration.
  * Set these environment variables to enable real form submissions:
  * 
- * - VITE_FORMSPREE_CONTACT_ID: Formspree form ID for contact form (e.g., "xyzabcde")
- * - VITE_FORMSPREE_NEWSLETTER_ID: Formspree form ID for newsletter (e.g., "xyzabcde")
+ * - VITE_FORMSPREE_CONTACT_ID: Formspree form ID for contact form
+ * - VITE_FORMSPREE_NEWSLETTER_ID: Formspree form ID for newsletter
+ * - VITE_FORMSPREE_ORDER_ID: Formspree form ID for order enquiries
  * - VITE_CONTACT_API_ENDPOINT: Custom API endpoint for contact form
  * - VITE_NEWSLETTER_API_ENDPOINT: Custom API endpoint for newsletter
+ * - VITE_ORDER_API_ENDPOINT: Custom API endpoint for order form
  * 
  * If no environment variables are set, forms will use mock mode (console logging only).
  * 
@@ -44,10 +48,14 @@ export const formServiceConfig = {
   formspreeContactId: import.meta.env.VITE_FORMSPREE_CONTACT_ID ?? '',
   /** Formspree form ID for newsletter subscriptions */
   formspreeNewsletterId: import.meta.env.VITE_FORMSPREE_NEWSLETTER_ID ?? '',
+  /** Formspree form ID for order enquiries */
+  formspreeOrderId: import.meta.env.VITE_FORMSPREE_ORDER_ID ?? '',
   /** Custom API endpoint for contact form */
   contactApiEndpoint: import.meta.env.VITE_CONTACT_API_ENDPOINT ?? '',
   /** Custom API endpoint for newsletter */
   newsletterApiEndpoint: import.meta.env.VITE_NEWSLETTER_API_ENDPOINT ?? '',
+  /** Custom API endpoint for order form */
+  orderApiEndpoint: import.meta.env.VITE_ORDER_API_ENDPOINT ?? '',
 }
 
 // =============================================================================
@@ -73,6 +81,18 @@ export interface NewsletterData {
 }
 
 /**
+ * Order enquiry form data.
+ */
+export interface OrderFormData {
+  email: string
+  phone: string
+  item: string
+  itemType: string
+  quantity: string
+  comments?: string
+}
+
+/**
  * Form submission result.
  */
 export interface FormResult {
@@ -89,8 +109,8 @@ export interface FormResult {
  * Checks if running in development/mock mode.
  */
 function isMockMode(): boolean {
-  const { formspreeContactId, formspreeNewsletterId, contactApiEndpoint, newsletterApiEndpoint } = formServiceConfig
-  return !formspreeContactId && !formspreeNewsletterId && !contactApiEndpoint && !newsletterApiEndpoint
+  const { formspreeContactId, formspreeNewsletterId, formspreeOrderId, contactApiEndpoint, newsletterApiEndpoint, orderApiEndpoint } = formServiceConfig
+  return !formspreeContactId && !formspreeNewsletterId && !formspreeOrderId && !contactApiEndpoint && !newsletterApiEndpoint && !orderApiEndpoint
 }
 
 /**
@@ -172,6 +192,7 @@ async function mockSubmit(type: string, data: Record<string, unknown>): Promise<
   console.warn('[Form Service] To enable real submissions, set environment variables:')
   console.warn('  - VITE_FORMSPREE_CONTACT_ID for contact form')
   console.warn('  - VITE_FORMSPREE_NEWSLETTER_ID for newsletter')
+  console.warn('  - VITE_FORMSPREE_ORDER_ID for order enquiries')
   console.warn('  See https://formspree.io to create free forms')
   
   return { success: true, message: 'Mock submission successful (development mode)' }
@@ -262,6 +283,42 @@ export async function submitNewsletterSubscription(data: NewsletterData): Promis
 
   // Mock mode
   return mockSubmit('Newsletter', { ...data })
+}
+
+/**
+ * Submits an order enquiry form.
+ * 
+ * Routes to:
+ * 1. Custom API endpoint if VITE_ORDER_API_ENDPOINT is set
+ * 2. Formspree if VITE_FORMSPREE_ORDER_ID is set
+ * 3. Mock mode (console logging) if neither is configured
+ * 
+ * @param data - Order form data
+ * @returns Promise resolving to submission result
+ */
+export async function submitOrderForm(data: OrderFormData): Promise<FormResult> {
+  const { formspreeOrderId, orderApiEndpoint } = formServiceConfig
+
+  // Custom API takes priority
+  if (orderApiEndpoint) {
+    return submitToApi(orderApiEndpoint, { ...data })
+  }
+
+  // Formspree as fallback
+  if (formspreeOrderId) {
+    return submitToFormspree(formspreeOrderId, {
+      email: data.email,
+      phone: data.phone,
+      item: data.item,
+      item_type: data.itemType,
+      quantity: data.quantity,
+      comments: data.comments ?? '',
+      _subject: `[Order Enquiry] ${data.item || 'General'}`,
+    })
+  }
+
+  // Mock mode
+  return mockSubmit('Order Enquiry', { ...data })
 }
 
 /**

@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Package, X } from '@phosphor-icons/react'
+import { Package } from '@phosphor-icons/react'
+import { ImageLightbox } from '@/components/ImageLightbox'
 import type { Product } from '@/lib/types'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { Card } from '@/components/ui/card'
@@ -45,7 +46,8 @@ interface ProductsPageProps {
 export function ProductsPage({ products, onNavigate, onSetPaymentDraft }: ProductsPageProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [lightboxImages, setLightboxImages] = useState<string[]>([])
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const FEATURE_PREVIEW_COUNT = 3
   const isLoading = !products
 
@@ -175,7 +177,10 @@ export function ProductsPage({ products, onNavigate, onSetPaymentDraft }: Produc
               product={product}
               featurePreviewCount={FEATURE_PREVIEW_COUNT}
               onSelect={handleProductSelect}
-              onZoomImage={(imageUrl) => setSelectedImage(imageUrl)}
+              onZoomImage={(imageUrl, gallery) => {
+                setLightboxImages(gallery)
+                setLightboxIndex(Math.max(0, gallery.indexOf(imageUrl)))
+              }}
               onBuy={handleBuy}
               onDatasheet={navigateToDatasheet}
               onCaseStudy={navigateToCaseStudy}
@@ -190,7 +195,10 @@ export function ProductsPage({ products, onNavigate, onSetPaymentDraft }: Produc
             {selectedProduct && (
               <ProductDialogContent
                 product={selectedProduct}
-                onSelectImage={setSelectedImage}
+                onSelectImage={(imageUrl, gallery) => {
+                  setLightboxImages(gallery)
+                  setLightboxIndex(Math.max(0, gallery.indexOf(imageUrl)))
+                }}
                 onBuy={handleBuy}
                 onDatasheet={navigateToDatasheet}
                 onCaseStudy={navigateToCaseStudy}
@@ -201,29 +209,13 @@ export function ProductsPage({ products, onNavigate, onSetPaymentDraft }: Produc
         </DialogContent>
       </Dialog>
 
-      {/* Image Lightbox */}
-      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none">
-          <div className="relative flex items-center justify-center w-full h-full min-h-[50vh]">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-4 z-10 text-white hover:bg-white/20 rounded-full"
-              onClick={() => setSelectedImage(null)}
-              aria-label="Close image"
-            >
-              <X size={24} weight="bold" />
-            </Button>
-            <img 
-              src={selectedImage || ''} 
-              alt="Product detail - full size"
-              className="max-w-full max-h-[90vh] object-contain"
-              loading="eager"
-              decoding="sync"
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ImageLightbox
+        images={lightboxImages}
+        currentIndex={lightboxIndex}
+        onClose={() => { setLightboxIndex(null); setLightboxImages([]); }}
+        onNavigate={setLightboxIndex}
+        alt="Product detail"
+      />
     </PageLayout>
   )
 }

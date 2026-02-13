@@ -10,8 +10,8 @@
 import { useState, useCallback, type MouseEvent } from 'react'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Button } from '@/components/ui/button'
-import { Wrench, X } from '@phosphor-icons/react'
+import { Wrench } from '@phosphor-icons/react'
+import { ImageLightbox } from '@/components/ImageLightbox'
 import type { Product } from '@/lib/types'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { customSolutions } from '@/lib/custom-data'
@@ -38,7 +38,8 @@ interface CustomPageProps {
  */
 export function CustomPage({ onNavigate }: CustomPageProps) {
   const [selectedSolution, setSelectedSolution] = useState<Product | null>(null)
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [lightboxImages, setLightboxImages] = useState<string[]>([])
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [orderItem, setOrderItem] = useState<string>('')
   const [isOrderOpen, setIsOrderOpen] = useState(false)
   const FEATURE_PREVIEW_COUNT = 3
@@ -84,7 +85,10 @@ export function CustomPage({ onNavigate }: CustomPageProps) {
               product={solution}
               featurePreviewCount={FEATURE_PREVIEW_COUNT}
               onSelect={handleSolutionSelect}
-              onZoomImage={(imageUrl) => setSelectedImage(imageUrl)}
+              onZoomImage={(imageUrl, gallery) => {
+                setLightboxImages(gallery)
+                setLightboxIndex(Math.max(0, gallery.indexOf(imageUrl)))
+              }}
               onOrder={handleOrder}
               showWhatsApp
             />
@@ -98,7 +102,10 @@ export function CustomPage({ onNavigate }: CustomPageProps) {
             {selectedSolution && (
               <ProductDialogContent
                 product={selectedSolution}
-                onSelectImage={setSelectedImage}
+                onSelectImage={(imageUrl, gallery) => {
+                  setLightboxImages(gallery)
+                  setLightboxIndex(Math.max(0, gallery.indexOf(imageUrl)))
+                }}
                 onOrder={handleOrder}
                 showWhatsApp
               />
@@ -107,29 +114,13 @@ export function CustomPage({ onNavigate }: CustomPageProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Image Lightbox */}
-      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none">
-          <div className="relative flex items-center justify-center w-full h-full min-h-[50vh]">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-4 z-10 text-white hover:bg-white/20 rounded-full"
-              onClick={() => setSelectedImage(null)}
-              aria-label="Close image"
-            >
-              <X size={24} weight="bold" />
-            </Button>
-            <img 
-              src={selectedImage || ''} 
-              alt="Custom solution detail - full size"
-              className="max-w-full max-h-[90vh] object-contain"
-              loading="eager"
-              decoding="sync"
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ImageLightbox
+        images={lightboxImages}
+        currentIndex={lightboxIndex}
+        onClose={() => { setLightboxIndex(null); setLightboxImages([]); }}
+        onNavigate={setLightboxIndex}
+        alt="Custom solution detail"
+      />
 
       <OrderModal
         open={isOrderOpen}

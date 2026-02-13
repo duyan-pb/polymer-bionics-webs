@@ -9,21 +9,43 @@
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ContactCTA } from '@/components/ContactCTA'
-import { CheckCircle, FilePdf, Download } from '@phosphor-icons/react'
+import { CheckCircle, FilePdf, Download, MagnifyingGlassPlus } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import type { Material } from '@/lib/types'
 
 interface MaterialDialogContentProps {
   material: Material
+  onZoomImage?: (imageUrl: string) => void
 }
 
-export function MaterialDialogContent({ material }: MaterialDialogContentProps) {
+export function MaterialDialogContent({ material, onZoomImage }: MaterialDialogContentProps) {
   return (
     <>
       <DialogHeader>
         <div className="h-56 md:h-72 -mx-6 -mt-6 mb-6 overflow-hidden bg-muted">
           {material.imageUrl ? (
-            <img src={material.imageUrl} alt={material.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+            <div
+              className="relative group cursor-zoom-in w-full h-full"
+              onClick={() => onZoomImage?.(material.imageUrl!)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onZoomImage?.(material.imageUrl!)
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`Enlarge image of ${material.name}`}
+            >
+              <img src={material.imageUrl} alt={material.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" decoding="async" />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center pointer-events-none">
+                <MagnifyingGlassPlus
+                  size={40}
+                  className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg"
+                  weight="bold"
+                />
+              </div>
+            </div>
           ) : (
             <div className={`w-full h-full ${material.imageClass || 'bg-gradient-to-br from-accent/20 to-primary/10'}`}></div>
           )}

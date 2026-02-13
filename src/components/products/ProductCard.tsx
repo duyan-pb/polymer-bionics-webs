@@ -20,7 +20,7 @@ export interface ProductCardProps {
   product: Product
   featurePreviewCount: number
   onSelect: (product: Product) => void
-  onZoomImage: (imageUrl: string) => void
+  onZoomImage: (imageUrl: string, gallery: string[]) => void
   onBuy?: (e: MouseEvent, product: Product) => void
   onOrder?: (e: MouseEvent, product: Product) => void
   onContact?: (e: MouseEvent) => void
@@ -54,13 +54,15 @@ export function ProductCard({
           className="mb-4 md:mb-6 rounded-lg overflow-hidden relative group cursor-zoom-in"
           onClick={(e) => {
             e.stopPropagation()
-            onZoomImage(product.imageUrl ?? '')
+            const gallery = [product.imageUrl, ...(product.images || [])].filter(Boolean) as string[]
+            onZoomImage(product.imageUrl ?? '', gallery)
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault()
               e.stopPropagation()
-              onZoomImage(product.imageUrl ?? '')
+              const gallery = [product.imageUrl, ...(product.images || [])].filter(Boolean) as string[]
+              onZoomImage(product.imageUrl ?? '', gallery)
             }
           }}
           tabIndex={0}

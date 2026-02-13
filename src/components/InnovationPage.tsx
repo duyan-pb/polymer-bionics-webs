@@ -10,8 +10,8 @@
 import { useState, useCallback, type MouseEvent } from 'react'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Button } from '@/components/ui/button'
-import { Lightbulb, X } from '@phosphor-icons/react'
+import { Lightbulb } from '@phosphor-icons/react'
+import { ImageLightbox } from '@/components/ImageLightbox'
 import type { Product } from '@/lib/types'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { innovations } from '@/lib/innovation-data'
@@ -37,7 +37,8 @@ interface InnovationPageProps {
  */
 export function InnovationPage({ onNavigate }: InnovationPageProps) {
   const [selectedInnovation, setSelectedInnovation] = useState<Product | null>(null)
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [lightboxImages, setLightboxImages] = useState<string[]>([])
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const FEATURE_PREVIEW_COUNT = 3
 
   const handleInnovationSelect = useCallback((innovation: Product) => {
@@ -80,7 +81,10 @@ export function InnovationPage({ onNavigate }: InnovationPageProps) {
               product={innovation}
               featurePreviewCount={FEATURE_PREVIEW_COUNT}
               onSelect={handleInnovationSelect}
-              onZoomImage={(imageUrl) => setSelectedImage(imageUrl)}
+              onZoomImage={(imageUrl, gallery) => {
+                setLightboxImages(gallery)
+                setLightboxIndex(Math.max(0, gallery.indexOf(imageUrl)))
+              }}
               onContact={navigateToContact}
             />
           ))}
@@ -93,36 +97,23 @@ export function InnovationPage({ onNavigate }: InnovationPageProps) {
             {selectedInnovation && (
               <ProductDialogContent
                 product={selectedInnovation}
-                onSelectImage={setSelectedImage}
+                onSelectImage={(imageUrl, gallery) => {
+                  setLightboxImages(gallery)
+                  setLightboxIndex(Math.max(0, gallery.indexOf(imageUrl)))
+                }}
               />
             )}
           </ScrollArea>
         </DialogContent>
       </Dialog>
 
-      {/* Image Lightbox */}
-      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none">
-          <div className="relative flex items-center justify-center w-full h-full min-h-[50vh]">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-4 z-10 text-white hover:bg-white/20 rounded-full"
-              onClick={() => setSelectedImage(null)}
-              aria-label="Close image"
-            >
-              <X size={24} weight="bold" />
-            </Button>
-            <img 
-              src={selectedImage || ''} 
-              alt="Innovation detail - full size"
-              className="max-w-full max-h-[90vh] object-contain"
-              loading="eager"
-              decoding="sync"
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ImageLightbox
+        images={lightboxImages}
+        currentIndex={lightboxIndex}
+        onClose={() => { setLightboxIndex(null); setLightboxImages([]); }}
+        onNavigate={setLightboxIndex}
+        alt="Innovation detail"
+      />
     </PageLayout>
   )
 }

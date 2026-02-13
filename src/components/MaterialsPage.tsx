@@ -16,6 +16,7 @@ import { PageHero } from '@/components/PageHero'
 import CESheet from '@/assets/images/optimized/CE_sheet.webp'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { MaterialDialogContent } from '@/components/materials/MaterialDialogContent'
+import { ImageLightbox } from '@/components/ImageLightbox'
 
 /**
  * Props for the MaterialsPage component.
@@ -40,6 +41,8 @@ interface MaterialsPageProps {
  */
 export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
+  const [lightboxImages, setLightboxImages] = useState<string[]>([])
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   const handleMaterialSelect = useCallback((material: Material) => {
     setSelectedMaterial(material)
@@ -68,6 +71,10 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
                 key={material.id}
                 material={material}
                 onSelect={handleMaterialSelect}
+                onZoomImage={(imageUrl) => {
+                  setLightboxImages([imageUrl])
+                  setLightboxIndex(0)
+                }}
               />
             ))}
           </div>
@@ -80,11 +87,25 @@ export function MaterialsPage({ onNavigate }: MaterialsPageProps) {
         <DialogContent className="max-w-4xl max-h-[90vh]">
           <ScrollArea className="max-h-[80vh] pr-4">
             {selectedMaterial && (
-              <MaterialDialogContent material={selectedMaterial} />
+              <MaterialDialogContent
+                material={selectedMaterial}
+                onZoomImage={(imageUrl) => {
+                  setLightboxImages([imageUrl])
+                  setLightboxIndex(0)
+                }}
+              />
             )}
           </ScrollArea>
         </DialogContent>
       </Dialog>
+
+      <ImageLightbox
+        images={lightboxImages}
+        currentIndex={lightboxIndex}
+        onClose={() => { setLightboxIndex(null); setLightboxImages([]); }}
+        onNavigate={setLightboxIndex}
+        alt="Material detail"
+      />
     </div>
   )
 }

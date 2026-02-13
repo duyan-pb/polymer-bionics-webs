@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { ShoppingCart, EnvelopeSimple, Phone, Package, HashStraight, ChatText, Info } from '@phosphor-icons/react'
 import { toast } from 'sonner'
-import { submitContactForm } from '@/lib/form-service'
+import { submitOrderForm } from '@/lib/form-service'
 
 export interface OrderModalProps {
   /** Whether the modal is open */
@@ -77,17 +77,13 @@ export function OrderModal({ open, onOpenChange, itemName = '', itemType = 'Prod
 
     setIsSubmitting(true)
     try {
-      const result = await submitContactForm({
-        name: '',
+      const result = await submitOrderForm({
         email: form.email,
-        subject: `Order Enquiry – ${form.item || 'General'}`,
-        message: [
-          `Item: ${form.item || 'Not specified'}`,
-          `Type: ${itemType}`,
-          `Quantity: ${form.quantity}`,
-          `Phone: ${form.phone}`,
-          form.comments ? `Comments: ${form.comments}` : '',
-        ].filter(Boolean).join('\n'),
+        phone: form.phone,
+        item: form.item || 'Not specified',
+        itemType,
+        quantity: form.quantity,
+        comments: form.comments,
       })
 
       if (result.success) {

@@ -18,7 +18,7 @@ import { openExternal } from '@/lib/utils'
 
 export interface ProductDialogContentProps {
   product: Product
-  onSelectImage: (image: string) => void
+  onSelectImage: (image: string, gallery: string[]) => void
   onBuy?: (e: MouseEvent, product: Product) => void
   onOrder?: (e: MouseEvent, product: Product) => void
   onDatasheet?: (e: MouseEvent, datasheetId?: string) => void
@@ -27,7 +27,7 @@ export interface ProductDialogContentProps {
   showWhatsApp?: boolean
 }
 
-function ProductImageGrid({ product, onSelectImage }: { product: Product; onSelectImage: (image: string) => void }) {
+function ProductImageGrid({ product, onSelectImage }: { product: Product; onSelectImage: (image: string, gallery: string[]) => void }) {
   if (!product.images || product.images.length === 0) {
     return null
   }
@@ -43,8 +43,17 @@ function ProductImageGrid({ product, onSelectImage }: { product: Product; onSele
             <div 
               key={idx}
               className="cursor-zoom-in rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary relative group"
-              onClick={() => onSelectImage(img)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelectImage(img); } }}
+              onClick={() => {
+                const gallery = [product.imageUrl, ...product.images!].filter(Boolean) as string[]
+                onSelectImage(img, gallery)
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  const gallery = [product.imageUrl, ...product.images!].filter(Boolean) as string[]
+                  onSelectImage(img, gallery)
+                }
+              }}
               tabIndex={0}
               role="button"
               aria-label={`View ${product.name} image ${idx + 1} in full size`}
