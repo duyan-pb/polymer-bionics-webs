@@ -7,23 +7,24 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ContactLinks } from '../ContactLinks'
 
-// Mock sonner toast
-vi.mock('sonner', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}))
-
 // Mock contact config
 vi.mock('@/lib/contact-config', () => ({
   contactConfig: {
     whatsapp: { number: '+1234567890' },
     email: { general: 'info@test.com', sales: 'sales@test.com' },
   },
-  copyWhatsAppNumber: vi.fn().mockResolvedValue(true),
+  getWhatsAppUrl: vi.fn(() => 'https://wa.me/1234567890?text=Hello'),
   getEmailUrl: vi.fn((type: string) => `mailto:${type}@test.com`),
 }))
+
+// Mock utils (openExternal)
+vi.mock('@/lib/utils', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>()
+  return {
+    ...actual,
+    openExternal: vi.fn(),
+  }
+})
 
 describe('ContactLinks', () => {
   beforeEach(() => {
@@ -55,7 +56,7 @@ describe('ContactLinks', () => {
     it('renders sales email text when emailType is sales', () => {
       render(<ContactLinks emailType="sales" />)
       
-      expect(screen.getByRole('link', { name: /email sales/i })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: /enquiry/i })).toBeInTheDocument()
     })
   })
 
@@ -108,50 +109,28 @@ describe('ContactLinks', () => {
   })
 
   describe('interactions', () => {
-    it('copies WhatsApp number on click', async () => {
-      const { copyWhatsAppNumber } = await import('@/lib/contact-config')
-      const { toast } = await import('sonner')
+    it('opens WhatsApp URL on click', async () => {
+      const { openExternal } = await import('@/lib/utils')
       
       render(<ContactLinks />)
       
       await userEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
       
-      expect(copyWhatsAppNumber).toHaveBeenCalled()
-      expect(toast.success).toHaveBeenCalledWith(
-        'WhatsApp number copied!',
-        expect.objectContaining({
-          description: expect.stringContaining('+1234567890'),
-        })
+      expect(openExternal).toHaveBeenCalledWith(
+        expect.stringContaining('wa.me')
       )
     })
 
-    it('shows error toast when copy fails', async () => {
-      const { copyWhatsAppNumber } = await import('@/lib/contact-config')
-      const { toast } = await import('sonner')
-      
-      vi.mocked(copyWhatsAppNumber).mockResolvedValueOnce(false)
-      
-      render(<ContactLinks />)
-      
-      await userEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
-      
-      expect(toast.error).toHaveBeenCalled()
-    })
-
-    it('opens email link in new window', async () => {
-      const windowOpen = vi.spyOn(window, 'open').mockImplementation(() => null)
+    it('opens email link via openExternal', async () => {
+      const { openExternal } = await import('@/lib/utils')
       
       render(<ContactLinks />)
       
       await userEvent.click(screen.getByRole('link', { name: /email us/i }))
       
-      expect(windowOpen).toHaveBeenCalledWith(
+      expect(openExternal).toHaveBeenCalledWith(
         expect.stringContaining('mailto:'),
-        '_blank',
-        'noopener,noreferrer'
       )
-      
-      windowOpen.mockRestore()
     })
   })
 })

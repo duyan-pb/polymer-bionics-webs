@@ -159,7 +159,7 @@ describe('HomePage', () => {
       expect(toast.error).toHaveBeenCalledWith('Please enter a valid email address')
     })
 
-    it('shows success message for valid email', async () => {
+    it('shows success dialog for valid email', async () => {
       render(<HomePage onNavigate={mockOnNavigate} />)
       
       const input = screen.getByLabelText(/email/i)
@@ -169,7 +169,7 @@ describe('HomePage', () => {
       await userEvent.click(button)
       
       await waitFor(() => {
-        expect(mockToast.success).toHaveBeenCalledWith('Successfully subscribed!', expect.any(Object))
+        expect(screen.getByText('Successfully Subscribed!')).toBeInTheDocument()
       })
     })
 

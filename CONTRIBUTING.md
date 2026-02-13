@@ -21,7 +21,7 @@ This project adheres to a code of conduct. By participating, you are expected to
 
 ### Prerequisites
 
-- Node.js 20.x or higher
+- Node.js 22.12 or higher
 - npm 10.x or higher
 - Git
 
@@ -325,10 +325,17 @@ export function MyPage({ data, onNavigate }: MyPageProps) {
 | `PageHero` | Standardized page headers |
 | `ClickableCard` | Accessible clickable cards with keyboard navigation |
 | `Breadcrumbs` | Navigation breadcrumbs |
-| `ContactLinks` | Contact action buttons |
+| `ContactLinks` | Contact action buttons (WhatsApp, Email) via `openExternal()` |
 | `GlobalSearch` | Site-wide search functionality |
 | `BackToTopButton` | Scroll-to-top button |
 | `FloatingContactButton` | Floating contact CTA |
+| `ImageLightbox` | Full-screen image viewer with gallery navigation |
+| `SuccessDialog` | Reusable form success confirmation dialog |
+| `OrderModal` | Order enquiry modal for products/devices/custom |
+| `ComingSoonCard` | Empty state card for upcoming content |
+| `ContentState` | Loading/empty/error state wrapper |
+| `HeroImage` | Optimized hero background image |
+| `ContactCTA` | Contact call-to-action section |
 
 ## Questions?
 

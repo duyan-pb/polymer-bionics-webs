@@ -32,6 +32,15 @@ vi.mock('@/components/ContactLinks', () => ({
   ContactLinks: () => <div data-testid="contact-links">Contact Links</div>,
 }))
 
+// Mock utils (openExternal)
+vi.mock('@/lib/utils', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>()
+  return {
+    ...actual,
+    openExternal: vi.fn(),
+  }
+})
+
 // Mock Dialog components
 vi.mock('@/components/ui/dialog', () => ({
   Dialog: ({ children, open }: { children: React.ReactNode; open: boolean }) => open ? <div data-testid="dialog">{children}</div> : null,
@@ -223,7 +232,9 @@ describe('NewsPage', () => {
   })
 
   describe('publication selection', () => {
-    it('opens publication dialog on card click', async () => {
+    it('opens DOI link when publication with DOI is clicked', async () => {
+      const { openExternal } = await import('@/lib/utils')
+      
       render(<NewsPage news={mockNews} publications={mockPublications} onNavigate={mockOnNavigate} />)
       
       const publicationsTab = screen.getByRole('tab', { name: /publications/i })
@@ -232,9 +243,8 @@ describe('NewsPage', () => {
       const cards = screen.getAllByTestId('news-card')
       await userEvent.click(cards[0])
       
-      await waitFor(() => {
-        expect(screen.getByTestId('dialog')).toBeInTheDocument()
-      })
+      // Publications with DOIs navigate to the DOI link instead of opening a dialog
+      expect(openExternal).toHaveBeenCalledWith('10.1038/s41551-024-00123-4')
     })
   })
 

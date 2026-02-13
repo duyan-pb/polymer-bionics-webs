@@ -45,13 +45,29 @@ This is primarily an informational website presenting company details, team memb
 - **Progression**: View materials grid → click material card → see detailed properties, advantages, and technical details
 - **Success criteria**: Clear differentiation between material types with accessible technical information
 
-### Applications Gallery
+### Devices Library
 
-- **Functionality**: Display of medical applications enabled by PolymerBionics materials with benefits and use cases
-- **Purpose**: Demonstrates real-world clinical applications and market opportunities for the technology
-- **Trigger**: Navigate to Applications section
-- **Progression**: Browse application cards → click for details → view benefits, use cases, and relevant materials
-- **Success criteria**: Clear connection between materials capabilities and clinical applications
+- **Functionality**: Catalog of medical device systems (e.g., EEG systems) with specifications, images, and order enquiry
+- **Purpose**: Showcases the company's medical device product line with detailed technical information
+- **Trigger**: Navigate to Devices section
+- **Progression**: Browse device cards → click for details → view specs and images → submit order enquiry via OrderModal
+- **Success criteria**: Clear device differentiation with accessible technical specs and easy ordering path
+
+### Custom Solutions
+
+- **Functionality**: Display of custom engineering capabilities with process steps, case studies, and enquiry form
+- **Purpose**: Demonstrates bespoke design and manufacturing services for client-specific applications
+- **Trigger**: Navigate to Custom Solutions section
+- **Progression**: Browse custom solution offerings → view process steps → submit custom order enquiry
+- **Success criteria**: Clear understanding of custom capabilities with easy path to enquiry
+
+### Innovation Hub
+
+- **Functionality**: Showcase of R&D projects, research areas, and innovation pipeline
+- **Purpose**: Highlights ongoing research and future technology directions in bioelectronics
+- **Trigger**: Navigate to Innovation section
+- **Progression**: Browse innovation areas → view project details and images → explore research themes
+- **Success criteria**: Clear presentation of research capabilities and innovation pipeline
 
 ### Media Gallery (Videos & Case Studies)
 
@@ -125,9 +141,13 @@ Animations should be subtle and purposeful, emphasizing content relationships an
 - **Components**:
   - Navigation: Custom header with logo and horizontal menu (shadcn Sheet for mobile drawer)
   - Hero: Custom section with large typography and gradient background
-  - Cards: shadcn Card for team members, products, case studies, datasheets
+  - Cards: shadcn Card for team members, products, case studies, datasheets; ClickableCard for accessible interactive cards
   - Buttons: shadcn Button with primary, secondary, and ghost variants
   - Dialogs: shadcn Dialog for expanded team bios and product details
+  - ImageLightbox: Full-screen image viewer with gallery navigation using createPortal (not shadcn Dialog)
+  - OrderModal: Order enquiry modal for products, devices, and custom solutions
+  - SuccessDialog: Reusable confirmation dialog for successful form submissions
+  - ComingSoonCard: Empty state card for pages without content yet
   - Tabs: shadcn Tabs for organizing content within sections (e.g., News vs Publications)
   - Badges: shadcn Badge for roles, product categories, publication types
   - Separator: shadcn Separator for visual content breaks
@@ -184,7 +204,7 @@ All tracking respects user consent preferences and implements privacy-first desi
 | shadcn/ui | Component Library |
 | Framer Motion | Animations |
 | Phosphor Icons | Icon System |
-| GitHub Spark | KV Store & Hosting |
+| Netlify Forms | Form Submission |
 | Vitest | Unit Testing |
 | Stryker | Mutation Testing |
 | Azure Web App | Production Hosting |

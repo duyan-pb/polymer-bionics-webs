@@ -213,18 +213,18 @@ describe('ProductsPage', () => {
   })
 
   describe('buy button', () => {
-    it('renders Buy button on product cards', () => {
+    it('renders Order button on product cards', () => {
       render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
-      const buyButtons = screen.getAllByRole('button', { name: /buy/i })
-      expect(buyButtons.length).toBeGreaterThan(0)
+      const orderButtons = screen.getAllByRole('button', { name: /order/i })
+      expect(orderButtons.length).toBeGreaterThan(0)
     })
 
-    it('Buy button navigates to payment page and sets draft', async () => {
+    it('Order button navigates to payment page and sets draft', async () => {
       render(<ProductsPage products={mockProducts} onNavigate={mockOnNavigate} onSetPaymentDraft={mockOnSetPaymentDraft} />)
       
-      const buyButtons = screen.getAllByRole('button', { name: /buy/i })
-      await userEvent.click(buyButtons[0])
+      const orderButtons = screen.getAllByRole('button', { name: /order/i })
+      await userEvent.click(orderButtons[0])
       
       expect(mockOnSetPaymentDraft).toHaveBeenCalledWith({
         product: 'BioFlex Electrode Array',
