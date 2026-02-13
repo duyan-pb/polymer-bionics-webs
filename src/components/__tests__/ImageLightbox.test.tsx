@@ -273,9 +273,6 @@ describe('ImageLightbox', () => {
       )
 
       const dialog = screen.getByRole('dialog')
-      const closeButton = screen.getByLabelText('Close image')
-      const prevButton = screen.getByLabelText('Previous image')
-      const nextButton = screen.getByLabelText('Next image')
 
       // Focus the container (simulating initial focus state)
       dialog.focus()
