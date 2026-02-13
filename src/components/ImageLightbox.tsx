@@ -1,14 +1,14 @@
 /**
  * Image Lightbox Component
  *
- * Full-screen image viewer with next/prev navigation for image galleries.
- * Used across Products, Devices, Custom, Materials, and Innovation pages.
+ * Image viewer overlay with next/prev navigation for image galleries.
+ * Sized to roughly 2 cards wide. Uses a portal to avoid style conflicts.
  *
  * @module components/ImageLightbox
  */
 
 import { useCallback, useEffect } from 'react'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/button'
 import { X, CaretLeft, CaretRight } from '@phosphor-icons/react'
 
@@ -26,14 +26,14 @@ export interface ImageLightboxProps {
 }
 
 /**
- * Full-screen image lightbox with keyboard and button navigation.
+ * Image lightbox with keyboard and button navigation.
  *
  * Features:
- * - Double-sized display (fills viewport)
+ * - Constrained to ~2-card width (max-w-3xl / 768px)
  * - Next/previous arrow buttons when gallery has multiple images
  * - Keyboard navigation (ArrowLeft, ArrowRight, Escape)
  * - Image counter badge (e.g. "2 / 5")
- * - Click outside or press X to close
+ * - Click backdrop or press X to close
  */
 export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt = 'Image detail' }: ImageLightboxProps) {
   const isOpen = currentIndex !== null && currentIndex >= 0 && currentIndex < images.length
@@ -54,49 +54,70 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
     if (!isOpen) { return }
 
     const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { onClose() }
       if (e.key === 'ArrowRight') { goNext() }
       if (e.key === 'ArrowLeft') { goPrev() }
     }
 
+    document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', handleKey)
-    return () => { window.removeEventListener('keydown', handleKey) }
-  }, [isOpen, goNext, goPrev])
+
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleKey)
+    }
+  }, [isOpen, goNext, goPrev, onClose])
 
   if (!isOpen || currentIndex === null) { return null }
 
-  return (
-    <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="fixed inset-0 top-0 left-0 translate-x-0 translate-y-0 max-w-none w-screen h-screen p-0 bg-black/95 border-none rounded-none gap-0 [&>button]:hidden">
-        <div className="relative flex items-center justify-center w-full h-full">
-          {/* Close button */}
+  return createPortal(
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Image lightbox"
+    >
+      {/* Card-sized container — roughly 2 cards wide */}
+      <div
+        className="relative w-[90vw] max-w-3xl bg-background rounded-xl shadow-2xl border overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Top bar with close button + counter */}
+        <div className="flex items-center justify-between px-4 py-2 border-b bg-muted/50">
+          <span className="text-sm text-muted-foreground">
+            {hasMultiple ? `${currentIndex + 1} / ${images.length}` : 'Image preview'}
+          </span>
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-4 right-4 z-10 text-white hover:bg-white/20 rounded-full"
+            className="h-8 w-8 rounded-full"
             onClick={onClose}
             aria-label="Close image"
           >
-            <X size={24} weight="bold" />
+            <X size={18} weight="bold" />
           </Button>
+        </div>
 
+        {/* Image area */}
+        <div className="relative flex items-center justify-center bg-black/5 dark:bg-black/20 p-4">
           {/* Previous button */}
           {hasMultiple && (
             <Button
-              variant="ghost"
+              variant="secondary"
               size="icon"
-              className="absolute left-4 z-10 text-white hover:bg-white/20 rounded-full h-12 w-12"
+              className="absolute left-2 z-10 rounded-full h-10 w-10 shadow-md"
               onClick={goPrev}
               aria-label="Previous image"
             >
-              <CaretLeft size={32} weight="bold" />
+              <CaretLeft size={22} weight="bold" />
             </Button>
           )}
 
-          {/* Image */}
           <img
             src={images[currentIndex]}
             alt={alt}
-            className="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain select-none"
+            className="max-h-[70vh] w-auto h-auto object-contain select-none rounded-md"
             loading="eager"
             decoding="sync"
             draggable={false}
@@ -105,24 +126,18 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
           {/* Next button */}
           {hasMultiple && (
             <Button
-              variant="ghost"
+              variant="secondary"
               size="icon"
-              className="absolute right-4 z-10 text-white hover:bg-white/20 rounded-full h-12 w-12"
+              className="absolute right-2 z-10 rounded-full h-10 w-10 shadow-md"
               onClick={goNext}
               aria-label="Next image"
             >
-              <CaretRight size={32} weight="bold" />
+              <CaretRight size={22} weight="bold" />
             </Button>
           )}
-
-          {/* Image counter */}
-          {hasMultiple && (
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-sm bg-black/50 px-3 py-1 rounded-full">
-              {currentIndex + 1} / {images.length}
-            </div>
-          )}
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>,
+    document.body,
   )
 }

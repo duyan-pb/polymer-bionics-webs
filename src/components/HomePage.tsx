@@ -21,6 +21,7 @@ import { HomeFeatureCard } from '@/components/home/HomeFeatureCard'
 import { NewsletterSignup } from '@/components/home/NewsletterSignup'
 import { getWhatsAppUrl, getEmailUrl } from '@/lib/contact-config'
 import { openExternal } from '@/lib/utils'
+import { SuccessDialog } from '@/components/SuccessDialog'
 
 // Preload hero image immediately for faster LCP
 const preloadImage = new Image()
@@ -55,6 +56,7 @@ interface HomePageProps {
 export const HomePage = memo(({ onNavigate }: HomePageProps) => {
   const [email, setEmail] = useState('')
   const [isSubscribing, setIsSubscribing] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const handleSubscribe = useCallback(async () => {
     if (!email.trim()) {
@@ -73,10 +75,8 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
       const result = await submitNewsletterSubscription({ email })
       
       if (result.success) {
-        toast.success('Successfully subscribed!', {
-          description: "You'll receive our latest updates soon."
-        })
         setEmail('')
+        setShowSuccess(true)
       } else {
         toast.error('Subscription failed', {
           description: result.error ?? 'Please try again later.'
@@ -235,6 +235,13 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
           />
         </div>
       </section>
+
+      <SuccessDialog
+        open={showSuccess}
+        onOpenChange={setShowSuccess}
+        title="Successfully Subscribed!"
+        description="Thank you for subscribing. You'll receive our latest updates and news soon."
+      />
     </div>
   )
 })
