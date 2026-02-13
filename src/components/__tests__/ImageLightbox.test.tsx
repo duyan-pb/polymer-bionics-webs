@@ -15,6 +15,19 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ImageLightbox } from '../ImageLightbox'
 
+/**
+ * Helper to create a Tab KeyboardEvent with optional shiftKey
+ */
+function createTabEvent(shiftKey = false): KeyboardEvent {
+  const event = new KeyboardEvent('keydown', { 
+    key: 'Tab', 
+    bubbles: true, 
+    cancelable: true,
+    shiftKey 
+  })
+  return event
+}
+
 describe('ImageLightbox', () => {
   const images = ['/img/a.jpg', '/img/b.jpg', '/img/c.jpg']
   const onClose = vi.fn()
@@ -232,9 +245,9 @@ describe('ImageLightbox', () => {
         <ImageLightbox images={images} currentIndex={0} onClose={onClose} onNavigate={onNavigate} />
       )
 
+      const dialog = screen.getByRole('dialog')
       // Wait for focus to move into the lightbox container
       await vi.waitFor(() => {
-        const dialog = screen.getByRole('dialog')
         expect(document.activeElement).toBe(dialog)
       })
 
@@ -279,8 +292,7 @@ describe('ImageLightbox', () => {
       expect(document.activeElement).toBe(dialog)
 
       // Press Tab - should move to first focusable element
-      const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
-      Object.defineProperty(tabEvent, 'shiftKey', { value: false })
+      const tabEvent = createTabEvent()
       window.dispatchEvent(tabEvent)
 
       // The event should be prevented and focus should move to first button
@@ -299,7 +311,7 @@ describe('ImageLightbox', () => {
       expect(document.activeElement).toBe(dialog)
 
       // Press Shift+Tab - should move to last focusable element
-      const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true, shiftKey: true })
+      const tabEvent = createTabEvent(true)
       window.dispatchEvent(tabEvent)
 
       // The event should be prevented
@@ -316,7 +328,7 @@ describe('ImageLightbox', () => {
       expect(document.activeElement).toBe(nextButton)
 
       // Press Tab - should wrap to first focusable element
-      const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
+      const tabEvent = createTabEvent()
       window.dispatchEvent(tabEvent)
 
       expect(tabEvent.defaultPrevented).toBe(true)
@@ -332,7 +344,7 @@ describe('ImageLightbox', () => {
       expect(document.activeElement).toBe(closeButton)
 
       // Press Shift+Tab - should wrap to last focusable element
-      const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true, shiftKey: true })
+      const tabEvent = createTabEvent(true)
       window.dispatchEvent(tabEvent)
 
       expect(tabEvent.defaultPrevented).toBe(true)
@@ -347,7 +359,7 @@ describe('ImageLightbox', () => {
       const dialog = screen.getByRole('dialog')
       dialog.focus()
 
-      const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
+      const tabEvent = createTabEvent()
       window.dispatchEvent(tabEvent)
 
       // Should prevent default even if no focusables (to prevent escape from lightbox)
