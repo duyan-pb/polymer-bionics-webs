@@ -15,6 +15,19 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ImageLightbox } from '../ImageLightbox'
 
+/**
+ * Helper to create a Tab KeyboardEvent with optional shiftKey
+ */
+function createTabEvent(shiftKey = false): KeyboardEvent {
+  const event = new KeyboardEvent('keydown', { 
+    key: 'Tab', 
+    bubbles: true, 
+    cancelable: true,
+    shiftKey 
+  })
+  return event
+}
+
 describe('ImageLightbox', () => {
   const images = ['/img/a.jpg', '/img/b.jpg', '/img/c.jpg']
   const onClose = vi.fn()
@@ -216,6 +229,141 @@ describe('ImageLightbox', () => {
         <ImageLightbox images={images} currentIndex={0} onClose={onClose} onNavigate={onNavigate} alt="Product photo" />
       )
       expect(screen.getByAltText('Product photo')).toBeInTheDocument()
+    })
+  })
+
+  describe('focus management', () => {
+    it('moves focus into lightbox when opened', async () => {
+      // Create a button outside the lightbox to start with focus
+      const externalButton = document.createElement('button')
+      externalButton.textContent = 'External'
+      document.body.appendChild(externalButton)
+      externalButton.focus()
+      expect(document.activeElement).toBe(externalButton)
+
+      render(
+        <ImageLightbox images={images} currentIndex={0} onClose={onClose} onNavigate={onNavigate} />
+      )
+
+      const dialog = screen.getByRole('dialog')
+      // Wait for focus to move into the lightbox container
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(dialog)
+      })
+
+      document.body.removeChild(externalButton)
+    })
+
+    it('restores focus to previously active element when closed', async () => {
+      // Create a button that will have focus before opening
+      const triggerButton = document.createElement('button')
+      triggerButton.textContent = 'Open Lightbox'
+      document.body.appendChild(triggerButton)
+      triggerButton.focus()
+      expect(document.activeElement).toBe(triggerButton)
+
+      const { unmount } = render(
+        <ImageLightbox images={images} currentIndex={0} onClose={onClose} onNavigate={onNavigate} />
+      )
+
+      // Wait for focus to move into the lightbox
+      await vi.waitFor(() => {
+        expect(document.activeElement).not.toBe(triggerButton)
+      })
+
+      // Close the lightbox
+      unmount()
+
+      // Focus should be restored to the trigger button
+      expect(document.activeElement).toBe(triggerButton)
+
+      document.body.removeChild(triggerButton)
+    })
+
+    it('traps Tab key when focus is on the container itself', () => {
+      render(
+        <ImageLightbox images={images} currentIndex={0} onClose={onClose} onNavigate={onNavigate} />
+      )
+
+      const dialog = screen.getByRole('dialog')
+
+      // Focus the container (simulating initial focus state)
+      dialog.focus()
+      expect(document.activeElement).toBe(dialog)
+
+      // Press Tab - should move to first focusable element
+      const tabEvent = createTabEvent()
+      window.dispatchEvent(tabEvent)
+
+      // The event should be prevented and focus should move to first button
+      expect(tabEvent.defaultPrevented).toBe(true)
+    })
+
+    it('traps Shift+Tab when focus is on the container itself', () => {
+      render(
+        <ImageLightbox images={images} currentIndex={0} onClose={onClose} onNavigate={onNavigate} />
+      )
+
+      const dialog = screen.getByRole('dialog')
+
+      // Focus the container
+      dialog.focus()
+      expect(document.activeElement).toBe(dialog)
+
+      // Press Shift+Tab - should move to last focusable element
+      const tabEvent = createTabEvent(true)
+      window.dispatchEvent(tabEvent)
+
+      // The event should be prevented
+      expect(tabEvent.defaultPrevented).toBe(true)
+    })
+
+    it('cycles focus forward with Tab from last focusable element', () => {
+      render(
+        <ImageLightbox images={images} currentIndex={0} onClose={onClose} onNavigate={onNavigate} />
+      )
+
+      const nextButton = screen.getByLabelText('Next image')
+      nextButton.focus()
+      expect(document.activeElement).toBe(nextButton)
+
+      // Press Tab - should wrap to first focusable element
+      const tabEvent = createTabEvent()
+      window.dispatchEvent(tabEvent)
+
+      expect(tabEvent.defaultPrevented).toBe(true)
+    })
+
+    it('cycles focus backward with Shift+Tab from first focusable element', () => {
+      render(
+        <ImageLightbox images={images} currentIndex={0} onClose={onClose} onNavigate={onNavigate} />
+      )
+
+      const closeButton = screen.getByLabelText('Close image')
+      closeButton.focus()
+      expect(document.activeElement).toBe(closeButton)
+
+      // Press Shift+Tab - should wrap to last focusable element
+      const tabEvent = createTabEvent(true)
+      window.dispatchEvent(tabEvent)
+
+      expect(tabEvent.defaultPrevented).toBe(true)
+    })
+
+    it('does not trap Tab when no focusable elements exist', () => {
+      // Render without navigation buttons (single image)
+      render(
+        <ImageLightbox images={['/img/single.jpg']} currentIndex={0} onClose={onClose} onNavigate={onNavigate} />
+      )
+
+      const dialog = screen.getByRole('dialog')
+      dialog.focus()
+
+      const tabEvent = createTabEvent()
+      window.dispatchEvent(tabEvent)
+
+      // Should prevent default even if no focusables (to prevent escape from lightbox)
+      expect(tabEvent.defaultPrevented).toBe(true)
     })
   })
 })
