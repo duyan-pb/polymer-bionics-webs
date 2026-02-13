@@ -65,6 +65,103 @@ interface UseGlobalSearchDataProps {
   news: NewsItem[]
 }
 
+/** Map search type to its display icon */
+function renderIcon(type: SearchType): ReactNode {
+  switch (type) {
+    case 'product':
+      return <Package className="mr-2" size={16} weight="duotone" />
+    case 'team':
+      return <Users className="mr-2" size={16} weight="duotone" />
+    case 'device':
+      return <Cpu className="mr-2" size={16} weight="duotone" />
+    case 'custom':
+      return <Wrench className="mr-2" size={16} weight="duotone" />
+    case 'innovation':
+      return <Lightbulb className="mr-2" size={16} weight="duotone" />
+    case 'news':
+      return <Newspaper className="mr-2" size={16} weight="duotone" />
+    default:
+      return <ArrowRight className="mr-2" size={16} weight="bold" />
+  }
+}
+
+/** Build the browse groups shown when no search query is active */
+function buildBrowseGroups({
+  onSelect,
+  products,
+  team,
+  devices,
+  customSolutions,
+  innovations,
+  news,
+}: UseGlobalSearchDataProps): SearchBrowseGroup[] {
+  return [
+    {
+      heading: 'Navigate',
+      items: NAV_ITEMS.map((item) => ({
+        id: item.id,
+        label: item.label,
+        onSelect: () => onSelect(item.id),
+        icon: <ArrowRight className="mr-2" size={16} weight="bold" />,
+      })),
+    },
+    {
+      heading: 'Products',
+      items: (products || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((p) => ({
+        id: p.id,
+        label: `${p.name} – ${p.category}`,
+        onSelect: () => onSelect('products'),
+        icon: <Package className="mr-2" size={16} weight="duotone" />,
+      })),
+    },
+    {
+      heading: 'Devices',
+      items: (devices || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((d) => ({
+        id: d.id,
+        label: `${d.name} – ${d.category}`,
+        onSelect: () => onSelect('devices'),
+        icon: <Cpu className="mr-2" size={16} weight="duotone" />,
+      })),
+    },
+    {
+      heading: 'Custom',
+      items: (customSolutions || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((c) => ({
+        id: c.id,
+        label: `${c.name} – ${c.category}`,
+        onSelect: () => onSelect('custom'),
+        icon: <Wrench className="mr-2" size={16} weight="duotone" />,
+      })),
+    },
+    {
+      heading: 'Innovation',
+      items: (innovations || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((i) => ({
+        id: i.id,
+        label: `${i.name} – ${i.category}`,
+        onSelect: () => onSelect('innovation'),
+        icon: <Lightbulb className="mr-2" size={16} weight="duotone" />,
+      })),
+    },
+    {
+      heading: 'Team',
+      items: (team || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((m) => ({
+        id: m.id,
+        label: `${m.name} – ${m.role}`,
+        onSelect: () => onSelect('team'),
+        icon: <Users className="mr-2" size={16} weight="duotone" />,
+      })),
+    },
+    {
+      heading: 'News & Publications',
+      items: (news || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((n) => ({
+        id: n.id,
+        label: n.title,
+        onSelect: () => onSelect('news'),
+        icon: <Newspaper className="mr-2" size={16} weight="duotone" />,
+      })),
+    },
+  ]
+}
+
 export function useGlobalSearchData({ 
   onSelect, 
   products, 
@@ -156,25 +253,6 @@ export function useGlobalSearchData({
 
   const hasQuery = searchQuery.trim().length > 0
 
-  const renderIcon = (type: SearchType) => {
-    switch (type) {
-      case 'product':
-        return <Package className="mr-2" size={16} weight="duotone" />
-      case 'team':
-        return <Users className="mr-2" size={16} weight="duotone" />
-      case 'device':
-        return <Cpu className="mr-2" size={16} weight="duotone" />
-      case 'custom':
-        return <Wrench className="mr-2" size={16} weight="duotone" />
-      case 'innovation':
-        return <Lightbulb className="mr-2" size={16} weight="duotone" />
-      case 'news':
-        return <Newspaper className="mr-2" size={16} weight="duotone" />
-      default:
-        return <ArrowRight className="mr-2" size={16} weight="bold" />
-    }
-  }
-
   const resultsGroupItems: SearchResultsGroupItem[] = fuseResults.map((item) => ({
     id: item.id,
     label: item.label,
@@ -183,71 +261,7 @@ export function useGlobalSearchData({
     icon: renderIcon(item.type),
   }))
 
-  const browseGroups: SearchBrowseGroup[] = [
-    {
-      heading: 'Navigate',
-      items: NAV_ITEMS.map((item) => ({
-        id: item.id,
-        label: item.label,
-        onSelect: () => onSelect(item.id),
-        icon: <ArrowRight className="mr-2" size={16} weight="bold" />,
-      })),
-    },
-    {
-      heading: 'Products',
-      items: (products || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((p) => ({
-        id: p.id,
-        label: `${p.name} – ${p.category}`,
-        onSelect: () => onSelect('products'),
-        icon: <Package className="mr-2" size={16} weight="duotone" />,
-      })),
-    },
-    {
-      heading: 'Devices',
-      items: (devices || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((d) => ({
-        id: d.id,
-        label: `${d.name} – ${d.category}`,
-        onSelect: () => onSelect('devices'),
-        icon: <Cpu className="mr-2" size={16} weight="duotone" />,
-      })),
-    },
-    {
-      heading: 'Custom',
-      items: (customSolutions || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((c) => ({
-        id: c.id,
-        label: `${c.name} – ${c.category}`,
-        onSelect: () => onSelect('custom'),
-        icon: <Wrench className="mr-2" size={16} weight="duotone" />,
-      })),
-    },
-    {
-      heading: 'Innovation',
-      items: (innovations || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((i) => ({
-        id: i.id,
-        label: `${i.name} – ${i.category}`,
-        onSelect: () => onSelect('innovation'),
-        icon: <Lightbulb className="mr-2" size={16} weight="duotone" />,
-      })),
-    },
-    {
-      heading: 'Team',
-      items: (team || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((m) => ({
-        id: m.id,
-        label: `${m.name} – ${m.role}`,
-        onSelect: () => onSelect('team'),
-        icon: <Users className="mr-2" size={16} weight="duotone" />,
-      })),
-    },
-    {
-      heading: 'News & Publications',
-      items: (news || []).slice(0, MAX_RESULTS_PER_CATEGORY).map((n) => ({
-        id: n.id,
-        label: n.title,
-        onSelect: () => onSelect('news'),
-        icon: <Newspaper className="mr-2" size={16} weight="duotone" />,
-      })),
-    },
-  ]
+  const browseGroups = buildBrowseGroups({ onSelect, products, team, devices, customSolutions, innovations, news })
 
   return {
     searchQuery,

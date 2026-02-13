@@ -37,6 +37,102 @@ interface OrderFormData {
   comments: string
 }
 
+interface OrderFormFieldsProps {
+  form: OrderFormData
+  onChange: (field: keyof OrderFormData, value: string) => void
+  isSubmitting: boolean
+  onSubmit: () => void
+}
+
+/** Form field layout for the order modal */
+function OrderFormFields({ form, onChange, isSubmitting, onSubmit }: OrderFormFieldsProps) {
+  return (
+    <div className="space-y-4 pt-2">
+      {/* Email */}
+      <div className="space-y-1.5">
+        <Label htmlFor="order-email" className="flex items-center gap-1.5 text-sm font-medium">
+          <EnvelopeSimple size={16} className="text-muted-foreground" /> Email <span className="text-destructive">*</span>
+        </Label>
+        <Input
+          id="order-email"
+          type="email"
+          placeholder="you@company.com"
+          value={form.email}
+          onChange={e => onChange('email', e.target.value)}
+          required
+        />
+      </div>
+
+      {/* Phone */}
+      <div className="space-y-1.5">
+        <Label htmlFor="order-phone" className="flex items-center gap-1.5 text-sm font-medium">
+          <Phone size={16} className="text-muted-foreground" /> Phone Number <span className="text-destructive">*</span>
+        </Label>
+        <Input
+          id="order-phone"
+          type="tel"
+          placeholder="+44 7123 456789"
+          value={form.phone}
+          onChange={e => onChange('phone', e.target.value)}
+          required
+        />
+      </div>
+
+      {/* Item (pre-populated) */}
+      <div className="space-y-1.5">
+        <Label htmlFor="order-item" className="flex items-center gap-1.5 text-sm font-medium">
+          <Package size={16} className="text-muted-foreground" /> Item
+        </Label>
+        <Input
+          id="order-item"
+          value={form.item}
+          onChange={e => onChange('item', e.target.value)}
+          placeholder="Product or device name"
+        />
+      </div>
+
+      {/* Quantity */}
+      <div className="space-y-1.5">
+        <Label htmlFor="order-qty" className="flex items-center gap-1.5 text-sm font-medium">
+          <HashStraight size={16} className="text-muted-foreground" /> Quantity
+        </Label>
+        <Input
+          id="order-qty"
+          type="number"
+          min="1"
+          value={form.quantity}
+          onChange={e => onChange('quantity', e.target.value)}
+        />
+      </div>
+
+      {/* Comments */}
+      <div className="space-y-1.5">
+        <Label htmlFor="order-comments" className="flex items-center gap-1.5 text-sm font-medium">
+          <ChatText size={16} className="text-muted-foreground" /> Comments <span className="text-muted-foreground font-normal">(optional)</span>
+        </Label>
+        <Textarea
+          id="order-comments"
+          placeholder="Any additional requirements or questions…"
+          rows={3}
+          value={form.comments}
+          onChange={e => onChange('comments', e.target.value)}
+        />
+      </div>
+
+      {/* Note */}
+      <div className="flex items-start gap-2 rounded-md bg-muted/60 px-3 py-2.5 text-xs text-muted-foreground">
+        <Info size={16} className="mt-0.5 flex-shrink-0 text-primary" weight="fill" />
+        <span>We will respond within 24 hours with a quotation or to confirm your order.</span>
+      </div>
+
+      {/* Submit */}
+      <Button className="w-full" onClick={onSubmit} disabled={isSubmitting}>
+        {isSubmitting ? 'Submitting…' : 'Submit Order Enquiry'}
+      </Button>
+    </div>
+  )
+}
+
 /**
  * Order capture modal with customer details form.
  *
@@ -120,89 +216,12 @@ export function OrderModal({ open, onOpenChange, itemName = '', itemType = 'Prod
           </p>
         </DialogHeader>
 
-        <div className="space-y-4 pt-2">
-          {/* Email */}
-          <div className="space-y-1.5">
-            <Label htmlFor="order-email" className="flex items-center gap-1.5 text-sm font-medium">
-              <EnvelopeSimple size={16} className="text-muted-foreground" /> Email <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="order-email"
-              type="email"
-              placeholder="you@company.com"
-              value={form.email}
-              onChange={e => handleChange('email', e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Phone */}
-          <div className="space-y-1.5">
-            <Label htmlFor="order-phone" className="flex items-center gap-1.5 text-sm font-medium">
-              <Phone size={16} className="text-muted-foreground" /> Phone Number <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="order-phone"
-              type="tel"
-              placeholder="+44 7123 456789"
-              value={form.phone}
-              onChange={e => handleChange('phone', e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Item (pre-populated) */}
-          <div className="space-y-1.5">
-            <Label htmlFor="order-item" className="flex items-center gap-1.5 text-sm font-medium">
-              <Package size={16} className="text-muted-foreground" /> Item
-            </Label>
-            <Input
-              id="order-item"
-              value={form.item}
-              onChange={e => handleChange('item', e.target.value)}
-              placeholder="Product or device name"
-            />
-          </div>
-
-          {/* Quantity */}
-          <div className="space-y-1.5">
-            <Label htmlFor="order-qty" className="flex items-center gap-1.5 text-sm font-medium">
-              <HashStraight size={16} className="text-muted-foreground" /> Quantity
-            </Label>
-            <Input
-              id="order-qty"
-              type="number"
-              min="1"
-              value={form.quantity}
-              onChange={e => handleChange('quantity', e.target.value)}
-            />
-          </div>
-
-          {/* Comments */}
-          <div className="space-y-1.5">
-            <Label htmlFor="order-comments" className="flex items-center gap-1.5 text-sm font-medium">
-              <ChatText size={16} className="text-muted-foreground" /> Comments <span className="text-muted-foreground font-normal">(optional)</span>
-            </Label>
-            <Textarea
-              id="order-comments"
-              placeholder="Any additional requirements or questions…"
-              rows={3}
-              value={form.comments}
-              onChange={e => handleChange('comments', e.target.value)}
-            />
-          </div>
-
-          {/* Note */}
-          <div className="flex items-start gap-2 rounded-md bg-muted/60 px-3 py-2.5 text-xs text-muted-foreground">
-            <Info size={16} className="mt-0.5 flex-shrink-0 text-primary" weight="fill" />
-            <span>We will respond within 24 hours with a quotation or to confirm your order.</span>
-          </div>
-
-          {/* Submit */}
-          <Button className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting…' : 'Submit Order Enquiry'}
-          </Button>
-        </div>
+        <OrderFormFields
+          form={form}
+          onChange={handleChange}
+          isSubmitting={isSubmitting}
+          onSubmit={handleSubmit}
+        />
       </DialogContent>
     </Dialog>
 
