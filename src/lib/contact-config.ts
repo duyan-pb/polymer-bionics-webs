@@ -40,8 +40,8 @@ export const contactConfig = {
    * WhatsApp Business configuration.
    */
   whatsapp: {
-    /** WhatsApp number in international format (e.g., +447123456789) */
-    number: '+447123456789', // TODO: Replace with real WhatsApp Business number
+    /** WhatsApp number in international format */
+    number: '+447341961421',
     /** Default message template for enquiries */
     defaultMessage: 'Hello, I would like to enquire about Polymer Bionics products and services.',
   },

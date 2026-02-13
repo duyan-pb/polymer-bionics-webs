@@ -3,11 +3,12 @@
  *
  * Image viewer overlay with next/prev navigation for image galleries.
  * Sized to roughly 2 cards wide. Uses a portal to avoid style conflicts.
+ * Implements focus trapping and preserves existing scroll-lock state.
  *
  * @module components/ImageLightbox
  */
 
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/button'
 import { X, CaretLeft, CaretRight } from '@phosphor-icons/react'
@@ -25,6 +26,9 @@ export interface ImageLightboxProps {
   alt?: string
 }
 
+/** Focusable element selector for focus-trap logic */
+const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+
 /**
  * Image lightbox with keyboard and button navigation.
  *
@@ -34,10 +38,15 @@ export interface ImageLightboxProps {
  * - Keyboard navigation (ArrowLeft, ArrowRight, Escape)
  * - Image counter badge (e.g. "2 / 5")
  * - Click backdrop or press X to close
+ * - Focus trapping keeps Tab within the lightbox
+ * - Preserves scroll-lock state of underlying modals
  */
 export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt = 'Image detail' }: ImageLightboxProps) {
   const isOpen = currentIndex !== null && currentIndex >= 0 && currentIndex < images.length
   const hasMultiple = images.length > 1
+  const containerRef = useRef<HTMLDivElement>(null)
+  const previousOverflowRef = useRef<string>('')
+  const previousActiveRef = useRef<Element | null>(null)
 
   const goNext = useCallback(() => {
     if (currentIndex === null) { return }
@@ -49,22 +58,54 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
     onNavigate((currentIndex - 1 + images.length) % images.length)
   }, [currentIndex, images.length, onNavigate])
 
-  // Keyboard navigation
+  // Keyboard navigation + focus trap
   useEffect(() => {
     if (!isOpen) { return }
 
+    // Save previous state
+    previousOverflowRef.current = document.body.style.overflow
+    previousActiveRef.current = document.activeElement
+    document.body.style.overflow = 'hidden'
+
+    // Move focus into lightbox
+    requestAnimationFrame(() => {
+      containerRef.current?.focus()
+    })
+
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { onClose() }
-      if (e.key === 'ArrowRight') { goNext() }
-      if (e.key === 'ArrowLeft') { goPrev() }
+      if (e.key === 'Escape') { onClose(); return }
+      if (e.key === 'ArrowRight') { goNext(); return }
+      if (e.key === 'ArrowLeft') { goPrev(); return }
+
+      // Focus trap on Tab
+      if (e.key === 'Tab' && containerRef.current) {
+        const focusable = containerRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)
+        if (focusable.length === 0) { e.preventDefault(); return }
+
+        const first = focusable[0] as HTMLElement
+        const last = focusable[focusable.length - 1] as HTMLElement
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
     }
 
-    document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', handleKey)
 
     return () => {
-      document.body.style.overflow = ''
+      // Restore previous overflow (preserves scroll-lock from underlying modals)
+      document.body.style.overflow = previousOverflowRef.current
       window.removeEventListener('keydown', handleKey)
+
+      // Restore focus to the element that opened the lightbox
+      if (previousActiveRef.current instanceof HTMLElement) {
+        previousActiveRef.current.focus()
+      }
     }
   }, [isOpen, goNext, goPrev, onClose])
 
@@ -72,11 +113,13 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
 
   return createPortal(
     <div
+      ref={containerRef}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-label="Image lightbox"
+      tabIndex={-1}
     >
       {/* Card-sized container — roughly 2 cards wide */}
       <div
