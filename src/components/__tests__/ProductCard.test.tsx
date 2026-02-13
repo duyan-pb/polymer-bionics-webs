@@ -65,13 +65,18 @@ describe('ProductCard', () => {
     expect(handleSelect).toHaveBeenCalledWith(product)
   })
 
-  it('calls onZoomImage when image is clicked and does not trigger onSelect', async () => {
+  it('calls onZoomImage with imageUrl and deduplicated gallery when image is clicked', async () => {
     const handleSelect = vi.fn()
     const handleZoom = vi.fn()
 
+    const productWithImages: Product = {
+      ...product,
+      images: ['/images/product.jpg', '/images/extra.jpg'],
+    }
+
     render(
       <ProductCard
-        product={product}
+        product={productWithImages}
         featurePreviewCount={2}
         onSelect={handleSelect}
         onZoomImage={handleZoom}
@@ -84,7 +89,16 @@ describe('ProductCard', () => {
 
     await userEvent.click(screen.getByRole('button', { name: `Enlarge image of ${product.name}` }))
 
-    expect(handleZoom).toHaveBeenCalledWith(product.imageUrl)
+    // Should pass the imageUrl and a deduplicated gallery
+    expect(handleZoom).toHaveBeenCalledWith(
+      productWithImages.imageUrl,
+      expect.arrayContaining(['/images/product.jpg', '/images/extra.jpg'])
+    )
+    // Gallery should NOT have duplicates (imageUrl is already in images)
+    const gallery = handleZoom.mock.calls[0][1] as string[]
+    const unique = [...new Set(gallery)]
+    expect(gallery).toEqual(unique)
+
     expect(handleSelect).not.toHaveBeenCalled()
   })
 

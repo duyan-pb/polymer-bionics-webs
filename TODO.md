@@ -147,7 +147,7 @@ regulatoryStatus: '...'                   // CE/FDA certification status
 
 | Setting | Current Value | Action |
 | ------- | ------------- | ------ |
-| WhatsApp number | `+447123456789` | Update with real WhatsApp Business number |
+| WhatsApp number | `+447341961421` | ✅ Configured |
 | LinkedIn URL | `https://www.linkedin.com/company/polymer-bionics` | Verify correct URL |
 | Office address | Exhibition Rd, South Kensington, London SW7 2AZ | Verify address |
 
@@ -167,13 +167,15 @@ Set environment variables for production:
 
 ### Form Service ([src/lib/form-service.ts](src/lib/form-service.ts))
 
-Set environment variables for form submissions:
+Forms submit via **Netlify Forms** automatically when deployed to Netlify (no env vars needed). Three hidden forms are declared in `index.html`: `contact`, `newsletter`, `order`.
+
+Optional environment variables for custom API override:
 
 | Variable | Purpose |
 | -------- | ------- |
-| `VITE_FORMSPREE_CONTACT_ID` | Formspree form ID for contact form |
-| `VITE_FORMSPREE_NEWSLETTER_ID` | Formspree form ID for newsletter |
-| `VITE_CONTACT_API_ENDPOINT` | Custom API endpoint (alternative to Formspree) |
+| `VITE_CONTACT_API_ENDPOINT` | Custom API endpoint (overrides Netlify Forms) |
+| `VITE_NEWSLETTER_API_ENDPOINT` | Custom newsletter API endpoint |
+| `VITE_ORDER_API_ENDPOINT` | Custom order form API endpoint |
 
 ---
 
@@ -206,11 +208,14 @@ Future implementation:
 | Page | Enhancement |
 | ---- | ----------- |
 | [HomePage](src/components/HomePage.tsx) | Replace partner placeholders with real logos; Add testimonials section |
+| [DevicesPage](src/components/DevicesPage.tsx) | Add real device images and specifications; Update placeholder descriptions |
+| [CustomPage](src/components/CustomPage.tsx) | Add real custom solutions content and case studies |
+| [InnovationPage](src/components/InnovationPage.tsx) | Add real R&D project content and images |
 | [NewsPage](src/components/NewsPage.tsx) | Add pagination; Add search/filter by year/author; Consider RSS feed |
 | [MediaPage](src/components/MediaPage.tsx) | Add real video content; Implement video player; Add PDF downloads |
 | [DatasheetsPage](src/components/DatasheetsPage.tsx) | Upload real PDFs; Add version history tracking |
 | [TeamPage](src/components/TeamPage.tsx) | Add team member photos; Update all bios |
-| [ContactPage](src/components/ContactPage.tsx) | Configure form backend; Add Google Maps embed; Consider live chat |
+| [ContactPage](src/components/ContactPage.tsx) | ✅ Form backend configured (Netlify Forms); Add Google Maps embed; Consider live chat |
 
 ---
 
@@ -238,8 +243,10 @@ npm run validate     # Full validation (lint, typecheck, test, build)
 | ------------ | --------- | ----------------- |
 | Team Members | `src/lib/team-data.ts` | `TeamPage.tsx` |
 | Materials | `src/lib/materials-data.ts` | `MaterialsPage.tsx` |
-| Applications | `src/lib/materials-data.ts` | `ApplicationsPage.tsx` |
 | Products | `src/lib/seed-data.ts` | `ProductsPage.tsx` |
+| Devices | `src/lib/devices-data.ts` | `DevicesPage.tsx` |
+| Custom Solutions | `src/lib/custom-data.ts` | `CustomPage.tsx` |
+| Innovation | `src/lib/innovation-data.ts` | `InnovationPage.tsx` |
 | News | `src/lib/publications-data.ts` | `NewsPage.tsx` |
 | Publications | `src/lib/publications-data.ts` | `NewsPage.tsx` |
 | Videos | `src/lib/media-data.ts` | `MediaPage.tsx` |
@@ -248,4 +255,4 @@ npm run validate     # Full validation (lint, typecheck, test, build)
 
 ---
 
-Last updated: January 2026
+Last updated: February 2026

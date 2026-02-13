@@ -51,9 +51,18 @@ vi.mock('@/lib/contact-config', () => ({
       country: 'Test Country',
     },
   },
-  copyWhatsAppNumber: vi.fn().mockResolvedValue(true),
+  getWhatsAppUrl: vi.fn(() => 'https://wa.me/1234567890?text=Hello'),
   getEmailUrl: vi.fn((type: string) => `mailto:${type}@test.com`),
 }))
+
+// Mock utils (openExternal)
+vi.mock('@/lib/utils', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>()
+  return {
+    ...actual,
+    openExternal: vi.fn(),
+  }
+})
 
 import { FloatingContactButton } from '../FloatingContactButton'
 
@@ -106,6 +115,7 @@ describe('FloatingContactButton', () => {
 
   describe('contact actions', () => {
     it('opens email on general enquiry click', async () => {
+      const { openExternal } = await import('@/lib/utils')
       const user = userEvent.setup()
       render(<FloatingContactButton />)
       
@@ -117,11 +127,13 @@ describe('FloatingContactButton', () => {
       const generalButton = screen.getByText('General Enquiry').closest('button')
       await user.click(generalButton!)
       
-      expect(window.open).toHaveBeenCalled()
+      expect(openExternal).toHaveBeenCalledWith(
+        expect.stringContaining('mailto:')
+      )
     })
 
-    it('copies whatsapp number on click', async () => {
-      const { copyWhatsAppNumber } = await import('@/lib/contact-config')
+    it('opens whatsapp URL on click', async () => {
+      const { openExternal } = await import('@/lib/utils')
       const user = userEvent.setup()
       render(<FloatingContactButton />)
       
@@ -133,10 +145,13 @@ describe('FloatingContactButton', () => {
       const whatsappButton = screen.getByText('WhatsApp').closest('button')
       await user.click(whatsappButton!)
       
-      expect(copyWhatsAppNumber).toHaveBeenCalled()
+      expect(openExternal).toHaveBeenCalledWith(
+        expect.stringContaining('wa.me')
+      )
     })
 
     it('opens maps on visit us click', async () => {
+      const { openExternal } = await import('@/lib/utils')
       const user = userEvent.setup()
       render(<FloatingContactButton />)
       
@@ -148,10 +163,8 @@ describe('FloatingContactButton', () => {
       const visitButton = screen.getByText('Visit Us').closest('button')
       await user.click(visitButton!)
       
-      expect(window.open).toHaveBeenCalledWith(
-        expect.stringContaining('google.com/maps'),
-        '_blank',
-        'noopener,noreferrer'
+      expect(openExternal).toHaveBeenCalledWith(
+        expect.stringContaining('google.com/maps')
       )
     })
   })

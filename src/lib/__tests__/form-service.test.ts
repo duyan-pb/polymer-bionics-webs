@@ -2,6 +2,9 @@
  * Form Service Tests
  * 
  * Tests for newsletter and contact form submission handling.
+ * The test setup mocks window.location.hostname to 'polymerbionics.com',
+ * so isNetlifyEnvironment() returns true by default — matching the Netlify
+ * Forms submission path. The global fetch mock returns { ok: true }.
  * 
  * @module lib/__tests__/form-service.test
  */
@@ -10,30 +13,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import {
   submitContactForm,
   submitNewsletterSubscription,
+  submitOrderForm,
   isFormServiceConfigured,
   type ContactFormData,
   type NewsletterData,
+  type OrderFormData,
 } from '../form-service'
-
-// =============================================================================
-// MOCKS
-// =============================================================================
-
-// Mock import.meta.env
-const originalEnv = { ...import.meta.env }
-
-function setEnv(overrides: Record<string, string | undefined>) {
-  Object.assign(import.meta.env, overrides)
-}
-
-function resetEnv() {
-  Object.keys(import.meta.env).forEach(key => {
-    if (key.startsWith('VITE_CONTACT') || key.startsWith('VITE_NEWSLETTER') || key.startsWith('VITE_ORDER')) {
-      delete (import.meta.env as Record<string, unknown>)[key]
-    }
-  })
-  Object.assign(import.meta.env, originalEnv)
-}
 
 // =============================================================================
 // TESTS
@@ -42,16 +27,16 @@ function resetEnv() {
 describe('form-service', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    resetEnv()
   })
 
   afterEach(() => {
-    resetEnv()
+    vi.restoreAllMocks()
   })
 
   describe('isFormServiceConfigured', () => {
-    it('returns false when no environment variables are set', () => {
-      expect(isFormServiceConfigured()).toBe(false)
+    it('returns true when running on Netlify (hostname matches)', () => {
+      // Test setup sets hostname to polymerbionics.com → isNetlifyEnvironment() = true
+      expect(isFormServiceConfigured()).toBe(true)
     })
   })
 
@@ -64,21 +49,31 @@ describe('form-service', () => {
       message: 'I would like to learn more about your products.',
     }
 
-    it('returns success in mock mode', async () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      
+    it('returns success when submitted via Netlify Forms', async () => {
+      // Global fetch mock returns ok: true → Netlify Forms path succeeds
       const result = await submitContactForm(validContactData)
       
       expect(result.success).toBe(true)
-      expect(result.message).toContain('Mock')
-      expect(consoleSpy).toHaveBeenCalled()
+      expect(result.message).toBe('Submission successful')
+    })
+
+    it('sends form data via URL-encoded POST', async () => {
+      await submitContactForm(validContactData)
       
-      consoleSpy.mockRestore()
+      expect(global.fetch).toHaveBeenCalledWith('/', expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      }))
+      
+      // Verify form-name field is included for Netlify
+      const callArgs = vi.mocked(global.fetch).mock.calls[0]
+      const body = callArgs[1]?.body as string
+      expect(body).toContain('form-name=contact')
+      expect(body).toContain('name=John')
+      expect(body).toContain('email=john%40example.com')
     })
 
     it('handles form data without optional company field', async () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      
       const dataWithoutCompany: ContactFormData = {
         name: 'Jane Doe',
         email: 'jane@example.com',
@@ -89,24 +84,29 @@ describe('form-service', () => {
       const result = await submitContactForm(dataWithoutCompany)
       
       expect(result.success).toBe(true)
-      
-      consoleSpy.mockRestore()
     })
 
-    it('calls custom API when VITE_CONTACT_API_ENDPOINT is set', async () => {
-      setEnv({ VITE_CONTACT_API_ENDPOINT: 'https://api.example.com/contact' })
+    it('returns failure on HTTP error', async () => {
+      vi.mocked(global.fetch).mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+      } as Response)
       
-      // Need to re-import to pick up new env
-      // For this test, we'll mock fetch instead
-      const mockFetch = vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve({ success: true }),
-      })
-      global.fetch = mockFetch
+      const result = await submitContactForm(validContactData)
       
-      // The module caches config on load, so this is a simplified test
-      // In real usage, the env would be set before module loads
-      expect(typeof submitContactForm).toBe('function')
+      expect(result.success).toBe(false)
+      expect(result.message).toBe('Submission failed')
+      expect(result.error).toBe('HTTP 500')
+    })
+
+    it('returns network error on fetch failure', async () => {
+      vi.mocked(global.fetch).mockRejectedValueOnce(new Error('Network error'))
+      
+      const result = await submitContactForm(validContactData)
+      
+      expect(result.success).toBe(false)
+      expect(result.message).toBe('Network error')
+      expect(result.error).toBe('Network error')
     })
   })
 
@@ -115,46 +115,57 @@ describe('form-service', () => {
       email: 'subscriber@example.com',
     }
 
-    it('returns success in mock mode', async () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      
+    it('returns success when submitted via Netlify Forms', async () => {
       const result = await submitNewsletterSubscription(validNewsletterData)
       
       expect(result.success).toBe(true)
-      expect(result.message).toContain('Mock')
-      
-      consoleSpy.mockRestore()
+      expect(result.message).toBe('Submission successful')
     })
 
-    it('logs helpful setup instructions in mock mode', async () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      
+    it('sends newsletter form data correctly', async () => {
       await submitNewsletterSubscription(validNewsletterData)
       
-      // Should log setup instructions
-      const calls = consoleSpy.mock.calls.flat().join(' ')
-      expect(calls).toContain('Netlify')
+      expect(global.fetch).toHaveBeenCalledWith('/', expect.objectContaining({
+        method: 'POST',
+      }))
       
-      consoleSpy.mockRestore()
+      const callArgs = vi.mocked(global.fetch).mock.calls[0]
+      const body = callArgs[1]?.body as string
+      expect(body).toContain('form-name=newsletter')
+      expect(body).toContain('email=subscriber%40example.com')
     })
   })
 
-  describe('API error handling', () => {
-    it('handles network errors gracefully', async () => {
-      setEnv({ VITE_CONTACT_API_ENDPOINT: 'https://api.example.com/contact' })
+  describe('submitOrderForm', () => {
+    const validOrderData: OrderFormData = {
+      email: 'buyer@example.com',
+      phone: '+1234567890',
+      item: 'BioFlex Array',
+      itemType: 'product',
+      quantity: '5',
+      comments: 'Urgent order',
+    }
+
+    it('returns success when submitted via Netlify Forms', async () => {
+      const result = await submitOrderForm(validOrderData)
       
-      global.fetch = vi.fn().mockRejectedValue(new Error('Network error'))
+      expect(result.success).toBe(true)
+      expect(result.message).toBe('Submission successful')
+    })
+
+    it('sends order form data correctly', async () => {
+      await submitOrderForm(validOrderData)
       
-      // The module behavior depends on when env is loaded
-      // This test validates the error handling structure exists
-      expect(typeof submitContactForm).toBe('function')
+      const callArgs = vi.mocked(global.fetch).mock.calls[0]
+      const body = callArgs[1]?.body as string
+      expect(body).toContain('form-name=order')
+      expect(body).toContain('item=BioFlex')
+      expect(body).toContain('quantity=5')
     })
   })
 
   describe('FormResult type', () => {
     it('has correct structure', async () => {
-      const consoleSpy = vi.spyOn(console, 'info').mockImplementation(() => {})
-      
       const result = await submitContactForm({
         name: 'Test',
         email: 'test@test.com',
@@ -166,8 +177,6 @@ describe('form-service', () => {
       expect(result).toHaveProperty('message')
       expect(typeof result.success).toBe('boolean')
       expect(typeof result.message).toBe('string')
-      
-      consoleSpy.mockRestore()
     })
   })
 })

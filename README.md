@@ -10,12 +10,16 @@ A professional biotech company website showcasing Polymer Bionics' medical innov
 ## Features
 
 - **Team Profiles** - Showcase team members with credentials and research interests
-- **Product Catalog** - Display medical products with specifications and applications
+- **Product Catalog** - Display medical products with specifications, image galleries, and order enquiry
 - **Materials Library** - Comprehensive biomaterial offerings with technical properties
-- **Applications Gallery** - Real-world clinical applications and use cases
+- **Devices Library** - EEG systems and bioelectronic device catalog with order flow
+- **Custom Solutions** - Bespoke engineering solutions showcase with enquiry forms
+- **Innovation Hub** - R&D capabilities and research programs
 - **Media Center** - Videos, case studies, and downloadable resources
 - **Technical Datasheets** - Organized library of downloadable documentation
 - **News & Publications** - Company news and scientific publications feed
+- **Image Lightbox** - Full-screen image viewer with gallery navigation and keyboard support
+- **Order Enquiry** - Integrated order modal with Netlify Forms submission
 
 ## Tech Stack
 
@@ -33,7 +37,7 @@ A professional biotech company website showcasing Polymer Bionics' medical innov
 
 ### Prerequisites
 
-- Node.js 20.x or higher
+- Node.js 22.12 or higher
 - npm 10.x or higher
 
 ### Installation
@@ -131,19 +135,36 @@ src/
 ├── components/              # Feature pages + shared components
 │   ├── ui/                  # shadcn/ui primitives (DO NOT edit)
 │   ├── contact/             # Contact form components
+│   ├── datasheets/          # Datasheet page components
+│   ├── home/                # Home page sub-components
+│   ├── layout/              # Layout wrapper components
+│   ├── materials/           # Material card & dialog components
+│   ├── products/            # Product card & dialog components
+│   ├── search/              # Search-related components
+│   ├── team/                # Team page sub-components
 │   ├── __tests__/           # Component unit tests
 │   ├── HomePage.tsx         # Landing page
 │   ├── TeamPage.tsx         # Team member profiles
 │   ├── ProductsPage.tsx     # Product showcase
 │   ├── MaterialsPage.tsx    # Materials library
-│   ├── ApplicationsPage.tsx # Clinical applications
+│   ├── DevicesPage.tsx      # EEG systems & devices
+│   ├── CustomPage.tsx       # Custom solutions
+│   ├── InnovationPage.tsx   # R&D and innovation
 │   ├── MediaPage.tsx        # Videos & case studies
 │   ├── DatasheetsPage.tsx   # Technical datasheets
 │   ├── NewsPage.tsx         # News & publications
 │   ├── ContactPage.tsx      # Contact information
+│   ├── PaymentPage.tsx      # Order request / payment
 │   ├── PageHero.tsx         # Reusable page hero section
 │   ├── ClickableCard.tsx    # Accessible clickable cards
 │   ├── Breadcrumbs.tsx      # Navigation breadcrumbs
+│   ├── ImageLightbox.tsx    # Full-screen image viewer with gallery
+│   ├── SuccessDialog.tsx    # Form success confirmation dialog
+│   ├── OrderModal.tsx       # Order enquiry modal
+│   ├── ComingSoonCard.tsx   # Empty state card
+│   ├── ContentState.tsx     # Loading/empty/error wrapper
+│   ├── HeroImage.tsx        # Optimized hero background
+│   ├── ContactCTA.tsx       # Contact call-to-action section
 │   ├── Navigation.tsx       # Header navigation
 │   ├── Footer.tsx           # Site footer
 │   ├── GlobalSearch.tsx     # Site-wide search
@@ -152,7 +173,6 @@ src/
 ├── hooks/
 │   ├── use-theme.ts         # Theme management hook
 │   ├── use-mobile.ts        # Responsive breakpoint detection
-│   ├── use-kv.ts            # localStorage KV (static deployments)
 │   └── __tests__/           # Hook unit tests
 ├── lib/
 │   ├── analytics/           # Analytics infrastructure
@@ -171,11 +191,15 @@ src/
 │   ├── constants.ts         # Navigation, categories, transitions
 │   ├── types.ts             # TypeScript interfaces
 │   ├── feature-flags.ts     # Feature flag system
+│   ├── form-service.ts      # Form submission (Netlify Forms / API / mock)
 │   ├── analytics-config.ts  # Analytics configuration
-│   ├── utils.ts             # Utility functions (cn, etc.)
+│   ├── utils.ts             # Utility functions (cn, openExternal, etc.)
 │   ├── seed-data.ts         # Product seed data
 │   ├── team-data.ts         # Team member data
 │   ├── materials-data.ts    # Materials & applications
+│   ├── devices-data.ts      # Device catalog (EEG systems etc.)
+│   ├── custom-data.ts       # Custom solutions data
+│   ├── innovation-data.ts   # Innovation/R&D data
 │   ├── media-data.ts        # Video/case study data
 │   ├── publications-data.ts # Publications data
 │   └── contact-config.ts    # Contact information
@@ -192,7 +216,8 @@ api/                         # Azure Functions
     └── events.ts            # Server-side event collection
 
 docs/                        # Documentation
-└── ANALYTICS.md             # Analytics infrastructure docs
+├── ANALYTICS.md             # Analytics infrastructure docs
+└── DATASHEET-INVENTORY.md   # Datasheet status tracking
 ```
 
 ## CI/CD Pipeline

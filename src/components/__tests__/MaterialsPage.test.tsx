@@ -125,10 +125,11 @@ describe('MaterialsPage', () => {
       expect(screen.getByText('Another test material')).toBeInTheDocument()
     })
 
-    it('displays property badges', () => {
+    it('displays material properties', () => {
       render(<MaterialsPage onNavigate={mockOnNavigate} />)
-      const badges = screen.getAllByTestId('badge')
-      expect(badges.length).toBeGreaterThan(0)
+      // MaterialCard renders properties as list items with CheckCircle icons
+      expect(screen.getByText('Property 1')).toBeInTheDocument()
+      expect(screen.getByText('Property 2')).toBeInTheDocument()
     })
   })
 

@@ -22,9 +22,18 @@ vi.mock('@/lib/contact-config', () => ({
     email: { general: 'info@test.com', sales: 'sales@test.com' },
     address: { street: '123 Test St', city: 'Test City', postcode: '12345', country: 'Test Country' },
   },
-  copyWhatsAppNumber: vi.fn().mockResolvedValue(true),
+  getWhatsAppUrl: vi.fn(() => 'https://wa.me/1234567890?text=Hello'),
   getEmailUrl: vi.fn((type: string) => `mailto:${type}@test.com`),
 }))
+
+// Mock utils (openExternal)
+vi.mock('@/lib/utils', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>()
+  return {
+    ...actual,
+    openExternal: vi.fn(),
+  }
+})
 
 // Mock ConsentBanner components
 vi.mock('@/components/ConsentBanner', () => ({
@@ -92,27 +101,27 @@ describe('Footer', () => {
 
   describe('interactions', () => {
     it('handles WhatsApp click', async () => {
-      const { copyWhatsAppNumber } = await import('@/lib/contact-config')
-      const { toast } = await import('sonner')
+      const { openExternal } = await import('@/lib/utils')
       
       render(<Footer />)
       
       await userEvent.click(screen.getByRole('button', { name: /whatsapp/i }))
       
-      expect(copyWhatsAppNumber).toHaveBeenCalled()
-      expect(toast.success).toHaveBeenCalled()
+      expect(openExternal).toHaveBeenCalledWith(
+        expect.stringContaining('wa.me')
+      )
     })
 
     it('handles email link clicks', async () => {
-      const windowOpen = vi.spyOn(window, 'open').mockImplementation(() => null)
+      const { openExternal } = await import('@/lib/utils')
       
       render(<Footer />)
       
       await userEvent.click(screen.getByRole('link', { name: /general enquiry/i }))
       
-      expect(windowOpen).toHaveBeenCalled()
-      
-      windowOpen.mockRestore()
+      expect(openExternal).toHaveBeenCalledWith(
+        expect.stringContaining('mailto:')
+      )
     })
   })
 })

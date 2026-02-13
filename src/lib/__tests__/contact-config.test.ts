@@ -145,8 +145,8 @@ describe('contact-config', () => {
       const url = getEmailUrl('general', subject)
       
       expect(url).toContain(`mailto:${contactConfig.email.general}`)
-      // URLSearchParams uses + for spaces
-      expect(url).toContain('subject=Product+Inquiry')
+      // encodeURIComponent uses %20 for spaces
+      expect(url).toContain('subject=Product%20Inquiry')
     })
 
     it('encodes special characters in subject', () => {
@@ -162,7 +162,7 @@ describe('contact-config', () => {
       const url = getEmailUrl('sales', subject)
       
       expect(url).toContain(`mailto:${contactConfig.email.sales}`)
-      expect(url).toContain('subject=Sales+Question')
+      expect(url).toContain('subject=Sales%20Question')
     })
     
     it('includes body when provided', () => {
@@ -172,9 +172,9 @@ describe('contact-config', () => {
       
       // Check that it contains the email, subject, and body parameters
       expect(url).toContain(`mailto:${contactConfig.email.general}`)
-      expect(url).toContain('subject=Custom+subject')
-      expect(url).toContain('body=Line+1')
-      expect(url).toContain('Line+2')
+      expect(url).toContain('subject=Custom%20subject')
+      expect(url).toContain('body=Line%201')
+      expect(url).toContain('Line%202')
     })
     
     it('includes context when no subject/body provided', () => {
