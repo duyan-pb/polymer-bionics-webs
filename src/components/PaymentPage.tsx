@@ -34,6 +34,7 @@ import { cn } from '@/lib/utils'
 import { submitContactForm } from '@/lib/form-service'
 import type { Product } from '@/lib/types'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SuccessDialog } from '@/components/SuccessDialog'
 
 interface PaymentPageProps {
   onNavigate: (page: string) => void
@@ -76,6 +77,7 @@ export function PaymentPage({ onNavigate, products, paymentDraft }: PaymentPageP
   const [formData, setFormData] = useState<OrderFormData>(INITIAL_ORDER_FORM)
   const [errors, setErrors] = useState<OrderFormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   useEffect(() => {
     if (!paymentDraft) {
@@ -159,11 +161,9 @@ export function PaymentPage({ onNavigate, products, paymentDraft }: PaymentPageP
       })
 
       if (result.success) {
-        toast.success('Order request sent', {
-          description: 'Our sales team will contact you shortly with a quote and payment options.',
-        })
         setFormData(INITIAL_ORDER_FORM)
         setErrors({})
+        setShowSuccess(true)
       } else {
         toast.error('Failed to send order request', {
           description: result.error ?? 'Please try again later.',
@@ -354,6 +354,13 @@ export function PaymentPage({ onNavigate, products, paymentDraft }: PaymentPageP
           </CardContent>
         </Card>
       </div>
+
+      <SuccessDialog
+        open={showSuccess}
+        onOpenChange={setShowSuccess}
+        title="Order Request Sent!"
+        description="Our sales team will contact you shortly with a quotation and payment options."
+      />
     </PageLayout>
   )
 }

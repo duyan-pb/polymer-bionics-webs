@@ -44,13 +44,13 @@ function ProductImageGrid({ product, onSelectImage }: { product: Product; onSele
               key={idx}
               className="cursor-zoom-in rounded-lg overflow-hidden border-2 border-border hover:border-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary relative group"
               onClick={() => {
-                const gallery = [product.imageUrl, ...product.images!].filter(Boolean) as string[]
+                const gallery = [...new Set([product.imageUrl, ...product.images!].filter(Boolean))] as string[]
                 onSelectImage(img, gallery)
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault()
-                  const gallery = [product.imageUrl, ...product.images!].filter(Boolean) as string[]
+                  const gallery = [...new Set([product.imageUrl, ...product.images!].filter(Boolean))] as string[]
                   onSelectImage(img, gallery)
                 }
               }}

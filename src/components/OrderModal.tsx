@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label'
 import { ShoppingCart, EnvelopeSimple, Phone, Package, HashStraight, ChatText, Info } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { submitOrderForm } from '@/lib/form-service'
+import { SuccessDialog } from '@/components/SuccessDialog'
 
 export interface OrderModalProps {
   /** Whether the modal is open */
@@ -55,6 +56,7 @@ export function OrderModal({ open, onOpenChange, itemName = '', itemType = 'Prod
     comments: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   // Sync itemName prop with form when it changes
   useEffect(() => {
@@ -87,11 +89,9 @@ export function OrderModal({ open, onOpenChange, itemName = '', itemType = 'Prod
       })
 
       if (result.success) {
-        toast.success('Order enquiry submitted!', {
-          description: 'We will respond within 24 hours.',
-        })
         onOpenChange(false)
         setForm({ email: '', phone: '', item: itemName, quantity: '1', comments: '' })
+        setShowSuccess(true)
       } else {
         toast.error('Submission failed', {
           description: result.error ?? 'Please try again later.',
@@ -107,6 +107,7 @@ export function OrderModal({ open, onOpenChange, itemName = '', itemType = 'Prod
   }, [form, itemName, itemType, onOpenChange])
 
   return (
+    <>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
@@ -204,5 +205,13 @@ export function OrderModal({ open, onOpenChange, itemName = '', itemType = 'Prod
         </div>
       </DialogContent>
     </Dialog>
+
+    <SuccessDialog
+      open={showSuccess}
+      onOpenChange={setShowSuccess}
+      title="Order Enquiry Submitted!"
+      description="Thank you for your interest. We will respond within 24 hours with a quotation or to confirm your order."
+    />
+    </>
   )
 }

@@ -54,14 +54,14 @@ export function ProductCard({
           className="mb-4 md:mb-6 rounded-lg overflow-hidden relative group cursor-zoom-in"
           onClick={(e) => {
             e.stopPropagation()
-            const gallery = [product.imageUrl, ...(product.images || [])].filter(Boolean) as string[]
+            const gallery = [...new Set([product.imageUrl, ...(product.images || [])].filter(Boolean))] as string[]
             onZoomImage(product.imageUrl ?? '', gallery)
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault()
               e.stopPropagation()
-              const gallery = [product.imageUrl, ...(product.images || [])].filter(Boolean) as string[]
+              const gallery = [...new Set([product.imageUrl, ...(product.images || [])].filter(Boolean))] as string[]
               onZoomImage(product.imageUrl ?? '', gallery)
             }
           }}

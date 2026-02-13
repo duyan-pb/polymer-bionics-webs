@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { submitContactForm } from '@/lib/form-service'
+import { SuccessDialog } from '@/components/SuccessDialog'
 
 /**
  * Form data structure for contact form.
@@ -69,6 +70,7 @@ export function ContactForm() {
   const [formData, setFormData] = useState<ContactFormData>(INITIAL_FORM_DATA)
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const validateForm = useCallback((): boolean => {
     const newErrors: FormErrors = {}
@@ -112,11 +114,9 @@ export function ContactForm() {
       })
       
       if (result.success) {
-        toast.success('Message sent successfully!', {
-          description: "We'll get back to you within 24 hours."
-        })
         setFormData(INITIAL_FORM_DATA)
         setErrors({})
+        setShowSuccess(true)
       } else {
         toast.error('Failed to send message', {
           description: result.error ?? 'Please try again later.'
@@ -252,6 +252,13 @@ export function ContactForm() {
           </Button>
         </form>
       </CardContent>
+
+      <SuccessDialog
+        open={showSuccess}
+        onOpenChange={setShowSuccess}
+        title="Message Sent!"
+        description="Thank you for reaching out. We'll get back to you within 24 hours."
+      />
     </Card>
   )
 }
