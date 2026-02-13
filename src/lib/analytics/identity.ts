@@ -26,7 +26,7 @@ function getSecureRandomUint32(): number {
   if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
     const array = new Uint32Array(1)
     crypto.getRandomValues(array)
-    return array[0]!
+    return array[0] ?? 0
   }
   // Best-effort fallback; not cryptographically secure
   return (Math.random() * 0xffffffff) >>> 0
@@ -61,7 +61,7 @@ function generateSessionId(): string {
     const bytes = new Uint8Array(8)
     crypto.getRandomValues(bytes)
     for (let i = 0; i < bytes.length; i++) {
-      randomValue += bytes[i]!.toString(36)
+      randomValue += (bytes[i] ?? 0).toString(36)
     }
   } else {
     // Best-effort fallback; not cryptographically secure

@@ -9,6 +9,9 @@
 
 import type { Product } from './types'
 
+// Innovation images
+import conformaxImg from '@/assets/images/innovation/originals/ConformaX/Auxetic Array.png'
+
 /**
  * Innovation catalog.
  * Advanced bioelectronic technologies in development.
@@ -18,6 +21,7 @@ export const innovations: Product[] = [
     id: 'conformax',
     name: 'ConformaX Peripheral Nerve Interface',
     tagline: 'Self-conforming implantable nerve interface system',
+    imageUrl: conformaxImg,
     description: 'ConformaX is a self-conforming peripheral nerve interface designed to adapt dynamically to nerve geometry. It combines soft elastomeric electrodes with stretchable architectures to support stable stimulation and recording.',
     technicalDescription: 'ConformaX is a self-conforming peripheral nerve interface designed to adapt dynamically to nerve geometry. It combines soft elastomeric electrodes with stretchable architectures to support stable stimulation and recording.',
     category: 'neural-interfaces',

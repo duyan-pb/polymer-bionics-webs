@@ -121,8 +121,8 @@ export const initialProducts: Product[] = [
   {
     id: 'flexelec-mea',
     name: 'FlexElec MEA',
-    imageUrl: flexelecMeaImg,
-    images: [flexelecMeaImg, flexelecMeaImg1, flexelecMeaImg2],
+    imageUrl: flexelecMeaImg2,
+    images: [flexelecMeaImg2, flexelecMeaImg, flexelecMeaImg1],
     tagline: 'Soft, flexible implantable electrodes for stimulation and recording',
     description: 'FlexElec MEA (Multi-Electrode Array) electrodes are soft, conductive elastomer-based electrodes designed for use in implantable bioelectronic systems. They are available in scalable configurations ranging from single-channel reference electrodes to multi-channel electrode arrays, supporting both neural recording and electrical stimulation.',
     technicalDescription: 'FlexElec implantable electrodes are soft, conductive elastomer–based electrodes designed for use in implantable bioelectronic systems. They are available in scalable configurations ranging from single-channel reference electrodes to multi-channel electrode arrays, supporting both neural recording and electrical stimulation.',

@@ -29,6 +29,33 @@ export interface ImageLightboxProps {
 /** Focusable element selector for focus-trap logic */
 const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
 
+/** Handle Tab key for focus trapping within a container */
+function handleFocusTrap(e: KeyboardEvent, container: HTMLElement) {
+  const focusable = container.querySelectorAll<HTMLElement>(FOCUSABLE)
+  if (focusable.length === 0) { e.preventDefault(); return }
+
+  const first = focusable[0] as HTMLElement
+  const last = focusable[focusable.length - 1] as HTMLElement
+  const active = document.activeElement
+
+  // If focus is on the container itself (or outside focusable children),
+  // redirect to first/last depending on direction
+  const isInsideTrap = container.contains(active) && active !== container
+  if (!isInsideTrap) {
+    e.preventDefault()
+    ;(e.shiftKey ? last : first).focus()
+    return
+  }
+
+  if (e.shiftKey && active === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && active === last) {
+    e.preventDefault()
+    first.focus()
+  }
+}
+
 /**
  * Image lightbox with keyboard and button navigation.
  *
@@ -96,7 +123,6 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
         didCaptureRef.current = false
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-run when open state truly changes
   }, [isOpen])
 
   // Keyboard navigation + focus trap — separate effect so it rebinds
@@ -108,32 +134,8 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
       if (e.key === 'Escape') { onClose(); return }
       if (e.key === 'ArrowRight') { goNext(); return }
       if (e.key === 'ArrowLeft') { goPrev(); return }
-
-      // Focus trap on Tab
       if (e.key === 'Tab' && containerRef.current) {
-        const focusable = containerRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)
-        if (focusable.length === 0) { e.preventDefault(); return }
-
-        const first = focusable[0] as HTMLElement
-        const last = focusable[focusable.length - 1] as HTMLElement
-        const active = document.activeElement
-
-        // If focus is on the container itself (or outside focusable children),
-        // redirect to first/last depending on direction
-        const isInsideTrap = containerRef.current.contains(active) && active !== containerRef.current
-        if (!isInsideTrap) {
-          e.preventDefault()
-          ;(e.shiftKey ? last : first).focus()
-          return
-        }
-
-        if (e.shiftKey && active === first) {
-          e.preventDefault()
-          last.focus()
-        } else if (!e.shiftKey && active === last) {
-          e.preventDefault()
-          first.focus()
-        }
+        handleFocusTrap(e, containerRef.current)
       }
     }
 

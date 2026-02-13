@@ -30,13 +30,13 @@ export function MaterialCard({ material, onSelect, onZoomImage }: MaterialCardPr
           className="h-56 md:h-72 overflow-hidden bg-muted relative group/zoom cursor-zoom-in"
           onClick={(e) => {
             e.stopPropagation()
-            onZoomImage?.(material.imageUrl!)
+            if (material.imageUrl) { onZoomImage?.(material.imageUrl) }
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault()
               e.stopPropagation()
-              onZoomImage?.(material.imageUrl!)
+              if (material.imageUrl) { onZoomImage?.(material.imageUrl) }
             }
           }}
           tabIndex={0}

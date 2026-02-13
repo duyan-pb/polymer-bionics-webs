@@ -22,8 +22,6 @@ import {
   formspreeConfig,
   envCheck,
   type ContactFormData,
-  type NewsletterData,
-  type OrderFormData,
 } from '../form-service'
 
 // =============================================================================

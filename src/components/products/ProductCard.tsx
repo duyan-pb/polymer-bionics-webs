@@ -30,6 +30,50 @@ export interface ProductCardProps {
   showWhatsApp?: boolean
 }
 
+/** Build a deduplicated gallery array from a product's images */
+function buildGallery(product: Product): string[] {
+  return [...new Set([product.imageUrl, ...(product.images || [])].filter(Boolean))] as string[]
+}
+
+/** Zoomable product image with hover overlay */
+function ProductImageSection({ product, onZoomImage }: { product: Product; onZoomImage: ProductCardProps['onZoomImage'] }) {
+  if (!product.imageUrl) {
+    return (
+      <div className="mb-4 md:mb-6 rounded-lg overflow-hidden">
+        <ProductPlaceholderImage productName={product.name} category={product.category} />
+      </div>
+    )
+  }
+
+  const gallery = buildGallery(product)
+  return (
+    <div 
+      className="mb-4 md:mb-6 rounded-lg overflow-hidden relative group cursor-zoom-in"
+      onClick={(e) => { e.stopPropagation(); onZoomImage(product.imageUrl ?? '', gallery) }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault(); e.stopPropagation(); onZoomImage(product.imageUrl ?? '', gallery)
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      aria-label={`Enlarge image of ${product.name}`}
+    >
+      <img 
+        src={product.imageUrl} 
+        alt={product.name}
+        className="w-full h-56 md:h-72 object-cover transition-transform duration-300 group-hover:scale-105"
+        style={product.imagePosition ? { objectPosition: product.imagePosition } : undefined}
+        loading="lazy"
+        decoding="async"
+      />
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
+        <MagnifyingGlassPlus size={40} className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" weight="bold" />
+      </div>
+    </div>
+  )
+}
+
 export function ProductCard({
   product,
   featurePreviewCount,
@@ -48,51 +92,7 @@ export function ProductCard({
       onClick={() => onSelect(product)}
       ariaLabel={`View details for ${product.name}`}
     >
-      {/* Always render image area for consistent card heights */}
-      {product.imageUrl ? (
-        <div 
-          className="mb-4 md:mb-6 rounded-lg overflow-hidden relative group cursor-zoom-in"
-          onClick={(e) => {
-            e.stopPropagation()
-            const gallery = [...new Set([product.imageUrl, ...(product.images || [])].filter(Boolean))] as string[]
-            onZoomImage(product.imageUrl ?? '', gallery)
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault()
-              e.stopPropagation()
-              const gallery = [...new Set([product.imageUrl, ...(product.images || [])].filter(Boolean))] as string[]
-              onZoomImage(product.imageUrl ?? '', gallery)
-            }
-          }}
-          tabIndex={0}
-          role="button"
-          aria-label={`Enlarge image of ${product.name}`}
-        >
-          <img 
-            src={product.imageUrl} 
-            alt={product.name}
-            className="w-full h-56 md:h-72 object-cover transition-transform duration-300 group-hover:scale-105"
-            style={product.imagePosition ? { objectPosition: product.imagePosition } : undefined}
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
-            <MagnifyingGlassPlus 
-              size={40} 
-              className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" 
-              weight="bold"
-            />
-          </div>
-        </div>
-      ) : (
-        <div className="mb-4 md:mb-6 rounded-lg overflow-hidden">
-          <ProductPlaceholderImage 
-            productName={product.name} 
-            category={product.category} 
-          />
-        </div>
-      )}
+      <ProductImageSection product={product} onZoomImage={onZoomImage} />
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 md:mb-4 gap-2">
         <div>
           <h3 className="text-xl md:text-2xl font-bold mb-1 md:mb-2">{product.name}</h3>

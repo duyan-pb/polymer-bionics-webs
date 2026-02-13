@@ -26,11 +26,11 @@ export function MaterialDialogContent({ material, onZoomImage }: MaterialDialogC
           {material.imageUrl ? (
             <div
               className="relative group cursor-zoom-in w-full h-full"
-              onClick={() => onZoomImage?.(material.imageUrl!)}
+              onClick={() => { if (material.imageUrl) { onZoomImage?.(material.imageUrl) } }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault()
-                  onZoomImage?.(material.imageUrl!)
+                  if (material.imageUrl) { onZoomImage?.(material.imageUrl) }
                 }
               }}
               tabIndex={0}
