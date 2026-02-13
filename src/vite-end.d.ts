@@ -35,10 +35,7 @@ interface ImportMetaEnv {
   // Feature flags (Epic 11)
   readonly VITE_APP_CONFIG_ENDPOINT?: string
   
-  // Form service (Formspree)
-  readonly VITE_FORMSPREE_CONTACT_ID?: string
-  readonly VITE_FORMSPREE_NEWSLETTER_ID?: string
-  readonly VITE_FORMSPREE_ORDER_ID?: string
+  // Form service (optional custom API overrides — Netlify Forms used by default)
   readonly VITE_CONTACT_API_ENDPOINT?: string
   readonly VITE_NEWSLETTER_API_ENDPOINT?: string
   readonly VITE_ORDER_API_ENDPOINT?: string

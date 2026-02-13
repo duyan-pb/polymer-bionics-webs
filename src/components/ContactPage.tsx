@@ -7,7 +7,7 @@
  * @module components/ContactPage
  */
 
-// TODO: Configure Formspree or custom API for form submissions
+// Forms submit to Netlify Forms automatically when deployed to Netlify
 // TODO: Add Google Maps embed for office location
 // TODO: Consider adding live chat integration
 

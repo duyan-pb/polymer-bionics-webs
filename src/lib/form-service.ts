@@ -1,55 +1,26 @@
 /**
  * Form Submission Service
  * 
- * Handles newsletter subscriptions and contact form submissions.
- * Supports multiple backends:
- * - Formspree (default, works with static hosting)
- * - Custom API endpoint
- * - Mock mode for development
+ * Handles contact, newsletter, and order form submissions.
+ * 
+ * Backends (in priority order):
+ * 1. Netlify Forms — auto-detected from hidden forms in index.html (default on Netlify)
+ * 2. Custom API endpoint — set VITE_CONTACT_API_ENDPOINT etc.
+ * 3. Mock mode — local development fallback (console.log only)
  * 
  * @module lib/form-service
  */
-
-// =============================================================================
-// FORM SUBMISSION BACKEND CONFIGURATION
-// =============================================================================
-// Set environment variables in .env:
-// - VITE_FORMSPREE_CONTACT_ID: Formspree form ID for contact form
-// - VITE_FORMSPREE_NEWSLETTER_ID: Formspree form ID for newsletter
-// - VITE_FORMSPREE_ORDER_ID: Formspree form ID for order enquiries
-// - VITE_CONTACT_API_ENDPOINT: Custom API (e.g., Azure Functions)
-// - VITE_NEWSLETTER_API_ENDPOINT: Custom newsletter API
-// - VITE_ORDER_API_ENDPOINT: Custom order API
-//
-// Without these, forms run in mock mode (console.log only).
-// =============================================================================
 
 // =============================================================================
 // CONFIGURATION
 // =============================================================================
 
 /**
- * Form service configuration.
- * Set these environment variables to enable real form submissions:
- * 
- * - VITE_FORMSPREE_CONTACT_ID: Formspree form ID for contact form
- * - VITE_FORMSPREE_NEWSLETTER_ID: Formspree form ID for newsletter
- * - VITE_FORMSPREE_ORDER_ID: Formspree form ID for order enquiries
- * - VITE_CONTACT_API_ENDPOINT: Custom API endpoint for contact form
- * - VITE_NEWSLETTER_API_ENDPOINT: Custom API endpoint for newsletter
- * - VITE_ORDER_API_ENDPOINT: Custom API endpoint for order form
- * 
- * If no environment variables are set, forms will use mock mode (console logging only).
- * 
- * @see https://formspree.io for free form backend
+ * Optional custom API endpoints.
+ * If set, these take priority over Netlify Forms.
+ * If neither is set, Netlify Forms is used on Netlify, mock mode locally.
  */
 export const formServiceConfig = {
-  /** Formspree form ID for contact submissions */
-  formspreeContactId: import.meta.env.VITE_FORMSPREE_CONTACT_ID ?? '',
-  /** Formspree form ID for newsletter subscriptions */
-  formspreeNewsletterId: import.meta.env.VITE_FORMSPREE_NEWSLETTER_ID ?? '',
-  /** Formspree form ID for order enquiries */
-  formspreeOrderId: import.meta.env.VITE_FORMSPREE_ORDER_ID ?? '',
   /** Custom API endpoint for contact form */
   contactApiEndpoint: import.meta.env.VITE_CONTACT_API_ENDPOINT ?? '',
   /** Custom API endpoint for newsletter */
@@ -106,36 +77,30 @@ export interface FormResult {
 // =============================================================================
 
 /**
- * Checks if running in development/mock mode.
+ * Submits data to a Netlify Form using the POST-to-self pattern.
+ * Netlify intercepts POSTs with a `form-name` field that matches
+ * a form declared in the static HTML (index.html).
+ * 
+ * @see https://docs.netlify.com/forms/setup/#javascript-forms
  */
-function isMockMode(): boolean {
-  const { formspreeContactId, formspreeNewsletterId, formspreeOrderId, contactApiEndpoint, newsletterApiEndpoint, orderApiEndpoint } = formServiceConfig
-  return !formspreeContactId && !formspreeNewsletterId && !formspreeOrderId && !contactApiEndpoint && !newsletterApiEndpoint && !orderApiEndpoint
-}
-
-/**
- * Submits data to a Formspree form.
- */
-async function submitToFormspree(formId: string, data: Record<string, unknown>): Promise<FormResult> {
+async function submitToNetlify(formName: string, data: Record<string, string>): Promise<FormResult> {
   try {
-    const response = await fetch(`https://formspree.io/f/${formId}`, {
+    const body = new URLSearchParams({ 'form-name': formName, ...data })
+
+    const response = await fetch('/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
     })
 
     if (response.ok) {
       return { success: true, message: 'Submission successful' }
     }
 
-    const errorData = await response.json().catch(() => ({}))
     return {
       success: false,
       message: 'Submission failed',
-      error: errorData.error ?? `HTTP ${response.status}`,
+      error: `HTTP ${response.status}`,
     }
   } catch (error) {
     return {
@@ -180,20 +145,26 @@ async function submitToApi(endpoint: string, data: Record<string, unknown>): Pro
 }
 
 /**
- * Mock submission for development mode.
+ * Checks if running on Netlify (production/deploy-preview).
+ * Netlify sets the CONTEXT env var during builds, but we can also
+ * detect it at runtime by checking the hostname.
+ */
+function isNetlifyEnvironment(): boolean {
+  if (typeof window === 'undefined') { return false }
+  const host = window.location.hostname
+  return host.endsWith('.netlify.app') || host === 'polymerbionics.com' || host.endsWith('.polymerbionics.com')
+}
+
+/**
+ * Mock submission for local development.
  */
 async function mockSubmit(type: string, data: Record<string, unknown>): Promise<FormResult> {
   const MOCK_SUBMIT_DELAY_MS = 800
-  // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, MOCK_SUBMIT_DELAY_MS))
   
-  // Log for debugging
   console.warn(`[Form Service - Mock Mode] ${type} submission:`, data)
-  console.warn('[Form Service] To enable real submissions, set environment variables:')
-  console.warn('  - VITE_FORMSPREE_CONTACT_ID for contact form')
-  console.warn('  - VITE_FORMSPREE_NEWSLETTER_ID for newsletter')
-  console.warn('  - VITE_FORMSPREE_ORDER_ID for order enquiries')
-  console.warn('  See https://formspree.io to create free forms')
+  console.warn('[Form Service] Forms will submit to Netlify automatically when deployed.')
+  console.warn('[Form Service] For local testing, set VITE_CONTACT_API_ENDPOINT etc.')
   
   return { success: true, message: 'Mock submission successful (development mode)' }
 }
@@ -207,42 +178,26 @@ async function mockSubmit(type: string, data: Record<string, unknown>): Promise<
  * 
  * Routes to:
  * 1. Custom API endpoint if VITE_CONTACT_API_ENDPOINT is set
- * 2. Formspree if VITE_FORMSPREE_CONTACT_ID is set
- * 3. Mock mode (console logging) if neither is configured
- * 
- * @param data - Contact form data
- * @returns Promise resolving to submission result
- * 
- * @example
- * ```tsx
- * const result = await submitContactForm({
- *   name: 'John Doe',
- *   email: 'john@example.com',
- *   subject: 'Product Inquiry',
- *   message: 'I would like to learn more...'
- * })
- * if (result.success) {
- *   toast.success('Message sent!')
- * }
- * ```
+ * 2. Netlify Forms if running on Netlify
+ * 3. Mock mode (console logging) otherwise
  */
 export async function submitContactForm(data: ContactFormData): Promise<FormResult> {
-  const { formspreeContactId, contactApiEndpoint } = formServiceConfig
+  const { contactApiEndpoint } = formServiceConfig
 
-  // Custom API takes priority
   if (contactApiEndpoint) {
     return submitToApi(contactApiEndpoint, { ...data })
   }
 
-  // Formspree as fallback
-  if (formspreeContactId) {
-    return submitToFormspree(formspreeContactId, {
-      ...data,
-      _subject: `[Contact] ${data.subject}`,
+  if (isNetlifyEnvironment()) {
+    return submitToNetlify('contact', {
+      name: data.name,
+      email: data.email,
+      company: data.company ?? '',
+      subject: data.subject,
+      message: data.message,
     })
   }
 
-  // Mock mode
   return mockSubmit('Contact Form', { ...data })
 }
 
@@ -251,37 +206,22 @@ export async function submitContactForm(data: ContactFormData): Promise<FormResu
  * 
  * Routes to:
  * 1. Custom API endpoint if VITE_NEWSLETTER_API_ENDPOINT is set
- * 2. Formspree if VITE_FORMSPREE_NEWSLETTER_ID is set
- * 3. Mock mode (console logging) if neither is configured
- * 
- * @param data - Newsletter subscription data
- * @returns Promise resolving to submission result
- * 
- * @example
- * ```tsx
- * const result = await submitNewsletterSubscription({ email: 'user@example.com' })
- * if (result.success) {
- *   toast.success('Subscribed!')
- * }
- * ```
+ * 2. Netlify Forms if running on Netlify
+ * 3. Mock mode (console logging) otherwise
  */
 export async function submitNewsletterSubscription(data: NewsletterData): Promise<FormResult> {
-  const { formspreeNewsletterId, newsletterApiEndpoint } = formServiceConfig
+  const { newsletterApiEndpoint } = formServiceConfig
 
-  // Custom API takes priority
   if (newsletterApiEndpoint) {
     return submitToApi(newsletterApiEndpoint, { ...data })
   }
 
-  // Formspree as fallback
-  if (formspreeNewsletterId) {
-    return submitToFormspree(formspreeNewsletterId, {
+  if (isNetlifyEnvironment()) {
+    return submitToNetlify('newsletter', {
       email: data.email,
-      _subject: '[Newsletter] New Subscription',
     })
   }
 
-  // Mock mode
   return mockSubmit('Newsletter', { ...data })
 }
 
@@ -290,41 +230,34 @@ export async function submitNewsletterSubscription(data: NewsletterData): Promis
  * 
  * Routes to:
  * 1. Custom API endpoint if VITE_ORDER_API_ENDPOINT is set
- * 2. Formspree if VITE_FORMSPREE_ORDER_ID is set
- * 3. Mock mode (console logging) if neither is configured
- * 
- * @param data - Order form data
- * @returns Promise resolving to submission result
+ * 2. Netlify Forms if running on Netlify
+ * 3. Mock mode (console logging) otherwise
  */
 export async function submitOrderForm(data: OrderFormData): Promise<FormResult> {
-  const { formspreeOrderId, orderApiEndpoint } = formServiceConfig
+  const { orderApiEndpoint } = formServiceConfig
 
-  // Custom API takes priority
   if (orderApiEndpoint) {
     return submitToApi(orderApiEndpoint, { ...data })
   }
 
-  // Formspree as fallback
-  if (formspreeOrderId) {
-    return submitToFormspree(formspreeOrderId, {
+  if (isNetlifyEnvironment()) {
+    return submitToNetlify('order', {
       email: data.email,
       phone: data.phone,
       item: data.item,
       item_type: data.itemType,
       quantity: data.quantity,
       comments: data.comments ?? '',
-      _subject: `[Order Enquiry] ${data.item || 'General'}`,
     })
   }
 
-  // Mock mode
   return mockSubmit('Order Enquiry', { ...data })
 }
 
 /**
  * Checks if form services are configured for production use.
- * Useful for showing development mode indicators in UI.
  */
 export function isFormServiceConfigured(): boolean {
-  return !isMockMode()
+  const { contactApiEndpoint, newsletterApiEndpoint, orderApiEndpoint } = formServiceConfig
+  return isNetlifyEnvironment() || !!contactApiEndpoint || !!newsletterApiEndpoint || !!orderApiEndpoint
 }

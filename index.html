@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#1a1a2e" />
     <meta name="color-scheme" content="light dark" />
     <!-- Content Security Policy - protects against XSS attacks (frame-ancestors only works in headers, not meta) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.clarity.ms https://formspree.io; base-uri 'self'; form-action 'self' https://formspree.io;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.clarity.ms; base-uri 'self'; form-action 'self';">
     <title>Polymer Bionics - Flexible Bioelectronics & Medical Devices</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
@@ -65,6 +65,29 @@
 </head>
 
 <body>
+    <!-- Hidden forms for Netlify form detection (SPA requires these in static HTML) -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="company" />
+      <input type="text" name="subject" />
+      <textarea name="message"></textarea>
+    </form>
+    <form name="newsletter" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="email" name="email" />
+    </form>
+    <form name="order" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="item" />
+      <input type="text" name="item_type" />
+      <input type="text" name="quantity" />
+      <textarea name="comments"></textarea>
+    </form>
+
     <div id="root">
       <!-- Initial loading state to improve perceived performance -->
       <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;">

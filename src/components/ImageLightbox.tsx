@@ -66,7 +66,7 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="max-w-[95vw] max-h-[95vh] w-[90vw] h-[90vh] p-0 bg-black/95 border-none [&>button]:hidden">
+      <DialogContent className="fixed inset-0 top-0 left-0 translate-x-0 translate-y-0 max-w-none w-screen h-screen p-0 bg-black/95 border-none rounded-none gap-0 [&>button]:hidden">
         <div className="relative flex items-center justify-center w-full h-full">
           {/* Close button */}
           <Button
@@ -96,7 +96,7 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
           <img
             src={images[currentIndex]}
             alt={alt}
-            className="max-w-[85vw] max-h-[85vh] object-contain select-none"
+            className="max-w-[90vw] max-h-[90vh] w-auto h-auto object-contain select-none"
             loading="eager"
             decoding="sync"
             draggable={false}
@@ -117,7 +117,7 @@ export function ImageLightbox({ images, currentIndex, onClose, onNavigate, alt =
 
           {/* Image counter */}
           {hasMultiple && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/80 text-sm bg-black/50 px-3 py-1 rounded-full">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-sm bg-black/50 px-3 py-1 rounded-full">
               {currentIndex + 1} / {images.length}
             </div>
           )}

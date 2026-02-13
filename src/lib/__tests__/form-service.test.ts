@@ -28,7 +28,7 @@ function setEnv(overrides: Record<string, string | undefined>) {
 
 function resetEnv() {
   Object.keys(import.meta.env).forEach(key => {
-    if (key.startsWith('VITE_FORMSPREE') || key.startsWith('VITE_CONTACT') || key.startsWith('VITE_NEWSLETTER')) {
+    if (key.startsWith('VITE_CONTACT') || key.startsWith('VITE_NEWSLETTER') || key.startsWith('VITE_ORDER')) {
       delete (import.meta.env as Record<string, unknown>)[key]
     }
   })
@@ -93,8 +93,8 @@ describe('form-service', () => {
       consoleSpy.mockRestore()
     })
 
-    it('calls Formspree when VITE_FORMSPREE_CONTACT_ID is set', async () => {
-      setEnv({ VITE_FORMSPREE_CONTACT_ID: 'test-form-id' })
+    it('calls custom API when VITE_CONTACT_API_ENDPOINT is set', async () => {
+      setEnv({ VITE_CONTACT_API_ENDPOINT: 'https://api.example.com/contact' })
       
       // Need to re-import to pick up new env
       // For this test, we'll mock fetch instead
@@ -133,7 +133,7 @@ describe('form-service', () => {
       
       // Should log setup instructions
       const calls = consoleSpy.mock.calls.flat().join(' ')
-      expect(calls).toContain('VITE_FORMSPREE')
+      expect(calls).toContain('Netlify')
       
       consoleSpy.mockRestore()
     })
