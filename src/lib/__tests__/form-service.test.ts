@@ -3,9 +3,10 @@
  * 
  * Tests for newsletter, contact, and order form submission handling.
  * 
- * Without VITE_FORMSPREE_* env vars, all submissions fall through to
- * mock mode (console.log only). Tests for the Formspree path set the
- * config directly to simulate a configured environment.
+ * Without VITE_FORMSPREE_* env vars, submissions fall through to the
+ * unconfigured fallback:
+ * - DEV mode (vitest default): returns mock success
+ * - PROD mode: returns explicit failure with NO_FORM_BACKEND error
  * 
  * @module lib/__tests__/form-service.test
  */
@@ -17,6 +18,7 @@ import {
   submitOrderForm,
   isFormServiceConfigured,
   formspreeConfig,
+  envCheck,
   type ContactFormData,
   type NewsletterData,
   type OrderFormData,
@@ -32,7 +34,7 @@ describe('form-service', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    // Reset Formspree config to empty (mock mode)
+    // Reset Formspree config to empty (unconfigured fallback)
     formspreeConfig.contactFormId = ''
     formspreeConfig.newsletterFormId = ''
     formspreeConfig.orderFormId = ''
@@ -60,11 +62,11 @@ describe('form-service', () => {
   })
 
   // ===========================================================================
-  // Mock mode (no config)
+  // Unconfigured fallback — DEV mode (vitest runs with DEV=true)
   // ===========================================================================
 
-  describe('mock mode (no Formspree config)', () => {
-    it('submitContactForm returns mock success', async () => {
+  describe('unconfigured fallback (DEV mode)', () => {
+    it('submitContactForm returns mock success in dev', async () => {
       const result = await submitContactForm({
         name: 'John Doe',
         email: 'john@example.com',
@@ -76,14 +78,14 @@ describe('form-service', () => {
       expect(result.message).toContain('Mock')
     })
 
-    it('submitNewsletterSubscription returns mock success', async () => {
+    it('submitNewsletterSubscription returns mock success in dev', async () => {
       const result = await submitNewsletterSubscription({ email: 'sub@example.com' })
 
       expect(result.success).toBe(true)
       expect(result.message).toContain('Mock')
     })
 
-    it('submitOrderForm returns mock success', async () => {
+    it('submitOrderForm returns mock success in dev', async () => {
       const result = await submitOrderForm({
         email: 'buyer@example.com',
         phone: '+1234567890',
@@ -94,6 +96,54 @@ describe('form-service', () => {
 
       expect(result.success).toBe(true)
       expect(result.message).toContain('Mock')
+    })
+  })
+
+  // ===========================================================================
+  // Unconfigured fallback — PROD mode (simulated)
+  // ===========================================================================
+
+  describe('unconfigured fallback (PROD mode)', () => {
+    beforeEach(() => {
+      // Simulate production environment
+      envCheck.isDev = false
+    })
+
+    afterEach(() => {
+      envCheck.isDev = true
+    })
+
+    it('submitContactForm returns failure with NO_FORM_BACKEND in prod', async () => {
+      const result = await submitContactForm({
+        name: 'John Doe',
+        email: 'john@example.com',
+        subject: 'Test',
+        message: 'Hello',
+      })
+
+      expect(result.success).toBe(false)
+      expect(result.error).toBe('NO_FORM_BACKEND')
+      expect(result.message).toContain('not configured')
+    })
+
+    it('submitNewsletterSubscription returns failure in prod', async () => {
+      const result = await submitNewsletterSubscription({ email: 'sub@example.com' })
+
+      expect(result.success).toBe(false)
+      expect(result.error).toBe('NO_FORM_BACKEND')
+    })
+
+    it('submitOrderForm returns failure in prod', async () => {
+      const result = await submitOrderForm({
+        email: 'buyer@example.com',
+        phone: '+1234567890',
+        item: 'BioFlex Array',
+        itemType: 'product',
+        quantity: '5',
+      })
+
+      expect(result.success).toBe(false)
+      expect(result.error).toBe('NO_FORM_BACKEND')
     })
   })
 

@@ -4,9 +4,10 @@
  * Handles contact, newsletter, and order form submissions.
  * 
  * Backends (in priority order):
- * 1. Formspree — set VITE_FORMSPREE_CONTACT_ID etc. (primary)
- * 2. Custom API endpoint — set VITE_CONTACT_API_ENDPOINT etc.
- * 3. Mock mode — local development fallback (console.log only)
+ * 1. Custom API endpoint — set VITE_CONTACT_API_ENDPOINT etc.
+ * 2. Formspree — set VITE_FORMSPREE_CONTACT_ID etc.
+ * 3. Development only: mock mode (console.log, returns success)
+ * 4. Production with no config: returns explicit failure
  * 
  * @module lib/form-service
  */
@@ -124,41 +125,6 @@ async function submitToFormspree(formId: string, data: Record<string, string>): 
   }
 }
 
-// /** (Netlify Forms — commented out, using Formspree instead)
-//  * Submits data to a Netlify Form using the POST-to-self pattern.
-//  * Netlify intercepts POSTs with a `form-name` field that matches
-//  * a form declared in the static HTML (index.html).
-//  * 
-//  * @see https://docs.netlify.com/forms/setup/#javascript-forms
-//  */
-// async function submitToNetlify(formName: string, data: Record<string, string>): Promise<FormResult> {
-//   try {
-//     const body = new URLSearchParams({ 'form-name': formName, ...data })
-//
-//     const response = await fetch('/', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-//       body: body.toString(),
-//     })
-//
-//     if (response.ok) {
-//       return { success: true, message: 'Submission successful' }
-//     }
-//
-//     return {
-//       success: false,
-//       message: 'Submission failed',
-//       error: `HTTP ${response.status}`,
-//     }
-//   } catch (error) {
-//     return {
-//       success: false,
-//       message: 'Network error',
-//       error: error instanceof Error ? error.message : 'Unknown error',
-//     }
-//   }
-// }
-
 /**
  * Submits data to a custom API endpoint.
  */
@@ -192,15 +158,6 @@ async function submitToApi(endpoint: string, data: Record<string, unknown>): Pro
   }
 }
 
-// /** (Netlify — commented out, using Formspree instead)
-//  * Checks if running on Netlify (production/deploy-preview).
-//  */
-// function isNetlifyEnvironment(): boolean {
-//   if (typeof window === 'undefined') { return false }
-//   const host = window.location.hostname
-//   return host.endsWith('.netlify.app') || host === 'polymerbionics.com' || host.endsWith('.polymerbionics.com')
-// }
-
 /**
  * Checks if Formspree is configured for a given form type.
  */
@@ -209,17 +166,40 @@ function hasFormspreeId(formId: string): boolean {
 }
 
 /**
- * Mock submission for local development.
+ * Runtime environment check, exposed for test overrides.
+ * Tests can set `envCheck.isDev = false` to simulate production.
  */
-async function mockSubmit(type: string, data: Record<string, unknown>): Promise<FormResult> {
-  const MOCK_SUBMIT_DELAY_MS = 800
-  await new Promise(resolve => setTimeout(resolve, MOCK_SUBMIT_DELAY_MS))
-  
-  console.warn(`[Form Service - Mock Mode] ${type} submission:`, data)
-  console.warn('[Form Service] Set VITE_FORMSPREE_CONTACT_ID etc. for Formspree submissions.')
-  console.warn('[Form Service] Or set VITE_CONTACT_API_ENDPOINT etc. for custom API.')
-  
-  return { success: true, message: 'Mock submission successful (development mode)' }
+export const envCheck = {
+  isDev: import.meta.env.DEV === true,
+}
+
+/**
+ * Handles the unconfigured fallback.
+ * 
+ * - **Development**: returns mock success with console warnings so
+ *   local dev is not blocked.
+ * - **Production**: returns an explicit failure so submissions are
+ *   never silently dropped when env vars are missing.
+ */
+async function unconfiguredFallback(type: string, data: Record<string, unknown>): Promise<FormResult> {
+  if (envCheck.isDev) {
+    const MOCK_SUBMIT_DELAY_MS = 800
+    await new Promise(resolve => setTimeout(resolve, MOCK_SUBMIT_DELAY_MS))
+
+    console.warn(`[Form Service - Mock Mode] ${type} submission:`, data)
+    console.warn('[Form Service] Set VITE_FORMSPREE_CONTACT_ID etc. for Formspree submissions.')
+    console.warn('[Form Service] Or set VITE_CONTACT_API_ENDPOINT etc. for custom API.')
+
+    return { success: true, message: 'Mock submission successful (development mode)' }
+  }
+
+  // Production with no backend configured — fail loudly so leads are not lost.
+  console.error(`[Form Service] ${type} submission failed: no form backend configured.`)
+  return {
+    success: false,
+    message: 'Form service is not configured. Please contact us directly.',
+    error: 'NO_FORM_BACKEND',
+  }
 }
 
 // =============================================================================
@@ -232,7 +212,7 @@ async function mockSubmit(type: string, data: Record<string, unknown>): Promise<
  * Routes to:
  * 1. Custom API endpoint if VITE_CONTACT_API_ENDPOINT is set
  * 2. Formspree if VITE_FORMSPREE_CONTACT_ID is set
- * 3. Mock mode (console logging) otherwise
+ * 3. Dev: mock success / Prod: explicit failure
  */
 export async function submitContactForm(data: ContactFormData): Promise<FormResult> {
   const { contactApiEndpoint } = formServiceConfig
@@ -252,7 +232,7 @@ export async function submitContactForm(data: ContactFormData): Promise<FormResu
     })
   }
 
-  return mockSubmit('Contact Form', { ...data })
+  return unconfiguredFallback('Contact Form', { ...data })
 }
 
 /**
@@ -261,7 +241,7 @@ export async function submitContactForm(data: ContactFormData): Promise<FormResu
  * Routes to:
  * 1. Custom API endpoint if VITE_NEWSLETTER_API_ENDPOINT is set
  * 2. Formspree if VITE_FORMSPREE_NEWSLETTER_ID is set
- * 3. Mock mode (console logging) otherwise
+ * 3. Dev: mock success / Prod: explicit failure
  */
 export async function submitNewsletterSubscription(data: NewsletterData): Promise<FormResult> {
   const { newsletterApiEndpoint } = formServiceConfig
@@ -277,7 +257,7 @@ export async function submitNewsletterSubscription(data: NewsletterData): Promis
     })
   }
 
-  return mockSubmit('Newsletter', { ...data })
+  return unconfiguredFallback('Newsletter', { ...data })
 }
 
 /**
@@ -286,7 +266,7 @@ export async function submitNewsletterSubscription(data: NewsletterData): Promis
  * Routes to:
  * 1. Custom API endpoint if VITE_ORDER_API_ENDPOINT is set
  * 2. Formspree if VITE_FORMSPREE_ORDER_ID is set
- * 3. Mock mode (console logging) otherwise
+ * 3. Dev: mock success / Prod: explicit failure
  */
 export async function submitOrderForm(data: OrderFormData): Promise<FormResult> {
   const { orderApiEndpoint } = formServiceConfig
@@ -307,7 +287,7 @@ export async function submitOrderForm(data: OrderFormData): Promise<FormResult> 
     })
   }
 
-  return mockSubmit('Order Enquiry', { ...data })
+  return unconfiguredFallback('Order Enquiry', { ...data })
 }
 
 /**
