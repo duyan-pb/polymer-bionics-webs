@@ -29,12 +29,29 @@ import {
 // =============================================================================
 
 describe('form-service', () => {
-  /** Store original config values so they can be restored after each test. */
+  /**
+   * Test configuration strategy:
+   * 
+   * These tests modify formspreeConfig properties directly to test different
+   * scenarios. While this mutates an exported object, it's safe here because:
+   * 
+   * 1. Tests in Vitest run sequentially within a describe block
+   * 2. beforeEach resets config to a known state before each test
+   * 3. afterEach restores original values after each test
+   * 4. No other modules import form-service during test execution
+   * 
+   * Alternative approaches considered:
+   * - vi.mock() with dynamic imports: Would make tests significantly more complex
+   * - Dependency injection: Would require refactoring the production code
+   * - Property spies: Don't work well with config objects read at call time
+   * 
+   * This pattern provides adequate test isolation for the current architecture.
+   */
   const originalFormspreeConfig = { ...formspreeConfig }
 
   beforeEach(() => {
     vi.clearAllMocks()
-    // Reset Formspree config to empty (unconfigured fallback)
+    // Reset config to empty state to test unconfigured fallback
     formspreeConfig.contactFormId = ''
     formspreeConfig.newsletterFormId = ''
     formspreeConfig.orderFormId = ''
@@ -42,7 +59,7 @@ describe('form-service', () => {
 
   afterEach(() => {
     vi.restoreAllMocks()
-    // Restore original config
+    // Restore original config to prevent test pollution
     Object.assign(formspreeConfig, originalFormspreeConfig)
   })
 
