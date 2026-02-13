@@ -9,14 +9,14 @@
 
 import type { Product } from './types'
 
-// Custom solution images (web-optimized)
-import wearableSystemsImg from '@/assets/images/custom/optimized/wearable_systems.webp'
-import wearableGarmentsImg from '@/assets/images/custom/optimized/wearable_garments.webp'
-import adhesiveMonitoringImg from '@/assets/images/custom/optimized/adhesive_monitoring.webp'
-import adhesiveMonitoringImg1 from '@/assets/images/custom/optimized/adhesive_monitoring_1.webp'
-import customImplantableImg from '@/assets/images/custom/optimized/custom_implantable_arrays.webp'
-import customImplantableImg1 from '@/assets/images/custom/optimized/custom_implantable_arrays_1.webp'
-import customImplantableImg2 from '@/assets/images/custom/optimized/custom_implantable_arrays_2.webp'
+// Custom solution images (high-fidelity originals)
+import wearableSystemsImg from '@/assets/images/custom/originals/Wearable Systems/IMG_2906.JPG'
+import wearableGarmentsImg from '@/assets/images/custom/originals/Wearable Garment Systems/EEG textile wearables.png'
+import adhesiveMonitoringImg from '@/assets/images/custom/originals/Adhesive Monitoring Systems/FlexElec sheet vid.png'
+import adhesiveMonitoringImg1 from '@/assets/images/custom/originals/Adhesive Monitoring Systems/FlexElecsheet electrode.png'
+import customImplantableImg from '@/assets/images/custom/originals/Custom Implantable Electrode Arrays/Hexa array noscale.png'
+import customImplantableImg1 from '@/assets/images/custom/originals/Custom Implantable Electrode Arrays/HExa array.png'
+import customImplantableImg2 from '@/assets/images/custom/originals/Custom Implantable Electrode Arrays/RPNI.png'
 
 /**
  * Custom solutions catalog.

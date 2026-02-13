@@ -7,12 +7,10 @@
  */
 
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { ClickableCard } from '@/components/ClickableCard'
-import { MATERIAL_CARD } from '@/lib/constants'
 import type { Material } from '@/lib/types'
 import { MaterialPlaceholderImage } from '@/components/materials/MaterialPlaceholderImage'
-import { FilePdf } from '@phosphor-icons/react'
+import { FilePdf, CheckCircle } from '@phosphor-icons/react'
 
 interface MaterialCardProps {
   material: Material
@@ -42,23 +40,19 @@ export function MaterialCard({ material, onSelect }: MaterialCardProps) {
         </p>
         <div className="space-y-4">
           <div>
-            <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
+            <h4 className="text-sm font-semibold mb-2 text-primary">
               Key Properties
             </h4>
-            <div className="flex flex-wrap gap-2">
-              {material.properties.slice(0, MATERIAL_CARD.MAX_PROPERTIES).map((prop, idx) => (
-                <Badge key={idx} variant="secondary" className="text-xs">
-                  {prop.length > MATERIAL_CARD.MAX_PROPERTY_LENGTH ? `${prop.substring(0, MATERIAL_CARD.MAX_PROPERTY_LENGTH)  }...` : prop}
-                </Badge>
+            <ul className="space-y-1">
+              {material.properties.map((prop, idx) => (
+                <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <CheckCircle size={16} className="text-accent mt-0.5 flex-shrink-0" weight="fill" />
+                  {prop}
+                </li>
               ))}
-              {material.properties.length > MATERIAL_CARD.MAX_PROPERTIES && (
-                <Badge variant="outline" className="text-xs">
-                  +{material.properties.length - MATERIAL_CARD.MAX_PROPERTIES} more
-                </Badge>
-              )}
-            </div>
+            </ul>
           </div>
-          <Button variant="outline" size="sm" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors font-semibold">
+          <Button size="sm" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-sm">
             View Full Details
           </Button>
           {material.datasheets && material.datasheets.length > 0 && (

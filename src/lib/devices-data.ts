@@ -9,13 +9,13 @@
 
 import type { Product } from './types'
 
-// Device images (web-optimized)
-import simpleegImg from '@/assets/images/devices/optimized/simpleeg.webp'
+// Device images (high-fidelity originals where available, optimized fallback otherwise)
+import simpleegImg from '@/assets/images/devices/originals/SimplEEG/Picture 1headband.png'
 import simpleegImg1 from '@/assets/images/devices/optimized/simpleeg_1.webp'
 import simpleegImg2 from '@/assets/images/devices/optimized/simpleeg_2.webp'
 import simpleegImg3 from '@/assets/images/devices/optimized/simpleeg_3.webp'
-import babeegImg from '@/assets/images/devices/optimized/babeeg.webp'
-import babeegImg1 from '@/assets/images/devices/optimized/babeeg_1.webp'
+import babeegImg from '@/assets/images/devices/originals/BabEEG/BabEEG phantom.png'
+import babeegImg1 from '@/assets/images/devices/originals/BabEEG/BabEEG with kid.png'
 
 /**
  * Proprietary bioelectronic devices.

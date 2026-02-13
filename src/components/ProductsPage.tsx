@@ -91,11 +91,6 @@ export function ProductsPage({ products, onNavigate, onSetPaymentDraft }: Produc
     onNavigate('media')
   }, [onNavigate])
 
-  const navigateToContact = useCallback((e: MouseEvent) => {
-    e.stopPropagation()
-    onNavigate('contact')
-  }, [onNavigate])
-
   const handleBuy = useCallback((e: MouseEvent, product: Product) => {
     e.stopPropagation()
     setSelectedProduct(null)
@@ -182,9 +177,9 @@ export function ProductsPage({ products, onNavigate, onSetPaymentDraft }: Produc
               onSelect={handleProductSelect}
               onZoomImage={(imageUrl) => setSelectedImage(imageUrl)}
               onBuy={handleBuy}
-              onContact={navigateToContact}
               onDatasheet={navigateToDatasheet}
               onCaseStudy={navigateToCaseStudy}
+              showWhatsApp
             />
           ))}
         </div>
@@ -199,6 +194,7 @@ export function ProductsPage({ products, onNavigate, onSetPaymentDraft }: Produc
                 onBuy={handleBuy}
                 onDatasheet={navigateToDatasheet}
                 onCaseStudy={navigateToCaseStudy}
+                showWhatsApp
               />
             )}
           </ScrollArea>

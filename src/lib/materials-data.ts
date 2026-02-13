@@ -9,10 +9,10 @@
 
 import type { Material } from './types'
 
-// Material images (web-optimized)
-import flexelecMatImg from '@/assets/images/materials/optimized/flexelec.webp'
-import biongelImg from '@/assets/images/materials/optimized/biongel.webp'
-import elastisolderImg from '@/assets/images/materials/optimized/elastisolder.webp'
+// Material images (high-fidelity originals)
+import flexelecMatImg from '@/assets/images/materials/originals/FlexElec/CE sheet (1).png'
+import biongelImg from '@/assets/images/materials/originals/BionGel/BionGel.png'
+import elastisolderImg from '@/assets/images/materials/originals/ElastiSolder/ElastiSolder.png'
 
 /**
  * Biomaterials catalog.

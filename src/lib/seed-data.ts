@@ -9,19 +9,19 @@
 
 import type { Product } from './types'
 
-// Product images (web-optimized)
-import flexelecFoamImg from '@/assets/images/products/optimized/flexelec_foam.webp'
+// Product images (high-fidelity originals where available, optimized fallback otherwise)
+import flexelecFoamImg from '@/assets/images/products/originals/FlexElec Foam Electrode/FlexElecFoam.jpg'
 import flexelecFoamImg1 from '@/assets/images/products/optimized/flexelec_foam_1.webp'
 import flexelecFoamImg2 from '@/assets/images/products/optimized/flexelec_foam_2.webp'
-import flexelecSheetImg from '@/assets/images/products/optimized/flexelec_sheet.webp'
-import flexelecProbeImg from '@/assets/images/products/optimized/flexelec_probe.webp'
-import flexelecProbeImg1 from '@/assets/images/products/optimized/flexelec_probe_1.webp'
-import flexelecCuffImg from '@/assets/images/products/optimized/flexelec_cuff.webp'
-import flexelecCuffImg1 from '@/assets/images/products/optimized/flexelec_cuff_1.webp'
-import flexelecCuffImg2 from '@/assets/images/products/optimized/flexelec_cuff_2.webp'
-import flexelecMeaImg from '@/assets/images/products/optimized/flexelec_mea.webp'
-import flexelecMeaImg1 from '@/assets/images/products/optimized/flexelec_mea_1.webp'
-import flexelecMeaImg2 from '@/assets/images/products/optimized/flexelec_mea_2.webp'
+import flexelecSheetImg from '@/assets/images/products/originals/FlexElec Sheet Electrode/flat electrode alone1.png'
+import flexelecProbeImg from '@/assets/images/products/originals/FlexElec Probe Electrode/FlexElec Probe Full.jpg'
+import flexelecProbeImg1 from '@/assets/images/products/originals/FlexElec Probe Electrode/Picture_FlexElecProbe.jpg'
+import flexelecCuffImg from '@/assets/images/products/originals/FlexElec Cuff/CE cuff.png'
+import flexelecCuffImg1 from '@/assets/images/products/originals/FlexElec Cuff/IMG_8440_scale.png'
+import flexelecCuffImg2 from '@/assets/images/products/originals/FlexElec Cuff/IMG_9191_scale.JPG'
+import flexelecMeaImg from '@/assets/images/products/originals/FlexElec MEA/Panel MEA.png'
+import flexelecMeaImg1 from '@/assets/images/products/originals/FlexElec MEA/MEA pic invitro.jpg'
+import flexelecMeaImg2 from '@/assets/images/products/originals/FlexElec MEA/MEA zoom in.png'
 
 /**
  * FlexElec product catalog.
@@ -76,6 +76,7 @@ export const initialProducts: Product[] = [
     id: 'flexelec-probe',
     name: 'FlexElec Probe Electrode',
     imageUrl: flexelecProbeImg,
+    imagePosition: 'center 30%',
     images: [flexelecProbeImg, flexelecProbeImg1],
     tagline: 'Flexible stimulation and recording wire electrodes for bioelectronic research',
     description: 'FlexElec Probe electrodes are conventional metal wires coated with a compliant elastomer layer to reduce stiffness while maintaining electrical performance. They are designed for research applications requiring flexible stimulation and recording interfaces within bench setups or head-fixed research studies.',

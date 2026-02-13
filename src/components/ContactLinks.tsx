@@ -85,7 +85,7 @@ export function ContactLinks({
             onClick={handleEmailClick}
           >
             <EnvelopeSimple className="mr-2" size={18} />
-            {emailType === 'sales' ? 'Email Sales' : 'Email Us'}
+            {emailType === 'sales' ? 'Enquiry' : 'Email Us'}
           </a>
         </Button>
       )}

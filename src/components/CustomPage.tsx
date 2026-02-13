@@ -18,6 +18,7 @@ import { customSolutions } from '@/lib/custom-data'
 import ElastomerArray from '@/assets/images/optimized/Elastomer_array.webp'
 import { ProductDialogContent } from '@/components/products/ProductDialogContent'
 import { ProductCard } from '@/components/products/ProductCard'
+import { OrderModal } from '@/components/OrderModal'
 
 /**
  * Props for the CustomPage component.
@@ -38,16 +39,20 @@ interface CustomPageProps {
 export function CustomPage({ onNavigate }: CustomPageProps) {
   const [selectedSolution, setSelectedSolution] = useState<Product | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [orderItem, setOrderItem] = useState<string>('')
+  const [isOrderOpen, setIsOrderOpen] = useState(false)
   const FEATURE_PREVIEW_COUNT = 3
 
   const handleSolutionSelect = useCallback((solution: Product) => {
     setSelectedSolution(solution)
   }, [])
 
-  const navigateToContact = useCallback((e: MouseEvent) => {
+  const handleOrder = useCallback((e: MouseEvent, solution: Product) => {
     e.stopPropagation()
-    onNavigate('contact')
-  }, [onNavigate])
+    setSelectedSolution(null)
+    setOrderItem(solution.name)
+    setIsOrderOpen(true)
+  }, [])
 
   const hero = {
     title: 'Custom Solutions',
@@ -80,7 +85,8 @@ export function CustomPage({ onNavigate }: CustomPageProps) {
               featurePreviewCount={FEATURE_PREVIEW_COUNT}
               onSelect={handleSolutionSelect}
               onZoomImage={(imageUrl) => setSelectedImage(imageUrl)}
-              onContact={navigateToContact}
+              onOrder={handleOrder}
+              showWhatsApp
             />
           ))}
         </div>
@@ -93,6 +99,8 @@ export function CustomPage({ onNavigate }: CustomPageProps) {
               <ProductDialogContent
                 product={selectedSolution}
                 onSelectImage={setSelectedImage}
+                onOrder={handleOrder}
+                showWhatsApp
               />
             )}
           </ScrollArea>
@@ -122,6 +130,13 @@ export function CustomPage({ onNavigate }: CustomPageProps) {
           </div>
         </DialogContent>
       </Dialog>
+
+      <OrderModal
+        open={isOrderOpen}
+        onOpenChange={setIsOrderOpen}
+        itemName={orderItem}
+        itemType="Custom Solution"
+      />
     </PageLayout>
   )
 }

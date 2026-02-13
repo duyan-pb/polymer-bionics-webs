@@ -80,6 +80,8 @@ export interface Product {
   regulatoryStatus?: string
   /** Primary product image URL */
   imageUrl?: string
+  /** CSS object-position for image cropping */
+  imagePosition?: string
   /** Additional image URLs */
   images?: string[]
   /** Related datasheet ID */

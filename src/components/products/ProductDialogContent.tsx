@@ -11,16 +11,20 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
-import { ContactCTA } from '@/components/ContactCTA'
-import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, ShoppingCart, FilePdf } from '@phosphor-icons/react'
+import { Download, CheckCircle, TestTube, Package, Image as ImageIcon, MagnifyingGlassPlus, ShoppingCart, FilePdf, WhatsappLogo, EnvelopeSimple } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
+import { getWhatsAppUrl, getEmailUrl } from '@/lib/contact-config'
+import { openExternal } from '@/lib/utils'
 
 export interface ProductDialogContentProps {
   product: Product
   onSelectImage: (image: string) => void
   onBuy?: (e: MouseEvent, product: Product) => void
+  onOrder?: (e: MouseEvent, product: Product) => void
   onDatasheet?: (e: MouseEvent, datasheetId?: string) => void
   onCaseStudy?: (e: MouseEvent, caseStudyId?: string) => void
+  /** Show WhatsApp button */
+  showWhatsApp?: boolean
 }
 
 function ProductImageGrid({ product, onSelectImage }: { product: Product; onSelectImage: (image: string) => void }) {
@@ -68,7 +72,7 @@ function ProductImageGrid({ product, onSelectImage }: { product: Product; onSele
   )
 }
 
-export function ProductDialogContent({ product, onSelectImage, onBuy, onDatasheet, onCaseStudy }: ProductDialogContentProps) {
+export function ProductDialogContent({ product, onSelectImage, onBuy, onOrder, onDatasheet, onCaseStudy, showWhatsApp = false }: ProductDialogContentProps) {
   return (
     <>
       <DialogHeader>
@@ -147,12 +151,35 @@ export function ProductDialogContent({ product, onSelectImage, onBuy, onDatashee
           </>
         )}
         <div className="space-y-3 pt-4">
-          <div className="flex gap-3">
-            {onBuy && (
-              <Button variant="default" onClick={(e) => onBuy(e, product)}>
-                <ShoppingCart className="mr-2" weight="duotone" /> Buy Now
+          <div className="flex flex-wrap gap-3">
+            {showWhatsApp && (
+              <Button
+                className="bg-[#25D366] hover:bg-[#1da851] text-white"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  openExternal(getWhatsAppUrl(`Hi, I'm interested in ${product.name}. Could you provide more information?`))
+                }}
+              >
+                <WhatsappLogo className="mr-2" weight="fill" /> WhatsApp
               </Button>
             )}
+            {(onBuy || onOrder) && (
+              <Button variant="default" onClick={(e) => {
+                if (onOrder) {
+                  onOrder(e, product)
+                } else if (onBuy) {
+                  onBuy(e, product)
+                }
+              }}>
+                <ShoppingCart className="mr-2" weight="duotone" /> Order
+              </Button>
+            )}
+            <Button variant="default" onClick={(e) => {
+              e.stopPropagation()
+              openExternal(getEmailUrl('sales', `Enquiry – ${product.name}`))
+            }}>
+              <EnvelopeSimple className="mr-2" /> Enquiry
+            </Button>
             {product.datasheetId && onDatasheet && (
               <Button variant="outline" onClick={(e) => onDatasheet(e, product.datasheetId)}>
                 <Download className="mr-2" /> View Datasheet
@@ -163,9 +190,6 @@ export function ProductDialogContent({ product, onSelectImage, onBuy, onDatashee
                 View Case Study
               </Button>
             )}
-          </div>
-          <div className="flex gap-3">
-            <ContactCTA emailType="sales" />
           </div>
         </div>
       </div>

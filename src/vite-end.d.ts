@@ -42,3 +42,21 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+// Type declarations for uppercase image extensions
+declare module '*.JPG' {
+  const src: string
+  export default src
+}
+declare module '*.JPEG' {
+  const src: string
+  export default src
+}
+declare module '*.PNG' {
+  const src: string
+  export default src
+}
+declare module '*.HEIC' {
+  const src: string
+  export default src
+}

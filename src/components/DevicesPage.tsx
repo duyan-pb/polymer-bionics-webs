@@ -18,6 +18,7 @@ import { devices } from '@/lib/devices-data'
 import ElastomerArray from '@/assets/images/optimized/Elastomer_array.webp'
 import { ProductDialogContent } from '@/components/products/ProductDialogContent'
 import { ProductCard } from '@/components/products/ProductCard'
+import { OrderModal } from '@/components/OrderModal'
 
 /**
  * Props for the DevicesPage component.
@@ -38,16 +39,20 @@ interface DevicesPageProps {
 export function DevicesPage({ onNavigate }: DevicesPageProps) {
   const [selectedDevice, setSelectedDevice] = useState<Product | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [orderItem, setOrderItem] = useState<string>('')
+  const [isOrderOpen, setIsOrderOpen] = useState(false)
   const FEATURE_PREVIEW_COUNT = 3
 
   const handleDeviceSelect = useCallback((device: Product) => {
     setSelectedDevice(device)
   }, [])
 
-  const navigateToContact = useCallback((e: MouseEvent) => {
+  const handleOrder = useCallback((e: MouseEvent, device: Product) => {
     e.stopPropagation()
-    onNavigate('contact')
-  }, [onNavigate])
+    setSelectedDevice(null)
+    setOrderItem(device.name)
+    setIsOrderOpen(true)
+  }, [])
 
   const hero = {
     title: 'Devices',
@@ -81,7 +86,8 @@ export function DevicesPage({ onNavigate }: DevicesPageProps) {
               featurePreviewCount={FEATURE_PREVIEW_COUNT}
               onSelect={handleDeviceSelect}
               onZoomImage={(imageUrl) => setSelectedImage(imageUrl)}
-              onContact={navigateToContact}
+              onOrder={handleOrder}
+              showWhatsApp
             />
           ))}
         </div>
@@ -94,6 +100,8 @@ export function DevicesPage({ onNavigate }: DevicesPageProps) {
               <ProductDialogContent
                 product={selectedDevice}
                 onSelectImage={setSelectedImage}
+                onOrder={handleOrder}
+                showWhatsApp
               />
             )}
           </ScrollArea>
@@ -123,6 +131,13 @@ export function DevicesPage({ onNavigate }: DevicesPageProps) {
           </div>
         </DialogContent>
       </Dialog>
+
+      <OrderModal
+        open={isOrderOpen}
+        onOpenChange={setIsOrderOpen}
+        itemName={orderItem}
+        itemType="Device"
+      />
     </PageLayout>
   )
 }

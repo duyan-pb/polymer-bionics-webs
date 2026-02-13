@@ -10,7 +10,7 @@
 import { useState, useCallback, memo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { ArrowRight, Flask, Users, Atom, Lightbulb, Cpu, Wrench } from '@phosphor-icons/react'
+import { ArrowRight, Flask, Users, Atom, Lightbulb, Cpu, Wrench, WhatsappLogo, ShoppingCart, EnvelopeSimple } from '@phosphor-icons/react'
 import { HeroImage } from '@/components/HeroImage'
 import BackgroundCover from '@/assets/images/optimized/Background_Cover.webp'
 import { motion } from 'framer-motion'
@@ -19,6 +19,8 @@ import { submitNewsletterSubscription } from '@/lib/form-service'
 import { HOME_FEATURE_ICON_SIZE, HOME_PARTNER_PLACEHOLDER_COUNT } from '@/lib/constants'
 import { HomeFeatureCard } from '@/components/home/HomeFeatureCard'
 import { NewsletterSignup } from '@/components/home/NewsletterSignup'
+import { getWhatsAppUrl, getEmailUrl } from '@/lib/contact-config'
+import { openExternal } from '@/lib/utils'
 
 // Preload hero image immediately for faster LCP
 const preloadImage = new Image()
@@ -190,7 +192,40 @@ export const HomePage = memo(({ onNavigate }: HomePageProps) => {
         </div>
       </section>
 
-      <section className="py-10 md:py-16 px-4 md:px-8 bg-background">
+      <section className="py-12 md:py-20 px-4 md:px-8 bg-background">
+        <div className="max-w-[1280px] mx-auto text-center">
+          <h2 className="text-2xl md:text-4xl font-semibold mb-3">Ready to Get Started?</h2>
+          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-sm md:text-lg">
+            Contact us to discuss your requirements, request a quotation, or place an order.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              size="lg"
+              className="bg-[#25D366] hover:bg-[#1da851] text-white h-12 px-8 text-base font-semibold"
+              onClick={() => openExternal(getWhatsAppUrl())}
+            >
+              <WhatsappLogo className="mr-2" size={20} weight="fill" /> WhatsApp
+            </Button>
+            <Button
+              size="lg"
+              className="h-12 px-8 text-base font-semibold"
+              onClick={() => onNavigate('payment')}
+            >
+              <ShoppingCart className="mr-2" size={20} weight="duotone" /> Order
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="h-12 px-8 text-base font-semibold"
+              onClick={() => openExternal(getEmailUrl('sales'))}
+            >
+              <EnvelopeSimple className="mr-2" size={20} /> Enquiry
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-10 md:py-16 px-4 md:px-8 bg-muted/40">
         <div className="max-w-[1280px] mx-auto max-w-2xl">
           <NewsletterSignup
             email={email}

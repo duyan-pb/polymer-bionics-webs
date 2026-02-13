@@ -10,9 +10,11 @@ import type { MouseEvent } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ClickableCard } from '@/components/ClickableCard'
-import { Download, CheckCircle, MagnifyingGlassPlus, ShoppingCart } from '@phosphor-icons/react'
+import { Download, CheckCircle, MagnifyingGlassPlus, ShoppingCart, WhatsappLogo, EnvelopeSimple } from '@phosphor-icons/react'
 import type { Product } from '@/lib/types'
 import { ProductPlaceholderImage } from '@/components/products/ProductPlaceholderImage'
+import { getWhatsAppUrl, getEmailUrl } from '@/lib/contact-config'
+import { openExternal } from '@/lib/utils'
 
 export interface ProductCardProps {
   product: Product
@@ -20,9 +22,12 @@ export interface ProductCardProps {
   onSelect: (product: Product) => void
   onZoomImage: (imageUrl: string) => void
   onBuy?: (e: MouseEvent, product: Product) => void
-  onContact: (e: MouseEvent) => void
+  onOrder?: (e: MouseEvent, product: Product) => void
+  onContact?: (e: MouseEvent) => void
   onDatasheet?: (e: MouseEvent, datasheetId?: string) => void
   onCaseStudy?: (e: MouseEvent, caseStudyId?: string) => void
+  /** Show WhatsApp button */
+  showWhatsApp?: boolean
 }
 
 export function ProductCard({
@@ -31,9 +36,11 @@ export function ProductCard({
   onSelect,
   onZoomImage,
   onBuy,
+  onOrder,
   onContact,
   onDatasheet,
   onCaseStudy,
+  showWhatsApp = false,
 }: ProductCardProps) {
   return (
     <ClickableCard
@@ -64,6 +71,7 @@ export function ProductCard({
             src={product.imageUrl} 
             alt={product.name}
             className="w-full h-56 md:h-72 object-cover transition-transform duration-300 group-hover:scale-105"
+            style={product.imagePosition ? { objectPosition: product.imagePosition } : undefined}
             loading="lazy"
             decoding="async"
           />
@@ -106,16 +114,50 @@ export function ProductCard({
 
         <div className="pt-2">
           <div className="flex flex-wrap gap-2">
-            {onBuy && (
+            {showWhatsApp && (
+              <Button
+                variant="default"
+                size="sm"
+                className="text-xs md:text-sm bg-[#25D366] hover:bg-[#1da851] text-white"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  openExternal(getWhatsAppUrl(`Hi, I'm interested in ${product.name}. Could you provide more information?`))
+                }}
+              >
+                <WhatsappLogo className="mr-1" size={16} weight="fill" /> WhatsApp
+              </Button>
+            )}
+            {(onBuy || onOrder) && (
               <Button
                 variant="default"
                 size="sm"
                 className="text-xs md:text-sm"
-                onClick={(e) => onBuy(e, product)}
+                onClick={(e) => {
+                  if (onOrder) {
+                    onOrder(e, product)
+                  } else if (onBuy) {
+                    onBuy(e, product)
+                  }
+                }}
               >
-                <ShoppingCart className="mr-1" size={16} weight="duotone" /> Buy
+                <ShoppingCart className="mr-1" size={16} weight="duotone" /> Order
               </Button>
             )}
+            <Button
+              variant="default"
+              size="sm"
+              className="text-xs md:text-sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                if (onContact) {
+                  onContact(e)
+                } else {
+                  openExternal(getEmailUrl('sales', `Enquiry – ${product.name}`))
+                }
+              }}
+            >
+              <EnvelopeSimple className="mr-1" size={16} /> Enquiry
+            </Button>
             {product.datasheetId && onDatasheet && (
               <Button
                 variant="outline"
@@ -136,9 +178,6 @@ export function ProductCard({
                 Case Study
               </Button>
             )}
-            <Button variant="default" size="sm" className="text-xs md:text-sm" onClick={onContact}>
-              Enquire
-            </Button>
           </div>
         </div>
       </div>
