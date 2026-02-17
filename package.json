@@ -100,7 +100,7 @@
         "@testing-library/jest-dom": "^6.9.1",
         "@testing-library/react": "^16.3.1",
         "@testing-library/user-event": "^14.6.1",
-        "@types/react": "^19.2.13",
+        "@types/react": "^19.2.14",
         "@types/react-dom": "^19.0.4",
         "@vitejs/plugin-react-swc": "^4.2.3",
         "@vitest/coverage-v8": "^4.0.16",
@@ -116,7 +116,7 @@
         "tailwindcss": "^4.1.18",
         "type-coverage": "^2.29.7",
         "typescript": "~5.9.3",
-        "typescript-eslint": "^8.55.0",
+        "typescript-eslint": "^8.56.0",
         "vite": "^7.3.0",
         "vitest": "^4.0.16",
         "web-vitals": "^5.1.0"
